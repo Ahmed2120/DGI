@@ -16,8 +16,9 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        fontFamily: 'Montserrat'
       ),
-      home: const AuthScreen(),
+      home: const AssetsCapture(),
     );
   }
 }

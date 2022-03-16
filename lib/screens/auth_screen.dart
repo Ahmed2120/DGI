@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AuthScreen extends StatelessWidget {
@@ -127,7 +126,6 @@ class _AuthCardState extends State<AuthCard>
 
   @override
   void dispose() {
-    _controller.dispose();
     super.dispose();
   }
 
