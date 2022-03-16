@@ -185,8 +185,13 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                     ],
                   ),
                   Row(
-                    children: const [
+                    children: [
                       Text('PHOTO'),
+                      Spacer(),
+                      SizedBox(
+                        width: dSize.width * 0.4,
+                        child: Image.asset('assets/icons/0-16.jpg', height: 40, alignment: Alignment.centerLeft,),
+                      ),
                     ],
                   ),
                 ],
