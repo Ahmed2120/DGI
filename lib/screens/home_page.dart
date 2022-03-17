@@ -11,8 +11,8 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dsize = MediaQuery.of(context).size;
-    // print('hhh ${dsize.height * 0.0042}');
-    // print('hhh ${dsize.width * 0.092}');
+    print('hhh ${dsize.height * 0.0412}');
+    print('hhh ${dsize.width * 0.039}');
     return Scaffold(
       body: Stack(
         children: [
@@ -28,7 +28,7 @@ class HomePage extends StatelessWidget {
                     stops: [0, 1])),
           ),
           Padding(
-            padding: EdgeInsets.all(dsize.height * 0.0412),
+            padding: EdgeInsets.symmetric(vertical:dsize.height * 0.041, horizontal: 30),
             child: Center(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -42,7 +42,7 @@ class HomePage extends StatelessWidget {
                         fontWeight: FontWeight.bold),
                   ),
                   Container(
-                    margin: EdgeInsets.only(top: 10, bottom: 20),
+                    margin: EdgeInsets.only(top: dsize.height * 0.015, bottom: dsize.height * 0.013),
                     width: double.infinity,
                     decoration: BoxDecoration(
                         color: Color(0xFFFFA227),
@@ -54,15 +54,15 @@ class HomePage extends StatelessWidget {
                           width: dsize.width * 0.5,
                         ),
                         Container(
-                          padding: const EdgeInsets.all(10),
+                          padding: EdgeInsets.symmetric(vertical: dsize.height * 0.008),
                           width: double.infinity,
                           decoration: BoxDecoration(
                               color: const Color(0xFFFFFFFF).withOpacity(0.3),
                               borderRadius: BorderRadius.circular(10)),
-                          child: const Text(
+                          child: Text(
                             'FIXED ASSET RACKING Software v 1.0.0',
                             style: TextStyle(
-                              fontSize: 15,
+                              fontSize: dsize.width * 0.039,
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                             ),
@@ -73,7 +73,8 @@ class HomePage extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.all(15),
+                    padding: EdgeInsets.all(dsize.height * 0.0152),
+                    height: dsize.height * 0.647,
                     width: double.infinity,
                     decoration: BoxDecoration(
                         color: const Color(0xFFFFFFFF).withOpacity(0.3),
@@ -126,11 +127,11 @@ class HomePage extends StatelessWidget {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.all(dsize.height * 0.0029),
+                    padding: EdgeInsets.only(top: dsize.height * 0.0029),
                     child: Text('FATS Dashboard',
                         style: TextStyle(
                             color: Color(0xFF0F6671),
-                            fontSize: 15,
+                            fontSize: dsize.width * 0.042,
                             fontFamily: 'Montserrat')),
                   )
                 ],
