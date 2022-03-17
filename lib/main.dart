@@ -18,10 +18,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'DGI',
       theme: ThemeData(
+        colorScheme: ColorScheme.fromSwatch().copyWith(
+          primary: Color(0xFF0F6671)
+        ),
         primarySwatch: Colors.blue,
         fontFamily: 'Montserrat'
       ),
-      home: const AssetsCapture(),
+      home: const HomePage(),
     );
   }
 }

@@ -39,16 +39,17 @@ class HomePage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10)),
                     child: Column(
                       children: [
-                        Container(
-                          padding: EdgeInsets.all(10),
-                            child: const Text(
-                          'DGI',
-                          style: TextStyle(
-                              fontSize: 30,
-                              fontFamily: 'Montserrat',
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold),
-                        )),
+                        Image.asset('assets/icons/0-22.png', width: dsize.width * 0.5,),
+                        // Container(
+                        //   padding: EdgeInsets.all(10),
+                        //     child: const Text(
+                        //   'DGI',
+                        //   style: TextStyle(
+                        //       fontSize: 30,
+                        //       fontFamily: 'Montserrat',
+                        //       color: Colors.white,
+                        //       fontWeight: FontWeight.bold),
+                        // )),
                         Container(
                           padding: const EdgeInsets.all(10),
                           width: double.infinity,
@@ -75,11 +76,11 @@ class HomePage extends StatelessWidget {
                       padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
                       children: [
                         buildColumn('Assets Capture', dsize, '1-15'),
-                        buildColumn('Asset Movement Transaction', dsize, '1-13'),
                         buildColumn('Asset Verification', dsize, '1-12'),
-                        buildColumn('View Assets by Location', dsize, '1-14'),
-                        buildColumn('View Assets by Custodian', dsize, '1-16'),
-                        buildColumn('Asset inquiry (Verified Asset)', dsize, '1-17'),
+                        buildColumn('Asset Counter', dsize, '1-13'),
+                        buildColumn('ABOUT us', dsize, '0-19'),
+                        buildColumn('SETTINGS', dsize, '0-20'),
+
                       ],
                       gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                         maxCrossAxisExtent: 130,
@@ -108,7 +109,7 @@ class HomePage extends StatelessWidget {
                         children: [
                           Container(
                             width: double.infinity,
-                            height: dsize.height * 0.11,
+                            height: dsize.height * 0.105,
                             decoration: BoxDecoration(
                                 color: const Color(0xFFFFFFFF).withOpacity(0.3),
                                 borderRadius: BorderRadius.circular(20)),

@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 
 class AuthScreen extends StatelessWidget {
-
-
   const AuthScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
-
 
     return Scaffold(
       body: Stack(
@@ -39,54 +36,26 @@ class AuthScreen extends StatelessWidget {
                       Flexible(
                         flex: 0,
                         child: CircleAvatar(
-                          backgroundColor: Colors.white.withOpacity(0.5),
-                          radius: deviceSize.width * 0.2,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Text(
-                                "DGI",
-                                style: TextStyle(
-                                    color: Color(0xFF0F6671),
-                                    fontSize: 70,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'Anton'),
-                              ),
-                              Text(
-                                "FIXED ASSET",
-                                style: TextStyle(
-                                    color: Color(0xFFFFFFFF),
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'Anton'),
-                              ),
-                              Text(
-                                "TRACKING SYSTEM",
-                                style: TextStyle(
-                                    color: Color(0xFFFFFFFF),
-
-                                    fontSize: 13.5,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'Anton'),
-                              ),
-                            ],
-                          ),
-                        ),
+                            backgroundColor: Colors.white.withOpacity(0.5),
+                            radius: deviceSize.width * 0.22,
+                            child: Image.asset('assets/icons/0-18.png')),
                       ),
                       Flexible(
                           child: Container(
-                            margin: const EdgeInsets.only(top: 17, bottom: 15),
-                            child: const Text(
-                              'Welcome!',
-                              style: TextStyle(
-                                  color: Color(0xFFFFFFFF),
-                                  fontSize: 50,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Anton'),
-                            ),
-                          )),
-                      const Flexible(child: AuthCard(), flex: 0,),
-
+                        margin: const EdgeInsets.only(top: 10),
+                        child: const Text(
+                          'Welcome!',
+                          style: TextStyle(
+                              color: Color(0xFFFFFFFF),
+                              fontSize: 40,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Anton'),
+                        ),
+                      )),
+                      const Flexible(
+                        child: AuthCard(),
+                        flex: 0,
+                      ),
                     ],
                   ),
                 ),
@@ -120,7 +89,6 @@ class _AuthCardState extends State<AuthCard>
 
   @override
   void initState() {
-
     super.initState();
   }
 
@@ -145,9 +113,7 @@ class _AuthCardState extends State<AuthCard>
       // dbHelper.insertPlace(Users(5, _authData['email']!, _authData['password']!));
       // List<Users> users = await dbHelper.getUsers();
       // print('${users[5].id}');
-    }
-
-    catch (err) {
+    } catch (err) {
       var errMessage = 'Could not authenticate you. please try again later';
       _showErrorDialog(err.toString());
     }
@@ -160,19 +126,18 @@ class _AuthCardState extends State<AuthCard>
     showDialog(
         context: context,
         builder: (ctx) => AlertDialog(
-          title: const Text('An error Occurred'),
-          content: Text(message),
-          actions: [
-            TextButton(
-              child: const Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            )
-          ],
-        ));
+              title: const Text('An error Occurred'),
+              content: Text(message),
+              actions: [
+                TextButton(
+                  child: const Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            ));
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -184,52 +149,74 @@ class _AuthCardState extends State<AuthCard>
         key: _formKey,
         child: Column(
           children: [
-            TextFormField(
-              decoration: const InputDecoration(
-                  labelText: 'username'),
-              // keyboardType: TextInputType.emailAddress,
-              // validator: (val) {
-              //   if (val!.isEmpty || !val.contains('@')) {
-              //     return 'Inavalid email';
-              //   }
-              // },
-              onSaved: (val) {
-                _authData['email'] = val!;
-              },
+            Container(
+              decoration: BoxDecoration(
+                border:
+                    Border(bottom: BorderSide(color: Colors.white, width: 2)),
+              ),
+              child: TextFormField(
+                style: TextStyle(color: Colors.white),
+                decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    labelStyle: TextStyle(color: Colors.white),
+                    labelText: 'username'),
+                // keyboardType: TextInputType.emailAddress,
+                // validator: (val) {
+                //   if (val!.isEmpty || !val.contains('@')) {
+                //     return 'Inavalid email';
+                //   }
+                // },
+                onSaved: (val) {
+                  _authData['email'] = val!;
+                },
+              ),
             ),
-            TextFormField(
-              decoration: const InputDecoration(labelText: 'Password'),
-              obscureText: true,
-              controller: _passwordController,
-              // validator: (val) {
-              //   if (val!.isEmpty || val.length < 5) {
-              //     return 'Password is too short';
-              //   }
-              // },
-              onSaved: (val) {
-                _authData['password'] = val!;
-              },
+            Container(
+              decoration: BoxDecoration(
+                border:
+                    Border(bottom: BorderSide(color: Colors.white, width: 2)),
+              ),
+              child: TextFormField(
+                style: TextStyle(color: Colors.white),
+                decoration: const InputDecoration(
+                  labelStyle: TextStyle(color: Colors.white),
+                  labelText: 'Password',
+                  border: InputBorder.none,
+                ),
+                obscureText: true,
+                controller: _passwordController,
+                // validator: (val) {
+                //   if (val!.isEmpty || val.length < 5) {
+                //     return 'Password is too short';
+                //   }
+                // },
+                onSaved: (val) {
+                  _authData['password'] = val!;
+                },
+              ),
             ),
             const SizedBox(
               height: 20,
             ),
             // if (isLoading)
             //   const CircularProgressIndicator()
-              ElevatedButton(
-                child: isLoading ? CircularProgressIndicator() : Text('Log In'),
-                onPressed: _submit,
-                style: ElevatedButton.styleFrom(
-                    primary: const Color(0xFFFFA227),
-                    textStyle: const TextStyle(fontSize: 20),
-                    padding: const EdgeInsets.all(15),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(50)),
-                    minimumSize: const Size(double.infinity, 34)),
-              ),
-            const SizedBox(height: 12,),
+            ElevatedButton(
+              child: isLoading ? CircularProgressIndicator() : Text('Log In'),
+              onPressed: _submit,
+              style: ElevatedButton.styleFrom(
+                  primary: const Color(0xFFFFA227),
+                  textStyle: const TextStyle(fontSize: 20),
+                  padding: const EdgeInsets.all(15),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50)),
+                  minimumSize: const Size(double.infinity, 34)),
+            ),
+            const SizedBox(
+              height: 12,
+            ),
             ElevatedButton(
               child: const Text('Close'),
-              onPressed: (){},
+              onPressed: () {},
               style: ElevatedButton.styleFrom(
                   primary: Color(0xFF0F6671),
                   textStyle: TextStyle(fontSize: 20),
@@ -238,40 +225,45 @@ class _AuthCardState extends State<AuthCard>
                       borderRadius: BorderRadius.circular(50)),
                   minimumSize: Size(double.infinity, 34)),
             ),
-            const SizedBox(height: 15,),
+            const SizedBox(
+              height: 10,
+            ),
             const Text(
               'Modyle Name : ASSET TRACKING',
               style: TextStyle(
-                  color: Color(0xFFFFFFFF),
-                  fontSize: 20,
-                  ),
+                color: Color(0xFFFFFFFF),
+                fontSize: 18,
+              ),
             ),
-            const SizedBox(height: 15,),
+            const SizedBox(
+              height: 10,
+            ),
             const Text(
               'Internal Version',
               style: TextStyle(
-                  color: Color(0xFFFFFFFF),
-                  fontSize: 20,
-                  ),
+                color: Color(0xFFFFFFFF),
+                fontSize: 18,
+              ),
             ),
             Container(
               // margin: const EdgeInsets.only(top: 17, bottom: 15),
               child: const Text(
                 'V 1.0.0',
                 style: TextStyle(
-                    color: Color(0xFFFFFFFF),
-
-                    fontSize: 20,
-                    ),
+                  color: Color(0xFFFFFFFF),
+                  fontSize: 18,
+                ),
               ),
             ),
-            const SizedBox(height: 15,),
+            const SizedBox(
+              height: 15,
+            ),
             const Text(
               'DGI SYSTEM',
               style: TextStyle(
-                  color: Color(0xFF0F6671),
-                  fontSize: 20,
-                  ),
+                color: Color(0xFF0F6671),
+                fontSize: 20,
+              ),
             ),
           ],
         ),
