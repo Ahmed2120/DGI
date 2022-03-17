@@ -1,5 +1,9 @@
+import 'package:dgi/screens/assets_capture_screen.dart';
+import 'package:dgi/screens/assets_verification_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import 'assets_counter_screen.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -7,6 +11,8 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dsize = MediaQuery.of(context).size;
+    // print('hhh ${dsize.height * 0.0042}');
+    // print('hhh ${dsize.width * 0.092}');
     return Scaffold(
       body: Stack(
         children: [
@@ -22,14 +28,18 @@ class HomePage extends StatelessWidget {
                     stops: [0, 1])),
           ),
           Padding(
-            padding: const EdgeInsets.all(30.0),
+            padding: EdgeInsets.all(dsize.height * 0.0412),
             child: Center(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const Text(
                     'HOME',
-                    style: TextStyle(fontSize: 25, color: Colors.white, fontFamily: 'Montserrat', fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontSize: 25,
+                        color: Colors.white,
+                        fontFamily: 'Montserrat',
+                        fontWeight: FontWeight.bold),
                   ),
                   Container(
                     margin: EdgeInsets.only(top: 10, bottom: 20),
@@ -39,27 +49,25 @@ class HomePage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10)),
                     child: Column(
                       children: [
-                        Image.asset('assets/icons/0-22.png', width: dsize.width * 0.5,),
-                        // Container(
-                        //   padding: EdgeInsets.all(10),
-                        //     child: const Text(
-                        //   'DGI',
-                        //   style: TextStyle(
-                        //       fontSize: 30,
-                        //       fontFamily: 'Montserrat',
-                        //       color: Colors.white,
-                        //       fontWeight: FontWeight.bold),
-                        // )),
+                        Image.asset(
+                          'assets/icons/0-22.png',
+                          width: dsize.width * 0.5,
+                        ),
                         Container(
                           padding: const EdgeInsets.all(10),
                           width: double.infinity,
                           decoration: BoxDecoration(
                               color: const Color(0xFFFFFFFF).withOpacity(0.3),
                               borderRadius: BorderRadius.circular(10)),
-                          child: const Text('FIXED ASSET RACKING Software v 1.0.0', style: TextStyle(
+                          child: const Text(
+                            'FIXED ASSET RACKING Software v 1.0.0',
+                            style: TextStyle(
                               fontSize: 15,
                               color: Colors.white,
-                              fontWeight: FontWeight.bold,),textAlign: TextAlign.center,),
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
                       ],
                     ),
@@ -73,26 +81,57 @@ class HomePage extends StatelessWidget {
                     child: GridView(
                       shrinkWrap: true,
                       scrollDirection: Axis.vertical,
-                      padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                      padding:
+                          EdgeInsets.symmetric(vertical: dsize.height * 0.0092, horizontal: 25),
                       children: [
-                        buildColumn('Assets Capture', dsize, '1-15'),
-                        buildColumn('Asset Verification', dsize, '1-12'),
-                        buildColumn('Asset Counter', dsize, '1-13'),
-                        buildColumn('ABOUT us', dsize, '0-19'),
-                        buildColumn('SETTINGS', dsize, '0-20'),
-
+                        InkWell(
+                          child: buildColumn('Assets Capture', dsize, '1-15'),
+                          onTap: () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (context) => AssetsCapture())),
+                        ),
+                        InkWell(
+                          child:
+                              buildColumn('Asset Verification', dsize, '1-12'),
+                          onTap: () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (context) => AssetsVerification())),
+                        ),
+                        InkWell(
+                          child: buildColumn('Asset Counter', dsize, '1-13'),
+                          onTap: () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (context) => AssetsCounter())),
+                        ),
+                        InkWell(
+                          child: buildColumn('ABOUT us', dsize, '0-19'),
+                          // onTap: () => Navigator.of(context).push(
+                          //     MaterialPageRoute(
+                          //         builder: (context) => AssetsCapture())),
+                        ),
+                        InkWell(
+                          child: buildColumn('SETTINGS', dsize, '0-20'),
+                          // onTap: () => Navigator.of(context).push(
+                          //     MaterialPageRoute(
+                          //         builder: (context) => AssetsCapture())),
+                        ),
                       ],
-                      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                      gridDelegate:
+                          SliverGridDelegateWithMaxCrossAxisExtent(
                         maxCrossAxisExtent: 130,
-                        childAspectRatio: 2 / 1.71,
-                        crossAxisSpacing: 30,
-                        mainAxisSpacing: 20,
+                        childAspectRatio: (dsize.height * 0.00331) / (dsize.height * 0.0033),
+                        crossAxisSpacing: dsize.width * 0.094,
+                        mainAxisSpacing: dsize.height * 0.03515,
                       ),
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: Text('FATS Dashboard', style: TextStyle(color: Color(0xFF0F6671), fontSize: 15, fontFamily: 'Montserrat')),
+                  Padding(
+                    padding: EdgeInsets.all(dsize.height * 0.0029),
+                    child: Text('FATS Dashboard',
+                        style: TextStyle(
+                            color: Color(0xFF0F6671),
+                            fontSize: 15,
+                            fontFamily: 'Montserrat')),
                   )
                 ],
               ),
@@ -103,20 +142,24 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Column buildColumn( String title, dsize, String img) {
+  Column buildColumn(String title, dsize, String img) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            width: double.infinity,
-                            height: dsize.height * 0.105,
-                            decoration: BoxDecoration(
-                                color: const Color(0xFFFFFFFF).withOpacity(0.3),
-                                borderRadius: BorderRadius.circular(20)),
-                            child: Image.asset('assets/icons/$img.png'),
-                          ),
-                          Text(title, textAlign: TextAlign.center, style: TextStyle(color: Colors.white),),
-                        ],
-                      );
+      children: [
+        Container(
+          width: double.infinity,
+          height: dsize.height * 0.1,
+          decoration: BoxDecoration(
+              color: const Color(0xFFFFFFFF).withOpacity(0.3),
+              borderRadius: BorderRadius.circular(20)),
+          child: Image.asset('assets/icons/$img.png'),
+        ),
+        Text(
+          title,
+          textAlign: TextAlign.center,
+          style: TextStyle(color: Colors.white, fontSize: dsize.height * 0.01786),
+        ),
+      ],
+    );
   }
 }

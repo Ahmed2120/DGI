@@ -15,17 +15,19 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   @override
   Widget build(BuildContext context) {
     final dSize = MediaQuery.of(context).size;
+    print('hhh ${dSize.height * 0.055}');
+    print('hhh ${dSize.width * 0.0159}');
     return Scaffold(
         body: SafeArea(
       child: SingleChildScrollView(
-        child: Container(
+        child: SizedBox(
           height: dSize.height - 24,
           child: Column(
             children: [
               Container(
                 width: double.infinity,
                 height: dSize.height * 0.15,
-                padding: EdgeInsets.symmetric(vertical: 12),
+                padding: EdgeInsets.symmetric(vertical: dSize.height * 0.015),
                 decoration: const BoxDecoration(
                     gradient: LinearGradient(
                         colors: [
@@ -82,7 +84,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
               ),
               Expanded(
                 child: Padding(
-                  padding: EdgeInsets.all(15),
+                  padding: EdgeInsets.all(dSize.height * 0.016),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -98,7 +100,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                             decoration: const BoxDecoration(
                                 border: Border(
                                     bottom: BorderSide(
-                                        color: Color(0xFF00B0BD), width: 2))),
+                                        color: Color(0xFF00B0BD), width: 1))),
                             width: dSize.width * 0.4,
                             child: DropdownButtonHideUnderline(
                               child: DropdownButton<String>(
@@ -108,6 +110,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                                   Icons.arrow_drop_down,
                                   color: Color(0xFF00B0BD),
                                 ),
+                                isDense: true,
                                 isExpanded: true,
                                 items:
                                     <String>['A', 'B', 'C', 'D'].map((String item) {
@@ -141,8 +144,9 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                               border: Border.all(
                                   color: const Color(0xFF00B0BD), width: 2.0),
                             ),
-                            child: const TextField(
+                            child: TextField(
                               decoration: InputDecoration(
+                                constraints: BoxConstraints(maxHeight: dSize.height * 0.045),
                                 border: InputBorder.none,
                               ),
                             ),
@@ -164,7 +168,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                                   radius: 12,
                                   child: Icon(Icons.add),
                                 ),
-                                const SizedBox(width: 10,),
+                                SizedBox(width: dSize.width * 0.0159,),
                                 Container(
                                   padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 25),
                                   decoration: BoxDecoration(
@@ -175,7 +179,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                                   child: const Text('1', style: TextStyle(
                                       color: Color(0xFF0F6671), fontSize: 17, fontWeight: FontWeight.bold),),
                                 ),
-                                const SizedBox(width: 10,),
+                                SizedBox(width: dSize.width * 0.0159,),
                                 const CircleAvatar(
                                   backgroundColor: Color(0xFF00B0BD),
                                   foregroundColor: Colors.white,
@@ -193,7 +197,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                           Spacer(),
                           SizedBox(
                             width: dSize.width * 0.4,
-                            child: Image.asset('assets/icons/0-16.jpg', height: 40, alignment: Alignment.centerLeft,),
+                            child: Image.asset('assets/icons/0-16.jpg', height: dSize.height * 0.055, alignment: Alignment.centerLeft,),
                           ),
                         ],
                       ),
@@ -251,8 +255,8 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('USER NAME : MO GAMAL', style: TextStyle(color: Colors.white),),
-                      Text('PDA NO : 1023088', style: TextStyle(color: Colors.white),),
+                      Text('USER NAME : MO GAMAL', style: TextStyle(color: Colors.white, fontSize: dSize.width * 0.037),),
+                      Text('PDA NO : 1023088', style: TextStyle(color: Colors.white, fontSize: dSize.width * 0.037),),
                     ],
                   )
               )
