@@ -194,6 +194,14 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                       ),
                     ],
                   ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text('ADD ', style:
+                      const TextStyle(fontSize: 13, color: Color(0xFF0F6671), fontWeight: FontWeight.bold),),
+                      Icon(Icons.add, size: 17, color: Color(0xFF00B0BD),),
+                    ],
+                  )
                 ],
               ),
             ),
@@ -201,7 +209,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
           Expanded(child: Column(
             children: [
               Container(
-                padding: EdgeInsets.all(15),
+                padding: const EdgeInsets.symmetric(horizontal: 15),
                 height: dSize.height * 0.33,
                 child: ListView(
                   children: [

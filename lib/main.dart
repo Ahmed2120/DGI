@@ -1,6 +1,9 @@
 import 'package:dgi/screens/assets_capture_screen.dart';
+import 'package:dgi/screens/assets_counter_screen.dart';
+import 'package:dgi/screens/assets_verification_screen.dart';
 import 'package:dgi/screens/auth_screen.dart';
 import 'package:dgi/screens/home_page.dart';
+import 'package:dgi/screens/item_capture_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -13,7 +16,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'DGI',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         fontFamily: 'Montserrat'
