@@ -1,4 +1,4 @@
-import 'package:dgi/screens/assets_capture_screen.dart'
+import 'package:dgi/screens/assets_capture_screen.dart';
 import 'package:dgi/screens/assets_counter_screen.dart';
 import 'package:dgi/screens/assets_verification_screen.dart';
 import 'package:dgi/screens/auth_screen.dart';
