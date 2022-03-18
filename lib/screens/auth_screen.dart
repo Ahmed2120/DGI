@@ -245,14 +245,11 @@ class _AuthCardState extends State<AuthCard>
                 fontSize: 18,
               ),
             ),
-            Container(
-              // margin: const EdgeInsets.only(top: 17, bottom: 15),
-              child: const Text(
-                'V 1.0.0',
-                style: TextStyle(
-                  color: Color(0xFFFFFFFF),
-                  fontSize: 18,
-                ),
+            const Text(
+              'V 1.0.0',
+              style: TextStyle(
+                color: Color(0xFFFFFFFF),
+                fontSize: 18,
               ),
             ),
             const SizedBox(
