@@ -12,11 +12,13 @@ class AssetsCapture extends StatefulWidget {
 class _AssetsCaptureState extends State<AssetsCapture> {
   String? value;
 
+  final GlobalKey<FormState> _formKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     final dSize = MediaQuery.of(context).size;
-    print('hhh ${dSize.height * 0.055}');
-    print('hhh ${dSize.width * 0.0159}');
+    print('hhh ${dSize.height * 0.004}');
+    print('hhh ${dSize.width * 0.04}');
     return Scaffold(
         body: SafeArea(
       child: SingleChildScrollView(
@@ -85,131 +87,134 @@ class _AssetsCaptureState extends State<AssetsCapture> {
               Expanded(
                 child: Padding(
                   padding: EdgeInsets.all(dSize.height * 0.016),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            'CATEGORY',
-                            style:
-                                TextStyle(fontSize: 16, color: Color(0xFF0F6671)),
-                          ),
-                          Spacer(),
-                          Container(
-                            decoration: const BoxDecoration(
-                                border: Border(
-                                    bottom: BorderSide(
-                                        color: Color(0xFF00B0BD), width: 1))),
-                            width: dSize.width * 0.4,
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton<String>(
-                                value: value,
-                                iconSize: 30,
-                                icon: const Icon(
-                                  Icons.arrow_drop_down,
-                                  color: Color(0xFF00B0BD),
-                                ),
-                                isDense: true,
-                                isExpanded: true,
-                                items:
-                                    <String>['A', 'B', 'C', 'D'].map((String item) {
-                                  return DropdownMenuItem<String>(
-                                    value: item,
-                                    child: Text(
-                                      item,
-                                      style: const TextStyle(
-                                          color: Color(0xFF0F6671), fontSize: 20),
-                                    ),
-                                  );
-                                }).toList(),
-                                onChanged: (val) {
-                                  setState(() {
-                                    value = val;
-                                  });
-                                  print(val);
-                                },
-                              ),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              'CATEGORY',
+                              style:
+                                  TextStyle(fontSize: 16, color: Color(0xFF0F6671)),
                             ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          const Text('ITEM DESC'),
-                          Spacer(),
-                          Container(
-                            width: dSize.width * 0.4,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: const Color(0xFF00B0BD), width: 2.0),
-                            ),
-                            child: TextField(
-                              decoration: InputDecoration(
-                                constraints: BoxConstraints(maxHeight: dSize.height * 0.045),
-                                border: InputBorder.none,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Text('QUANTITY'),
-                          Spacer(),
-                          SizedBox(
-                            width: dSize.width * 0.4,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                const CircleAvatar(
-                                  backgroundColor: Color(0xFFFFA227),
-                                  foregroundColor: Colors.white,
-                                  radius: 12,
-                                  child: Icon(Icons.add),
-                                ),
-                                SizedBox(width: dSize.width * 0.0159,),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 25),
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: const Color(0xFF00B0BD), width: 2.0),
-                                    borderRadius: BorderRadius.circular(15)
+                            Spacer(),
+                            Container(
+                              decoration: const BoxDecoration(
+                                  border: Border(
+                                      bottom: BorderSide(
+                                          color: Color(0xFF00B0BD), width: 1))),
+                              width: dSize.width * 0.4,
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton<String>(
+                                  value: value,
+                                  iconSize: 30,
+                                  icon: const Icon(
+                                    Icons.arrow_drop_down,
+                                    color: Color(0xFF00B0BD),
                                   ),
-                                  child: const Text('1', style: TextStyle(
-                                      color: Color(0xFF0F6671), fontSize: 17, fontWeight: FontWeight.bold),),
+                                  isDense: true,
+                                  isExpanded: true,
+                                  items:
+                                      <String>['A', 'B', 'C', 'D'].map((String item) {
+                                    return DropdownMenuItem<String>(
+                                      value: item,
+                                      child: Text(
+                                        item,
+                                        style: const TextStyle(
+                                            color: Color(0xFF0F6671), fontSize: 20),
+                                      ),
+                                    );
+                                  }).toList(),
+                                  onChanged: (val) {
+                                    setState(() {
+                                      value = val;
+                                    });
+                                    print(val);
+                                  },
                                 ),
-                                SizedBox(width: dSize.width * 0.0159,),
-                                const CircleAvatar(
-                                  backgroundColor: Color(0xFF00B0BD),
-                                  foregroundColor: Colors.white,
-                                  radius: 12,
-                                  child: Icon(Icons.add),
-                                ),
-                              ],
+                              ),
                             ),
-                          )
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Text('PHOTO'),
-                          Spacer(),
-                          SizedBox(
-                            width: dSize.width * 0.4,
-                            child: Image.asset('assets/icons/0-16.jpg', height: dSize.height * 0.055, alignment: Alignment.centerLeft,),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text('ADD ', style:
-                          const TextStyle(fontSize: 13, color: Color(0xFF0F6671), fontWeight: FontWeight.bold),),
-                          Icon(Icons.add, size: 17, color: Color(0xFF00B0BD),),
-                        ],
-                      )
-                    ],
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            const Text('ITEM DESC'),
+                            Spacer(),
+                            Container(
+                              width: dSize.width * 0.4,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: const Color(0xFF00B0BD), width: 2.0),
+                              ),
+                              child: TextFormField(
+                                decoration: InputDecoration(
+                                  constraints: BoxConstraints(maxHeight: dSize.height * 0.045),
+                                  border: InputBorder.none,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text('QUANTITY'),
+                            Spacer(),
+                            SizedBox(
+                              width: dSize.width * 0.4,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  const CircleAvatar(
+                                    backgroundColor: Color(0xFFFFA227),
+                                    foregroundColor: Colors.white,
+                                    radius: 12,
+                                    child: Icon(Icons.remove),
+                                  ),
+                                  SizedBox(width: dSize.width * 0.0159,),
+                                  Container(
+                                    padding: EdgeInsets.symmetric(vertical: dSize.height * 0.004, horizontal: dSize.width * 0.06),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: const Color(0xFF00B0BD), width: 2.0),
+                                      borderRadius: BorderRadius.circular(15)
+                                    ),
+                                    child: Text('1', style: TextStyle(
+                                        color: Color(0xFF0F6671), fontSize: dSize.width * 0.04, fontWeight: FontWeight.bold),),
+                                  ),
+                                  SizedBox(width: dSize.width * 0.0159,),
+                                  const CircleAvatar(
+                                    backgroundColor: Color(0xFF00B0BD),
+                                    foregroundColor: Colors.white,
+                                    radius: 12,
+                                    child: Icon(Icons.add),
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text('PHOTO'),
+                            Spacer(),
+                            SizedBox(
+                              width: dSize.width * 0.4,
+                              child: Image.asset('assets/icons/0-16.jpg', height: dSize.height * 0.055, alignment: Alignment.centerLeft,),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text('ADD ', style:
+                            const TextStyle(fontSize: 13, color: Color(0xFF0F6671), fontWeight: FontWeight.bold),),
+                            Icon(Icons.add, size: 17, color: Color(0xFF00B0BD),),
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),

@@ -12,6 +12,8 @@ class AssetsVerification extends StatefulWidget {
 class _AssetsVerificationState extends State<AssetsVerification> {
   String? value;
 
+  final GlobalKey<FormState> _formKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     final dSize = MediaQuery.of(context).size;
@@ -107,291 +109,294 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                     padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
                     child: SizedBox(
                       height: dSize.height * 0.58,
-                      child: Column(
-                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            alignment: Alignment.centerLeft,
-                            padding: const EdgeInsets.only(bottom: 5),
-                            child: const Text('ASSET LOCATION INFORMATION', style:
-                            TextStyle(fontSize: 13, color: Color(0xFF0F6671), fontWeight: FontWeight.bold),),
-                          ),
-                          Row(
-                            children: [
-                              buildText('CATEGORY', dSize),
-                              const Spacer(),
-                              Container(
-                                decoration: const BoxDecoration(
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              alignment: Alignment.centerLeft,
+                              padding: const EdgeInsets.only(bottom: 5),
+                              child: const Text('ASSET LOCATION INFORMATION', style:
+                              TextStyle(fontSize: 13, color: Color(0xFF0F6671), fontWeight: FontWeight.bold),),
+                            ),
+                            Row(
+                              children: [
+                                buildText('CATEGORY', dSize),
+                                const Spacer(),
+                                Container(
+                                  decoration: const BoxDecoration(
+                                      border: Border(
+                                          bottom: BorderSide(
+                                              color: Color(0xFF00B0BD), width: 2))),
+                                  width: dSize.width * 0.4,
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButton<String>(
+                                      value: value,
+                                      iconSize: 30,
+                                      icon: const Icon(
+                                        Icons.arrow_drop_down,
+                                        color: Color(0xFF00B0BD),
+                                      ),
+                                      isDense: true,
+                                      isExpanded: true,
+                                      items:
+                                      <String>['A', 'B', 'C', 'D'].map((String item) {
+                                        return DropdownMenuItem<String>(
+                                          value: item,
+                                          child: Text(
+                                            item,
+                                            style: const TextStyle(
+                                                color: Color(0xFF0F6671), fontSize: 20),
+                                          ),
+                                        );
+                                      }).toList(),
+                                      onChanged: (val) {
+                                        setState(() {
+                                          value = val;
+                                        });
+                                        print(val);
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: dSize.height * 0.01,),
+                            Row(
+                              children: [
+                                buildText('CITY', dSize),
+                                Spacer(),
+                                Container(
+                                  decoration: const BoxDecoration(
+                                      border: Border(
+                                          bottom: BorderSide(
+                                              color: Color(0xFF00B0BD), width: 2))),
+                                  width: dSize.width * 0.4,
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButton<String>(
+                                      value: value,
+                                      iconSize: 30,
+                                      icon: const Icon(
+                                        Icons.arrow_drop_down,
+                                        color: Color(0xFF00B0BD),
+                                      ),
+                                      isDense: true,
+                                      isExpanded: true,
+                                      items:
+                                      <String>['A', 'B', 'C', 'D'].map((String item) {
+                                        return DropdownMenuItem<String>(
+                                          value: item,
+                                          child: Text(
+                                            item,
+                                            style: const TextStyle(
+                                                color: Color(0xFF0F6671), fontSize: 20),
+                                          ),
+                                        );
+                                      }).toList(),
+                                      onChanged: (val) {
+                                        setState(() {
+                                          value = val;
+                                        });
+                                        print(val);
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: dSize.height * 0.01,),
+                            Row(
+                              children: [
+                                buildText('AREA', dSize),
+                                const Spacer(),
+                                Container(
+                                  width: dSize.width * 0.4,
+                                  decoration: BoxDecoration(
                                     border: Border(
                                         bottom: BorderSide(
-                                            color: Color(0xFF00B0BD), width: 2))),
-                                width: dSize.width * 0.4,
-                                child: DropdownButtonHideUnderline(
-                                  child: DropdownButton<String>(
-                                    value: value,
-                                    iconSize: 30,
-                                    icon: const Icon(
-                                      Icons.arrow_drop_down,
-                                      color: Color(0xFF00B0BD),
+                                            color: Color(0xFF00B0BD), width: 2)),
+                                  ),
+                                  child: TextFormField(
+                                    decoration: InputDecoration(
+                                      constraints: BoxConstraints(maxHeight: 20),
+                                      border: InputBorder.none,
                                     ),
-                                    isDense: true,
-                                    isExpanded: true,
-                                    items:
-                                    <String>['A', 'B', 'C', 'D'].map((String item) {
-                                      return DropdownMenuItem<String>(
-                                        value: item,
-                                        child: Text(
-                                          item,
-                                          style: const TextStyle(
-                                              color: Color(0xFF0F6671), fontSize: 20),
-                                        ),
-                                      );
-                                    }).toList(),
-                                    onChanged: (val) {
-                                      setState(() {
-                                        value = val;
-                                      });
-                                      print(val);
-                                    },
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: dSize.height * 0.01,),
-                          Row(
-                            children: [
-                              buildText('CITY', dSize),
-                              Spacer(),
-                              Container(
-                                decoration: const BoxDecoration(
+                              ],
+                            ),
+                            SizedBox(height: dSize.height * 0.01,),
+                            Row(
+                              children: [
+                                buildText('DEPARTMENT', dSize),
+                                Spacer(),
+                                Container(
+                                  width: dSize.width * 0.4,
+                                  decoration: BoxDecoration(
                                     border: Border(
                                         bottom: BorderSide(
-                                            color: Color(0xFF00B0BD), width: 2))),
-                                width: dSize.width * 0.4,
-                                child: DropdownButtonHideUnderline(
-                                  child: DropdownButton<String>(
-                                    value: value,
-                                    iconSize: 30,
-                                    icon: const Icon(
-                                      Icons.arrow_drop_down,
-                                      color: Color(0xFF00B0BD),
+                                            color: Color(0xFF00B0BD), width: 2)),
+                                  ),
+                                  child: TextFormField(
+                                    decoration: InputDecoration(
+                                      constraints: BoxConstraints(maxHeight: 20),
+                                      border: InputBorder.none,
                                     ),
-                                    isDense: true,
-                                    isExpanded: true,
-                                    items:
-                                    <String>['A', 'B', 'C', 'D'].map((String item) {
-                                      return DropdownMenuItem<String>(
-                                        value: item,
-                                        child: Text(
-                                          item,
-                                          style: const TextStyle(
-                                              color: Color(0xFF0F6671), fontSize: 20),
-                                        ),
-                                      );
-                                    }).toList(),
-                                    onChanged: (val) {
-                                      setState(() {
-                                        value = val;
-                                      });
-                                      print(val);
-                                    },
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: dSize.height * 0.01,),
-                          Row(
-                            children: [
-                              buildText('AREA', dSize),
-                              const Spacer(),
-                              Container(
-                                width: dSize.width * 0.4,
-                                decoration: BoxDecoration(
-                                  border: Border(
-                                      bottom: BorderSide(
-                                          color: Color(0xFF00B0BD), width: 2)),
-                                ),
-                                child: const TextField(
-                                  decoration: InputDecoration(
-                                    constraints: BoxConstraints(maxHeight: 20),
-                                    border: InputBorder.none,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: dSize.height * 0.01,),
-                          Row(
-                            children: [
-                              buildText('DEPARTMENT', dSize),
-                              Spacer(),
-                              Container(
-                                width: dSize.width * 0.4,
-                                decoration: BoxDecoration(
-                                  border: Border(
-                                      bottom: BorderSide(
-                                          color: Color(0xFF00B0BD), width: 2)),
-                                ),
-                                child: const TextField(
-                                  decoration: InputDecoration(
-                                    constraints: BoxConstraints(maxHeight: 20),
-                                    border: InputBorder.none,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: dSize.height * 0.01,),
-                          Row(
-                            children: [
-                              buildText('BUSINESS UNIT', dSize),
-                              Spacer(),
-                              Container(
-                                width: dSize.width * 0.4,
-                                decoration: BoxDecoration(
-                                  border: Border(
-                                      bottom: BorderSide(
-                                          color: Color(0xFF00B0BD), width: 2)),
-                                ),
-                                child: const TextField(
-                                  decoration: InputDecoration(
-                                    constraints: BoxConstraints(maxHeight: 20),
-                                    border: InputBorder.none,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: dSize.height * 0.01,),
-                          Row(
-                            children: [
-                              buildText('NAME', dSize),
-                              Spacer(),
-                              Container(
-                                width: dSize.width * 0.4,
-                                decoration: BoxDecoration(
-                                  border: Border(
-                                      bottom: BorderSide(
-                                          color: Color(0xFF00B0BD), width: 2)),
-                                ),
-                                child: const TextField(
-                                  decoration: InputDecoration(
-                                    constraints: BoxConstraints(maxHeight: 20),
-                                    border: InputBorder.none,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: dSize.height * 0.01,),
-                          Row(
-                            children: [
-                              buildText('BLDG NAME', dSize),
-                              const Spacer(),
-                              Container(
-                                width: dSize.width * 0.4,
-                                decoration: BoxDecoration(
-                                  border: Border(
-                                      bottom: BorderSide(
-                                          color: Color(0xFF00B0BD), width: 2)),
-                                ),
-                                child: const TextField(
-                                  decoration: InputDecoration(
-                                    constraints: BoxConstraints(maxHeight: 20),
-                                    border: InputBorder.none,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: dSize.height * 0.01,),
-                          Row(
-                            children: [
-                              buildText('BLDG ADDRESS', dSize),
-                              const Spacer(),
-                              Container(
-                                width: dSize.width * 0.4,
-                                decoration: BoxDecoration(
-                                  border: Border(
-                                      bottom: BorderSide(
-                                          color: Color(0xFF00B0BD), width: 2)),
-                                ),
-                                child: const TextField(
-                                  decoration: InputDecoration(
-                                    constraints: BoxConstraints(maxHeight: 20),
-                                    border: InputBorder.none,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: dSize.height * 0.01,),
-                          Row(
-                            children: [
-                              buildText('BUILDING NO', dSize),
-                              Spacer(),
-                              Container(
-                                width: dSize.width * 0.4,
-                                decoration: BoxDecoration(
-                                  border: Border(
-                                      bottom: BorderSide(
-                                          color: Color(0xFF00B0BD), width: 2)),
-                                ),
-                                child: const TextField(
-                                  decoration: InputDecoration(
-                                    constraints: BoxConstraints(maxHeight: 15),
-                                    border: InputBorder.none,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: dSize.height * 0.01,),
-                          Row(
-                            children: [
-                              buildText('FLOOR NO', dSize),
-                              const Spacer(),
-                              Container(
-                                decoration: const BoxDecoration(
+                              ],
+                            ),
+                            SizedBox(height: dSize.height * 0.01,),
+                            Row(
+                              children: [
+                                buildText('BUSINESS UNIT', dSize),
+                                Spacer(),
+                                Container(
+                                  width: dSize.width * 0.4,
+                                  decoration: BoxDecoration(
                                     border: Border(
                                         bottom: BorderSide(
-                                            color: Color(0xFF00B0BD), width: 2))),
-                                width: dSize.width * 0.4,
-                                child: DropdownButtonHideUnderline(
-                                  child: DropdownButton<String>(
-                                    value: value,
-                                    iconSize: 30,
-                                    icon: const Icon(
-                                      Icons.arrow_drop_down,
-                                      color: Color(0xFF00B0BD),
+                                            color: Color(0xFF00B0BD), width: 2)),
+                                  ),
+                                  child: TextFormField(
+                                    decoration: InputDecoration(
+                                      constraints: BoxConstraints(maxHeight: 20),
+                                      border: InputBorder.none,
                                     ),
-                                    isDense: true,
-                                    isExpanded: true,
-                                    items:
-                                    <String>['A', 'B', 'C', 'D'].map((String item) {
-                                      return DropdownMenuItem<String>(
-                                        value: item,
-                                        child: Text(
-                                          item,
-                                          style: const TextStyle(
-                                              color: Color(0xFF0F6671), fontSize: 20),
-                                        ),
-                                      );
-                                    }).toList(),
-                                    onChanged: (val) {
-                                      setState(() {
-                                        value = val;
-                                      });
-                                      print(val);
-                                    },
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
+                              ],
+                            ),
+                            SizedBox(height: dSize.height * 0.01,),
+                            Row(
+                              children: [
+                                buildText('NAME', dSize),
+                                Spacer(),
+                                Container(
+                                  width: dSize.width * 0.4,
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                        bottom: BorderSide(
+                                            color: Color(0xFF00B0BD), width: 2)),
+                                  ),
+                                  child: TextFormField(
+                                    decoration: InputDecoration(
+                                      constraints: BoxConstraints(maxHeight: 20),
+                                      border: InputBorder.none,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: dSize.height * 0.01,),
+                            Row(
+                              children: [
+                                buildText('BLDG NAME', dSize),
+                                const Spacer(),
+                                Container(
+                                  width: dSize.width * 0.4,
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                        bottom: BorderSide(
+                                            color: Color(0xFF00B0BD), width: 2)),
+                                  ),
+                                  child: TextFormField(
+                                    decoration: InputDecoration(
+                                      constraints: BoxConstraints(maxHeight: 20),
+                                      border: InputBorder.none,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: dSize.height * 0.01,),
+                            Row(
+                              children: [
+                                buildText('BLDG ADDRESS', dSize),
+                                const Spacer(),
+                                Container(
+                                  width: dSize.width * 0.4,
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                        bottom: BorderSide(
+                                            color: Color(0xFF00B0BD), width: 2)),
+                                  ),
+                                  child: TextFormField(
+                                    decoration: InputDecoration(
+                                      constraints: BoxConstraints(maxHeight: 20),
+                                      border: InputBorder.none,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: dSize.height * 0.01,),
+                            Row(
+                              children: [
+                                buildText('BUILDING NO', dSize),
+                                Spacer(),
+                                Container(
+                                  width: dSize.width * 0.4,
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                        bottom: BorderSide(
+                                            color: Color(0xFF00B0BD), width: 2)),
+                                  ),
+                                  child: TextFormField(
+                                    decoration: InputDecoration(
+                                      constraints: BoxConstraints(maxHeight: 15),
+                                      border: InputBorder.none,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: dSize.height * 0.01,),
+                            Row(
+                              children: [
+                                buildText('FLOOR NO', dSize),
+                                const Spacer(),
+                                Container(
+                                  decoration: const BoxDecoration(
+                                      border: Border(
+                                          bottom: BorderSide(
+                                              color: Color(0xFF00B0BD), width: 2))),
+                                  width: dSize.width * 0.4,
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButton<String>(
+                                      value: value,
+                                      iconSize: 30,
+                                      icon: const Icon(
+                                        Icons.arrow_drop_down,
+                                        color: Color(0xFF00B0BD),
+                                      ),
+                                      isDense: true,
+                                      isExpanded: true,
+                                      items:
+                                      <String>['A', 'B', 'C', 'D'].map((String item) {
+                                        return DropdownMenuItem<String>(
+                                          value: item,
+                                          child: Text(
+                                            item,
+                                            style: const TextStyle(
+                                                color: Color(0xFF0F6671), fontSize: 20),
+                                          ),
+                                        );
+                                      }).toList(),
+                                      onChanged: (val) {
+                                        setState(() {
+                                          value = val;
+                                        });
+                                        print(val);
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
