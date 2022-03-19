@@ -1,3 +1,6 @@
+import 'package:dgi/Services/CategoryService.dart';
+import 'package:dgi/Utility/DropDownMenu.dart';
+import 'package:dgi/model/category.dart';
 import 'package:dropdown_button2/custom_dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +13,16 @@ class AssetsCapture extends StatefulWidget {
 }
 
 class _AssetsCaptureState extends State<AssetsCapture> {
-  String? value;
+  CategoryService categoryService = CategoryService();
+  List<String> categories = [];
+
+  @override
+  void initState(){
+    // TODO: implement initState
+    super.initState();
+    initCategories();
+  }
+
 
   final GlobalKey<FormState> _formKey = GlobalKey();
 
@@ -92,52 +104,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Row(
-                          children: [
-                            Text(
-                              'CATEGORY',
-                              style:
-                                  TextStyle(fontSize: 16, color: Color(0xFF0F6671)),
-                            ),
-                            Spacer(),
-                            Container(
-                              decoration: const BoxDecoration(
-                                  border: Border(
-                                      bottom: BorderSide(
-                                          color: Color(0xFF00B0BD), width: 1))),
-                              width: dSize.width * 0.4,
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton<String>(
-                                  value: value,
-                                  iconSize: 30,
-                                  icon: const Icon(
-                                    Icons.arrow_drop_down,
-                                    color: Color(0xFF00B0BD),
-                                  ),
-                                  isDense: true,
-                                  isExpanded: true,
-                                  items:
-                                      <String>['A', 'B', 'C', 'D'].map((String item) {
-                                    return DropdownMenuItem<String>(
-                                      value: item,
-                                      child: Text(
-                                        item,
-                                        style: const TextStyle(
-                                            color: Color(0xFF0F6671), fontSize: 20),
-                                      ),
-                                    );
-                                  }).toList(),
-                                  onChanged: (val) {
-                                    setState(() {
-                                      value = val;
-                                    });
-                                    print(val);
-                                  },
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                        DropDownMenu(title: 'CATEGORY', values: categories),
                         Row(
                           children: [
                             const Text('ITEM DESC'),
@@ -282,5 +249,24 @@ class _AssetsCaptureState extends State<AssetsCapture> {
             child: Text(cell, style: TextStyle(color: isHeader ? Colors.white : Color(0xFF0F6671), fontWeight: isHeader ? FontWeight.bold : FontWeight.normal),),
           )).toList(),
   );
+
+  initCategories() async{
+    CategoryService categoryService = CategoryService();
+    Category category = Category(name: 'Category A');
+    await categoryService.insert(category);
+    category = Category(name: 'Category B');
+    await categoryService.insert(category);
+    category = Category(name: 'Category C');
+    await categoryService.insert(category);
+    category = Category(name: 'Category D');
+    await categoryService.insert(category);
+    categoryService.retrieve().then((result) => {
+      setState(() {
+        for(var item in result) {
+          categories.add(item.name);
+        }
+      })
+    });
+  }
   
 }
