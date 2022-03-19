@@ -2,7 +2,7 @@ import 'package:dgi/model/area.dart';
 
 import '../db/AreaRepository.dart';
 
-class CategoryService{
+class AreaService{
   AreaRepository areaRepository = AreaRepository();
   Future<int> insert(Area area) async {
     return areaRepository.insert(area);
