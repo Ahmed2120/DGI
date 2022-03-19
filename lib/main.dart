@@ -8,6 +8,9 @@ import 'package:dgi/screens/item_capture_screen.dart';
 import 'package:dgi/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 
+import 'screens/assets_check.dart';
+import 'screens/assets_details.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -26,7 +29,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         fontFamily: 'Montserrat'
       ),
-      home: const SplashScreen(),
+      home: const AssetsCheck(),
     );
   }
 }
