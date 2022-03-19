@@ -54,7 +54,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                 child: Column(
                   children: [
                     const Text(
-                      'DGI ASSETS TRCKING',
+                      'DGI ASSETS TRACKING',
                       style: TextStyle(
                           fontSize: 15,
                           color: Colors.white,

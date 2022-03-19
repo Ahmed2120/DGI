@@ -1,5 +1,6 @@
 import 'package:dgi/screens/assets_capture_screen.dart';
 import 'package:dgi/screens/assets_counter_screen.dart';
+import 'package:dgi/screens/assets_custodian.dart';
 import 'package:dgi/screens/assets_verification_screen.dart';
 import 'package:dgi/screens/auth_screen.dart';
 import 'package:dgi/screens/home_page.dart';
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         fontFamily: 'Montserrat'
       ),
-      home: const SplashScreen(),
+      home: const AssetsCustodian(),
     );
   }
 }
