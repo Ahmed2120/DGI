@@ -1,5 +1,6 @@
 import 'package:dgi/screens/assets_capture_screen.dart';
 import 'package:dgi/screens/assets_verification_screen.dart';
+import 'package:dgi/screens/item_capture_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -86,10 +87,10 @@ class HomePage extends StatelessWidget {
                           EdgeInsets.symmetric(vertical: dsize.height * 0.0092, horizontal: 25),
                       children: [
                         InkWell(
-                          child: buildColumn('Assets Capture', dsize, '1-15'),
+                          child: buildColumn('Item Capture', dsize, '1-15'),
                           onTap: () => Navigator.of(context).push(
                               MaterialPageRoute(
-                                  builder: (context) => AssetsCapture())),
+                                  builder: (context) => ItemCapture())),
                         ),
                         InkWell(
                           child:
@@ -128,12 +129,12 @@ class HomePage extends StatelessWidget {
                   ),
                   Padding(
                     padding: EdgeInsets.only(top: dsize.height * 0.0029),
-                    child: Text('FATS Dashboard',
+                    child: Text('SAGECO Dashboard',
                         style: TextStyle(
                             color: Color(0xFF0F6671),
                             fontSize: dsize.width * 0.042,
                             fontFamily: 'Montserrat')),
-                  )
+                  ),
                 ],
               ),
             ),

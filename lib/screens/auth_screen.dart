@@ -1,3 +1,4 @@
+import 'package:dgi/screens/home_page.dart';
 import 'package:flutter/material.dart';
 
 class AuthScreen extends StatelessWidget {
@@ -108,11 +109,7 @@ class _AuthCardState extends State<AuthCard>
     });
 
     try {
-      // dbHelper.insertData();
-      // await dbHelper.openDb();
-      // dbHelper.insertPlace(Users(5, _authData['email']!, _authData['password']!));
-      // List<Users> users = await dbHelper.getUsers();
-      // print('${users[5].id}');
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=> HomePage()));
     } catch (err) {
       var errMessage = 'Could not authenticate you. please try again later';
       _showErrorDialog(err.toString());

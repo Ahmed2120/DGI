@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dgi/screens/auth_screen.dart';
 import 'package:dgi/screens/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
@@ -17,7 +18,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Timer(const Duration(milliseconds: 3600), ()=>
-        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=> HomePage()))
+        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=> AuthScreen()))
     );
   }
 

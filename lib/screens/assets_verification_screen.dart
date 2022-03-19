@@ -411,9 +411,14 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
                               color: Color(0xFF00B0BD),
-                              borderRadius: BorderRadius.circular(5)
+                              borderRadius: BorderRadius.circular(5)),
+                          child: InkWell(
+                            onTap: () => Navigator.of(context).pop(),
+                            child: Icon(
+                              Icons.arrow_back_ios,
+                              color: Colors.white,
+                            ),
                           ),
-                          child: Icon(Icons.arrow_back_ios, color: Colors.white,),
                         ),
                         Container(
                           padding: EdgeInsets.all(5),

@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         fontFamily: 'Montserrat'
       ),
-      home: const AssetsCustodian(),
+      home: const SplashScreen(),
     );
   }
 }
