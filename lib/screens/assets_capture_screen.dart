@@ -1,7 +1,10 @@
+import 'dart:io';
+
+import 'package:camera/camera.dart';
 import 'package:dgi/Services/CategoryService.dart';
 import 'package:dgi/Utility/DropDownMenu.dart';
 import 'package:dgi/model/category.dart';
-import 'package:dropdown_button2/custom_dropdown_button2.dart';
+import 'package:dgi/screens/take_picture_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -13,8 +16,12 @@ class AssetsCapture extends StatefulWidget {
 }
 
 class _AssetsCaptureState extends State<AssetsCapture> {
-  CategoryService categoryService = CategoryService();
   List<String> categories = [];
+  XFile ? image;
+  var descriptionController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey();
+  final CategoryService categoryService = CategoryService();
+  int quantity = 1;
 
   @override
   void initState(){
@@ -23,14 +30,9 @@ class _AssetsCaptureState extends State<AssetsCapture> {
     initCategories();
   }
 
-
-  final GlobalKey<FormState> _formKey = GlobalKey();
-
   @override
   Widget build(BuildContext context) {
     final dSize = MediaQuery.of(context).size;
-    print('hhh ${dSize.height * 0.004}');
-    print('hhh ${dSize.width * 0.04}');
     return Scaffold(
         body: SafeArea(
       child: SingleChildScrollView(
@@ -116,6 +118,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                                     color: const Color(0xFF00B0BD), width: 2.0),
                               ),
                               child: TextFormField(
+                                controller: descriptionController,
                                 decoration: InputDecoration(
                                   constraints: BoxConstraints(maxHeight: dSize.height * 0.045),
                                   border: InputBorder.none,
@@ -133,11 +136,20 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  const CircleAvatar(
-                                    backgroundColor: Color(0xFFFFA227),
-                                    foregroundColor: Colors.white,
-                                    radius: 12,
-                                    child: Icon(Icons.remove),
+                                  InkWell(
+                                    onTap:(){
+                                      if(quantity>1) {
+                                        setState(() {
+                                          quantity --;
+                                        });
+                                      }
+                                   },
+                                    child: const CircleAvatar(
+                                      backgroundColor: Color(0xFFFFA227),
+                                      foregroundColor: Colors.white,
+                                      radius: 12,
+                                      child: Icon(Icons.remove),
+                                    ),
                                   ),
                                   SizedBox(width: dSize.width * 0.0159,),
                                   Container(
@@ -147,15 +159,22 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                                           color: const Color(0xFF00B0BD), width: 2.0),
                                       borderRadius: BorderRadius.circular(15)
                                     ),
-                                    child: Text('1', style: TextStyle(
+                                    child: Text(quantity.toString(), style: TextStyle(
                                         color: Color(0xFF0F6671), fontSize: dSize.width * 0.04, fontWeight: FontWeight.bold),),
                                   ),
                                   SizedBox(width: dSize.width * 0.0159,),
-                                  const CircleAvatar(
-                                    backgroundColor: Color(0xFF00B0BD),
-                                    foregroundColor: Colors.white,
-                                    radius: 12,
-                                    child: Icon(Icons.add),
+                                  InkWell(
+                                    onTap: (){
+                                      setState(() {
+                                        quantity ++;
+                                      });
+                                    },
+                                    child: const CircleAvatar(
+                                      backgroundColor: Color(0xFF00B0BD),
+                                      foregroundColor: Colors.white,
+                                      radius: 12,
+                                      child: Icon(Icons.add),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -166,20 +185,22 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                           children: [
                             Text('PHOTO'),
                             Spacer(),
-                            SizedBox(
-                              width: dSize.width * 0.4,
-                              child: Image.asset('assets/icons/0-16.jpg', height: dSize.height * 0.055, alignment: Alignment.centerLeft,),
+                            InkWell(
+                              child: SizedBox(
+                                width: dSize.width * 0.4,
+                                child: Image.asset('assets/icons/0-16.jpg', height: dSize.height * 0.055, alignment: Alignment.centerLeft,),
+                              ),
+                              onTap: () async {
+                                _showCamera();
+                              },
                             ),
+                            image != null ?SizedBox(
+                              width: dSize.width * 0.4,
+                              child: Image.file(File(image!.path), height: dSize.height * 0.055, alignment: Alignment.centerLeft,),
+                            ):Container(),
                           ],
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Text('ADD ', style:
-                            const TextStyle(fontSize: 13, color: Color(0xFF0F6671), fontWeight: FontWeight.bold),),
-                            Icon(Icons.add, size: 17, color: Color(0xFF00B0BD),),
-                          ],
-                        )
+                        buildAddButton(),
                       ],
                     ),
                   ),
@@ -268,5 +289,40 @@ class _AssetsCaptureState extends State<AssetsCapture> {
       })
     });
   }
+  _showCamera() async{
+    final cameras = await availableCameras();
+    final camera = cameras.first;
+    final result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => TakePicturePage(camera: camera)));
+    setState(() {
+      image = result;
+    });
+    print(result);
+  }
+
+  buildAddButton() {
+    return InkWell(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Text('ADD ', style:
+          const TextStyle(fontSize: 13, color: Color(0xFF0F6671), fontWeight: FontWeight.bold),),
+          Icon(Icons.add, size: 17, color: Color(0xFF00B0BD),),
+        ],
+      ),
+      onTap: (){
+        saveItem();
+      },
+    );
+  }
+
+  void saveItem() async{
+    File file = File(image!.path);
+    final byte =  file.readAsBytesSync();
+
+  }
+
   
 }
