@@ -1,6 +1,8 @@
+import 'package:dgi/screens/about.dart';
 import 'package:dgi/screens/assets_capture_screen.dart';
 import 'package:dgi/screens/assets_verification_screen.dart';
 import 'package:dgi/screens/item_capture_screen.dart';
+import 'package:dgi/screens/settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -107,15 +109,15 @@ class HomePage extends StatelessWidget {
                         ),
                         InkWell(
                           child: buildColumn('ABOUT us', dsize, '0-19'),
-                          // onTap: () => Navigator.of(context).push(
-                          //     MaterialPageRoute(
-                          //         builder: (context) => AssetsCapture())),
+                          onTap: () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (context) => const AboutUs())),
                         ),
                         InkWell(
                           child: buildColumn('SETTINGS', dsize, '0-20'),
-                          // onTap: () => Navigator.of(context).push(
-                          //     MaterialPageRoute(
-                          //         builder: (context) => AssetsCapture())),
+                          onTap: () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (context) => Settings())),
                         ),
                       ],
                       gridDelegate:

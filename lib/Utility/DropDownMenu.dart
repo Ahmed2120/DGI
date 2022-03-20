@@ -22,7 +22,7 @@ class _DropDownMenuState extends State<DropDownMenu> {
         Text(
           widget.title,
           style:
-          TextStyle(fontSize: 16, color: Color(0xFF0F6671)),
+          TextStyle(fontSize: dSize.width * 0.04, color: Color(0xFF0F6671), fontWeight: FontWeight.bold),
         ),
         Spacer(),
         Container(

@@ -38,7 +38,7 @@ class AuthScreen extends StatelessWidget {
                         flex: 0,
                         child: CircleAvatar(
                             backgroundColor: Colors.white.withOpacity(0.5),
-                            radius: deviceSize.width * 0.22,
+                            radius: deviceSize.width * 0.23,
                             child: Image.asset('assets/icons/0-18.png')),
                       ),
                       Flexible(

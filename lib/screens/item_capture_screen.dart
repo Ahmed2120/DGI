@@ -1,5 +1,7 @@
 import 'package:dgi/Utility/CustomWidgetBuilder.dart';
 import 'package:dgi/Utility/header.dart';
+import 'package:dgi/screens/assets_capture_screen.dart';
+import 'package:dgi/screens/assets_verification_screen.dart';
 import 'package:dropdown_button2/custom_dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -360,7 +362,9 @@ class _ItemCaptureState extends State<ItemCapture> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     CustomWidgetBuilder.buildArrow(context, Icon(Icons.arrow_back_ios), ()=>Navigator.of(context).pop()),
-                    CustomWidgetBuilder.buildArrow(context, Icon(Icons.arrow_forward_ios), (){}),
+                    CustomWidgetBuilder.buildArrow(context, Icon(Icons.arrow_forward_ios), ()=> Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) => AssetsCapture())))
                   ],
                 ),
               ),

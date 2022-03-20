@@ -7,6 +7,7 @@ import 'package:dgi/screens/home_page.dart';
 import 'package:dgi/screens/item_capture_screen.dart';
 import 'package:dgi/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'screens/assets_check.dart';
 import 'screens/assets_details.dart';
@@ -20,6 +21,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+    // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    //   statusBarColor: Color(0xFF019BA5)
+    // ));
+
     return MaterialApp(
       title: 'DGI',
       theme: ThemeData(
