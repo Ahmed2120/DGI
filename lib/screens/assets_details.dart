@@ -1,6 +1,9 @@
+import 'package:dgi/Utility/footer.dart';
 import 'package:dropdown_button2/custom_dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import '../Utility/CustomWidgetBuilder.dart';
 
 class AssetsDetails extends StatefulWidget {
   const AssetsDetails({Key? key}) : super(key: key);
@@ -17,12 +20,12 @@ class _AssetsDetailsState extends State<AssetsDetails> {
   @override
   Widget build(BuildContext context) {
     final dSize = MediaQuery.of(context).size;
-    print('hhh ${dSize.height * 0.01}');
-    print('hhh ${dSize.width * 0.04}');
+    print('hhh * 20 ${dSize.height * 0.007}');
+    // print('hhh ${dSize.width * 0.04}');
     return Scaffold(
         body: SafeArea(
       child: SingleChildScrollView(
-        child: Container(
+        child: SizedBox(
           height: dSize.height - 24,
           child: Column(
             children: [
@@ -155,6 +158,7 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                                 height: 100,
                                 child: Image.asset(
                                   'assets/icons/img.png',
+                                  fit: BoxFit.cover,
                                   width: 300,
                                 )),
                           ],
@@ -252,52 +256,11 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
-                      padding: EdgeInsets.all(5),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                          color: Color(0xFF00B0BD),
-                          borderRadius: BorderRadius.circular(5)),
-                      child: InkWell(
-                        onTap: () => Navigator.of(context).pop(),
-                        child: Icon(
-                          Icons.arrow_back_ios,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
+                    CustomWidgetBuilder.buildArrow(context, Icon(Icons.arrow_back_ios), ()=>Navigator.of(context).pop()),
                   ],
                 ),
               ),
-              Container(
-                  width: double.infinity,
-                  height: dSize.height * 0.05,
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
-                  decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                          colors: [
-                            Color(0xFF26BB9B),
-                            Color(0xFF00B0BD),
-                          ],
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
-                          stops: [0, 1])),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'USER NAME : MO GAMAL',
-                        style: TextStyle(
-                            color: Colors.white, fontSize: dSize.width * 0.037),
-                      ),
-                      Text(
-                        'PDA NO : 1023088',
-                        style: TextStyle(
-                            color: Colors.white, fontSize: dSize.width * 0.037),
-                      ),
-                    ],
-                  ))
+              const Footer()
             ],
           ),
         ),

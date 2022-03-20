@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         fontFamily: 'Montserrat'
       ),
-      home: const AssetsCheck(),
+      home: const SplashScreen(),
     );
   }
 }
