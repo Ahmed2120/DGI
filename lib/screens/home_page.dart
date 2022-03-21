@@ -1,5 +1,5 @@
-import 'package:dgi/screens/assets_capture_screen.dart';
 import 'package:dgi/screens/assets_verification_screen.dart';
+import 'package:dgi/screens/item_capture_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -89,7 +89,7 @@ class HomePage extends StatelessWidget {
                           child: buildColumn('Assets Capture', dsize, '1-15'),
                           onTap: () => Navigator.of(context).push(
                               MaterialPageRoute(
-                                  builder: (context) => AssetsCapture())),
+                                  builder: (context) => ItemCapture())),
                         ),
                         InkWell(
                           child:

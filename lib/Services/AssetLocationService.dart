@@ -10,7 +10,7 @@ class AssetLocationService{
   Future<List<AssetLocation>> retrieve() async {
     return _assetLocationRepository.retrieve();
   }
-  Future<int> insertCategories(List<AssetLocation> assetsLocations) async {
+  Future<int> batch(List<AssetLocation> assetsLocations) async {
     return _assetLocationRepository.batch(assetsLocations);
   }
   Future<void> delete(int id) async {

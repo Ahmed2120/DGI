@@ -1,18 +1,10 @@
-import 'package:dgi/screens/assets_capture_screen.dart';
-import 'package:dgi/screens/assets_counter_screen.dart';
-import 'package:dgi/screens/assets_custodian.dart';
-import 'package:dgi/screens/assets_verification_screen.dart';
-import 'package:dgi/screens/auth_screen.dart';
 import 'package:dgi/screens/home_page.dart';
-import 'package:dgi/screens/item_capture_screen.dart';
-import 'package:dgi/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
-
 class MyApp extends StatelessWidget {
 
   const MyApp({Key? key}) : super(key: key);
@@ -28,7 +20,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         fontFamily: 'Montserrat'
       ),
-      home: const AssetsCustodian(),
+      home: const HomePage(),
     );
   }
 }

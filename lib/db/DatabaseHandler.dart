@@ -13,7 +13,10 @@ class DatabaseHandler {
         batch.execute("CREATE TABLE city(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL)");
         batch.execute("CREATE TABLE department(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL)");
         batch.execute("CREATE TABLE country(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL)");
+        batch.execute("CREATE TABLE floor(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL)");
         batch.execute("CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT , name TEXT NOT NULL,username TEXT NOT NULL, password TEXT NOT NULL, email TEXT NOT NULL,address TEXT NOT NULL)",);
+        batch.execute("CREATE TABLE assetLocation(id INTEGER PRIMARY KEY , name TEXT NOT NULL,buildingAddress TEXT NOT NULL,buildingName TEXT NOT NULL,buildingNo TEXT NOT NULL,floorId INTEGER NOT NULL,departmentId INTEGER NOT NULL,areaId INTEGER NOT NULL,businessUnit TEXT NOT NULL)",);
+        batch.execute("CREATE TABLE item(id INTEGER PRIMARY KEY AUTOINCREMENT , name TEXT,image BLOB NOT NULL,categoryId  INTEGER NOT NULL,assetLocationId INTEGER NOT NULL,description TEXT NOT NULL,quantity INTEGER NOT NULL)",);
         await batch.commit();
       },
       version: 1,

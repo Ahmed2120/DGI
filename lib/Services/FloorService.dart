@@ -10,7 +10,7 @@ class FloorService{
   Future<List<Floor>> retrieve() async {
     return floorRepository.retrieve();
   }
-  Future<int> insertCategories(List<Floor> floors) async {
+  Future<int> batch(List<Floor> floors) async {
     return floorRepository.batch(floors);
   }
   Future<void> delete(int id) async {

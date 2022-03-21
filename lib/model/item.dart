@@ -2,18 +2,16 @@ import 'dart:typed_data';
 
 class Item {
   final int? id;
-  final String name;
-  final int categoryId;
+  final String? name;
+  final int? categoryId;
   final int quantity;
   final String description;
-  final Uint8List image;
+  final String image;
   final int assetLocationId;
 
   Item(
-      {this.id,
-      required this.name,
-      required this.image,
-      required this.categoryId,
+      {this.id, this.name,
+      required this.image, this.categoryId,
       required this.assetLocationId,
       required this.description,
       required this.quantity});

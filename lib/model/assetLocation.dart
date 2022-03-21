@@ -1,6 +1,6 @@
 class AssetLocation{
-  final int? id;
-  final int? areaId;
+  final int id;
+  final int areaId;
   final String businessUnit;
   final int departmentId;
   final String name;
@@ -10,7 +10,7 @@ class AssetLocation{
   final int floorId;
 
   AssetLocation(
-      { this.id,
+      { required this.id,
         required this.name,
         required this.buildingAddress,
         required this.buildingName,

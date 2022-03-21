@@ -1,4 +1,17 @@
-import 'package:dropdown_button2/custom_dropdown_button2.dart';
+import 'package:dgi/Services/AreaService.dart';
+import 'package:dgi/Services/AssetLocationService.dart';
+import 'package:dgi/Services/CityService.dart';
+import 'package:dgi/Services/CountryService.dart';
+import 'package:dgi/Services/DepartmentService.dart';
+import 'package:dgi/Services/FloorService.dart';
+import 'package:dgi/Utility/DropDownMenu.dart';
+import 'package:dgi/model/area.dart';
+import 'package:dgi/model/assetLocation.dart';
+import 'package:dgi/model/city.dart';
+import 'package:dgi/model/country.dart';
+import 'package:dgi/model/department.dart';
+import 'package:dgi/model/floor.dart';
+import 'package:dgi/screens/assets_capture_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -10,15 +23,30 @@ class ItemCapture extends StatefulWidget {
 }
 
 class _ItemCaptureState extends State<ItemCapture> {
-  String? value;
-
+  List<Country> countries = [];
+  List<City> cities = [];
+  List<Floor> floors = [];
+  List<Department> departments=[];
+  List<Area> areas =[Area(name: 'damp')];
+  AssetLocation assetLocation = AssetLocation(id:1, name: '', buildingAddress: '', buildingName: '', buildingNo: '', businessUnit: '', areaId: 1, departmentId: 1, floorId: 1);
   final GlobalKey<FormState> _formKey = GlobalKey();
+  final countryService = CountryService();
+  final cityService = CityService();
+  final floorService = FloorService();
+  final areaService = AreaService();
+  final departmentService = DepartmentService();
+  final assetLocationService = AssetLocationService();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initData();
+  }
 
   @override
   Widget build(BuildContext context) {
     final dSize = MediaQuery.of(context).size;
-    print('hhh ${dSize.height * 0.01}');
-    print('hhh ${dSize.width * 0.04}');
     return Scaffold(
         body: SafeArea(
           child: SingleChildScrollView(
@@ -71,11 +99,11 @@ class _ItemCaptureState extends State<ItemCapture> {
                                           fontFamily: 'Montserrat'),
                                       children: const <InlineSpan>[
                                         TextSpan(
-                                          text: 'ASSETS ',
+                                          text: 'ITEM ',
                                           style: TextStyle(fontWeight: FontWeight.bold),
                                         ),
                                         TextSpan(
-                                          text: 'VERIFICATION',
+                                          text: 'CAPTURE',
                                         ),
                                       ]),
                                 )),
@@ -117,284 +145,28 @@ class _ItemCaptureState extends State<ItemCapture> {
                             Container(
                               alignment: Alignment.centerLeft,
                               padding: const EdgeInsets.only(bottom: 5),
-                              child: const Text('ASSET LOCATION INFORMATION', style:
+                              child: const Text('ITEM LOCATION INFORMATION', style:
                               TextStyle(fontSize: 13, color: Color(0xFF0F6671), fontWeight: FontWeight.bold),),
                             ),
-                            Row(
-                              children: [
-                                buildText('CATEGORY', dSize),
-                                const Spacer(),
-                                Container(
-                                  decoration: const BoxDecoration(
-                                      border: Border(
-                                          bottom: BorderSide(
-                                              color: Color(0xFF00B0BD), width: 2))),
-                                  width: dSize.width * 0.4,
-                                  child: DropdownButtonHideUnderline(
-                                    child: DropdownButton<String>(
-                                      value: value,
-                                      iconSize: 30,
-                                      icon: const Icon(
-                                        Icons.arrow_drop_down,
-                                        color: Color(0xFF00B0BD),
-                                      ),
-                                      isDense: true,
-                                      isExpanded: true,
-                                      items:
-                                      <String>['A', 'B', 'C', 'D'].map((String item) {
-                                        return DropdownMenuItem<String>(
-                                          value: item,
-                                          child: Text(
-                                            item,
-                                            style: const TextStyle(
-                                                color: Color(0xFF0F6671), fontSize: 20),
-                                          ),
-                                        );
-                                      }).toList(),
-                                      onChanged: (val) {
-                                        setState(() {
-                                          value = val;
-                                        });
-                                        print(val);
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                            DropDownMenu(title: "COUNTRY", values: countries.map((e) => e.name).toList(),),
                             SizedBox(height: dSize.height * 0.01,),
-                            Row(
-                              children: [
-                                buildText('CITY', dSize),
-                                Spacer(),
-                                Container(
-                                  decoration: const BoxDecoration(
-                                      border: Border(
-                                          bottom: BorderSide(
-                                              color: Color(0xFF00B0BD), width: 2))),
-                                  width: dSize.width * 0.4,
-                                  child: DropdownButtonHideUnderline(
-                                    child: DropdownButton<String>(
-                                      value: value,
-                                      iconSize: 30,
-                                      icon: const Icon(
-                                        Icons.arrow_drop_down,
-                                        color: Color(0xFF00B0BD),
-                                      ),
-                                      isDense: true,
-                                      isExpanded: true,
-                                      items:
-                                      <String>['A', 'B', 'C', 'D'].map((String item) {
-                                        return DropdownMenuItem<String>(
-                                          value: item,
-                                          child: Text(
-                                            item,
-                                            style: const TextStyle(
-                                                color: Color(0xFF0F6671), fontSize: 20),
-                                          ),
-                                        );
-                                      }).toList(),
-                                      onChanged: (val) {
-                                        setState(() {
-                                          value = val;
-                                        });
-                                        print(val);
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                            DropDownMenu(title: "CITY", values: cities.map((e) => e.name).toList()),
                             SizedBox(height: dSize.height * 0.01,),
-                            Row(
-                              children: [
-                                buildText('AREA', dSize),
-                                const Spacer(),
-                                Container(
-                                  width: dSize.width * 0.4,
-                                  decoration: BoxDecoration(
-                                    border: Border(
-                                        bottom: BorderSide(
-                                            color: Color(0xFF00B0BD), width: 2)),
-                                  ),
-                                  child: TextFormField(
-                                    decoration: InputDecoration(
-                                      constraints: BoxConstraints(maxHeight: 20),
-                                      border: InputBorder.none,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                            buildTextFormField(dSize,'AREA',areas.isNotEmpty?areas[0].name:'dump'),
                             SizedBox(height: dSize.height * 0.01,),
-                            Row(
-                              children: [
-                                buildText('DEPARTMENT', dSize),
-                                Spacer(),
-                                Container(
-                                  width: dSize.width * 0.4,
-                                  decoration: BoxDecoration(
-                                    border: Border(
-                                        bottom: BorderSide(
-                                            color: Color(0xFF00B0BD), width: 2)),
-                                  ),
-                                  child: TextFormField(
-                                    decoration: InputDecoration(
-                                      constraints: BoxConstraints(maxHeight: 20),
-                                      border: InputBorder.none,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                            buildTextFormField(dSize,'DEPARTMENT',departments.isNotEmpty?departments[0].name:"dump"),
                             SizedBox(height: dSize.height * 0.01,),
-                            Row(
-                              children: [
-                                buildText('BUSINESS UNIT', dSize),
-                                Spacer(),
-                                Container(
-                                  width: dSize.width * 0.4,
-                                  decoration: BoxDecoration(
-                                    border: Border(
-                                        bottom: BorderSide(
-                                            color: Color(0xFF00B0BD), width: 2)),
-                                  ),
-                                  child: TextFormField(
-                                    decoration: InputDecoration(
-                                      constraints: BoxConstraints(maxHeight: 20),
-                                      border: InputBorder.none,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                            buildTextFormField(dSize,'BUSINESS UNIT',assetLocation!.businessUnit),
                             SizedBox(height: dSize.height * 0.01,),
-                            Row(
-                              children: [
-                                buildText('NAME', dSize),
-                                Spacer(),
-                                Container(
-                                  width: dSize.width * 0.4,
-                                  decoration: BoxDecoration(
-                                    border: Border(
-                                        bottom: BorderSide(
-                                            color: Color(0xFF00B0BD), width: 2)),
-                                  ),
-                                  child: TextFormField(
-                                    decoration: InputDecoration(
-                                      constraints: BoxConstraints(maxHeight: 20),
-                                      border: InputBorder.none,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                            buildTextFormField(dSize,'NAME',assetLocation!.name),
                             SizedBox(height: dSize.height * 0.01,),
-                            Row(
-                              children: [
-                                buildText('BLDG NAME', dSize),
-                                const Spacer(),
-                                Container(
-                                  width: dSize.width * 0.4,
-                                  decoration: BoxDecoration(
-                                    border: Border(
-                                        bottom: BorderSide(
-                                            color: Color(0xFF00B0BD), width: 2)),
-                                  ),
-                                  child: TextFormField(
-                                    decoration: InputDecoration(
-                                      constraints: BoxConstraints(maxHeight: 20),
-                                      border: InputBorder.none,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                            buildTextFormField(dSize,'BLDG NAME',assetLocation!.buildingName),
                             SizedBox(height: dSize.height * 0.01,),
-                            Row(
-                              children: [
-                                buildText('BLDG ADDRESS', dSize),
-                                const Spacer(),
-                                Container(
-                                  width: dSize.width * 0.4,
-                                  decoration: BoxDecoration(
-                                    border: Border(
-                                        bottom: BorderSide(
-                                            color: Color(0xFF00B0BD), width: 2)),
-                                  ),
-                                  child: TextFormField(
-                                    decoration: InputDecoration(
-                                      constraints: BoxConstraints(maxHeight: 20),
-                                      border: InputBorder.none,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                            buildTextFormField(dSize,'BLDG ADDRESS',assetLocation!.buildingAddress),
                             SizedBox(height: dSize.height * 0.01,),
-                            Row(
-                              children: [
-                                buildText('BUILDING NO', dSize),
-                                Spacer(),
-                                Container(
-                                  width: dSize.width * 0.4,
-                                  decoration: BoxDecoration(
-                                    border: Border(
-                                        bottom: BorderSide(
-                                            color: Color(0xFF00B0BD), width: 2)),
-                                  ),
-                                  child: TextFormField(
-                                    decoration: InputDecoration(
-                                      constraints: BoxConstraints(maxHeight: 15),
-                                      border: InputBorder.none,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                            buildTextFormField(dSize,'BUILDING NO',assetLocation!.buildingNo.toString()),
                             SizedBox(height: dSize.height * 0.01,),
-                            Row(
-                              children: [
-                                buildText('FLOOR NO', dSize),
-                                const Spacer(),
-                                Container(
-                                  decoration: const BoxDecoration(
-                                      border: Border(
-                                          bottom: BorderSide(
-                                              color: Color(0xFF00B0BD), width: 2))),
-                                  width: dSize.width * 0.4,
-                                  child: DropdownButtonHideUnderline(
-                                    child: DropdownButton<String>(
-                                      value: value,
-                                      iconSize: 30,
-                                      icon: const Icon(
-                                        Icons.arrow_drop_down,
-                                        color: Color(0xFF00B0BD),
-                                      ),
-                                      isDense: true,
-                                      isExpanded: true,
-                                      items:
-                                      <String>['A', 'B', 'C', 'D'].map((String item) {
-                                        return DropdownMenuItem<String>(
-                                          value: item,
-                                          child: Text(
-                                            item,
-                                            style: const TextStyle(
-                                                color: Color(0xFF0F6671), fontSize: 20),
-                                          ),
-                                        );
-                                      }).toList(),
-                                      onChanged: (val) {
-                                        setState(() {
-                                          value = val;
-                                        });
-                                        print(val);
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                            DropDownMenu(title: 'FLOOR NO', values: floors.map((e) => e.name).toList()),
                           ],
                         ),
                       ),
@@ -406,23 +178,31 @@ class _ItemCaptureState extends State<ItemCapture> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Container(
-                          padding: EdgeInsets.all(5),
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                              color: Color(0xFF00B0BD),
-                              borderRadius: BorderRadius.circular(5)
+                        InkWell(
+                          onTap: () => Navigator.pop(context),
+                          child: Container(
+                            padding: EdgeInsets.all(5),
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                                color: Color(0xFF00B0BD),
+                                borderRadius: BorderRadius.circular(5)
+                            ),
+                            child: Icon(Icons.arrow_back_ios, color: Colors.white,),
                           ),
-                          child: Icon(Icons.arrow_back_ios, color: Colors.white,),
                         ),
-                        Container(
-                          padding: EdgeInsets.all(5),
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                              color: Color(0xFF00B0BD),
-                              borderRadius: BorderRadius.circular(5)
+                        InkWell(
+                          onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) => AssetsCapture(assetLocationId: assetLocation.id,))),
+                          child: Container(
+                            padding: EdgeInsets.all(5),
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                                color: Color(0xFF00B0BD),
+                                borderRadius: BorderRadius.circular(5)
+                            ),
+                            child: Icon(Icons.arrow_forward_ios, color: Colors.white,),
                           ),
-                          child: Icon(Icons.arrow_forward_ios, color: Colors.white,),
                         ),
                       ],
                     ),
@@ -465,6 +245,59 @@ class _ItemCaptureState extends State<ItemCapture> {
       title,
       style:
       TextStyle(fontSize: dSize.width * 0.04, color: Color(0xFF0F6671), fontWeight: FontWeight.bold),
+    );
+  }
+
+  initData() async{
+/*
+    await cityService.insert(City(name: 'Cairo'));
+    await countryService.insert(Country(name: 'Egypt'));
+    await areaService.insert(Area(name: 'helwan'));
+    await floorService.insert(Floor(name: '8'));
+    await departmentService.insert(Department(name: 'dep'));
+    await assetLocationService.insert(AssetLocation(name: "location",areaId: 1,buildingAddress: "test building Address",
+    buildingName: "building Name",buildingNo: '10',businessUnit: 'businessUnit',departmentId: 10,floorId: 10,id: 10));
+*/
+
+    countries = await countryService.retrieve();
+    cities = await cityService.retrieve();
+    floors = await floorService.retrieve();
+    departments = await departmentService.retrieve();
+    areas = await areaService.retrieve();
+    assetLocationService.retrieve().then((value) {
+      setState(() {
+        if(value.isNotEmpty) {
+          assetLocation = value[0];
+        }
+      });
+    });
+    setState(() {
+
+    });
+  }
+
+  buildTextFormField(Size dSize,String title,String text){
+    return Row(
+      children: [
+        buildText(title, dSize),
+        const Spacer(),
+        Container(
+          width: dSize.width * 0.4,
+          decoration: const BoxDecoration(
+            border: Border(
+                bottom: BorderSide(
+                    color: Color(0xFF00B0BD), width: 2)),
+          ),
+          child: TextFormField(
+            controller:TextEditingController(text: text) ,
+            enabled: false,
+            decoration: const InputDecoration(
+              constraints: BoxConstraints(maxHeight: 20),
+              border: InputBorder.none,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

@@ -1,33 +1,41 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:dgi/Services/CategoryService.dart';
+import 'package:dgi/Services/ItemService.dart';
 import 'package:dgi/Utility/DropDownMenu.dart';
 import 'package:dgi/model/category.dart';
+import 'package:dgi/model/item.dart';
 import 'package:dgi/screens/take_picture_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AssetsCapture extends StatefulWidget {
-  const AssetsCapture({Key? key}) : super(key: key);
+  int assetLocationId;
+  AssetsCapture({Key? key,required this.assetLocationId}) : super(key: key);
 
   @override
   State<AssetsCapture> createState() => _AssetsCaptureState();
 }
 
 class _AssetsCaptureState extends State<AssetsCapture> {
-  List<String> categories = [];
-  XFile ? image;
+  List<Category> categories = [];
+  String? value;
+  String ? imagePath;
   var descriptionController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey();
-  final CategoryService categoryService = CategoryService();
+  final  categoryService = CategoryService();
+  final itemService = ItemService();
   int quantity = 1;
+  List<Item> items=[];
 
   @override
   void initState(){
     // TODO: implement initState
     super.initState();
     initCategories();
+    getItems();
   }
 
   @override
@@ -106,7 +114,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        DropDownMenu(title: 'CATEGORY', values: categories),
+                        dropdownMenu('CATEGORY',dSize,categories.map((e) => e.name).toList()),
                         Row(
                           children: [
                             const Text('ITEM DESC'),
@@ -194,9 +202,9 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                                 _showCamera();
                               },
                             ),
-                            image != null ?SizedBox(
+                            imagePath != null ?SizedBox(
                               width: dSize.width * 0.4,
-                              child: Image.file(File(image!.path), height: dSize.height * 0.055, alignment: Alignment.centerLeft,),
+                              child: Image.file(File(imagePath!), height: dSize.height * 0.055, alignment: Alignment.centerLeft,),
                             ):Container(),
                           ],
                         ),
@@ -215,14 +223,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                       children: [
                         Table(
                           border: TableBorder(borderRadius: BorderRadius.circular(10)),
-                          children: [
-                            buildRow(['NO', 'TYPE', 'DESC', 'QTY', 'PHOTO'], isHeader: true),
-                            buildRow(['NO', 'TYPE', 'DESC', 'QTY', 'PHOTO']),
-                            buildRow(['NO', 'TYPE', 'DESC', 'QTY', 'PHOTO']),
-                            buildRow(['NO', 'TYPE', 'DESC', 'QTY', 'PHOTO']),
-                            buildRow(['NO', 'TYPE', 'DESC', 'QTY', 'PHOTO']),
-                            buildRow(['NO', 'TYPE', 'DESC', 'QTY', 'PHOTO']),
-                          ],
+                          children: _getListings()
                         ),
                       ],
                     ),
@@ -283,9 +284,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
     await categoryService.insert(category);
     categoryService.retrieve().then((result) => {
       setState(() {
-        for(var item in result) {
-          categories.add(item.name);
-        }
+        categories = result;
       })
     });
   }
@@ -297,9 +296,8 @@ class _AssetsCaptureState extends State<AssetsCapture> {
         MaterialPageRoute(
             builder: (context) => TakePicturePage(camera: camera)));
     setState(() {
-      image = result;
+      imagePath = result;
     });
-    print(result);
   }
 
   buildAddButton() {
@@ -319,9 +317,74 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   }
 
   void saveItem() async{
-    File file = File(image!.path);
-    final byte =  file.readAsBytesSync();
-
+    File file = File(imagePath!);
+    final bytes =  file.readAsBytesSync();
+    String base64Image = base64Encode(bytes);
+    String description = descriptionController.text;
+    int? categoryId = categories.firstWhere((element) => element.name == value).id;
+    itemService.insert(Item(assetLocationId: widget.assetLocationId,categoryId:categoryId,description: description,
+    image: base64Image,quantity: quantity,));
+    getItems();
+  }
+  void getItems() async{
+    itemService.retrieve().then((value) => {
+      setState((){
+        items = value;
+      })
+    });
+  }
+  List<TableRow> _getListings() {
+    List<TableRow> listings = <TableRow>[];
+    int i = 0;
+    for (i = 0; i < items.length; i++) {
+      listings.add(buildRow([(i+1).toString(), 'TYPE', items[i].description, items[i].quantity.toString(), 'PHOTO'], isHeader: i==0),);
+    }
+    return listings;
+  }
+  dropdownMenu(String title,Size dSize,List<String> values){
+    return Row(
+      children: [
+        Text(
+          title,
+          style:
+          TextStyle(fontSize: 16, color: Color(0xFF0F6671)),
+        ),
+        Spacer(),
+        Container(
+          decoration: const BoxDecoration(
+              border: Border(
+                  bottom: BorderSide(
+                      color: Color(0xFF00B0BD), width: 2))),
+          width: dSize.width * 0.4,
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton<String>(
+              value: value,
+              iconSize: 30,
+              icon: const Icon(
+                Icons.arrow_drop_down,
+                color: Color(0xFF00B0BD),
+              ),
+              isExpanded: true,
+              items: values.map((String item) {
+                return DropdownMenuItem<String>(
+                  value: item,
+                  child: Text(
+                    item,
+                    style: const TextStyle(
+                        color: Color(0xFF0F6671), fontSize: 20),
+                  ),
+                );
+              }).toList(),
+              onChanged: (val) {
+                setState(() {
+                  value = val;
+                });
+              },
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
   

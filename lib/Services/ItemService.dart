@@ -10,7 +10,7 @@ class ItemService{
   Future<List<Item>> retrieve() async {
     return itemRepository.retrieve();
   }
-  Future<int> insertCategories(List<Item> items) async {
+  Future<int> batch(List<Item> items) async {
     return itemRepository.batch(items);
   }
   Future<void> delete(int id) async {
