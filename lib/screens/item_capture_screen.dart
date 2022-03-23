@@ -28,7 +28,7 @@ class _ItemCaptureState extends State<ItemCapture> {
   List<Floor> floors = [];
   List<Department> departments=[];
   List<Area> areas =[Area(name: 'damp')];
-  AssetLocation assetLocation = AssetLocation(id:1, name: '', buildingAddress: '', buildingName: '', buildingNo: '', businessUnit: '', areaId: 1, departmentId: 1, floorId: 1);
+  AssetLocation assetLocation = AssetLocation(id:1, name: '', buildingAddress: '', buildingName: '', buildingNo: '', businessUnit: '', areaId: 1, departmentId: 1, floorId: 1,sectionId: 10);
   final GlobalKey<FormState> _formKey = GlobalKey();
   final countryService = CountryService();
   final cityService = CityService();

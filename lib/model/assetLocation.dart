@@ -2,12 +2,13 @@ class AssetLocation{
   final int id;
   final int areaId;
   final String businessUnit;
-  final int departmentId;
+  final int? departmentId;
   final String name;
   final String buildingName;
   final String buildingAddress;
   final String buildingNo;
-  final int floorId;
+  final int? floorId;
+  final int? sectionId;
 
   AssetLocation(
       { required this.id,
@@ -18,7 +19,8 @@ class AssetLocation{
         required this.businessUnit,
         required this.areaId,
         required this.departmentId,
-        required this.floorId
+        required this.floorId,
+        required this.sectionId
       });
 
   AssetLocation.fromMap(Map<String, dynamic> res)
@@ -30,10 +32,11 @@ class AssetLocation{
         buildingNo = res["buildingNo"],
         areaId = res["areaId"],
         departmentId = res["departmentId"],
-        floorId = res["floorId"];
+        floorId = res["floorId"],
+        sectionId = res["sectionId"];
 
   Map<String, Object?> toMap() {
     return {'id':id,'name': name,'businessUnit':businessUnit,'buildingAddress':buildingAddress,'buildingName':buildingName,
-    'buildingNo':buildingNo,'areaId':areaId,'departmentId':departmentId,'floorId':floorId};
+    'buildingNo':buildingNo,'areaId':areaId,'departmentId':departmentId,'floorId':floorId,'sectionId':sectionId};
   }
 }
