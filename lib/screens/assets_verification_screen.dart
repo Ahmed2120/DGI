@@ -1,4 +1,4 @@
-import 'package:dropdown_button2/custom_dropdown_button2.dart';
+import 'package:dgi/screens/assets_counter_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -415,14 +415,19 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                           ),
                           child: Icon(Icons.arrow_back_ios, color: Colors.white,),
                         ),
-                        Container(
-                          padding: EdgeInsets.all(5),
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                              color: Color(0xFF00B0BD),
-                              borderRadius: BorderRadius.circular(5)
+                        InkWell(
+                          onTap: ()=>Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (context) => AssetsCounter())),
+                          child: Container(
+                            padding: EdgeInsets.all(5),
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                                color: Color(0xFF00B0BD),
+                                borderRadius: BorderRadius.circular(5)
+                            ),
+                            child: Icon(Icons.arrow_forward_ios, color: Colors.white,),
                           ),
-                          child: Icon(Icons.arrow_forward_ios, color: Colors.white,),
                         ),
                       ],
                     ),
