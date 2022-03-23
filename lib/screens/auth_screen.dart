@@ -1,3 +1,9 @@
+import 'dart:convert';
+import 'package:crypto/crypto.dart';
+
+import 'package:dgi/authentication.dart';
+import 'package:dgi/db/UserRepository.dart';
+import 'package:dgi/model/User.dart';
 import 'package:dgi/screens/home_page.dart';
 import 'package:flutter/material.dart';
 
@@ -7,6 +13,7 @@ class AuthScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
+    print('deviceSize: ${deviceSize.width * 0.1}');
 
     return Scaffold(
       body: Stack(
@@ -38,19 +45,19 @@ class AuthScreen extends StatelessWidget {
                         flex: 0,
                         child: CircleAvatar(
                             backgroundColor: Colors.white.withOpacity(0.5),
-                            radius: deviceSize.width * 0.23,
-                            child: Image.asset('assets/icons/0-18.png')),
+                            radius: deviceSize.width * 0.2,
+                            child: Image.asset('assets/icons/0-18.png', width: deviceSize.width * 0.25,)),
                       ),
                       Flexible(
                           child: Container(
                         margin: const EdgeInsets.only(top: 10),
-                        child: const Text(
+                        child: Text(
                           'Welcome!',
                           style: TextStyle(
-                              color: Color(0xFFFFFFFF),
-                              fontSize: 40,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'Anton'),
+                            color: Color(0xFFFFFFFF),
+                            fontSize: deviceSize.width * 0.1,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       )),
                       const Flexible(
@@ -80,13 +87,10 @@ class _AuthCardState extends State<AuthCard>
     with SingleTickerProviderStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey();
 
-  final Map<String, String> _authData = {'email': '', 'password': ''};
+  final Map<String, String> _authData = {'username': '', 'password': ''};
 
   bool isLoading = false;
   final _passwordController = TextEditingController();
-  late AnimationController _controller;
-  late Animation<Offset> _slideAnimation;
-  late Animation<double> _opacityAnimation;
 
   @override
   void initState() {
@@ -99,9 +103,9 @@ class _AuthCardState extends State<AuthCard>
   }
 
   Future _submit() async {
-    // if(!_formKey.currentState!.validate()){
-    //   return;
-    // }
+    if(!_formKey.currentState!.validate()){
+      return;
+    }
     FocusScope.of(context).unfocus();
     _formKey.currentState!.save();
     setState(() {
@@ -109,14 +113,38 @@ class _AuthCardState extends State<AuthCard>
     });
 
     try {
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=> HomePage()));
+      var bytes1 = utf8.encode(_authData['password']!);         // data being hashed
+      var digest1 = sha256.convert(bytes1);
+      User user = User(
+          name: 'ahmad',
+          username: _authData['username']!,
+          password: digest1.toString(),
+          address: 'address',
+          email: 'email');
+      Authentication auth = Authentication();
+      // UserRepository userRepository = UserRepository();
+      // userRepository.insert(user);
+      // userRepository.retrieve().then((value) {
+      //   for (var val in value) {
+      //     print('${val.username}');
+      //   }
+      // });
+
+      auth.logIn(_authData['username']!, digest1.toString()).then((value) {
+        setState(() {
+          isLoading = false;
+        });
+        if(value == 'success'){
+          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=> const HomePage()));
+        }else{
+          _showErrorDialog('Invalid username or password');
+        }
+      });
+
     } catch (err) {
       var errMessage = 'Could not authenticate you. please try again later';
       _showErrorDialog(err.toString());
     }
-    setState(() {
-      isLoading = false;
-    });
   }
 
   void _showErrorDialog(String message) {
@@ -146,51 +174,38 @@ class _AuthCardState extends State<AuthCard>
         key: _formKey,
         child: Column(
           children: [
-            Container(
-              decoration: BoxDecoration(
-                border:
-                    Border(bottom: BorderSide(color: Colors.white, width: 2)),
-              ),
-              child: TextFormField(
-                style: TextStyle(color: Colors.white),
-                decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    labelStyle: TextStyle(color: Colors.white),
-                    labelText: 'username'),
-                // keyboardType: TextInputType.emailAddress,
-                // validator: (val) {
-                //   if (val!.isEmpty || !val.contains('@')) {
-                //     return 'Inavalid email';
-                //   }
-                // },
-                onSaved: (val) {
-                  _authData['email'] = val!;
-                },
-              ),
+            TextFormField(
+              decoration: InputDecoration(labelText: 'username', labelStyle: TextStyle(color: Colors.white),enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.white),
+              ),),
+              keyboardType: TextInputType.emailAddress,
+              validator: (val){
+                if(val!.isEmpty){
+                  return 'Inavalid username';
+                }
+              },
+              onSaved: (val){
+                _authData['email'] = val!;
+              },
             ),
-            Container(
-              decoration: BoxDecoration(
-                border:
-                    Border(bottom: BorderSide(color: Colors.white, width: 2)),
+            TextFormField(
+              decoration: const InputDecoration(
+                labelStyle: TextStyle(color: Colors.white),
+                labelText: 'Password',
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white),
+                  )
               ),
-              child: TextFormField(
-                style: TextStyle(color: Colors.white),
-                decoration: const InputDecoration(
-                  labelStyle: TextStyle(color: Colors.white),
-                  labelText: 'Password',
-                  border: InputBorder.none,
-                ),
-                obscureText: true,
-                controller: _passwordController,
-                // validator: (val) {
-                //   if (val!.isEmpty || val.length < 5) {
-                //     return 'Password is too short';
-                //   }
-                // },
-                onSaved: (val) {
-                  _authData['password'] = val!;
-                },
-              ),
+              obscureText: true,
+              controller: _passwordController,
+              validator: (val) {
+                if (val!.isEmpty) {
+                  return 'Type Password';
+                }
+              },
+              onSaved: (val) {
+                _authData['password'] = val!;
+              },
             ),
             const SizedBox(
               height: 20,
@@ -225,38 +240,39 @@ class _AuthCardState extends State<AuthCard>
             const SizedBox(
               height: 10,
             ),
-            const Text(
+            Text(
               'Modyle Name : ASSET TRACKING',
               style: TextStyle(
                 color: Color(0xFFFFFFFF),
-                fontSize: 18,
+                fontSize: deviceSize.width * 0.04,
               ),
             ),
             const SizedBox(
               height: 10,
             ),
-            const Text(
+            Text(
               'Internal Version',
               style: TextStyle(
                 color: Color(0xFFFFFFFF),
-                fontSize: 18,
+                fontSize: deviceSize.width * 0.04,
               ),
             ),
             const Text(
               'V 1.0.0',
               style: TextStyle(
                 color: Color(0xFFFFFFFF),
-                fontSize: 18,
+                fontSize: 14,
               ),
             ),
             const SizedBox(
               height: 15,
             ),
-            const Text(
+            Text(
               'DGI SYSTEM',
               style: TextStyle(
                 color: Color(0xFF0F6671),
-                fontSize: 20,
+                fontSize: deviceSize.width * 0.045,
+                fontWeight: FontWeight.bold
               ),
             ),
           ],

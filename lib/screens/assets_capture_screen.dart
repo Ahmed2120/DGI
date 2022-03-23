@@ -5,6 +5,8 @@ import 'package:dropdown_button2/custom_dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../Utility/CustomWidgetBuilder.dart';
+
 class AssetsCapture extends StatefulWidget {
   const AssetsCapture({Key? key}) : super(key: key);
 
@@ -15,6 +17,7 @@ class AssetsCapture extends StatefulWidget {
 class _AssetsCaptureState extends State<AssetsCapture> {
   CategoryService categoryService = CategoryService();
   List<String> categories = [];
+  Image image = Image.asset('assets/icons/0-16.jpg', height: 30,);
 
   @override
   void initState(){
@@ -108,7 +111,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                         Row(
                           children: [
                             const Text('ITEM DESC'),
-                            Spacer(),
+                            const Spacer(),
                             Container(
                               width: dSize.width * 0.4,
                               decoration: BoxDecoration(
@@ -189,21 +192,24 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                 children: [
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
-                    height: dSize.height * 0.33,
-                    child: ListView(
-                      children: [
-                        Table(
-                          border: TableBorder(borderRadius: BorderRadius.circular(10)),
-                          children: [
-                            buildRow(['NO', 'TYPE', 'DESC', 'QTY', 'PHOTO'], isHeader: true),
-                            buildRow(['NO', 'TYPE', 'DESC', 'QTY', 'PHOTO']),
-                            buildRow(['NO', 'TYPE', 'DESC', 'QTY', 'PHOTO']),
-                            buildRow(['NO', 'TYPE', 'DESC', 'QTY', 'PHOTO']),
-                            buildRow(['NO', 'TYPE', 'DESC', 'QTY', 'PHOTO']),
-                            buildRow(['NO', 'TYPE', 'DESC', 'QTY', 'PHOTO']),
-                          ],
-                        ),
-                      ],
+                    height: dSize.height * 0.3,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: ListView(
+                        children: [
+                          Table(
+                            border: TableBorder(borderRadius: BorderRadius.circular(10)),
+                            children: [
+                              buildRow(['NO', 'TYPE', 'DESC', 'QTY', 'PHOTO'], isHeader: true),
+                              buildRow(['NO', 'TYPE', 'DESC', 'QTY', image]),
+                              buildRow(['NO', 'TYPE', 'DESC', 'QTY', image]),
+                              buildRow(['NO', 'TYPE', 'DESC', 'QTY', image]),
+                              buildRow(['NO', 'TYPE', 'DESC', 'QTY', image]),
+                              buildRow(['NO', 'TYPE', 'DESC', 'QTY', image]),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   Container(
@@ -211,6 +217,15 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                     child: Text('ITEM TOTAL     000', style: TextStyle(color: Color(0xFF0F6671), fontWeight: FontWeight.bold),), alignment: Alignment.centerLeft,),
                 ],
               ),),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CustomWidgetBuilder.buildArrow(context, Icon(Icons.arrow_back_ios_rounded), ()=>Navigator.of(context).pop()),
+                  ],
+                ),
+              ),
               Container(
                   width: double.infinity,
                   height: dSize.height * 0.07,
@@ -239,14 +254,14 @@ class _AssetsCaptureState extends State<AssetsCapture> {
     ));
   }
 
-  TableRow buildRow(List<String> cells, {bool isHeader = false}) => TableRow(
+  TableRow buildRow(List<dynamic> cells, {bool isHeader = false}) => TableRow(
     decoration: BoxDecoration(
       color: isHeader ? Color(0xFFFFA227) : Colors.grey[200],
         borderRadius: isHeader ? BorderRadius.circular(10) : BorderRadius.circular(0)
     ),
     children: cells.map((cell)=> Padding(
             padding: EdgeInsets.all(8.0),
-            child: Text(cell, style: TextStyle(color: isHeader ? Colors.white : Color(0xFF0F6671), fontWeight: isHeader ? FontWeight.bold : FontWeight.normal),),
+            child: cell.runtimeType == String ? Text(cell, style: TextStyle(color: isHeader ? Colors.white : Color(0xFF0F6671), fontWeight: isHeader ? FontWeight.bold : FontWeight.normal),) : cell,
           )).toList(),
   );
 

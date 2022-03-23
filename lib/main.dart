@@ -1,3 +1,4 @@
+import 'package:dgi/screens/administrator_screen.dart';
 import 'package:dgi/screens/assets_capture_screen.dart';
 import 'package:dgi/screens/assets_counter_screen.dart';
 import 'package:dgi/screens/assets_custodian.dart';
@@ -23,15 +24,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-    // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    //   statusBarColor: Color(0xFF019BA5)
-    // ));
-
     return MaterialApp(
-      title: 'DGI',
+      title: 'SAGECO',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSwatch().copyWith(
-          primary: Color(0xFF0F6671)
+          primary: const Color(0xFF0F6671)
         ),
         primarySwatch: Colors.blue,
         fontFamily: 'Montserrat'

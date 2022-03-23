@@ -1,9 +1,16 @@
 import 'dart:async';
+import 'dart:convert';
 
+import 'package:crypto/crypto.dart';
+import 'package:dgi/screens/administrator_screen.dart';
 import 'package:dgi/screens/auth_screen.dart';
 import 'package:dgi/screens/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+
+import '../authentication.dart';
+import '../db/UserRepository.dart';
+import '../model/User.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -17,8 +24,19 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+    var bytes1 = utf8.encode('1234');         // data being hashed
+    var digest1 = sha256.convert(bytes1);
+    User user = User(
+        name: 'ahmad',
+        username: 'ahmad',
+        password: digest1.toString(),
+        address: 'address',
+        email: 'email');
+    Authentication auth = Authentication();
+    UserRepository userRepository = UserRepository();
+    userRepository.insert(user);
     Timer(const Duration(milliseconds: 3000), ()=>
-        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=> AuthScreen()))
+        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=> Administrator()))
     );
   }
 

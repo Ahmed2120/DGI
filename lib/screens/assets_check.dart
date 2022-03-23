@@ -15,6 +15,7 @@ class AssetsCheck extends StatefulWidget {
 class _AssetsCheckState extends State<AssetsCheck> {
   String? value;
 
+
   final GlobalKey<FormState> _formKey = GlobalKey();
 
   @override
@@ -221,37 +222,43 @@ class _AssetsCheckState extends State<AssetsCheck> {
                                             'NO',
                                             'ASSETS',
                                             'DESC',
-                                            'PHOTO'
+                                            checkContainer(dSize, Icon(Icons.check),
+                                                Color(0xFF00B0BD)),
                                           ]),
                                           buildRow([
                                             'NO',
                                             'ASSETS',
                                             'DESC',
-                                            'PHOTO'
+                                            checkContainer(dSize, Icon(Icons.check),
+                                                Color(0xFF00B0BD)),
                                           ]),
                                           buildRow([
                                             'NO',
                                             'ASSETS',
                                             'DESC',
-                                            'PHOTO'
+                                            checkContainer(dSize, Icon(Icons.check),
+                                                Color(0xFF00B0BD)),
                                           ]),
                                           buildRow([
                                             'NO',
                                             'ASSETS',
                                             'DESC',
-                                            'PHOTO'
+                                            checkContainer(dSize, Icon(Icons.check),
+                                                Color(0xFF00B0BD)),
                                           ]),
                                           buildRow([
                                             'NO',
                                             'ASSETS',
                                             'DESC',
-                                            'PHOTO'
+                                            checkContainer(dSize, Icon(Icons.check),
+                                                Color(0xFF00B0BD)),
                                           ]),
                                           buildRow([
                                             'NO',
                                             'ASSETS',
                                             'DESC',
-                                            'PHOTO'
+                                            checkContainer(dSize, Icon(Icons.check),
+                                                Color(0xFF00B0BD)),
                                           ]),
                                         ],
                                       ),
@@ -302,7 +309,7 @@ class _AssetsCheckState extends State<AssetsCheck> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    CustomWidgetBuilder.buildArrow(context, Icon(Icons.arrow_back_ios), ()=>Navigator.of(context).pop()),
+                    CustomWidgetBuilder.buildArrow(context, Icon(Icons.arrow_back_ios_outlined), ()=>Navigator.of(context).pop()),
                   ],
                 ),
               ),
@@ -338,23 +345,14 @@ class _AssetsCheckState extends State<AssetsCheck> {
     );
   }
 
-  TableRow buildRow(List<String> cells, {bool isHeader = false}) => TableRow(
-        decoration: BoxDecoration(
-            color: isHeader ? Color(0xFFFFA227) : Colors.grey[200],
-            borderRadius: isHeader
-                ? BorderRadius.circular(10)
-                : BorderRadius.circular(0)),
-        children: cells
-            .map((cell) => Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text(
-                    cell,
-                    style: TextStyle(
-                        color: isHeader ? Colors.white : Color(0xFF0F6671),
-                        fontWeight:
-                            isHeader ? FontWeight.bold : FontWeight.normal),
-                  ),
-                ))
-            .toList(),
-      );
+  TableRow buildRow(List<dynamic> cells, {bool isHeader = false}) => TableRow(
+    decoration: BoxDecoration(
+        color: isHeader ? Color(0xFFFFA227) : Colors.grey[200],
+        borderRadius: isHeader ? BorderRadius.circular(10) : BorderRadius.circular(0)
+    ),
+    children: cells.map((cell)=> Padding(
+      padding: EdgeInsets.all(8.0),
+      child: cell.runtimeType == String ? Text(cell, style: TextStyle(color: isHeader ? Colors.white : Color(0xFF0F6671), fontWeight: isHeader ? FontWeight.bold : FontWeight.normal),) : cell,
+    )).toList(),
+  );
 }
