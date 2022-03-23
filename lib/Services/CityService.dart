@@ -9,7 +9,7 @@ class CityService{
   Future<List<City>> retrieve() async {
     return cityRepository.retrieve();
   }
-  Future<int> insertCategories(List<City> cities) async {
+  Future<int> batch(List<City> cities) async {
     return cityRepository.batch(cities);
   }
   Future<void> delete(int id) async {
