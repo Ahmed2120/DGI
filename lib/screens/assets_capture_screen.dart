@@ -1,17 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:camera/camera.dart';
 import 'package:dgi/Services/CategoryService.dart';
 import 'package:dgi/Services/ItemService.dart';
-import 'package:dgi/Utility/DropDownMenu.dart';
 import 'package:dgi/model/category.dart';
 import 'package:dgi/model/item.dart';
 import 'package:dgi/screens/take_picture_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import '../Utility/CustomWidgetBuilder.dart';
 
 class AssetsCapture extends StatefulWidget {
   int assetLocationId;
@@ -220,7 +216,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                     children: [
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 15),
-                        height: dSize.height * 0.3,
+                        height: dSize.height * 0.33,
                         child: ListView(
                           children: [
                             Table(
@@ -235,15 +231,6 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                         child: Text('ITEM TOTAL     000', style: TextStyle(color: Color(0xFF0F6671), fontWeight: FontWeight.bold),), alignment: Alignment.centerLeft,),
                     ],
                   ),),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        CustomWidgetBuilder.buildArrow(context, Icon(Icons.arrow_back_ios_rounded), ()=>Navigator.of(context).pop()),
-                      ],
-                    ),
-                  ),
                   Container(
                       width: double.infinity,
                       height: dSize.height * 0.07,
@@ -284,15 +271,6 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   );
 
   initCategories() async{
-    CategoryService categoryService = CategoryService();
-    Category category = Category(name: 'Category A');
-    await categoryService.insert(category);
-    category = Category(name: 'Category B');
-    await categoryService.insert(category);
-    category = Category(name: 'Category C');
-    await categoryService.insert(category);
-    category = Category(name: 'Category D');
-    await categoryService.insert(category);
     categoryService.retrieve().then((result) => {
       setState(() {
         categories = result;
@@ -348,7 +326,10 @@ class _AssetsCaptureState extends State<AssetsCapture> {
     List<TableRow> listings = <TableRow>[];
     int i = 0;
     for (i = 0; i < items.length; i++) {
-      listings.add(buildRow([(i+1).toString(), 'TYPE', items[i].description, items[i].quantity.toString(), 'PHOTO'], isHeader: i==0),);
+      if(i==0){
+        listings.add(buildRow([(1).toString(), 'TYPE', 'DESC', 'QNT', 'PHOTO'], isHeader: true),);
+      }
+      listings.add(buildRow([(i+2).toString(), 'TYPE', items[i].description, items[i].quantity.toString(), 'PHOTO'],),);
     }
     return listings;
   }
@@ -390,8 +371,6 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                 setState(() {
                   value = val;
                 });
-                print(val);
-                print(value);
               },
             ),
           ),

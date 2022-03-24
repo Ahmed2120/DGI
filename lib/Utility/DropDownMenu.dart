@@ -1,4 +1,3 @@
-import 'package:dgi/model/category.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -12,8 +11,7 @@ class DropDownMenu extends StatefulWidget{
 }
 
 class _DropDownMenuState extends State<DropDownMenu> {
-
-  String? value;
+  String ?value;
   @override
   Widget build(BuildContext context) {
     final dSize = MediaQuery.of(context).size;

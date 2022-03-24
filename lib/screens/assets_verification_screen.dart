@@ -1,8 +1,25 @@
+import 'package:dgi/Services/CategoryService.dart';
+import 'package:dgi/Utility/CustomWidgetBuilder.dart';
+import 'package:dgi/model/category.dart';
+import 'package:dgi/screens/assets_counter_screen.dart';
 import 'package:dgi/screens/assets_details.dart';
-import 'package:dropdown_button2/custom_dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:dgi/Services/AreaService.dart';
+import 'package:dgi/Services/AssetLocationService.dart';
+import 'package:dgi/Services/CityService.dart';
+import 'package:dgi/Services/CountryService.dart';
+import 'package:dgi/Services/DepartmentService.dart';
+import 'package:dgi/Services/FloorService.dart';
+import 'package:dgi/model/area.dart';
+import 'package:dgi/model/assetLocation.dart';
+import 'package:dgi/model/city.dart';
+import 'package:dgi/model/country.dart';
+import 'package:dgi/model/department.dart';
+import 'package:dgi/model/floor.dart';
+import 'package:flutter/services.dart';
+import 'dart:async';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import '../Utility/CustomWidgetBuilder.dart';
 import '../Utility/footer.dart';
 import '../Utility/header.dart';
@@ -15,11 +32,33 @@ class AssetsVerification extends StatefulWidget {
 }
 
 class _AssetsVerificationState extends State<AssetsVerification> {
+  List<Category> categories = [];
+  List<Country> countries = [];
+  List<City> cities = [];
+  List<Floor> floors = [];
+  List<Department> departments=[];
+  List<Area> areas =[];
+  AssetLocation assetLocation = AssetLocation(id:1, name: '', buildingAddress: '', buildingName: '', buildingNo: '', businessUnit: '', areaId: 1, departmentId: 1, floorId: 1,sectionId: 10);
+  final GlobalKey<FormState> _formKey = GlobalKey();
+  final countryService = CountryService();
+  final cityService = CityService();
+  final floorService = FloorService();
+  final areaService = AreaService();
+  final departmentService = DepartmentService();
+  final assetLocationService = AssetLocationService();
+  final categoryService = CategoryService();
   String? value;
   String? location;
 
-  final GlobalKey<FormState> _formKey = GlobalKey();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initData();
+  }
+
   List<String> locations = ['STORE', 'BUILDING', 'OFFICE'];
+
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +109,7 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                                       isDense: true,
                                       isExpanded: true,
                                       items:
-                                      <String>['A', 'B', 'C', 'D'].map((String item) {
+                                      categories.map((e) => e.name).map((String item) {
                                         return DropdownMenuItem<String>(
                                           value: item,
                                           child: Text(
@@ -113,7 +152,7 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                                       isDense: true,
                                       isExpanded: true,
                                       items:
-                                      <String>['A', 'B', 'C', 'D'].map((String item) {
+                                      cities.map((e) => e.name).map((String item) {
                                         return DropdownMenuItem<String>(
                                           value: item,
                                           child: Text(
@@ -135,26 +174,19 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                               ],
                             ),
                             SizedBox(height: dSize.height * 0.01,),
-                            Row(
-                              children: [
-                                buildText('AREA', dSize),
-                                const Spacer(),
-                                Container(
-                                  width: dSize.width * 0.4,
-                                  decoration: BoxDecoration(
-                                    border: Border(
-                                        bottom: BorderSide(
-                                            color: Color(0xFF00B0BD), width: 2)),
-                                  ),
-                                  child: TextFormField(
-                                    decoration: InputDecoration(
-                                      constraints: BoxConstraints(maxHeight: 20),
-                                      border: InputBorder.none,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                            CustomWidgetBuilder.buildTextFormField(dSize,'AREA',areas.isNotEmpty?areas[0].name:'dump'),
+                            SizedBox(height: dSize.height * 0.01,),
+                            CustomWidgetBuilder.buildTextFormField(dSize,'DEPARTMENT',departments.isNotEmpty?departments[0].name:"dump"),
+                            SizedBox(height: dSize.height * 0.01,),
+                            CustomWidgetBuilder.buildTextFormField(dSize,'BUSINESS UNIT',assetLocation!.businessUnit),
+                            SizedBox(height: dSize.height * 0.01,),
+                            CustomWidgetBuilder.buildTextFormField(dSize,'NAME',assetLocation!.name),
+                            SizedBox(height: dSize.height * 0.01,),
+                            CustomWidgetBuilder.buildTextFormField(dSize,'BLDG NAME',assetLocation!.buildingName),
+                            SizedBox(height: dSize.height * 0.01,),
+                            CustomWidgetBuilder.buildTextFormField(dSize,'BLDG ADDRESS',assetLocation!.buildingAddress),
+                            SizedBox(height: dSize.height * 0.01,),
+                            CustomWidgetBuilder.buildTextFormField(dSize,'BUILDING NO',assetLocation!.buildingNo.toString()),
                             SizedBox(height: dSize.height * 0.01,),
                             Row(
                               children: [
@@ -286,6 +318,32 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        InkWell(
+                          onTap: ()=>scanBarcodeNormal(),
+                          child: Container(
+                            padding: EdgeInsets.all(5),
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                                color: Color(0xFF00B0BD),
+                                borderRadius: BorderRadius.circular(5)
+                            ),
+                            child: Icon(Icons.arrow_back_ios, color: Colors.white,),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: ()=>Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (context) => AssetsCounter())),
+                          child: Container(
+                            padding: EdgeInsets.all(5),
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                                color: Color(0xFF00B0BD),
+                                borderRadius: BorderRadius.circular(5)
+                            ),
+                            child: Icon(Icons.arrow_forward_ios, color: Colors.white,),
+                          ),
+                        ),
                         CustomWidgetBuilder.buildArrow(context, Icon(Icons.arrow_back_ios_rounded), ()=>Navigator.of(context).pop()),
                         CustomWidgetBuilder.buildArrow(context, Icon(Icons.arrow_forward_ios), ()=> Navigator.of(context).push(
                             MaterialPageRoute(
@@ -301,11 +359,70 @@ class _AssetsVerificationState extends State<AssetsVerification> {
         ));
   }
 
+  initData() async{
+/*    await cityService.insert(City(name: 'Cairo'));
+    await countryService.insert(Country(name: 'Egypt'));
+    await areaService.insert(Area(name: 'helwan'));
+    await floorService.insert(Floor(name: '8'));
+    await departmentService.insert(Department(name: 'Technology'));
+    await assetLocationService.insert(AssetLocation(name: "location",areaId: 1,buildingAddress: "test building Address",
+    buildingName: "building Name",buildingNo: '10',businessUnit: 'businessUnit',departmentId: 10,floorId: 10,id: 10,sectionId: 22));
+    await cityService.insert(City(name: 'Fayioun'));
+    await countryService.insert(Country(name: 'KSA'));
+    await areaService.insert(Area(name: 'baaa'));
+    await floorService.insert(Floor(name: '12'));
+    await departmentService.insert(Department(name: 'HR'));
+    CategoryService categoryService = CategoryService();
+    Category category = Category(name: 'A');
+    await categoryService.insert(category);
+    category = Category(name: 'B');
+    await categoryService.insert(category);
+    category = Category(name: 'C');
+    await categoryService.insert(category);
+    category = Category(name: 'D');
+    await categoryService.insert(category);*/
+    categories = await categoryService.retrieve();
+    countries = await countryService.retrieve();
+    cities = await cityService.retrieve();
+    floors = await floorService.retrieve();
+    departments = await departmentService.retrieve();
+    areas = await areaService.retrieve();
+    assetLocationService.retrieve().then((value) {
+      setState(() {
+        if(value.isNotEmpty) {
+          assetLocation = value[0];
+        }
+      });
+    });
+    setState(() {
+
+    });
+  }
+
   Text buildText(String title, dSize) {
     return Text(
       title,
       style:
       TextStyle(fontSize: dSize.width * 0.04, color: Color(0xFF0F6671), fontWeight: FontWeight.bold),
     );
+  }
+
+  // Platform messages are asynchronous, so we initialize in an async method.
+  Future<void> scanBarcodeNormal() async {
+    String barcodeScanRes;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+          '#ff6666', 'Cancel', true, ScanMode.BARCODE);
+      print(barcodeScanRes);
+    } on PlatformException {
+      barcodeScanRes = 'Failed to get platform version.';
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) return;
+
   }
 }
