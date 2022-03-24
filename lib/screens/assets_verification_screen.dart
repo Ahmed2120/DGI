@@ -19,7 +19,6 @@ import 'package:dgi/model/department.dart';
 import 'package:dgi/model/floor.dart';
 import 'package:flutter/services.dart';
 import 'dart:async';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import '../Utility/CustomWidgetBuilder.dart';
 import '../Utility/footer.dart';
 import '../Utility/header.dart';
@@ -318,32 +317,6 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        InkWell(
-                          onTap: ()=>scanBarcodeNormal(),
-                          child: Container(
-                            padding: EdgeInsets.all(5),
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                color: Color(0xFF00B0BD),
-                                borderRadius: BorderRadius.circular(5)
-                            ),
-                            child: Icon(Icons.arrow_back_ios, color: Colors.white,),
-                          ),
-                        ),
-                        InkWell(
-                          onTap: ()=>Navigator.of(context).push(
-                              MaterialPageRoute(
-                                  builder: (context) => AssetsCounter())),
-                          child: Container(
-                            padding: EdgeInsets.all(5),
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                color: Color(0xFF00B0BD),
-                                borderRadius: BorderRadius.circular(5)
-                            ),
-                            child: Icon(Icons.arrow_forward_ios, color: Colors.white,),
-                          ),
-                        ),
                         CustomWidgetBuilder.buildArrow(context, Icon(Icons.arrow_back_ios_rounded), ()=>Navigator.of(context).pop()),
                         CustomWidgetBuilder.buildArrow(context, Icon(Icons.arrow_forward_ios), ()=> Navigator.of(context).push(
                             MaterialPageRoute(
@@ -407,7 +380,7 @@ class _AssetsVerificationState extends State<AssetsVerification> {
     );
   }
 
-  // Platform messages are asynchronous, so we initialize in an async method.
+/*  // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> scanBarcodeNormal() async {
     String barcodeScanRes;
     // Platform messages may fail, so we use a try/catch PlatformException.
@@ -424,5 +397,5 @@ class _AssetsVerificationState extends State<AssetsVerification> {
     // setState to update our non-existent appearance.
     if (!mounted) return;
 
-  }
+  }*/
 }
