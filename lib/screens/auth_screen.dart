@@ -68,16 +68,16 @@ class AuthScreen extends StatelessWidget {
                       ),
                       Flexible(
                           child: Container(
-                        margin: const EdgeInsets.only(top: 10),
-                        child: Text(
-                          'Welcome!',
-                          style: TextStyle(
-                            color: Color(0xFFFFFFFF),
-                            fontSize: deviceSize.width * 0.1,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      )),
+                            margin: const EdgeInsets.only(top: 10),
+                            child: Text(
+                              'Welcome!',
+                              style: TextStyle(
+                                color: Color(0xFFFFFFFF),
+                                fontSize: deviceSize.width * 0.1,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          )),
                       const Flexible(
                         child: AuthCard(),
                         flex: 0,
@@ -197,17 +197,17 @@ class _AuthCardState extends State<AuthCard>
     showDialog(
         context: context,
         builder: (ctx) => AlertDialog(
-              title: const Text('An error Occurred'),
-              content: Text(message),
-              actions: [
-                TextButton(
-                  child: const Text('OK'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                )
-              ],
-            ));
+          title: const Text('An error Occurred'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        ));
   }
 
   @override
@@ -236,8 +236,8 @@ class _AuthCardState extends State<AuthCard>
             ),
             TextFormField(
               decoration: const InputDecoration(
-                labelStyle: TextStyle(color: Colors.white),
-                labelText: 'Password',
+                  labelStyle: TextStyle(color: Colors.white),
+                  labelText: 'Password',
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.white),
                   )
@@ -316,9 +316,9 @@ class _AuthCardState extends State<AuthCard>
             Text(
               'DGI SYSTEM',
               style: TextStyle(
-                color: Color(0xFF0F6671),
-                fontSize: deviceSize.width * 0.045,
-                fontWeight: FontWeight.bold
+                  color: Color(0xFF0F6671),
+                  fontSize: deviceSize.width * 0.045,
+                  fontWeight: FontWeight.bold
               ),
             ),
           ],
