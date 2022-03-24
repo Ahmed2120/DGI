@@ -11,7 +11,7 @@ class CountryService{
   Future<List<Country>> retrieve() async {
     return countryRepository.retrieve();
   }
-  Future<int> insertCategories(List<Country> countries) async {
+  Future<int> batch(List<Country> countries) async {
     return countryRepository.batch(countries);
   }
   Future<void> delete(int id) async {

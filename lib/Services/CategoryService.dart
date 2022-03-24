@@ -9,7 +9,7 @@ class CategoryService{
   Future<List<Category>> retrieve() async {
     return categoryRepository.retrieve();
   }
-  Future<int> insertCategories(List<Category> categories) async {
+  Future<int> batch(List<Category> categories) async {
     return categoryRepository.insertCategories(categories);
   }
   Future<void> delete(int id) async {

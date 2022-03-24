@@ -10,7 +10,7 @@ class DepartmentService{
   Future<List<Department>> retrieve() async {
     return departmentRepository.retrieve();
   }
-  Future<int> insertCategories(List<Department> departments) async {
+  Future<int> batch(List<Department> departments) async {
     return departmentRepository.batch(departments);
   }
   Future<void> delete(int id) async {

@@ -370,7 +370,7 @@ class _ItemCaptureState extends State<ItemCapture> {
                     CustomWidgetBuilder.buildArrow(context, Icon(Icons.arrow_back_ios_rounded), ()=>Navigator.of(context).pop()),
                     CustomWidgetBuilder.buildArrow(context, Icon(Icons.arrow_forward_ios), ()=> Navigator.of(context).push(
                         MaterialPageRoute(
-                            builder: (context) => AssetsCapture())))
+                            builder: (context) => AssetsCapture(assetLocationId: 1,))))
                   ],
                 ),
               ),

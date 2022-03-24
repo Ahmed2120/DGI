@@ -89,26 +89,26 @@ class HomePage extends StatelessWidget {
                           EdgeInsets.symmetric(vertical: dsize.height * 0.0092, horizontal: 25),
                       children: [
                         InkWell(
-                          child: buildColumn('Item Capture', dsize, '1-15'),
+                          child: buildColumn('ITEM CAPTURE', dsize, '1-15'),
                           onTap: () => Navigator.of(context).push(
                               MaterialPageRoute(
                                   builder: (context) => ItemCapture())),
                         ),
                         InkWell(
                           child:
-                              buildColumn('Asset Verification', dsize, '1-12'),
+                              buildColumn('ASSET VERIFICATION', dsize, '1-12'),
                           onTap: () => Navigator.of(context).push(
                               MaterialPageRoute(
                                   builder: (context) => AssetsVerification())),
                         ),
                         InkWell(
-                          child: buildColumn('Asset Counter', dsize, '1-13'),
+                          child: buildColumn('ASSET COUNTER', dsize, '1-13'),
                           onTap: () => Navigator.of(context).push(
                               MaterialPageRoute(
                                   builder: (context) => AssetsCounter())),
                         ),
                         InkWell(
-                          child: buildColumn('ABOUT us', dsize, '0-19'),
+                          child: buildColumn('ABOUT US', dsize, '0-19'),
                           onTap: () => Navigator.of(context).push(
                               MaterialPageRoute(
                                   builder: (context) => const AboutUs())),

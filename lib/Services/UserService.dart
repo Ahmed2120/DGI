@@ -9,7 +9,7 @@ class CategoryService{
   Future<List<User>> retrieve() async {
     return userRepository.retrieve();
   }
-  Future<int> insertCategories(List<User> users) async {
+  Future<int> batch(List<User> users) async {
     return userRepository.batch(users);
   }
 }
