@@ -178,15 +178,15 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                             SizedBox(height: dSize.height * 0.01,),
                             CustomWidgetBuilder.buildTextFormField(dSize,'DEPARTMENT',departments.isNotEmpty?departments[0].name:"dump"),
                             SizedBox(height: dSize.height * 0.01,),
-                            CustomWidgetBuilder.buildTextFormField(dSize,'BUSINESS UNIT',assetLocation!.businessUnit),
+                            CustomWidgetBuilder.buildTextFormField(dSize,'BUSINESS UNIT',assetLocation.businessUnit),
                             SizedBox(height: dSize.height * 0.01,),
-                            CustomWidgetBuilder.buildTextFormField(dSize,'NAME',assetLocation!.name),
+                            CustomWidgetBuilder.buildTextFormField(dSize,'NAME',assetLocation.name),
                             SizedBox(height: dSize.height * 0.01,),
-                            CustomWidgetBuilder.buildTextFormField(dSize,'BLDG NAME',assetLocation!.buildingName),
+                            CustomWidgetBuilder.buildTextFormField(dSize,'BLDG NAME',assetLocation.buildingName),
                             SizedBox(height: dSize.height * 0.01,),
-                            CustomWidgetBuilder.buildTextFormField(dSize,'BLDG ADDRESS',assetLocation!.buildingAddress),
+                            CustomWidgetBuilder.buildTextFormField(dSize,'BLDG ADDRESS',assetLocation.buildingAddress),
                             SizedBox(height: dSize.height * 0.01,),
-                            CustomWidgetBuilder.buildTextFormField(dSize,'BUILDING NO',assetLocation!.buildingNo.toString()),
+                            CustomWidgetBuilder.buildTextFormField(dSize,'BUILDING NO',assetLocation.buildingNo.toString()),
                             SizedBox(height: dSize.height * 0.01,),
                             Row(
                               children: [
@@ -330,20 +330,20 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                             child: Icon(Icons.arrow_back_ios, color: Colors.white,),
                           ),
                         ),
-                        InkWell(
-                          onTap: ()=>Navigator.of(context).push(
-                              MaterialPageRoute(
-                                  builder: (context) => AssetsCounter())),
-                          child: Container(
-                            padding: EdgeInsets.all(5),
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                color: Color(0xFF00B0BD),
-                                borderRadius: BorderRadius.circular(5)
-                            ),
-                            child: Icon(Icons.arrow_forward_ios, color: Colors.white,),
-                          ),
-                        ),
+                        // InkWell(
+                        //   onTap: ()=>Navigator.of(context).push(
+                        //       MaterialPageRoute(
+                        //           builder: (context) => AssetsCounter())),
+                        //   child: Container(
+                        //     padding: EdgeInsets.all(5),
+                        //     alignment: Alignment.center,
+                        //     decoration: BoxDecoration(
+                        //         color: Color(0xFF00B0BD),
+                        //         borderRadius: BorderRadius.circular(5)
+                        //     ),
+                        //     child: Icon(Icons.arrow_forward_ios, color: Colors.white,),
+                        //   ),
+                        // ),
                         CustomWidgetBuilder.buildArrow(context, Icon(Icons.arrow_back_ios_rounded), ()=>Navigator.of(context).pop()),
                         CustomWidgetBuilder.buildArrow(context, Icon(Icons.arrow_forward_ios), ()=> Navigator.of(context).push(
                             MaterialPageRoute(
