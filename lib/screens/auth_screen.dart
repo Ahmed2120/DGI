@@ -1,13 +1,31 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:crypto/crypto.dart';
+import 'package:dgi/Services/AreaService.dart';
+import 'package:dgi/Services/AssetLocationService.dart';
+import 'package:dgi/Services/CategoryService.dart';
+import 'package:dgi/Services/CityService.dart';
+import 'package:dgi/Services/CountryService.dart';
+import 'package:dgi/Services/DepartmentService.dart';
+import 'package:dgi/Services/FloorService.dart';
+import 'package:dgi/Services/SectionTypeService.dart';
 
 import 'package:dgi/authentication.dart';
 import 'package:dgi/db/UserRepository.dart';
 import 'package:dgi/model/User.dart';
+import 'package:dgi/model/area.dart';
+import 'package:dgi/model/assetLocation.dart';
+import 'package:dgi/model/category.dart';
+import 'package:dgi/model/city.dart';
+import 'package:dgi/model/country.dart';
+import 'package:dgi/model/department.dart';
+import 'package:dgi/model/floor.dart';
+import 'package:dgi/model/sectionType.dart';
 import 'package:dgi/screens/home_page.dart';
 import 'package:flutter/material.dart';
 
 class AuthScreen extends StatelessWidget {
+
   const AuthScreen({Key? key}) : super(key: key);
 
   @override
@@ -85,6 +103,9 @@ class AuthCard extends StatefulWidget {
 
 class _AuthCardState extends State<AuthCard>
     with SingleTickerProviderStateMixin {
+
+  String _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+  Random _rnd = Random();
   final GlobalKey<FormState> _formKey = GlobalKey();
 
   final Map<String, String> _authData = {'username': '', 'password': ''};
@@ -95,6 +116,7 @@ class _AuthCardState extends State<AuthCard>
   @override
   void initState() {
     super.initState();
+    initData();
   }
 
   @override
@@ -122,13 +144,13 @@ class _AuthCardState extends State<AuthCard>
           address: 'address',
           email: 'email');
       Authentication auth = Authentication();
-      // UserRepository userRepository = UserRepository();
-      // userRepository.insert(user);
-      // userRepository.retrieve().then((value) {
-      //   for (var val in value) {
-      //     print('${val.username}');
-      //   }
-      // });
+      UserRepository userRepository = UserRepository();
+      userRepository.insert(user);
+       userRepository.retrieve().then((value) {
+         for (var val in value) {
+          print('${val.username}');
+       }
+       });
 
       auth.logIn(_authData['username']!, digest1.toString()).then((value) {
         setState(() {
@@ -145,6 +167,30 @@ class _AuthCardState extends State<AuthCard>
       var errMessage = 'Could not authenticate you. please try again later';
       _showErrorDialog(err.toString());
     }
+  }
+  String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
+      length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
+  initData()async{
+    var rng = Random().nextInt(1000);
+    CategoryService categoryService = CategoryService();
+    final countryService = CountryService();
+    final cityService = CityService();
+    final floorService = FloorService();
+    final areaService = AreaService();
+    final departmentService = DepartmentService();
+    final assetLocationService = AssetLocationService();
+    final sectionTypeService = SectionTypeService();
+    String random = getRandomString(8);
+    Category category = Category(name: random);
+    await categoryService.insert(category);
+    await cityService.insert(City(name: random));
+    await countryService.insert(Country(name: random));
+    await areaService.insert(Area(name: random));
+    await floorService.insert(Floor(name: rng.toString()));
+    await departmentService.insert(Department(name: random));
+    await sectionTypeService.insert(SectionType(name:rng.toString(),floorId: rng));
+    await assetLocationService.insert(AssetLocation(name: "location",areaId: 1,buildingAddress: "test building Address",
+    buildingName: "building Name",buildingNo: '10',businessUnit: 'businessUnit',departmentId: 10,floorId: 10,id: rng,sectionId: 22));
   }
 
   void _showErrorDialog(String message) {
