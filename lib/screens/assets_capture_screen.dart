@@ -122,7 +122,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                             categories.map((e) => e.name).toList()),
                         Row(
                           children: [
-                            const Text('ITEM DESC'),
+                            buildText('ITEM DESC', dSize),
                             Spacer(),
                             Container(
                               width: dSize.width * 0.4,
@@ -143,7 +143,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                         ),
                         Row(
                           children: [
-                            Text('QUANTITY'),
+                            buildText('QUANTITY', dSize),
                             Spacer(),
                             SizedBox(
                               width: dSize.width * 0.4,
@@ -209,7 +209,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                         ),
                         Row(
                           children: [
-                            Text('PHOTO'),
+                            buildText('PHOTO', dSize),
                             Spacer(),
                             InkWell(
                               child: SizedBox(
@@ -247,20 +247,23 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                   children: [
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
-                      height: dSize.height * 0.3,
-                      child: ListView(
-                        children: [
-                          Table(
-                              border: TableBorder(
-                                  borderRadius: BorderRadius.circular(10)),
-                              children: _getListings()),
-                        ],
+                      height: dSize.height * 0.321,
+                      child:ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: ListView(
+                          children: [
+                            Table(
+                                border: TableBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                                children: _getListings()),
+                          ],
+                        ),
                       ),
                     ),
                     Container(
                       padding: EdgeInsets.only(left: 15),
                       child: Text(
-                        'ITEM TOTAL     000',
+                        'ITEM TOTAL     ${items.length}',
                         style: TextStyle(
                             color: Color(0xFF0F6671),
                             fontWeight: FontWeight.bold),
@@ -271,7 +274,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -438,12 +441,10 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   List<TableRow> _getListings() {
     List<TableRow> listings = <TableRow>[];
     int i = 0;
+      listings.add(
+        buildRow(['No', 'TYPE', 'DESC', 'QNT', 'PHOTO'], isHeader: true),
+      );
     for (i = 0; i < items.length; i++) {
-      if (i == 0) {
-        listings.add(
-          buildRow(['No', 'TYPE', 'DESC', 'QNT', 'PHOTO'], isHeader: true),
-        );
-      }
       listings.add(
         buildRow(
           [
@@ -465,10 +466,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   dropdownMenu(String title, Size dSize, List<String> values) {
     return Row(
       children: [
-        Text(
-          title,
-          style: TextStyle(fontSize: 16, color: Color(0xFF0F6671)),
-        ),
+        buildText(title, dSize),
         Spacer(),
         Container(
           decoration: const BoxDecoration(
@@ -503,6 +501,16 @@ class _AssetsCaptureState extends State<AssetsCapture> {
           ),
         ),
       ],
+    );
+  }
+
+  Text buildText(String title, dSize) {
+    return Text(
+      title,
+      style: TextStyle(
+          fontSize: dSize.width * 0.03,
+          color: Color(0xFF0F6671),
+          fontWeight: FontWeight.bold),
     );
   }
 }
