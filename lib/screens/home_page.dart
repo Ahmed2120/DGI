@@ -152,7 +152,7 @@ class HomePage extends StatelessWidget {
       children: [
         Container(
           width: double.infinity,
-          height: dsize.height * 0.1,
+          height: dsize.height * 0.0928,
           decoration: BoxDecoration(
               color: const Color(0xFFFFFFFF).withOpacity(0.3),
               borderRadius: BorderRadius.circular(20)),
@@ -161,7 +161,7 @@ class HomePage extends StatelessWidget {
         Text(
           title,
           textAlign: TextAlign.center,
-          style: TextStyle(color: Colors.white, fontSize: dsize.height * 0.01786),
+          style: TextStyle(color: Colors.white, fontSize: dsize.height * 0.01780),
         ),
       ],
     );

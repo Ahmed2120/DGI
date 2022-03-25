@@ -4,7 +4,7 @@ class Asset {
   final String barcode;
   final String barcodeImage;
   final String serialnumber;
-  final String assetLocationId;
+  final int assetLocationId;
   final String description;
   final String image;
 
@@ -29,7 +29,7 @@ class Asset {
         image = res["image"];
 
   Map<String, Object?> toMap() {
-    return {'id':id,'name': itemId, 'itemId': barcode, 'barcode': barcode, 'barcodeImage': barcodeImage,
+    return {'id':id,'itemId': itemId, 'barcode': barcode, 'barcodeImage': barcodeImage,
       'serialnumber':serialnumber,'assetLocationId':assetLocationId,'description':description ,
       'image':image};
   }

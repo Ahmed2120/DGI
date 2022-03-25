@@ -13,7 +13,7 @@ class AssetRepository{
   }
   Future<List<Asset>> select(String barcode) async {
     final Database db = await databaseHandler.initializeDB();
-    final List<Map<String, Object?>> queryResult = await db.query(TABLE_NAME,where: "barcode",whereArgs: [barcode]);
+    final List<Map<String, Object?>> queryResult = await db.query(TABLE_NAME,where: "barcode = ?",whereArgs: [barcode]);
     return queryResult.map((e) => Asset.fromMap(e)).toList();
   }
   Future<List<Asset>> retrieve() async {
