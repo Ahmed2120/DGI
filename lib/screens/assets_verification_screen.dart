@@ -1,7 +1,8 @@
 import 'package:dgi/Services/CategoryService.dart';
+import 'package:dgi/Services/SectionTypeService.dart';
 import 'package:dgi/Utility/CustomWidgetBuilder.dart';
 import 'package:dgi/model/category.dart';
-import 'package:dgi/screens/assets_counter_screen.dart';
+import 'package:dgi/model/sectionType.dart';
 import 'package:dgi/screens/assets_details.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,8 +18,6 @@ import 'package:dgi/model/city.dart';
 import 'package:dgi/model/country.dart';
 import 'package:dgi/model/department.dart';
 import 'package:dgi/model/floor.dart';
-import 'package:flutter/services.dart';
-import 'dart:async';
 import '../Utility/CustomWidgetBuilder.dart';
 import '../Utility/footer.dart';
 import '../Utility/header.dart';
@@ -37,6 +36,7 @@ class _AssetsVerificationState extends State<AssetsVerification> {
   List<Floor> floors = [];
   List<Department> departments=[];
   List<Area> areas =[];
+  List<SectionType> sections =[];
   AssetLocation assetLocation = AssetLocation(id:1, name: '', buildingAddress: '', buildingName: '', buildingNo: '', businessUnit: '', areaId: 1, departmentId: 1, floorId: 1,sectionId: 10);
   final GlobalKey<FormState> _formKey = GlobalKey();
   final countryService = CountryService();
@@ -46,7 +46,9 @@ class _AssetsVerificationState extends State<AssetsVerification> {
   final departmentService = DepartmentService();
   final assetLocationService = AssetLocationService();
   final categoryService = CategoryService();
-  String? value;
+  final sectionService = SectionTypeService();
+  String? category;
+  String? city;
   String? location;
 
   @override
@@ -62,8 +64,6 @@ class _AssetsVerificationState extends State<AssetsVerification> {
   @override
   Widget build(BuildContext context) {
     final dSize = MediaQuery.of(context).size;
-    print('hhh ${dSize.height * 0.01}');
-    print('hhh ${dSize.width * 0.04}');
     return Scaffold(
         body: SafeArea(
           child: SingleChildScrollView(
@@ -89,7 +89,7 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                             ),
                             Row(
                               children: [
-                                buildText('CATEGORY', dSize),
+                                CustomWidgetBuilder.buildText('CATEGORY', dSize),
                                 const Spacer(),
                                 Container(
                                   decoration: const BoxDecoration(
@@ -99,7 +99,7 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                                   width: dSize.width * 0.4,
                                   child: DropdownButtonHideUnderline(
                                     child: DropdownButton<String>(
-                                      value: value,
+                                      value: category,
                                       iconSize: 30,
                                       icon: const Icon(
                                         Icons.arrow_drop_down,
@@ -120,7 +120,7 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                                       }).toList(),
                                       onChanged: (val) {
                                         setState(() {
-                                          value = val;
+                                          category = val;
                                         });
                                         print(val);
                                       },
@@ -132,7 +132,7 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                             SizedBox(height: dSize.height * 0.01,),
                             Row(
                               children: [
-                                buildText('CITY', dSize),
+                                CustomWidgetBuilder.buildText('CITY', dSize),
                                 Spacer(),
                                 Container(
                                   decoration: const BoxDecoration(
@@ -142,7 +142,7 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                                   width: dSize.width * 0.4,
                                   child: DropdownButtonHideUnderline(
                                     child: DropdownButton<String>(
-                                      value: value,
+                                      value: city,
                                       iconSize: 30,
                                       icon: const Icon(
                                         Icons.arrow_drop_down,
@@ -163,7 +163,7 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                                       }).toList(),
                                       onChanged: (val) {
                                         setState(() {
-                                          value = val;
+                                          city = val;
                                         });
                                         print(val);
                                       },
@@ -189,7 +189,7 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                             SizedBox(height: dSize.height * 0.01,),
                             Row(
                               children: [
-                                buildText('LOCATION TYPE', dSize),
+                                CustomWidgetBuilder.buildText('LOCATION TYPE', dSize),
                                 Spacer(),
                                 Container(
                                   decoration: const BoxDecoration(
@@ -241,70 +241,13 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                             ),
                             SizedBox(height: dSize.height * 0.015,),
                             if(location == 'OFFICE' || location == 'BUILDING')
-                              Row(
-                                children: [
-                                  buildText('FLOOR NO', dSize),
-                                  Spacer(),
-                                  Container(
-                                    width: dSize.width * 0.4,
-                                    decoration: BoxDecoration(
-                                      border: Border(
-                                          bottom: BorderSide(
-                                              color: Color(0xFF00B0BD), width: 2)),
-                                    ),
-                                    child: const TextField(
-                                      decoration: InputDecoration(
-                                        constraints: BoxConstraints(maxHeight: 20),
-                                        border: InputBorder.none,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                              CustomWidgetBuilder.buildTextFormField(dSize,'FLOOR NO',floors.isNotEmpty?areas[0].name:'0'),
                             SizedBox(height: dSize.height * 0.01,),
                             if(location == 'OFFICE' || location == 'BUILDING')
-                              Row(
-                                children: [
-                                  buildText('SECTION NO', dSize),
-                                  Spacer(),
-                                  Container(
-                                    width: dSize.width * 0.4,
-                                    decoration: BoxDecoration(
-                                      border: Border(
-                                          bottom: BorderSide(
-                                              color: Color(0xFF00B0BD), width: 2)),
-                                    ),
-                                    child: const TextField(
-                                      decoration: InputDecoration(
-                                        constraints: BoxConstraints(maxHeight: 20),
-                                        border: InputBorder.none,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                              CustomWidgetBuilder.buildTextFormField(dSize,'SECTION NO',sections.isNotEmpty?areas[0].name:'0'),
                             SizedBox(height: dSize.height * 0.01,),
                             if(location == 'OFFICE' || location == 'STORE')
-                              Row(
-                                children: [
-                                  buildText('DEPARTMENT', dSize),
-                                  const Spacer(),
-                                  Container(
-                                    width: dSize.width * 0.4,
-                                    decoration: BoxDecoration(
-                                      border: Border(
-                                          bottom: BorderSide(
-                                              color: Color(0xFF00B0BD), width: 2)),
-                                    ),
-                                    child: const TextField(
-                                      decoration: InputDecoration(
-                                        constraints: BoxConstraints(maxHeight: 20),
-                                        border: InputBorder.none,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                              CustomWidgetBuilder.buildTextFormField(dSize,'DEPARTMENT',departments.isNotEmpty?areas[0].name:'0'),
                             SizedBox(height: dSize.height * 0.01,),
                           ],
                         ),
@@ -333,33 +276,13 @@ class _AssetsVerificationState extends State<AssetsVerification> {
   }
 
   initData() async{
-/*    await cityService.insert(City(name: 'Cairo'));
-    await countryService.insert(Country(name: 'Egypt'));
-    await areaService.insert(Area(name: 'helwan'));
-    await floorService.insert(Floor(name: '8'));
-    await departmentService.insert(Department(name: 'Technology'));
-    await assetLocationService.insert(AssetLocation(name: "location",areaId: 1,buildingAddress: "test building Address",
-    buildingName: "building Name",buildingNo: '10',businessUnit: 'businessUnit',departmentId: 10,floorId: 10,id: 10,sectionId: 22));
-    await cityService.insert(City(name: 'Fayioun'));
-    await countryService.insert(Country(name: 'KSA'));
-    await areaService.insert(Area(name: 'baaa'));
-    await floorService.insert(Floor(name: '12'));
-    await departmentService.insert(Department(name: 'HR'));
-    CategoryService categoryService = CategoryService();
-    Category category = Category(name: 'A');
-    await categoryService.insert(category);
-    category = Category(name: 'B');
-    await categoryService.insert(category);
-    category = Category(name: 'C');
-    await categoryService.insert(category);
-    category = Category(name: 'D');
-    await categoryService.insert(category);*/
     categories = await categoryService.retrieve();
     countries = await countryService.retrieve();
     cities = await cityService.retrieve();
     floors = await floorService.retrieve();
     departments = await departmentService.retrieve();
     areas = await areaService.retrieve();
+    sections = await sectionService.retrieve();
     assetLocationService.retrieve().then((value) {
       setState(() {
         if(value.isNotEmpty) {
@@ -372,30 +295,5 @@ class _AssetsVerificationState extends State<AssetsVerification> {
     });
   }
 
-  Text buildText(String title, dSize) {
-    return Text(
-      title,
-      style:
-      TextStyle(fontSize: dSize.width * 0.04, color: Color(0xFF0F6671), fontWeight: FontWeight.bold),
-    );
-  }
 
-/*  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> scanBarcodeNormal() async {
-    String barcodeScanRes;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-          '#ff6666', 'Cancel', true, ScanMode.BARCODE);
-      print(barcodeScanRes);
-    } on PlatformException {
-      barcodeScanRes = 'Failed to get platform version.';
-    }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-  }*/
 }

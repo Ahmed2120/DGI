@@ -54,4 +54,15 @@ class CustomWidgetBuilder{
       ),
     );
   }
+
+  static TableRow buildRow(List<dynamic> cells, {bool isHeader = false}) => TableRow(
+    decoration: BoxDecoration(
+        color: isHeader ? Color(0xFFFFA227) : Colors.grey[200],
+        borderRadius: isHeader ? BorderRadius.circular(10) : BorderRadius.circular(0)
+    ),
+    children: cells.map((cell)=> Padding(
+      padding: EdgeInsets.all(8.0),
+      child: cell.runtimeType == String ? Text(cell, style: TextStyle(color: isHeader ? Colors.white : Color(0xFF0F6671), fontWeight: isHeader ? FontWeight.bold : FontWeight.normal),) : cell,
+    )).toList(),
+  );
 }
