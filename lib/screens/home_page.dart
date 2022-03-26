@@ -14,8 +14,8 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dsize = MediaQuery.of(context).size;
-    print('hhhi ${dsize.height * 0.0044}');
-    print('hhh ${dsize.width * 0.012}');
+    print('hhhi ${dsize.height * 0.0042}');
+    print('hhh ${dsize.width * 0.009}');
     return Scaffold(
       body: Stack(
         children: [
@@ -86,7 +86,7 @@ class HomePage extends StatelessWidget {
                       shrinkWrap: true,
                       scrollDirection: Axis.vertical,
                       padding:
-                          EdgeInsets.symmetric(vertical: dsize.height * 0.0092, horizontal: dsize.width * 0.06),
+                          EdgeInsets.symmetric(vertical: dsize.height * 0.0092, horizontal: dsize.width * 0.04),
                       children: [
                         InkWell(
                           child: buildColumn('ITEM CAPTURE', dsize, '1-15'),
@@ -120,17 +120,10 @@ class HomePage extends StatelessWidget {
                                   builder: (context) => Settings())),
                         ),
                       ],
-                      // gridDelegate:
-                          // SliverGridDelegateWithMaxCrossAxisExtent(
-                        // maxCrossAxisExtent: 200,
                       crossAxisCount: 2,
-                        childAspectRatio: (dsize.height * 0.0034) / (dsize.height * 0.0033),
-                        // crossAxisSpacing: dsize.width * 0.094,
-                        // crossAxisSpacing: dsize.width * 0.094,
-                        // crossAxisSpacing: dsize.width * 0.01,
-                        crossAxisSpacing: dsize.width * 0.001,
-                        // mainAxisSpacing: dsize.height * 0.03515,
-                        mainAxisSpacing: dsize.height * 0.0001,
+                        childAspectRatio: (dsize.width * 0.009) / (dsize.height * 0.0044),
+                        crossAxisSpacing: dsize.width * 0.009,
+                        mainAxisSpacing: dsize.height * 0.0227,
                       // ),
                     ),
                   ),
