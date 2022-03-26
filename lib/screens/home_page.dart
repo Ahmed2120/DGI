@@ -14,8 +14,8 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dsize = MediaQuery.of(context).size;
-    print('hhh ${dsize.height * 0.0412}');
-    print('hhh ${dsize.width * 0.039}');
+    print('hhhi ${dsize.height * 0.0044}');
+    print('hhh ${dsize.width * 0.012}');
     return Scaffold(
       body: Stack(
         children: [
@@ -82,11 +82,11 @@ class HomePage extends StatelessWidget {
                     decoration: BoxDecoration(
                         color: const Color(0xFFFFFFFF).withOpacity(0.3),
                         borderRadius: BorderRadius.circular(40)),
-                    child: GridView(
+                    child: GridView.count(
                       shrinkWrap: true,
                       scrollDirection: Axis.vertical,
                       padding:
-                          EdgeInsets.symmetric(vertical: dsize.height * 0.0092, horizontal: 25),
+                          EdgeInsets.symmetric(vertical: dsize.height * 0.0092, horizontal: dsize.width * 0.06),
                       children: [
                         InkWell(
                           child: buildColumn('ITEM CAPTURE', dsize, '1-15'),
@@ -120,13 +120,18 @@ class HomePage extends StatelessWidget {
                                   builder: (context) => Settings())),
                         ),
                       ],
-                      gridDelegate:
-                          SliverGridDelegateWithMaxCrossAxisExtent(
-                        maxCrossAxisExtent: 130,
-                        childAspectRatio: (dsize.height * 0.00331) / (dsize.height * 0.0033),
-                        crossAxisSpacing: dsize.width * 0.094,
-                        mainAxisSpacing: dsize.height * 0.03515,
-                      ),
+                      // gridDelegate:
+                          // SliverGridDelegateWithMaxCrossAxisExtent(
+                        // maxCrossAxisExtent: 200,
+                      crossAxisCount: 2,
+                        childAspectRatio: (dsize.height * 0.0034) / (dsize.height * 0.0033),
+                        // crossAxisSpacing: dsize.width * 0.094,
+                        // crossAxisSpacing: dsize.width * 0.094,
+                        // crossAxisSpacing: dsize.width * 0.01,
+                        crossAxisSpacing: dsize.width * 0.001,
+                        // mainAxisSpacing: dsize.height * 0.03515,
+                        mainAxisSpacing: dsize.height * 0.0001,
+                      // ),
                     ),
                   ),
                   Padding(
@@ -148,16 +153,17 @@ class HomePage extends StatelessWidget {
 
   Column buildColumn(String title, dsize, String img) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Container(
-          width: double.infinity,
-          height: dsize.height * 0.1,
+          // width: double.infinity,
+          // height: dsize.height * 0.1,
           decoration: BoxDecoration(
               color: const Color(0xFFFFFFFF).withOpacity(0.3),
               borderRadius: BorderRadius.circular(20)),
-          child: Image.asset('assets/icons/$img.png'),
+          child: Image.asset('assets/icons/$img.png', height: dsize.height * 0.122,),
         ),
+        SizedBox(height: dsize.height * 0.0044,),//2
         Text(
           title,
           textAlign: TextAlign.center,

@@ -35,9 +35,9 @@ class CustomWidgetBuilder{
     );
   }
 
- static Container buildArrow(BuildContext context, Icon icon, Function function) {
+ static Container buildArrow(BuildContext context, Size dSize, Icon icon, Function function) {
     return Container(
-      padding: EdgeInsets.all(5),
+      padding: EdgeInsets.all(dSize.width * 0.006),
       // alignment: Alignment.center,
       decoration: BoxDecoration(
           color: Color(0xFF00B0BD),
@@ -48,6 +48,7 @@ class CustomWidgetBuilder{
           alignment: Alignment.center,
           child: Icon(
             icon.icon,
+            size: dSize.width * 0.07,
             color: Colors.white,
           ),
         ),

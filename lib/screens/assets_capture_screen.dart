@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:camera/camera.dart';
 import 'package:dgi/Services/CategoryService.dart';
 import 'package:dgi/Services/ItemService.dart';
+import 'package:dgi/Utility/footer.dart';
 import 'package:dgi/model/category.dart';
 import 'package:dgi/model/item.dart';
 import 'package:dgi/screens/take_picture_page.dart';
@@ -44,6 +45,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   @override
   Widget build(BuildContext context) {
     final dSize = MediaQuery.of(context).size;
+    print('width: ${dSize.width * 0.01}');
     return Scaffold(
         body: SafeArea(
       child: SingleChildScrollView(
@@ -110,135 +112,134 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                   ],
                 ),
               ),
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.all(dSize.height * 0.016),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        dropdownMenu('CATEGORY', dSize,
-                            categories.map((e) => e.name).toList()),
-                        Row(
-                          children: [
-                            buildText('ITEM DESC', dSize),
-                            Spacer(),
-                            Container(
-                              width: dSize.width * 0.4,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: const Color(0xFF00B0BD), width: 2.0),
-                              ),
-                              child: TextFormField(
-                                controller: descriptionController,
-                                decoration: InputDecoration(
-                                  constraints: BoxConstraints(
-                                      maxHeight: dSize.height * 0.045),
-                                  border: InputBorder.none,
-                                ),
+              Container(
+                height: dSize.height * 0.32,
+                padding: EdgeInsets.symmetric(horizontal: dSize.height * 0.016),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      dropdownMenu('CATEGORY', dSize,
+                          categories.map((e) => e.name).toList()),
+                      Row(
+                        children: [
+                          buildText('ITEM DESC', dSize),
+                          Spacer(),
+                          Container(
+                            width: dSize.width * 0.5,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: const Color(0xFF00B0BD), width: 2.0),
+                            ),
+                            child: TextFormField(
+                              controller: descriptionController,
+                              decoration: InputDecoration(
+                                constraints: BoxConstraints(
+                                    maxHeight: dSize.height * 0.045),
+                                border: InputBorder.none,
                               ),
                             ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            buildText('QUANTITY', dSize),
-                            Spacer(),
-                            SizedBox(
-                              width: dSize.width * 0.4,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  InkWell(
-                                    onTap: () {
-                                      if (quantity > 1) {
-                                        setState(() {
-                                          quantity--;
-                                        });
-                                      }
-                                    },
-                                    child: const CircleAvatar(
-                                      backgroundColor: Color(0xFFFFA227),
-                                      foregroundColor: Colors.white,
-                                      radius: 12,
-                                      child: Icon(Icons.remove),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: dSize.width * 0.0159,
-                                  ),
-                                  Container(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: dSize.height * 0.004,
-                                        horizontal: dSize.width * 0.06),
-                                    decoration: BoxDecoration(
-                                        border: Border.all(
-                                            color: const Color(0xFF00B0BD),
-                                            width: 2.0),
-                                        borderRadius:
-                                            BorderRadius.circular(15)),
-                                    child: Text(
-                                      quantity.toString(),
-                                      style: TextStyle(
-                                          color: Color(0xFF0F6671),
-                                          fontSize: dSize.width * 0.04,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: dSize.width * 0.0159,
-                                  ),
-                                  InkWell(
-                                    onTap: () {
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          buildText('QUANTITY', dSize),
+                          Spacer(),
+                          SizedBox(
+                            width: dSize.width * 0.5,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    if (quantity > 1) {
                                       setState(() {
-                                        quantity++;
+                                        quantity--;
                                       });
-                                    },
-                                    child: const CircleAvatar(
-                                      backgroundColor: Color(0xFF00B0BD),
-                                      foregroundColor: Colors.white,
-                                      radius: 12,
-                                      child: Icon(Icons.add),
-                                    ),
+                                    }
+                                  },
+                                  child: const CircleAvatar(
+                                    backgroundColor: Color(0xFFFFA227),
+                                    foregroundColor: Colors.white,
+                                    radius: 12,
+                                    child: Icon(Icons.remove),
                                   ),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            buildText('PHOTO', dSize),
-                            Spacer(),
-                            InkWell(
-                              child: SizedBox(
-                                width: dSize.width * 0.4,
-                                child: Image.asset(
-                                  'assets/icons/0-16.jpg',
-                                  height: dSize.height * 0.055,
-                                  alignment: Alignment.centerLeft,
                                 ),
-                              ),
-                              onTap: () async {
-                                _showCamera();
-                              },
+                                SizedBox(
+                                  width: dSize.width * 0.0159,
+                                ),
+                                Container(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: dSize.height * 0.004,
+                                      horizontal: dSize.width * 0.06),
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: const Color(0xFF00B0BD),
+                                          width: 2.0),
+                                      borderRadius:
+                                          BorderRadius.circular(15)),
+                                  child: Text(
+                                    quantity.toString(),
+                                    style: TextStyle(
+                                        color: Color(0xFF0F6671),
+                                        fontSize: dSize.width * 0.04,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: dSize.width * 0.0159,
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      quantity++;
+                                    });
+                                  },
+                                  child: const CircleAvatar(
+                                    backgroundColor: Color(0xFF00B0BD),
+                                    foregroundColor: Colors.white,
+                                    radius: 12,
+                                    child: Icon(Icons.add),
+                                  ),
+                                ),
+                              ],
                             ),
-                            imagePath != null
-                                ? SizedBox(
-                                    width: dSize.width * 0.4,
-                                    child: Image.file(
-                                      File(imagePath!),
-                                      height: dSize.height * 0.055,
-                                      alignment: Alignment.centerLeft,
-                                    ),
-                                  )
-                                : Container(),
-                          ],
-                        ),
-                        buildAddButton(),
-                      ],
-                    ),
+                          )
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          buildText('PHOTO', dSize),
+                          Spacer(),
+                          InkWell(
+                            child: SizedBox(
+                              width: dSize.width * 0.5,
+                              child: Image.asset(
+                                'assets/icons/0-16.jpg',
+                                height: dSize.height * 0.055,
+                                alignment: Alignment.centerLeft,
+                              ),
+                            ),
+                            onTap: () async {
+                              _showCamera();
+                            },
+                          ),
+                          imagePath != null
+                              ? SizedBox(
+                                  width: dSize.width * 0.4,
+                                  child: Image.file(
+                                    File(imagePath!),
+                                    height: dSize.height * 0.055,
+                                    alignment: Alignment.centerLeft,
+                                  ),
+                                )
+                              : Container(),
+                        ],
+                      ),
+                      buildAddButton(),
+                    ],
                   ),
                 ),
               ),
@@ -247,7 +248,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                   children: [
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
-                      height: dSize.height * 0.321,
+                      height: dSize.height * 0.36,
                       child:ClipRRect(
                         borderRadius: BorderRadius.circular(12),
                         child: ListView(
@@ -265,6 +266,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                       child: Text(
                         'ITEM TOTAL     ${items.length}',
                         style: TextStyle(
+                          fontSize: dSize.width * 0.03,
                             color: Color(0xFF0F6671),
                             fontWeight: FontWeight.bold),
                       ),
@@ -294,39 +296,13 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                     // ),
                     CustomWidgetBuilder.buildArrow(
                         context,
+                        dSize,
                         Icon(Icons.arrow_back_ios_rounded),
                         () => Navigator.of(context).pop()),
                   ],
                 ),
               ),
-              Container(
-                  width: double.infinity,
-                  height: dSize.height * 0.07,
-                  padding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-                  decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                          colors: [
-                            Color(0xFF26BB9B),
-                            Color(0xFF00B0BD),
-                          ],
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
-                          stops: [0, 1])),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'USER NAME : MO GAMAL',
-                        style: TextStyle(
-                            color: Colors.white, fontSize: dSize.width * 0.037),
-                      ),
-                      Text(
-                        'PDA NO : 1023088',
-                        style: TextStyle(
-                            color: Colors.white, fontSize: dSize.width * 0.037),
-                      ),
-                    ],
-                  ))
+              Footer()
             ],
           ),
         ),
@@ -351,6 +327,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                       ? Text(
                           '$cell',
                           style: TextStyle(
+                            fontSize: 11,
                               color:
                                   isHeader ? Colors.white : Color(0xFF0F6671),
                               fontWeight: isHeader
@@ -472,7 +449,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
           decoration: const BoxDecoration(
               border: Border(
                   bottom: BorderSide(color: Color(0xFF00B0BD), width: 2))),
-          width: dSize.width * 0.4,
+          width: dSize.width * 0.5,
           child: DropdownButtonHideUnderline(
             child: DropdownButton<String>(
               value: value,

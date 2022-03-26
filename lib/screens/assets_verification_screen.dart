@@ -344,8 +344,12 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                         //     child: Icon(Icons.arrow_forward_ios, color: Colors.white,),
                         //   ),
                         // ),
-                        CustomWidgetBuilder.buildArrow(context, Icon(Icons.arrow_back_ios_rounded), ()=>Navigator.of(context).pop()),
-                        CustomWidgetBuilder.buildArrow(context, Icon(Icons.arrow_forward_ios), ()=> Navigator.of(context).push(
+                        CustomWidgetBuilder.buildArrow(
+                            context,
+                            dSize,
+                            Icon(Icons.arrow_back_ios_rounded),
+                                () => Navigator.of(context).pop()),
+                        CustomWidgetBuilder.buildArrow(context, dSize, Icon(Icons.arrow_forward_ios), ()=> Navigator.of(context).push(
                             MaterialPageRoute(
                                 builder: (context) => AssetsDetails()))),
                       ],

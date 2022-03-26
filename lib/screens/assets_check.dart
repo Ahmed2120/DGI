@@ -309,7 +309,11 @@ class _AssetsCheckState extends State<AssetsCheck> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    CustomWidgetBuilder.buildArrow(context, Icon(Icons.arrow_back_ios_outlined), ()=>Navigator.of(context).pop()),
+                    CustomWidgetBuilder.buildArrow(
+                        context,
+                        dSize,
+                        Icon(Icons.arrow_back_ios_rounded),
+                            () => Navigator.of(context).pop()),
                   ],
                 ),
               ),
