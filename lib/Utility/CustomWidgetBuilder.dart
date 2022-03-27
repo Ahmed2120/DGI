@@ -9,17 +9,14 @@ class CustomWidgetBuilder{
         buildText(title, dSize),
         const Spacer(),
         Container(
-          width: dSize.width * 0.4,
-          decoration: const BoxDecoration(
-            border: Border(
-                bottom: BorderSide(
-                    color: Color(0xFF00B0BD), width: 2)),
+          width: dSize.width * 0.5,
+          decoration: BoxDecoration(
+            border: Border.all(
+                color: const Color(0xFF00B0BD), width: 2.0),
           ),
           child: TextFormField(
-            controller:TextEditingController(text: text) ,
-            enabled: false,
-            decoration: const InputDecoration(
-              constraints: BoxConstraints(maxHeight: 20),
+            decoration: InputDecoration(
+              constraints: BoxConstraints(maxHeight: dSize.height * 0.045),
               border: InputBorder.none,
             ),
           ),
@@ -27,6 +24,7 @@ class CustomWidgetBuilder{
       ],
     );
   }
+
   static Text buildText(String title, dSize) {
     return Text(
       title,

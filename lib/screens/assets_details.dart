@@ -32,12 +32,12 @@ class _AssetsDetailsState extends State<AssetsDetails> {
         body: SafeArea(
       child: SingleChildScrollView(
         child: SizedBox(
-          height: dSize.height - 24,
+          height: dSize.height - dSize.height * 0.08,
           child: Column(
             children: [
               Container(
                 width: double.infinity,
-                height: dSize.height * 0.20,
+                height: dSize.height * 0.172,
                 padding: EdgeInsets.symmetric(vertical: dSize.height * 0.007),
                 decoration: const BoxDecoration(
                     gradient: LinearGradient(
@@ -65,7 +65,7 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                         Container(
                             alignment: Alignment.centerLeft,
                             padding: const EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 25),
+                                vertical: 2, horizontal: 25),
                             decoration: const BoxDecoration(
                               color: Color(0xFFFFA227),
                               borderRadius: BorderRadius.only(
@@ -92,10 +92,10 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                       ],
                     ),
                     SizedBox(
-                      height: dSize.height * 0.018,
+                      height: dSize.height * 0.011,
                     ),
                     Container(
-                      padding: EdgeInsets.symmetric(vertical: 5),
+                      padding: EdgeInsets.symmetric(vertical: 6),
                       width: double.infinity,
                       decoration: BoxDecoration(color: Colors.white),
                       child: Row(
@@ -111,7 +111,7 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                             'REMAIN : 1000235',
                             style: TextStyle(
                                 color: Color(0xFF0F6671),
-                                fontSize: dSize.width * 0.031),
+                                fontSize: dSize.width * 0.037),
                           ),
                         ],
                       ),
@@ -127,7 +127,7 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                   child: Form(
                     key: _formKey,
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      // crossAxisAlignment: CrossAxisAlignment.start,
                       // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Row(
@@ -147,7 +147,7 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                               ),
                             ):Container(
                               padding: EdgeInsets.all(10),
-                              width: dSize.width * 0.4,
+                              width: dSize.width * 0.5,
                               decoration: BoxDecoration(
                                 border: Border.all(
                                     color: const Color(0xFF00B0BD), width: 2.0),
@@ -163,14 +163,15 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                           height: dSize.height * 0.01,
                         ),
                         Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             CustomWidgetBuilder.buildText('ASSET DETAILS', dSize),
                             SizedBox(
                               height: dSize.height * 0.01,
                             ),
                             Container(
-                              alignment: Alignment.center,
+                              width: 200,
+                              // alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                   border: Border.all(
                                       color: const Color(0xFF00B0BD), width: 2.0),
@@ -234,7 +235,7 @@ class _AssetsDetailsState extends State<AssetsDetails> {
               ),
               const Spacer(),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

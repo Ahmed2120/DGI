@@ -27,7 +27,7 @@ class _AssetsCounterState extends State<AssetsCounter> {
         body: SafeArea(
           child: SingleChildScrollView(
             child: Container(
-              height: dSize.height - 24,
+              height: dSize.height - dSize.height * 0.08,
               child: Column(
                 children: [
                   const Header(title: 'ASSETS', subTitle: 'Counter',),
@@ -353,7 +353,7 @@ class _AssetsCounterState extends State<AssetsCounter> {
                   ),
                   const Spacer(),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
