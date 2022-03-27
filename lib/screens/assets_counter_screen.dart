@@ -1,8 +1,22 @@
 import 'package:dgi/Utility/footer.dart';
+import 'package:dgi/model/category.dart';
 import 'package:dgi/screens/assets_check.dart';
-import 'package:dropdown_button2/custom_dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:dgi/Services/CategoryService.dart';
+import 'package:dgi/Services/SectionTypeService.dart';
+import 'package:dgi/Utility/CustomWidgetBuilder.dart';
+import 'package:dgi/model/sectionType.dart';
+import 'package:dgi/Services/AreaService.dart';
+import 'package:dgi/Services/AssetLocationService.dart';
+import 'package:dgi/Services/CityService.dart';
+import 'package:dgi/Services/CountryService.dart';
+import 'package:dgi/Services/DepartmentService.dart';
+import 'package:dgi/Services/FloorService.dart';
+import 'package:dgi/model/area.dart';
+import 'package:dgi/model/city.dart';
+import 'package:dgi/model/department.dart';
+import 'package:dgi/model/floor.dart';
 
 import '../Utility/CustomWidgetBuilder.dart';
 import '../Utility/header.dart';
@@ -15,14 +29,35 @@ class AssetsCounter extends StatefulWidget {
 }
 
 class _AssetsCounterState extends State<AssetsCounter> {
-  String? value;
+  List<Category> categories = [];
+  List<City> cities = [];
+  List<Floor> floors = [];
+  List<Area> areas = [];
+  List<Department> departments = [];
+  List<SectionType> sections = [];
+
+  final countryService = CountryService();
+  final cityService = CityService();
+  final floorService = FloorService();
+  final areaService = AreaService();
+  final departmentService = DepartmentService();
+  final assetLocationService = AssetLocationService();
+  final categoryService = CategoryService();
+  final sectionService = SectionTypeService();
+  String? category;
+  String? city;
   String? location;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initData();
+  }
 
   @override
   Widget build(BuildContext context) {
     final dSize = MediaQuery.of(context).size;
-    print('hhh ${dSize.height * 0.01}');
-    print('hhh ${dSize.width * 0.04}');
     return Scaffold(
         body: SafeArea(
           child: SingleChildScrollView(
@@ -56,7 +91,7 @@ class _AssetsCounterState extends State<AssetsCounter> {
                                 width: dSize.width * 0.4,
                                 child: DropdownButtonHideUnderline(
                                   child: DropdownButton<String>(
-                                    value: value,
+                                    value: category,
                                     iconSize: 30,
                                     icon: const Icon(
                                       Icons.arrow_drop_down,
@@ -65,7 +100,7 @@ class _AssetsCounterState extends State<AssetsCounter> {
                                     isDense: true,
                                     isExpanded: true,
                                     items:
-                                    <String>['A', 'B', 'C', 'D'].map((String item) {
+                                    categories.map((e) => e.name).map((String item) {
                                       return DropdownMenuItem<String>(
                                         value: item,
                                         child: Text(
@@ -77,9 +112,8 @@ class _AssetsCounterState extends State<AssetsCounter> {
                                     }).toList(),
                                     onChanged: (val) {
                                       setState(() {
-                                        value = val;
+                                        category = val;
                                       });
-                                      print(val);
                                     },
                                   ),
                                 ),
@@ -90,7 +124,7 @@ class _AssetsCounterState extends State<AssetsCounter> {
                           Row(
                             children: [
                               buildText('CITY', dSize),
-                              Spacer(),
+                              const Spacer(),
                               Container(
                                 decoration: const BoxDecoration(
                                     border: Border(
@@ -99,7 +133,7 @@ class _AssetsCounterState extends State<AssetsCounter> {
                                 width: dSize.width * 0.4,
                                 child: DropdownButtonHideUnderline(
                                   child: DropdownButton<String>(
-                                    value: value,
+                                    value: city,
                                     iconSize: 30,
                                     icon: const Icon(
                                       Icons.arrow_drop_down,
@@ -108,7 +142,7 @@ class _AssetsCounterState extends State<AssetsCounter> {
                                     isDense: true,
                                     isExpanded: true,
                                     items:
-                                    <String>['A', 'B', 'C', 'D'].map((String item) {
+                                    cities.map((e) => e.name).map((String item) {
                                       return DropdownMenuItem<String>(
                                         value: item,
                                         child: Text(
@@ -120,7 +154,7 @@ class _AssetsCounterState extends State<AssetsCounter> {
                                     }).toList(),
                                     onChanged: (val) {
                                       setState(() {
-                                        value = val;
+                                        city = val;
                                       });
                                       print(val);
                                     },
@@ -130,31 +164,13 @@ class _AssetsCounterState extends State<AssetsCounter> {
                             ],
                           ),
                           SizedBox(height: dSize.height * 0.01,),
-                          Row(
-                            children: [
-                              buildText('AREA', dSize),
-                              const Spacer(),
-                              Container(
-                                width: dSize.width * 0.4,
-                                decoration: BoxDecoration(
-                                  border: Border(
-                                      bottom: BorderSide(
-                                          color: Color(0xFF00B0BD), width: 2)),
-                                ),
-                                child: const TextField(
-                                  decoration: InputDecoration(
-                                    constraints: BoxConstraints(maxHeight: 20),
-                                    border: InputBorder.none,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                        CustomWidgetBuilder.buildTextFormField(dSize, 'AREA',
+                            areas.isNotEmpty ? areas[0].name : 'area'),
                           SizedBox(height: dSize.height * 0.01,),
                           Row(
                             children: [
                               buildText('LOCATION TYPE', dSize),
-                              Spacer(),
+                              const Spacer(),
                               Container(
                                 decoration: const BoxDecoration(
                                     border: Border(
@@ -171,7 +187,7 @@ class _AssetsCounterState extends State<AssetsCounter> {
                                     ),
                                     style: const TextStyle(
                                         color: Color(0xFF0F6671), fontSize: 20),
-                                    dropdownColor: Color(0xFF00B0BD),
+                                    dropdownColor: const Color(0xFF00B0BD),
                                     isDense: true,
                                     isExpanded: true,
                                     items:
@@ -198,173 +214,41 @@ class _AssetsCounterState extends State<AssetsCounter> {
                           ),
                           SizedBox(height: dSize.height * 0.015,),
                           if(location == 'OFFICE' || location == 'BUILDING')
-                          Row(
-                            children: [
-                              buildText('FLOOR NO', dSize),
-                              Spacer(),
-                              Container(
-                                width: dSize.width * 0.4,
-                                decoration: BoxDecoration(
-                                  border: Border(
-                                      bottom: BorderSide(
-                                          color: Color(0xFF00B0BD), width: 2)),
-                                ),
-                                child: const TextField(
-                                  decoration: InputDecoration(
-                                    constraints: BoxConstraints(maxHeight: 20),
-                                    border: InputBorder.none,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                            CustomWidgetBuilder.buildTextFormField(
+                                dSize,
+                                'FLOOR NO',
+                                floors.isNotEmpty ? floors[0].name : '0'),
                           SizedBox(height: dSize.height * 0.01,),
                           if(location == 'OFFICE' || location == 'BUILDING')
-                          Row(
-                            children: [
-                              buildText('SECTION NO', dSize),
-                              Spacer(),
-                              Container(
-                                width: dSize.width * 0.4,
-                                decoration: BoxDecoration(
-                                  border: Border(
-                                      bottom: BorderSide(
-                                          color: Color(0xFF00B0BD), width: 2)),
-                                ),
-                                child: const TextField(
-                                  decoration: InputDecoration(
-                                    constraints: BoxConstraints(maxHeight: 20),
-                                    border: InputBorder.none,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                            CustomWidgetBuilder.buildTextFormField(
+                                dSize,
+                                'SECTION NO',
+                                sections.isNotEmpty ? sections[0].name : '0'),
                           SizedBox(height: dSize.height * 0.01,),
                           if(location == 'OFFICE' || location == 'STORE')
-                          Row(
-                            children: [
-                              buildText('DEPARTMENT', dSize),
-                              const Spacer(),
-                              Container(
-                                width: dSize.width * 0.4,
-                                decoration: BoxDecoration(
-                                  border: Border(
-                                      bottom: BorderSide(
-                                          color: Color(0xFF00B0BD), width: 2)),
-                                ),
-                                child: const TextField(
-                                  decoration: InputDecoration(
-                                    constraints: BoxConstraints(maxHeight: 20),
-                                    border: InputBorder.none,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                            CustomWidgetBuilder.buildTextFormField(
+                                dSize,
+                                'DEPARTMENT',
+                                departments.isNotEmpty ? departments[0].name : '0'),
                           SizedBox(height: dSize.height * 0.01,),
-                          // Row(
-                          //   children: [
-                          //     buildText('BLDG ADDRESS', dSize),
-                          //     const Spacer(),
-                          //     Container(
-                          //       width: dSize.width * 0.4,
-                          //       decoration: BoxDecoration(
-                          //         border: Border(
-                          //             bottom: BorderSide(
-                          //                 color: Color(0xFF00B0BD), width: 2)),
-                          //       ),
-                          //       child: const TextField(
-                          //         decoration: InputDecoration(
-                          //           constraints: BoxConstraints(maxHeight: 20),
-                          //           border: InputBorder.none,
-                          //         ),
-                          //       ),
-                          //     ),
-                          //   ],
-                          // ),
-                          // SizedBox(height: dSize.height * 0.01,),
-                          // Row(
-                          //   children: [
-                          //     buildText('BUILDING NO', dSize),
-                          //     Spacer(),
-                          //     Container(
-                          //       width: dSize.width * 0.4,
-                          //       decoration: BoxDecoration(
-                          //         border: Border(
-                          //             bottom: BorderSide(
-                          //                 color: Color(0xFF00B0BD), width: 2)),
-                          //       ),
-                          //       child: const TextField(
-                          //         decoration: InputDecoration(
-                          //           constraints: BoxConstraints(maxHeight: 15),
-                          //           border: InputBorder.none,
-                          //         ),
-                          //       ),
-                          //     ),
-                          //   ],
-                          // ),
-                          // SizedBox(height: dSize.height * 0.01,),
-                          // Row(
-                          //   children: [
-                          //     buildText('FLOOR NO', dSize),
-                          //     const Spacer(),
-                          //     Container(
-                          //       decoration: const BoxDecoration(
-                          //           border: Border(
-                          //               bottom: BorderSide(
-                          //                   color: Color(0xFF00B0BD), width: 2))),
-                          //       width: dSize.width * 0.4,
-                          //       child: DropdownButtonHideUnderline(
-                          //         child: DropdownButton<String>(
-                          //           value: value,
-                          //           iconSize: 30,
-                          //           icon: const Icon(
-                          //             Icons.arrow_drop_down,
-                          //             color: Color(0xFF00B0BD),
-                          //           ),
-                          //           isDense: true,
-                          //           isExpanded: true,
-                          //           items:
-                          //           <String>['A', 'B', 'C', 'D'].map((String item) {
-                          //             return DropdownMenuItem<String>(
-                          //               value: item,
-                          //               child: Text(
-                          //                 item,
-                          //                 style: const TextStyle(
-                          //                     color: Color(0xFF0F6671), fontSize: 20),
-                          //               ),
-                          //             );
-                          //           }).toList(),
-                          //           onChanged: (val) {
-                          //             setState(() {
-                          //               value = val;
-                          //             });
-                          //             print(val);
-                          //           },
-                          //         ),
-                          //       ),
-                          //     ),
-                          //   ],
-                          // ),
                         ],
                       ),
                     ),
                   ),
                   const Spacer(),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 1),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         CustomWidgetBuilder.buildArrow(
                             context,
                             dSize,
-                            Icon(Icons.arrow_back_ios_rounded),
+                            const Icon(Icons.arrow_back_ios_rounded),
                                 () => Navigator.of(context).pop()),
-                        CustomWidgetBuilder.buildArrow(context, dSize, Icon(Icons.arrow_forward_ios), ()=>Navigator.of(context).push(
+                        CustomWidgetBuilder.buildArrow(context, dSize, const Icon(Icons.arrow_forward_ios), ()=>Navigator.of(context).push(
                             MaterialPageRoute(
-                                builder: (context) => AssetsCheck()))),
+                                builder: (context) => const AssetsCheck()))),
                       ],
                     ),
                   ),
@@ -376,11 +260,21 @@ class _AssetsCounterState extends State<AssetsCounter> {
         ));
   }
 
+  initData() async {
+    categories = await categoryService.retrieve();
+    cities = await cityService.retrieve();
+    floors = await floorService.retrieve();
+    departments = await departmentService.retrieve();
+    areas = await areaService.retrieve();
+    sections = await sectionService.retrieve();
+    setState(() {});
+  }
+
   Text buildText(String title, dSize) {
     return Text(
       title,
       style:
-      TextStyle(fontSize: dSize.width * 0.04, color: Color(0xFF0F6671), fontWeight: FontWeight.bold),
+      TextStyle(fontSize: dSize.width * 0.04, color: const Color(0xFF0F6671), fontWeight: FontWeight.bold),
     );
   }
 }

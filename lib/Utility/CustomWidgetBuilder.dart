@@ -15,6 +15,7 @@ class CustomWidgetBuilder{
                 color: const Color(0xFF00B0BD), width: 2.0),
           ),
           child: TextFormField(
+            controller:TextEditingController(text: text) ,
             decoration: InputDecoration(
               constraints: BoxConstraints(maxHeight: dSize.height * 0.045),
               border: InputBorder.none,

@@ -19,4 +19,13 @@ class AssetService{
   Future<List<Asset>> select(String barcode) async {
     return assetRepository.select(barcode);
   }
+  Future<List<Asset>> getAllVerifiedItems() async {
+    return assetRepository.getAllVerifiedItems();
+  }
+  Future<List<Asset>> getAllCountedItems() async {
+    return assetRepository.getAllCountedItems();
+  }
+  Future<int> update(Asset asset) async {
+    return assetRepository.update(asset);
+  }
 }

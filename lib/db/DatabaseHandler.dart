@@ -19,7 +19,7 @@ class DatabaseHandler {
         batch.execute("CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT , name TEXT NOT NULL,username TEXT NOT NULL, password TEXT NOT NULL, email TEXT NOT NULL,address TEXT NOT NULL)",);
         batch.execute("CREATE TABLE assetLocation(id INTEGER PRIMARY KEY , name TEXT NOT NULL,buildingAddress TEXT NOT NULL,buildingName TEXT NOT NULL,buildingNo TEXT NOT NULL,floorId INTEGER NOT NULL,departmentId INTEGER NOT NULL,areaId INTEGER NOT NULL,businessUnit TEXT NOT NULL,sectionId INTEGER)",);
         batch.execute("CREATE TABLE item(id INTEGER PRIMARY KEY AUTOINCREMENT , name TEXT,image BLOB NOT NULL,categoryId  INTEGER NOT NULL,assetLocationId INTEGER NOT NULL,description TEXT NOT NULL,quantity INTEGER NOT NULL)",);
-        batch.execute("CREATE TABLE asset(id INTEGER PRIMARY KEY AUTOINCREMENT ,itemId INTEGER,barcode TEXT, serialnumber TEXT,image BLOB NOT NULL,barcodeImage BLOB NOT NULL,assetLocationId INTEGER NOT NULL,description TEXT NOT NULL)",);
+        batch.execute("CREATE TABLE asset(id INTEGER PRIMARY KEY AUTOINCREMENT ,itemId INTEGER,barcode TEXT, serialnumber TEXT,image BLOB NOT NULL,barcodeImage BLOB NOT NULL,assetLocationId INTEGER NOT NULL,description TEXT NOT NULL,isVerified BOOLEAN DEFAULT false,isCounted BOOLEAN DEFAULT false,correct BOOLEAN DEFAULT false)",);
         await batch.commit();
       },
       version: 1,

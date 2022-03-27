@@ -70,6 +70,8 @@ class _AssetsVerificationState extends State<AssetsVerification> {
 
   List<String> locations = ['STORE', 'BUILDING', 'OFFICE'];
 
+
+
   @override
   Widget build(BuildContext context) {
     final dSize = MediaQuery.of(context).size;
@@ -292,13 +294,13 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                           ],
                         ),
                         SizedBox(
-                          height: dSize.height * 0.015,
+                          height: dSize.height * 0.01,
                         ),
                         if (location == 'OFFICE' || location == 'BUILDING')
                           CustomWidgetBuilder.buildTextFormField(
                               dSize,
                               'FLOOR NO',
-                              floors.isNotEmpty ? areas[0].name : '0'),
+                              floors.isNotEmpty ? floors[0].name : '0'),
                         SizedBox(
                           height: dSize.height * 0.01,
                         ),
@@ -306,7 +308,7 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                           CustomWidgetBuilder.buildTextFormField(
                               dSize,
                               'SECTION NO',
-                              sections.isNotEmpty ? areas[0].name : '0'),
+                              sections.isNotEmpty ? sections[0].name : '0'),
                         SizedBox(
                           height: dSize.height * 0.01,
                         ),
@@ -314,7 +316,7 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                           CustomWidgetBuilder.buildTextFormField(
                               dSize,
                               'DEPARTMENT',
-                              departments.isNotEmpty ? areas[0].name : '0'),
+                              departments.isNotEmpty ? departments[0].name : '0'),
                         SizedBox(
                           height: dSize.height * 0.01,
                         ),
