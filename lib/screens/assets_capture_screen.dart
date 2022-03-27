@@ -50,13 +50,13 @@ class _AssetsCaptureState extends State<AssetsCapture> {
         body: SafeArea(
       child: SingleChildScrollView(
         child: SizedBox(
-          height: dSize.height - 24,
+          height: dSize.height - dSize.height * 0.08,
           child: Column(
             children: [
               Container(
                 width: double.infinity,
-                height: dSize.height * 0.15,
-                padding: EdgeInsets.symmetric(vertical: dSize.height * 0.015),
+                height: dSize.height * 0.122,
+                padding: EdgeInsets.symmetric(vertical: dSize.height * 0.01),
                 decoration: const BoxDecoration(
                     gradient: LinearGradient(
                         colors: [
@@ -83,7 +83,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                         Container(
                             alignment: Alignment.centerLeft,
                             padding: const EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 25),
+                                vertical: 2, horizontal: 25),
                             decoration: const BoxDecoration(
                               color: Color(0xFFFFA227),
                               borderRadius: BorderRadius.only(

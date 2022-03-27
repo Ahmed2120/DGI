@@ -11,7 +11,7 @@ class Header extends StatelessWidget {
     print('hhh ${dSize.width * 0.04}');
     return Container(
       width: double.infinity,
-      height: dSize.height * 0.20,
+      height: dSize.height * 0.172,
       padding: EdgeInsets.symmetric(vertical: dSize.height * 0.007),
       decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -38,7 +38,7 @@ class Header extends StatelessWidget {
               Container(
                   alignment: Alignment.centerLeft,
                   padding: const EdgeInsets.symmetric(
-                      vertical: 5, horizontal: 25),
+                      vertical: 2, horizontal: 25),
                   decoration: const BoxDecoration(
                     color: Color(0xFFFFA227),
                     borderRadius: BorderRadius.only(
@@ -64,10 +64,10 @@ class Header extends StatelessWidget {
             ],
           ),
           SizedBox(
-            height: dSize.height * 0.018,
+            height: dSize.height * 0.011,
           ),
           Container(
-            padding: const EdgeInsets.symmetric(vertical: 5),
+            padding: const EdgeInsets.symmetric(vertical: 6),
             width: double.infinity,
             decoration: BoxDecoration(color: Colors.white),
             child: Row(

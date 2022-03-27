@@ -303,7 +303,7 @@ class _SettingsState extends State<Settings> {
                   ),
                   Spacer(),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
