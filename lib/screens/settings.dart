@@ -307,7 +307,11 @@ class _SettingsState extends State<Settings> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        CustomWidgetBuilder.buildArrow(context, const Icon(Icons.arrow_back_ios), ()=>Navigator.of(context).pop()),
+                        CustomWidgetBuilder.buildArrow(
+                            context,
+                            dSize,
+                            Icon(Icons.arrow_back_ios_rounded),
+                                () => Navigator.of(context).pop()),
                       ],
                     ),
                   ),

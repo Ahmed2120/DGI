@@ -357,8 +357,12 @@ class _AssetsCounterState extends State<AssetsCounter> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        CustomWidgetBuilder.buildArrow(context, Icon(Icons.arrow_back_ios_rounded), ()=>Navigator.of(context).pop()),
-                        CustomWidgetBuilder.buildArrow(context, Icon(Icons.arrow_forward_ios), ()=>Navigator.of(context).push(
+                        CustomWidgetBuilder.buildArrow(
+                            context,
+                            dSize,
+                            Icon(Icons.arrow_back_ios_rounded),
+                                () => Navigator.of(context).pop()),
+                        CustomWidgetBuilder.buildArrow(context, dSize, Icon(Icons.arrow_forward_ios), ()=>Navigator.of(context).push(
                             MaterialPageRoute(
                                 builder: (context) => AssetsCheck()))),
                       ],

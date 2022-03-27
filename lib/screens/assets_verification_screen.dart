@@ -34,10 +34,20 @@ class _AssetsVerificationState extends State<AssetsVerification> {
   List<Country> countries = [];
   List<City> cities = [];
   List<Floor> floors = [];
-  List<Department> departments=[];
-  List<Area> areas =[];
-  List<SectionType> sections =[];
-  AssetLocation assetLocation = AssetLocation(id:1, name: '', buildingAddress: '', buildingName: '', buildingNo: '', businessUnit: '', areaId: 1, departmentId: 1, floorId: 1,sectionId: 10);
+  List<Department> departments = [];
+  List<Area> areas = [];
+  List<SectionType> sections = [];
+  AssetLocation assetLocation = AssetLocation(
+      id: 1,
+      name: '',
+      buildingAddress: '',
+      buildingName: '',
+      buildingNo: '',
+      businessUnit: '',
+      areaId: 1,
+      departmentId: 1,
+      floorId: 1,
+      sectionId: 10);
   final GlobalKey<FormState> _formKey = GlobalKey();
   final countryService = CountryService();
   final cityService = CityService();
@@ -60,222 +70,288 @@ class _AssetsVerificationState extends State<AssetsVerification> {
 
   List<String> locations = ['STORE', 'BUILDING', 'OFFICE'];
 
-
   @override
   Widget build(BuildContext context) {
     final dSize = MediaQuery.of(context).size;
     return Scaffold(
         body: SafeArea(
-          child: SingleChildScrollView(
-            child: Container(
-              height: dSize.height - 24,
-              child: Column(
-                children: [
-                  const Header(title: 'ASSETS', subTitle: 'VERIFICATION',),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-                    child: SizedBox(
-                      height: dSize.height * 0.58,
-                      child: Form(
-                        key: _formKey,
-                        child: Column(
-                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: SingleChildScrollView(
+        child: Container(
+          height: dSize.height - 24,
+          child: Column(
+            children: [
+              const Header(
+                title: 'ASSETS',
+                subTitle: 'VERIFICATION',
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+                child: SizedBox(
+                  height: dSize.height * 0.58,
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          padding: const EdgeInsets.only(bottom: 5),
+                          child: const Text(
+                            'ASSET LOCATION INFORMATION',
+                            style: TextStyle(
+                                fontSize: 13,
+                                color: Color(0xFF0F6671),
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Row(
                           children: [
+                            CustomWidgetBuilder.buildText('CATEGORY', dSize),
+                            const Spacer(),
                             Container(
-                              alignment: Alignment.centerLeft,
-                              padding: const EdgeInsets.only(bottom: 5),
-                              child: const Text('ASSET LOCATION INFORMATION', style:
-                              TextStyle(fontSize: 13, color: Color(0xFF0F6671), fontWeight: FontWeight.bold),),
-                            ),
-                            Row(
-                              children: [
-                                CustomWidgetBuilder.buildText('CATEGORY', dSize),
-                                const Spacer(),
-                                Container(
-                                  decoration: const BoxDecoration(
-                                      border: Border(
-                                          bottom: BorderSide(
-                                              color: Color(0xFF00B0BD), width: 2))),
-                                  width: dSize.width * 0.4,
-                                  child: DropdownButtonHideUnderline(
-                                    child: DropdownButton<String>(
-                                      value: category,
-                                      iconSize: 30,
-                                      icon: const Icon(
-                                        Icons.arrow_drop_down,
-                                        color: Color(0xFF00B0BD),
-                                      ),
-                                      isDense: true,
-                                      isExpanded: true,
-                                      items:
-                                      categories.map((e) => e.name).map((String item) {
-                                        return DropdownMenuItem<String>(
-                                          value: item,
-                                          child: Text(
-                                            item,
-                                            style: const TextStyle(
-                                                color: Color(0xFF0F6671), fontSize: 20),
-                                          ),
-                                        );
-                                      }).toList(),
-                                      onChanged: (val) {
-                                        setState(() {
-                                          category = val;
-                                        });
-                                        print(val);
-                                      },
-                                    ),
+                              decoration: const BoxDecoration(
+                                  border: Border(
+                                      bottom: BorderSide(
+                                          color: Color(0xFF00B0BD), width: 2))),
+                              width: dSize.width * 0.4,
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton<String>(
+                                  value: category,
+                                  iconSize: 30,
+                                  icon: const Icon(
+                                    Icons.arrow_drop_down,
+                                    color: Color(0xFF00B0BD),
                                   ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: dSize.height * 0.01,),
-                            Row(
-                              children: [
-                                CustomWidgetBuilder.buildText('CITY', dSize),
-                                Spacer(),
-                                Container(
-                                  decoration: const BoxDecoration(
-                                      border: Border(
-                                          bottom: BorderSide(
-                                              color: Color(0xFF00B0BD), width: 2))),
-                                  width: dSize.width * 0.4,
-                                  child: DropdownButtonHideUnderline(
-                                    child: DropdownButton<String>(
-                                      value: city,
-                                      iconSize: 30,
-                                      icon: const Icon(
-                                        Icons.arrow_drop_down,
-                                        color: Color(0xFF00B0BD),
+                                  isDense: true,
+                                  isExpanded: true,
+                                  items: categories
+                                      .map((e) => e.name)
+                                      .map((String item) {
+                                    return DropdownMenuItem<String>(
+                                      value: item,
+                                      child: Text(
+                                        item,
+                                        style: const TextStyle(
+                                            color: Color(0xFF0F6671),
+                                            fontSize: 20),
                                       ),
-                                      isDense: true,
-                                      isExpanded: true,
-                                      items:
-                                      cities.map((e) => e.name).map((String item) {
-                                        return DropdownMenuItem<String>(
-                                          value: item,
-                                          child: Text(
-                                            item,
-                                            style: const TextStyle(
-                                                color: Color(0xFF0F6671), fontSize: 20),
-                                          ),
-                                        );
-                                      }).toList(),
-                                      onChanged: (val) {
-                                        setState(() {
-                                          city = val;
-                                        });
-                                        print(val);
-                                      },
-                                    ),
-                                  ),
+                                    );
+                                  }).toList(),
+                                  onChanged: (val) {
+                                    setState(() {
+                                      category = val;
+                                    });
+                                    print(val);
+                                  },
                                 ),
-                              ],
+                              ),
                             ),
-                            SizedBox(height: dSize.height * 0.01,),
-                            CustomWidgetBuilder.buildTextFormField(dSize,'AREA',areas.isNotEmpty?areas[0].name:'dump'),
-                            SizedBox(height: dSize.height * 0.01,),
-                            CustomWidgetBuilder.buildTextFormField(dSize,'DEPARTMENT',departments.isNotEmpty?departments[0].name:"dump"),
-                            SizedBox(height: dSize.height * 0.01,),
-                            CustomWidgetBuilder.buildTextFormField(dSize,'BUSINESS UNIT',assetLocation.businessUnit),
-                            SizedBox(height: dSize.height * 0.01,),
-                            CustomWidgetBuilder.buildTextFormField(dSize,'NAME',assetLocation.name),
-                            SizedBox(height: dSize.height * 0.01,),
-                            CustomWidgetBuilder.buildTextFormField(dSize,'BLDG NAME',assetLocation.buildingName),
-                            SizedBox(height: dSize.height * 0.01,),
-                            CustomWidgetBuilder.buildTextFormField(dSize,'BLDG ADDRESS',assetLocation.buildingAddress),
-                            SizedBox(height: dSize.height * 0.01,),
-                            CustomWidgetBuilder.buildTextFormField(dSize,'BUILDING NO',assetLocation.buildingNo.toString()),
-                            SizedBox(height: dSize.height * 0.01,),
-                            Row(
-                              children: [
-                                CustomWidgetBuilder.buildText('LOCATION TYPE', dSize),
-                                Spacer(),
-                                Container(
-                                  decoration: const BoxDecoration(
-                                      border: Border(
-                                          bottom: BorderSide(
-                                              color: Color(0xFF00B0BD), width: 2))),
-                                  width: dSize.width * 0.4,
-                                  child: DropdownButtonHideUnderline(
-                                    child: DropdownButton<String>(
-                                      value: location,
-                                      iconSize: 30,
-                                      icon: const Icon(
-                                        Icons.arrow_drop_down,
-                                        color: Color(0xFF00B0BD),
-                                      ),
-                                      style: const TextStyle(
-                                          color: Colors.white, fontSize: 20),
-                                      selectedItemBuilder: (BuildContext context) {
-                                        return locations.map((String value) {
-                                          return Text(
-                                            value,
-                                            style: const TextStyle(color: Color(0xFF0F6671)),
-                                          );
-                                        }).toList();
-                                      },
-                                      dropdownColor: Color(0xFF00B0BD),
-                                      isDense: true,
-                                      isExpanded: true,
-                                      items:
-                                      locations.map((String item) {
-                                        return DropdownMenuItem<String>(
-                                          value: item,
-                                          child: Text(
-                                            item,
-                                            // style: const TextStyle(
-                                            //     color: Color(0xFF0F6671), fontSize: 20),
-                                          ),
-                                        );
-                                      }).toList(),
-                                      onChanged: (val) {
-                                        setState(() {
-                                          location = val;
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: dSize.height * 0.015,),
-                            if(location == 'OFFICE' || location == 'BUILDING')
-                              CustomWidgetBuilder.buildTextFormField(dSize,'FLOOR NO',floors.isNotEmpty?areas[0].name:'0'),
-                            SizedBox(height: dSize.height * 0.01,),
-                            if(location == 'OFFICE' || location == 'BUILDING')
-                              CustomWidgetBuilder.buildTextFormField(dSize,'SECTION NO',sections.isNotEmpty?areas[0].name:'0'),
-                            SizedBox(height: dSize.height * 0.01,),
-                            if(location == 'OFFICE' || location == 'STORE')
-                              CustomWidgetBuilder.buildTextFormField(dSize,'DEPARTMENT',departments.isNotEmpty?areas[0].name:'0'),
-                            SizedBox(height: dSize.height * 0.01,),
                           ],
                         ),
-                      ),
-                    ),
-                  ),
-                  const Spacer(),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        CustomWidgetBuilder.buildArrow(context, Icon(Icons.arrow_back_ios_rounded), ()=>Navigator.of(context).pop()),
-                        CustomWidgetBuilder.buildArrow(context, Icon(Icons.arrow_forward_ios), ()=> Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (context) => AssetsDetails()))),
+                        SizedBox(
+                          height: dSize.height * 0.01,
+                        ),
+                        Row(
+                          children: [
+                            CustomWidgetBuilder.buildText('CITY', dSize),
+                            Spacer(),
+                            Container(
+                              decoration: const BoxDecoration(
+                                  border: Border(
+                                      bottom: BorderSide(
+                                          color: Color(0xFF00B0BD), width: 2))),
+                              width: dSize.width * 0.4,
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton<String>(
+                                  value: city,
+                                  iconSize: 30,
+                                  icon: const Icon(
+                                    Icons.arrow_drop_down,
+                                    color: Color(0xFF00B0BD),
+                                  ),
+                                  isDense: true,
+                                  isExpanded: true,
+                                  items: cities
+                                      .map((e) => e.name)
+                                      .map((String item) {
+                                    return DropdownMenuItem<String>(
+                                      value: item,
+                                      child: Text(
+                                        item,
+                                        style: const TextStyle(
+                                            color: Color(0xFF0F6671),
+                                            fontSize: 20),
+                                      ),
+                                    );
+                                  }).toList(),
+                                  onChanged: (val) {
+                                    setState(() {
+                                      city = val;
+                                    });
+                                    print(val);
+                                  },
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: dSize.height * 0.01,
+                        ),
+                        CustomWidgetBuilder.buildTextFormField(dSize, 'AREA',
+                            areas.isNotEmpty ? areas[0].name : 'dump'),
+                        SizedBox(
+                          height: dSize.height * 0.01,
+                        ),
+                        CustomWidgetBuilder.buildTextFormField(
+                            dSize,
+                            'DEPARTMENT',
+                            departments.isNotEmpty
+                                ? departments[0].name
+                                : "dump"),
+                        SizedBox(
+                          height: dSize.height * 0.01,
+                        ),
+                        CustomWidgetBuilder.buildTextFormField(
+                            dSize, 'BUSINESS UNIT', assetLocation.businessUnit),
+                        SizedBox(
+                          height: dSize.height * 0.01,
+                        ),
+                        CustomWidgetBuilder.buildTextFormField(
+                            dSize, 'NAME', assetLocation.name),
+                        SizedBox(
+                          height: dSize.height * 0.01,
+                        ),
+                        CustomWidgetBuilder.buildTextFormField(
+                            dSize, 'BLDG NAME', assetLocation.buildingName),
+                        SizedBox(
+                          height: dSize.height * 0.01,
+                        ),
+                        CustomWidgetBuilder.buildTextFormField(dSize,
+                            'BLDG ADDRESS', assetLocation.buildingAddress),
+                        SizedBox(
+                          height: dSize.height * 0.01,
+                        ),
+                        CustomWidgetBuilder.buildTextFormField(dSize,
+                            'BUILDING NO', assetLocation.buildingNo.toString()),
+                        SizedBox(
+                          height: dSize.height * 0.01,
+                        ),
+                        Row(
+                          children: [
+                            CustomWidgetBuilder.buildText(
+                                'LOCATION TYPE', dSize),
+                            Spacer(),
+                            Container(
+                              decoration: const BoxDecoration(
+                                  border: Border(
+                                      bottom: BorderSide(
+                                          color: Color(0xFF00B0BD), width: 2))),
+                              width: dSize.width * 0.4,
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton<String>(
+                                  value: location,
+                                  iconSize: 30,
+                                  icon: const Icon(
+                                    Icons.arrow_drop_down,
+                                    color: Color(0xFF00B0BD),
+                                  ),
+                                  style: const TextStyle(
+                                      color: Colors.white, fontSize: 20),
+                                  selectedItemBuilder: (BuildContext context) {
+                                    return locations.map((String value) {
+                                      return Text(
+                                        value,
+                                        style: const TextStyle(
+                                            color: Color(0xFF0F6671)),
+                                      );
+                                    }).toList();
+                                  },
+                                  dropdownColor: Color(0xFF00B0BD),
+                                  isDense: true,
+                                  isExpanded: true,
+                                  items: locations.map((String item) {
+                                    return DropdownMenuItem<String>(
+                                      value: item,
+                                      child: Text(
+                                        item,
+                                        // style: const TextStyle(
+                                        //     color: Color(0xFF0F6671), fontSize: 20),
+                                      ),
+                                    );
+                                  }).toList(),
+                                  onChanged: (val) {
+                                    setState(() {
+                                      location = val;
+                                    });
+                                  },
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: dSize.height * 0.015,
+                        ),
+                        if (location == 'OFFICE' || location == 'BUILDING')
+                          CustomWidgetBuilder.buildTextFormField(
+                              dSize,
+                              'FLOOR NO',
+                              floors.isNotEmpty ? areas[0].name : '0'),
+                        SizedBox(
+                          height: dSize.height * 0.01,
+                        ),
+                        if (location == 'OFFICE' || location == 'BUILDING')
+                          CustomWidgetBuilder.buildTextFormField(
+                              dSize,
+                              'SECTION NO',
+                              sections.isNotEmpty ? areas[0].name : '0'),
+                        SizedBox(
+                          height: dSize.height * 0.01,
+                        ),
+                        if (location == 'OFFICE' || location == 'STORE')
+                          CustomWidgetBuilder.buildTextFormField(
+                              dSize,
+                              'DEPARTMENT',
+                              departments.isNotEmpty ? areas[0].name : '0'),
+                        SizedBox(
+                          height: dSize.height * 0.01,
+                        ),
                       ],
                     ),
                   ),
-                  const Footer()
-                ],
+                ),
               ),
-            ),
+              const Spacer(),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CustomWidgetBuilder.buildArrow(
+                        context,
+                        dSize,
+                        const Icon(Icons.arrow_back_ios_rounded),
+                        () => Navigator.of(context).pop()),
+                    CustomWidgetBuilder.buildArrow(
+                        context,
+                        dSize,
+                        const Icon(Icons.arrow_forward_ios),
+                        () => Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => AssetsDetails()))),
+                  ],
+                ),
+              ),
+              const Footer()
+            ],
           ),
-        ));
+        ),
+      ),
+    ));
   }
 
-  initData() async{
+  initData() async {
     categories = await categoryService.retrieve();
     countries = await countryService.retrieve();
     cities = await cityService.retrieve();
@@ -285,15 +361,11 @@ class _AssetsVerificationState extends State<AssetsVerification> {
     sections = await sectionService.retrieve();
     assetLocationService.retrieve().then((value) {
       setState(() {
-        if(value.isNotEmpty) {
+        if (value.isNotEmpty) {
           assetLocation = value[0];
         }
       });
     });
-    setState(() {
-
-    });
+    setState(() {});
   }
-
-
 }

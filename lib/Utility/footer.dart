@@ -6,8 +6,8 @@ class Footer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dSize = MediaQuery.of(context).size;
-    print('hhh ${dSize.height * 0.01}');
-    print('hhh ${dSize.width * 0.04}');
+    // print('hhh ${dSize.height * 0.01}');
+    // print('hhh ${dSize.width * 0.04}');
     return Container(
         width: double.infinity,
         height: dSize.height * 0.05,
