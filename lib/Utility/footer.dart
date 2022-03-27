@@ -10,9 +10,9 @@ class Footer extends StatelessWidget {
     // print('hhh ${dSize.width * 0.04}');
     return Container(
         width: double.infinity,
-        height: dSize.height * 0.05,
+        height: dSize.height * 0.04,
         padding:
-        const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+        EdgeInsets.symmetric(vertical: dSize.height * 0.001, horizontal: 20),
         decoration: const BoxDecoration(
             gradient: LinearGradient(
                 colors: [

@@ -64,7 +64,7 @@ class _ItemCaptureState extends State<ItemCapture> {
         body: SafeArea(
           child: SingleChildScrollView(
             child: SizedBox(
-              height: dSize.height - 24,
+              height: dSize.height - dSize.height * 0.08,
               child: Column(
                 children: [
                   const Header(title: 'ITEM', subTitle: 'Capture',),
@@ -236,7 +236,7 @@ class _ItemCaptureState extends State<ItemCapture> {
                   ),
                   const Spacer(),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
