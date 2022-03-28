@@ -9,17 +9,15 @@ class CustomWidgetBuilder{
         buildText(title, dSize),
         const Spacer(),
         Container(
-          width: dSize.width * 0.4,
-          decoration: const BoxDecoration(
-            border: Border(
-                bottom: BorderSide(
-                    color: Color(0xFF00B0BD), width: 2)),
+          width: dSize.width * 0.5,
+          decoration: BoxDecoration(
+            border: Border.all(
+                color: const Color(0xFF00B0BD), width: 2.0),
           ),
           child: TextFormField(
             controller:TextEditingController(text: text) ,
-            enabled: false,
-            decoration: const InputDecoration(
-              constraints: BoxConstraints(maxHeight: 20),
+            decoration: InputDecoration(
+              constraints: BoxConstraints(maxHeight: dSize.height * 0.045),
               border: InputBorder.none,
             ),
           ),
@@ -27,6 +25,7 @@ class CustomWidgetBuilder{
       ],
     );
   }
+
   static Text buildText(String title, dSize) {
     return Text(
       title,
@@ -55,4 +54,15 @@ class CustomWidgetBuilder{
       ),
     );
   }
+
+  static TableRow buildRow(List<dynamic> cells, {bool isHeader = false}) => TableRow(
+    decoration: BoxDecoration(
+        color: isHeader ? Color(0xFFFFA227) : Colors.grey[200],
+        borderRadius: isHeader ? BorderRadius.circular(10) : BorderRadius.circular(0)
+    ),
+    children: cells.map((cell)=> Padding(
+      padding: EdgeInsets.all(8.0),
+      child: cell.runtimeType == String ? Text(cell, style: TextStyle(color: isHeader ? Colors.white : Color(0xFF0F6671), fontWeight: isHeader ? FontWeight.bold : FontWeight.normal),) : cell,
+    )).toList(),
+  );
 }

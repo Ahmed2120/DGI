@@ -1,7 +1,12 @@
+import 'dart:convert';
+
+import 'package:dgi/Services/AssetService.dart';
 import 'package:dgi/Utility/footer.dart';
-import 'package:dropdown_button2/custom_dropdown_button2.dart';
+import 'package:dgi/model/asset.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 import '../Utility/CustomWidgetBuilder.dart';
 
@@ -13,7 +18,9 @@ class AssetsDetails extends StatefulWidget {
 }
 
 class _AssetsDetailsState extends State<AssetsDetails> {
-  String? value;
+  Asset? asset;
+  final assetService = AssetService();
+  List<Asset> assets =[];
 
   final GlobalKey<FormState> _formKey = GlobalKey();
   Image image = Image.asset('assets/icons/0-16.jpg', height: 30,);
@@ -21,8 +28,6 @@ class _AssetsDetailsState extends State<AssetsDetails> {
   @override
   Widget build(BuildContext context) {
     final dSize = MediaQuery.of(context).size;
-    print('hhh * 20 ${dSize.height * 0.007}');
-    // print('hhh ${dSize.width * 0.04}');
     return Scaffold(
         body: SafeArea(
       child: SingleChildScrollView(
@@ -127,16 +132,30 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                       children: [
                         Row(
                           children: [
-                            buildText('BARCODE', dSize),
+                            CustomWidgetBuilder.buildText('BARCODE', dSize),
                             const Spacer(),
-                            Container(
+                            asset == null? InkWell(
+                              onTap: ()=>scanBarcodeNormal(),
+                              child: Container(
+                                padding: EdgeInsets.all(10),
+                                width: dSize.width * 0.4,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: const Color(0xFF00B0BD), width: 2.0),
+                                ),
+                                child: Text('Tab to scan barcode'),
+                              ),
+                            ):Container(
                               padding: EdgeInsets.all(10),
                               width: dSize.width * 0.5,
                               decoration: BoxDecoration(
                                 border: Border.all(
                                     color: const Color(0xFF00B0BD), width: 2.0),
                               ),
-                              child: Text('barcode'),
+                              child:Image.memory(
+                                base64Decode(asset!.barcodeImage),
+                                height: 30,
+                              ) ,
                             ),
                           ],
                         ),
@@ -146,12 +165,7 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                buildText('ASSET DETAILS', dSize),
-                              ],
-                            ),
+                            CustomWidgetBuilder.buildText('ASSET DETAILS', dSize),
                             SizedBox(
                               height: dSize.height * 0.01,
                             ),
@@ -163,63 +177,31 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                                       color: const Color(0xFF00B0BD), width: 2.0),
                                 ),
                                 height: 100,
-                                child: Image.asset(
+                                child:asset == null? Image.asset(
                                   'assets/icons/img.png',
                                   fit: BoxFit.cover,
                                   width: 300,
+                                ):Image.memory(
+                                  base64Decode(asset!.image),
+                                  width: 300,
+                                  height: 100,
                                 )),
                           ],
                         ),
                         SizedBox(
                           height: dSize.height * 0.01,
                         ),
-                        Row(
-                          children: [
-                            buildText('ASSET DESC', dSize),
-                            const Spacer(),
-                            Container(
-                              width: dSize.width * 0.5,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: const Color(0xFF00B0BD), width: 2.0),
-                              ),
-                              child: TextFormField(
-                                decoration: InputDecoration(
-                                  constraints: BoxConstraints(maxHeight: dSize.height * 0.045),
-                                  border: InputBorder.none,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                        CustomWidgetBuilder.buildTextFormField(dSize, 'ASSET DESC',asset==null?"": asset!.description),
                         SizedBox(
                           height: dSize.height * 0.01,
                         ),
-                        Row(
-                          children: [
-                            buildText('SERIAL NO', dSize),
-                            const Spacer(),
-                            Container(
-                              width: dSize.width * 0.5,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: const Color(0xFF00B0BD), width: 2.0),
-                              ),
-                              child: TextFormField(
-                                decoration: InputDecoration(
-                                  constraints: BoxConstraints(maxHeight: dSize.height * 0.045),
-                                  border: InputBorder.none,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                        CustomWidgetBuilder.buildTextFormField(dSize, 'SERIAL NO',asset==null?"": asset!.serialnumber),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             ElevatedButton(
                               child: const Text('DONE'),
-                              onPressed: () {},
+                              onPressed: () => addAssets(),
                               style: ElevatedButton.styleFrom(
                                   primary: Color(0xFF00B0BD),
                                   ),
@@ -238,13 +220,7 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                                     children: [
                                       Table(
                                         border: TableBorder(borderRadius: BorderRadius.circular(10)),
-                                        children: [
-                                          buildRow(['NO', 'ASSETS', 'DESC', 'PHOTO'], isHeader: true),
-                                          buildRow(['NO', 'ASSETS', 'DESC', image]),
-                                          buildRow(['NO', 'ASSETS', 'DESC', image]),
-                                          buildRow(['NO', 'ASSETS', 'DESC', image]),
-
-                                        ],
+                                        children:_getListings()
                                       ),
                                     ],
                                   ),
@@ -279,24 +255,65 @@ class _AssetsDetailsState extends State<AssetsDetails> {
     ));
   }
 
-  Text buildText(String title, dSize) {
-    return Text(
-      title,
-      style: TextStyle(
-          fontSize: dSize.width * 0.03,
-          color: Color(0xFF0F6671),
-          fontWeight: FontWeight.bold),
-    );
+  List<TableRow> _getListings() {
+    List<TableRow> listings = <TableRow>[];
+    int i = 0;
+    for (i = 0; i < assets.length; i++) {
+      if (i == 0) {
+        listings.add(
+          CustomWidgetBuilder.buildRow(['No', 'ASSETS', 'DESC', 'PHOTO'], isHeader: true),
+        );
+      }
+      listings.add(
+        CustomWidgetBuilder.buildRow(
+          [
+            (i + 1).toString(),
+            'ASSETS',
+            assets[i].description,
+            Image.memory(
+              base64Decode(assets[i].image),
+              height: 30,
+            )
+          ],
+        ),
+      );
+    }
+    return listings;
+  }
+   // Platform messages are asynchronous, so we initialize in an async method.
+  Future<void> scanBarcodeNormal() async {
+    String barcodeScanRes;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+          '#ff6666', 'Cancel', true, ScanMode.BARCODE);
+      getItemData(barcodeScanRes);
+    } on PlatformException {
+      barcodeScanRes = 'Failed to get platform version.';
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) return;
+
   }
 
-  TableRow buildRow(List<dynamic> cells, {bool isHeader = false}) => TableRow(
-    decoration: BoxDecoration(
-        color: isHeader ? Color(0xFFFFA227) : Colors.grey[200],
-        borderRadius: isHeader ? BorderRadius.circular(10) : BorderRadius.circular(0)
-    ),
-    children: cells.map((cell)=> Padding(
-      padding: EdgeInsets.all(8.0),
-      child: cell.runtimeType == String ? Text(cell, style: TextStyle(color: isHeader ? Colors.white : Color(0xFF0F6671), fontWeight: isHeader ? FontWeight.bold : FontWeight.normal),) : cell,
-    )).toList(),
-  );
+  void getItemData(String barcodeScanRes) async{
+    List<Asset> assets = await assetService.select(barcodeScanRes);
+    setState(() {
+      if(assets.isNotEmpty){
+        asset=assets[0];
+      }
+    });
+  }
+
+  addAssets() {
+    assets.add(asset!);
+    asset = null;
+    setState(() {
+
+    });
+  }
+
 }

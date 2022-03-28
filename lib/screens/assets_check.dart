@@ -1,7 +1,12 @@
+import 'dart:convert';
+
+import 'package:dgi/Services/AssetService.dart';
 import 'package:dgi/Utility/footer.dart';
-import 'package:dropdown_button2/custom_dropdown_button2.dart';
+import 'package:dgi/model/asset.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 import '../Utility/CustomWidgetBuilder.dart';
 
@@ -13,16 +18,21 @@ class AssetsCheck extends StatefulWidget {
 }
 
 class _AssetsCheckState extends State<AssetsCheck> {
-  String? value;
-
-
+  Asset? asset;
+  final assetService = AssetService();
+  List<Asset> assets = [];
+  List<Asset> allAssets = [];
   final GlobalKey<FormState> _formKey = GlobalKey();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getItems();
+  }
 
   @override
   Widget build(BuildContext context) {
     final dSize = MediaQuery.of(context).size;
-    print('hhh ${dSize.height * 0.01}');
-    print('hhh ${dSize.width * 0.04}');
     return Scaffold(
         body: SafeArea(
       child: SingleChildScrollView(
@@ -97,13 +107,13 @@ class _AssetsCheckState extends State<AssetsCheck> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           Text(
-                            'ASSETS TOTAL : 1000235',
+                            'ASSETS TOTAL : '+allAssets.length.toString(),
                             style: TextStyle(
                                 color: Color(0xFF0F6671),
                                 fontSize: dSize.width * 0.031),
                           ),
                           Text(
-                            'REMAIN : 1000235',
+                            'REMAIN : '+allAssets.where((element) => element.isCounted==0).toList().length.toString(),
                             style: TextStyle(
                                 color: Color(0xFF0F6671),
                                 fontSize: dSize.width * 0.037),
@@ -129,27 +139,47 @@ class _AssetsCheckState extends State<AssetsCheck> {
                           children: [
                             buildText('BARCODE', dSize),
                             const Spacer(),
-                            Container(
-                              padding: EdgeInsets.all(10),
-                              width: dSize.width * 0.4,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: const Color(0xFF00B0BD), width: 2.0),
-                              ),
-                              child: Text('barcode'),
-                            ),
+                            asset == null
+                                ? InkWell(
+                                    onTap: () => scanBarcodeNormal(),
+                                    child: Container(
+                                      padding: EdgeInsets.all(10),
+                                      width: dSize.width * 0.4,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: const Color(0xFF00B0BD),
+                                            width: 2.0),
+                                      ),
+                                      child: Text('Tab to scan barcode'),
+                                    ),
+                                  )
+                                : Container(
+                                    padding: EdgeInsets.all(10),
+                                    width: dSize.width * 0.4,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: const Color(0xFF00B0BD),
+                                          width: 2.0),
+                                    ),
+                                    child: Image.memory(
+                                      base64Decode(asset!.barcodeImage),
+                                      height: 30,
+                                    ),
+                                  ),
                             SizedBox(
                               width: dSize.width * 0.03,
                             ),
                             Column(
                               children: [
-                                checkContainer(dSize, Icon(Icons.close),
-                                    Color(0xFFFFA227)),
+                                InkWell(
+                                    onTap: () => updateItem(false),
+                                    child: checkContainer(dSize, false)),
                                 SizedBox(
                                   height: dSize.height * 0.01,
                                 ),
-                                checkContainer(dSize, Icon(Icons.check),
-                                    Color(0xFF00B0BD)),
+                                InkWell(
+                                    onTap: () => updateItem(true),
+                                    child: checkContainer(dSize, true)),
                               ],
                             ),
                           ],
@@ -164,39 +194,31 @@ class _AssetsCheckState extends State<AssetsCheck> {
                                 // alignment: Alignment.centerRight,
                                 decoration: BoxDecoration(
                                   border: Border.all(
-                                      color: const Color(0xFF00B0BD), width: 2.0),
+                                      color: const Color(0xFF00B0BD),
+                                      width: 2.0),
                                 ),
                                 height: 100,
-                                child: Image.asset(
-                                  'assets/icons/img.png',
-                                  fit: BoxFit.cover,
-                                  width: dSize.width * 0.477,
-                                )),
+                                child: asset == null
+                                    ? Image.asset(
+                                        'assets/icons/img.png',
+                                        fit: BoxFit.cover,
+                                        width: dSize.width * 0.477,
+                                      )
+                                    : Image.memory(
+                                        base64Decode(asset!.image),
+                                        fit: BoxFit.cover,
+                                        width: dSize.width * 0.477,
+                                        height: dSize.height * 0.2,
+                                      )),
                           ],
                         ),
                         SizedBox(
                           height: dSize.height * 0.01,
                         ),
-                        Row(
-                          children: [
-                            buildText('ASSET DESC', dSize),
-                            const Spacer(),
-                            Container(
-                              width: dSize.width * 0.488,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: const Color(0xFF00B0BD), width: 2.0),
-                              ),
-                              child: TextFormField(
-                                decoration: InputDecoration(
-                                  constraints: BoxConstraints(
-                                      maxHeight: dSize.height * 0.045),
-                                  border: InputBorder.none,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                        CustomWidgetBuilder.buildTextFormField(
+                            dSize,
+                            'ASSET DESC',
+                            asset == null ? "" : asset!.description),
                         SizedBox(
                           height: dSize.height * 0.01,
                         ),
@@ -214,53 +236,7 @@ class _AssetsCheckState extends State<AssetsCheck> {
                                         border: TableBorder(
                                             borderRadius:
                                                 BorderRadius.circular(10)),
-                                        children: [
-                                          buildRow(
-                                              ['NO', 'ASSETS', 'DESC', 'CHECK'],
-                                              isHeader: true),
-                                          buildRow([
-                                            'NO',
-                                            'ASSETS',
-                                            'DESC',
-                                            checkContainer(dSize, Icon(Icons.check),
-                                                Color(0xFF00B0BD)),
-                                          ]),
-                                          buildRow([
-                                            'NO',
-                                            'ASSETS',
-                                            'DESC',
-                                            checkContainer(dSize, Icon(Icons.check),
-                                                Color(0xFF00B0BD)),
-                                          ]),
-                                          buildRow([
-                                            'NO',
-                                            'ASSETS',
-                                            'DESC',
-                                            checkContainer(dSize, Icon(Icons.check),
-                                                Color(0xFF00B0BD)),
-                                          ]),
-                                          buildRow([
-                                            'NO',
-                                            'ASSETS',
-                                            'DESC',
-                                            checkContainer(dSize, Icon(Icons.check),
-                                                Color(0xFF00B0BD)),
-                                          ]),
-                                          buildRow([
-                                            'NO',
-                                            'ASSETS',
-                                            'DESC',
-                                            checkContainer(dSize, Icon(Icons.check),
-                                                Color(0xFF00B0BD)),
-                                          ]),
-                                          buildRow([
-                                            'NO',
-                                            'ASSETS',
-                                            'DESC',
-                                            checkContainer(dSize, Icon(Icons.check),
-                                                Color(0xFF00B0BD)),
-                                          ]),
-                                        ],
+                                        children: _getListings(dSize),
                                       ),
                                     ],
                                   ),
@@ -268,29 +244,33 @@ class _AssetsCheckState extends State<AssetsCheck> {
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Text('CLICK THE ASSETS FOR MORE DETAILS', style: TextStyle(color: Color(0xFF00B0BD), fontSize: dSize.width * 0.03),),
+                                child: Text(
+                                  'CLICK THE ASSETS FOR MORE DETAILS',
+                                  style: TextStyle(
+                                      color: Color(0xFF00B0BD),
+                                      fontSize: dSize.width * 0.03),
+                                ),
                               ),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
                                 children: [
                                   Column(
                                     children: [
-                                      buildText('100236', dSize),
+                                      buildText(allAssets.length.toString(), dSize),
                                       buildText('TOTAL ASSETS', dSize),
                                     ],
                                   ),
                                   Column(
                                     children: [
-                                      buildText('100184', dSize),
-                                      checkContainer(dSize, Icon(Icons.check),
-                                          Color(0xFF00B0BD)),
+                                      buildText(allAssets.where((element) => element.correct>0).toList().length.toString(), dSize),
+                                      checkContainer(dSize, true),
                                     ],
                                   ),
                                   Column(
                                     children: [
-                                      buildText('50', dSize),
-                                      checkContainer(dSize, Icon(Icons.close),
-                                          Color(0xFFFFA227)),
+                                      buildText(allAssets.where((element) => element.correct==0&&element.isCounted>0).toList().length.toString(), dSize),
+                                      checkContainer(dSize, false),
                                     ],
                                   ),
                                 ],
@@ -313,7 +293,7 @@ class _AssetsCheckState extends State<AssetsCheck> {
                         context,
                         dSize,
                         Icon(Icons.arrow_back_ios_rounded),
-                            () => Navigator.of(context).pop()),
+                        () => Navigator.of(context).pop()),
                   ],
                 ),
               ),
@@ -325,12 +305,14 @@ class _AssetsCheckState extends State<AssetsCheck> {
     ));
   }
 
-  Container checkContainer(Size dSize, Icon icon, Color color) {
+  Container checkContainer(Size dSize, bool isCorrect) {
+    Icon icon = isCorrect ? const Icon(Icons.check) : const Icon(Icons.close);
     return Container(
       padding: EdgeInsets.symmetric(
           vertical: dSize.height * 0.0001, horizontal: dSize.width * 0.009),
-      decoration:
-          BoxDecoration(color: color, borderRadius: BorderRadius.circular(15)),
+      decoration: BoxDecoration(
+          color: isCorrect ? Color(0xFF00B0BD) : Color(0xFFFFA227),
+          borderRadius: BorderRadius.circular(15)),
       child: Icon(
         icon.icon,
         color: Colors.white,
@@ -349,14 +331,93 @@ class _AssetsCheckState extends State<AssetsCheck> {
     );
   }
 
+  // Platform messages are asynchronous, so we initialize in an async method.
+  Future<void> scanBarcodeNormal() async {
+    String barcodeScanRes;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+          '#ff6666', 'Cancel', true, ScanMode.BARCODE);
+      getItemData(barcodeScanRes);
+    } on PlatformException {
+      barcodeScanRes = 'Failed to get platform version.';
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) return;
+  }
+
+  void getItemData(String barcodeScanRes) async {
+    List<Asset> assets = await assetService.select(barcodeScanRes);
+    setState(() {
+      if (assets.isNotEmpty) {
+        asset = assets[0];
+      }
+    });
+  }
+
   TableRow buildRow(List<dynamic> cells, {bool isHeader = false}) => TableRow(
-    decoration: BoxDecoration(
-        color: isHeader ? Color(0xFFFFA227) : Colors.grey[200],
-        borderRadius: isHeader ? BorderRadius.circular(10) : BorderRadius.circular(0)
-    ),
-    children: cells.map((cell)=> Padding(
-      padding: EdgeInsets.all(8.0),
-      child: cell.runtimeType == String ? Text(cell, style: TextStyle(color: isHeader ? Colors.white : Color(0xFF0F6671), fontWeight: isHeader ? FontWeight.bold : FontWeight.normal),) : cell,
-    )).toList(),
-  );
+        decoration: BoxDecoration(
+            color: isHeader ? Color(0xFFFFA227) : Colors.grey[200],
+            borderRadius: isHeader
+                ? BorderRadius.circular(10)
+                : BorderRadius.circular(0)),
+        children: cells
+            .map((cell) => Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: cell.runtimeType == String
+                      ? Text(
+                          cell,
+                          style: TextStyle(
+                              color:
+                                  isHeader ? Colors.white : Color(0xFF0F6671),
+                              fontWeight: isHeader
+                                  ? FontWeight.bold
+                                  : FontWeight.normal),
+                        )
+                      : cell,
+                ))
+            .toList(),
+      );
+
+  List<TableRow> _getListings(Size dSize) {
+    List<TableRow> listings = <TableRow>[];
+    int i = 0;
+    for (i = 0; i < assets.length; i++) {
+      if (i == 0) {
+        listings.add(
+          buildRow(['No', 'ASSETS', 'DESC', 'CHECK'], isHeader: true),
+        );
+      }
+      listings.add(
+        CustomWidgetBuilder.buildRow(
+          [
+            (i + 1).toString(),
+            'ASSETS',
+            assets[i].description,
+            checkContainer(dSize, assets[i].correct>0?true:false),
+          ],
+        ),
+      );
+    }
+    return listings;
+  }
+
+  getItems() async {
+    assets = await assetService.getAllCountedItems();
+    allAssets = await assetService.retrieve();
+    setState(() {});
+  }
+
+  updateItem(bool correct) {
+    if(asset != null){
+      asset!.correct = correct?1:0;
+      asset!.isCounted=1;
+      assetService.update(asset!);
+      asset = null;
+      getItems();
+    }
+  }
 }

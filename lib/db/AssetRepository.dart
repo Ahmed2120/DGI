@@ -13,13 +13,27 @@ class AssetRepository{
   }
   Future<List<Asset>> select(String barcode) async {
     final Database db = await databaseHandler.initializeDB();
-    final List<Map<String, Object?>> queryResult = await db.query(TABLE_NAME,where: "barcode",whereArgs: [barcode]);
+    final List<Map<String, Object?>> queryResult = await db.query(TABLE_NAME,where: "barcode = ?",whereArgs: [barcode]);
+    return queryResult.map((e) => Asset.fromMap(e)).toList();
+  }
+  Future<List<Asset>> getAllVerifiedItems() async {
+    final Database db = await databaseHandler.initializeDB();
+    final List<Map<String, Object?>> queryResult = await db.query(TABLE_NAME,where: "isVerified = ?",whereArgs: [1]);
+    return queryResult.map((e) => Asset.fromMap(e)).toList();
+  }
+  Future<List<Asset>> getAllCountedItems() async {
+    final Database db = await databaseHandler.initializeDB();
+    final List<Map<String, Object?>> queryResult = await db.query(TABLE_NAME,where: "isCounted = ?",whereArgs: [1]);
     return queryResult.map((e) => Asset.fromMap(e)).toList();
   }
   Future<List<Asset>> retrieve() async {
     final Database db = await databaseHandler.initializeDB();
     final List<Map<String, Object?>> queryResult = await db.query(TABLE_NAME);
     return queryResult.map((e) => Asset.fromMap(e)).toList();
+  }
+  Future<int> update(Asset asset) async{
+    final Database db = await databaseHandler.initializeDB();
+    return db.update(TABLE_NAME, asset.toMap(),where: "id = ?",whereArgs: [asset.id]);
   }
   Future<int> batch(List<Asset> assets) async {
     int result = 0;

@@ -10,8 +10,6 @@ import 'package:dgi/model/item.dart';
 import 'package:dgi/screens/take_picture_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
-
 import '../Utility/CustomWidgetBuilder.dart';
 
 class AssetsCapture extends StatefulWidget {
@@ -338,6 +336,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                 ))
             .toList(),
       );
+
 
   initCategories() async {
     categoryService.retrieve().then((result) => {
