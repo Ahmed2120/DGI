@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dgi/Services/AssetService.dart';
 import 'package:dgi/Utility/footer.dart';
 import 'package:dgi/model/asset.dart';
+import 'package:dgi/model/category.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,7 +12,8 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import '../Utility/CustomWidgetBuilder.dart';
 
 class AssetsDetails extends StatefulWidget {
-  const AssetsDetails({Key? key}) : super(key: key);
+  Category category;
+  AssetsDetails({Key? key,required this.category}) : super(key: key);
 
   @override
   State<AssetsDetails> createState() => _AssetsDetailsState();
@@ -21,9 +23,18 @@ class _AssetsDetailsState extends State<AssetsDetails> {
   Asset? asset;
   final assetService = AssetService();
   List<Asset> assets =[];
+  List<Asset> allAssets =[];
+  bool error = false;
 
   final GlobalKey<FormState> _formKey = GlobalKey();
   Image image = Image.asset('assets/icons/0-16.jpg', height: 30,);
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getItems();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,22 +106,22 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                       height: dSize.height * 0.011,
                     ),
                     Container(
-                      padding: EdgeInsets.symmetric(vertical: 6),
+                      padding: const EdgeInsets.symmetric(vertical: 6),
                       width: double.infinity,
-                      decoration: BoxDecoration(color: Colors.white),
+                      decoration: const BoxDecoration(color: Colors.white),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           Text(
-                            'ASSETS TOTAL : 1000235',
+                            'ASSETS TOTAL : '+allAssets.length.toString(),
                             style: TextStyle(
-                                color: Color(0xFF0F6671),
+                                color: const Color(0xFF0F6671),
                                 fontSize: dSize.width * 0.031),
                           ),
                           Text(
-                            'REMAIN : 1000235',
+                            'REMAIN : '+allAssets.where((element) => element.isVerified==0).toList().length.toString(),
                             style: TextStyle(
-                                color: Color(0xFF0F6671),
+                                color: const Color(0xFF0F6671),
                                 fontSize: dSize.width * 0.037),
                           ),
                         ],
@@ -137,17 +148,22 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                             InkWell(
                               onTap: ()=>scanBarcodeNormal(),
                               child: Container(
-                                padding: EdgeInsets.all(10),
+                                padding: const EdgeInsets.all(10),
                                 width: dSize.width * 0.5,
                                 decoration: BoxDecoration(
                                   border: Border.all(
                                       color: const Color(0xFF00B0BD), width: 2.0),
                                 ),
-                                child: Text('Tab to scan barcode', textAlign: TextAlign.center,),
+                                child: const Text('Tap to scan barcode', textAlign: TextAlign.center,),
                               ),
-                            )
+                            ),
                           ],
                         ),
+                        if(error)
+                          const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text("There is no item found with this barcode",style: TextStyle(color: Colors.red,fontSize: 12,fontWeight: FontWeight.bold),),
+                          ),
                         SizedBox(
                           height: dSize.height * 0.01,
                         ),
@@ -193,9 +209,9 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                           children: [
                             ElevatedButton(
                               child: const Text('DONE'),
-                              onPressed: () => addAssets(),
+                              onPressed: () => updateItem(),
                               style: ElevatedButton.styleFrom(
-                                  primary: Color(0xFF00B0BD),
+                                  primary: const Color(0xFF00B0BD),
                                   ),
                             ),
                           ],
@@ -228,14 +244,14 @@ class _AssetsDetailsState extends State<AssetsDetails> {
               ),
               const Spacer(),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 1),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     CustomWidgetBuilder.buildArrow(
                         context,
                         dSize,
-                        Icon(Icons.arrow_back_ios_rounded),
+                        const Icon(Icons.arrow_back_ios_rounded),
                             () => Navigator.of(context).pop()),
                   ],
                 ),
@@ -258,8 +274,8 @@ class _AssetsDetailsState extends State<AssetsDetails> {
       listings.add(
         CustomWidgetBuilder.buildRow(
           [
-            (i + 1).toString(),
-            'ASSETS',
+            (i + 1),
+            widget.category.name,
             assets[i].description,
             Image.memory(
               base64Decode(assets[i].image),
@@ -290,21 +306,31 @@ class _AssetsDetailsState extends State<AssetsDetails> {
 
   }
 
-  void getItemData(String barcodeScanRes) async{
+  void getItemData(String barcodeScanRes) async {
     List<Asset> assets = await assetService.select(barcodeScanRes);
     setState(() {
-      if(assets.isNotEmpty){
-        asset=assets[0];
+      if (assets.isNotEmpty) {
+        error = false;
+        asset = assets[0];
+      }else{
+        error = true;
       }
     });
   }
 
-  addAssets() {
-    assets.add(asset!);
-    asset = null;
-    setState(() {
+  getItems() async {
+    assets = await assetService.getAllVerifiedItems();
+    allAssets = await assetService.retrieve();
+    setState(() {});
+  }
 
-    });
+  updateItem() {
+    if(asset != null){
+      asset!.isVerified=1;
+      assetService.update(asset!);
+      asset = null;
+      getItems();
+    }
   }
 
 }

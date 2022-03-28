@@ -15,7 +15,6 @@ import 'package:dgi/Services/FloorService.dart';
 import 'package:dgi/model/area.dart';
 import 'package:dgi/model/assetLocation.dart';
 import 'package:dgi/model/city.dart';
-import 'package:dgi/model/country.dart';
 import 'package:dgi/model/department.dart';
 import 'package:dgi/model/floor.dart';
 import '../Utility/CustomWidgetBuilder.dart';
@@ -31,7 +30,7 @@ class AssetsVerification extends StatefulWidget {
 
 class _AssetsVerificationState extends State<AssetsVerification> {
   List<Category> categories = [];
-  List<Country> countries = [];
+  //List<Country> countries = [];
   List<City> cities = [];
   List<Floor> floors = [];
   List<Department> departments = [];
@@ -57,7 +56,7 @@ class _AssetsVerificationState extends State<AssetsVerification> {
   final assetLocationService = AssetLocationService();
   final categoryService = CategoryService();
   final sectionService = SectionTypeService();
-  String? category;
+  String category="";
   String? city;
   String? location;
 
@@ -142,7 +141,7 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                                   }).toList(),
                                   onChanged: (val) {
                                     setState(() {
-                                      category = val;
+                                      category = val!;
                                     });
                                     print(val);
                                   },
@@ -307,7 +306,7 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                         dSize,
                         const Icon(Icons.arrow_forward_ios),
                         () => Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => AssetsDetails()))),
+                            builder: (context) => AssetsDetails(category: categories.where((element) => element.name==category).first,)))),
                   ],
                 ),
               ),
@@ -321,8 +320,10 @@ class _AssetsVerificationState extends State<AssetsVerification> {
 
   initData() async {
     categories = await categoryService.retrieve();
-    countries = await countryService.retrieve();
+    category = categories[0].name;
+    //countries = await countryService.retrieve();
     cities = await cityService.retrieve();
+    city = cities[0].name;
     floors = await floorService.retrieve();
     departments = await departmentService.retrieve();
     areas = await areaService.retrieve();
