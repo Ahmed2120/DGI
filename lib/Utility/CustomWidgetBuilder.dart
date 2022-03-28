@@ -12,10 +12,10 @@ class CustomWidgetBuilder{
           width: dSize.width * 0.5,
           child: TextFormField(
             controller: TextEditingController(text: text),
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               focusedBorder: OutlineInputBorder( borderSide: BorderSide(color: Color(0xFF00B0BD), width: 2)),
               enabledBorder: OutlineInputBorder( borderSide: BorderSide(color: Color(0xFF00B0BD), width: 2)),
-              contentPadding: EdgeInsets.all(8),
+              contentPadding: EdgeInsets.all(dSize.height * 0.007),
               isDense: true,
               border: InputBorder.none,
             ),
