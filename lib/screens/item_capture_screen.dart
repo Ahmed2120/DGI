@@ -90,7 +90,7 @@ class _ItemCaptureState extends State<ItemCapture> {
                                 border: Border(
                                     bottom: BorderSide(
                                         color: Color(0xFF00B0BD), width: 2))),
-                            width: dSize.width * 0.4,
+                            width: dSize.width * 0.5,
                             child: DropdownButtonHideUnderline(
                               child: DropdownButton<String>(
                                 value: cat,
@@ -133,7 +133,7 @@ class _ItemCaptureState extends State<ItemCapture> {
                                 border: Border(
                                     bottom: BorderSide(
                                         color: Color(0xFF00B0BD), width: 2))),
-                            width: dSize.width * 0.4,
+                            width: dSize.width * 0.5,
                             child: DropdownButtonHideUnderline(
                               child: DropdownButton<String>(
                                 value: city,
@@ -171,14 +171,15 @@ class _ItemCaptureState extends State<ItemCapture> {
                       SizedBox(height: dSize.height * 0.01,),
                       Row(
                         children: [
-                          CustomWidgetBuilder.buildText('LOCATION TYPE', dSize),
+                          CustomWidgetBuilder.buildText(
+                              'LOCATION TYPE', dSize),
                           Spacer(),
                           Container(
                             decoration: const BoxDecoration(
                                 border: Border(
                                     bottom: BorderSide(
                                         color: Color(0xFF00B0BD), width: 2))),
-                            width: dSize.width * 0.4,
+                            width: dSize.width * 0.5,
                             child: DropdownButtonHideUnderline(
                               child: DropdownButton<String>(
                                 value: location,
@@ -188,24 +189,26 @@ class _ItemCaptureState extends State<ItemCapture> {
                                   color: Color(0xFF00B0BD),
                                 ),
                                 style: const TextStyle(
-                                    color: Color(0xFF0F6671), fontSize: 20),
+                                    color: Colors.white, fontSize: 20),
                                 selectedItemBuilder: (BuildContext context) {
                                   return locations.map((String value) {
                                     return Text(
                                       value,
-                                      style: const TextStyle(color: Color(0xFF0F6671)),
+                                      style: const TextStyle(
+                                          color: Color(0xFF0F6671)),
                                     );
                                   }).toList();
                                 },
                                 dropdownColor: Color(0xFF00B0BD),
                                 isDense: true,
                                 isExpanded: true,
-                                items:
-                                locations.map((String item) {
+                                items: locations.map((String item) {
                                   return DropdownMenuItem<String>(
                                     value: item,
                                     child: Text(
                                       item,
+                                      // style: const TextStyle(
+                                      //     color: Color(0xFF0F6671), fontSize: 20),
                                     ),
                                   );
                                 }).toList(),
@@ -213,7 +216,6 @@ class _ItemCaptureState extends State<ItemCapture> {
                                   setState(() {
                                     location = val;
                                   });
-                                  print(val);
                                 },
                               ),
                             ),
@@ -236,7 +238,7 @@ class _ItemCaptureState extends State<ItemCapture> {
               ),
               const Spacer(),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

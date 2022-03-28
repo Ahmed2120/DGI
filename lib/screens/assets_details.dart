@@ -32,7 +32,7 @@ class _AssetsDetailsState extends State<AssetsDetails> {
         body: SafeArea(
       child: SingleChildScrollView(
         child: SizedBox(
-          height: dSize.height - dSize.height * 0.08,
+          height: dSize.height - dSize.height * 0.035,
           child: Column(
             children: [
               Container(
@@ -134,44 +134,36 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                           children: [
                             CustomWidgetBuilder.buildText('BARCODE', dSize),
                             const Spacer(),
-                            asset == null? InkWell(
+                            InkWell(
                               onTap: ()=>scanBarcodeNormal(),
                               child: Container(
                                 padding: EdgeInsets.all(10),
-                                width: dSize.width * 0.4,
+                                width: dSize.width * 0.5,
                                 decoration: BoxDecoration(
                                   border: Border.all(
                                       color: const Color(0xFF00B0BD), width: 2.0),
                                 ),
-                                child: Text('Tab to scan barcode'),
+                                child: Text('Tab to scan barcode', textAlign: TextAlign.center,),
                               ),
-                            ):Container(
-                              padding: EdgeInsets.all(10),
-                              width: dSize.width * 0.5,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: const Color(0xFF00B0BD), width: 2.0),
-                              ),
-                              child:Image.memory(
-                                base64Decode(asset!.barcodeImage),
-                                height: 30,
-                              ) ,
-                            ),
+                            )
                           ],
                         ),
                         SizedBox(
                           height: dSize.height * 0.01,
                         ),
                         Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            CustomWidgetBuilder.buildText('ASSET DETAILS', dSize),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                CustomWidgetBuilder.buildText('ASSET DETAILS', dSize),
+                              ],
+                            ),
                             SizedBox(
                               height: dSize.height * 0.01,
                             ),
                             Container(
                               width: 200,
-                              // alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                   border: Border.all(
                                       color: const Color(0xFF00B0BD), width: 2.0),
@@ -211,23 +203,24 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                         Expanded(
                           child: Column(
                             children: [
-                              SizedBox(
-                                height: dSize.height * 0.19,
-                                child: ClipRRect(
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 15),
+                                height: dSize.height * 0.187,
+                                child:ClipRRect(
                                   borderRadius: BorderRadius.circular(12),
                                   child: ListView(
-                                    reverse: true,
                                     children: [
                                       Table(
-                                        border: TableBorder(borderRadius: BorderRadius.circular(10)),
-                                        children:_getListings()
-                                      ),
+                                          border: TableBorder(
+                                              borderRadius: BorderRadius.circular(10)),
+                                          children: _getListings()),
                                     ],
                                   ),
                                 ),
                               ),
                             ],
-                          ),),
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -258,12 +251,10 @@ class _AssetsDetailsState extends State<AssetsDetails> {
   List<TableRow> _getListings() {
     List<TableRow> listings = <TableRow>[];
     int i = 0;
+    listings.add(
+      CustomWidgetBuilder.buildRow(['No', 'ASSETS', 'DESC', 'PHOTO'], isHeader: true),
+    );
     for (i = 0; i < assets.length; i++) {
-      if (i == 0) {
-        listings.add(
-          CustomWidgetBuilder.buildRow(['No', 'ASSETS', 'DESC', 'PHOTO'], isHeader: true),
-        );
-      }
       listings.add(
         CustomWidgetBuilder.buildRow(
           [

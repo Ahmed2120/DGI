@@ -10,14 +10,13 @@ class CustomWidgetBuilder{
         const Spacer(),
         Container(
           width: dSize.width * 0.5,
-          decoration: BoxDecoration(
-            border: Border.all(
-                color: const Color(0xFF00B0BD), width: 2.0),
-          ),
           child: TextFormField(
-            controller:TextEditingController(text: text) ,
-            decoration: InputDecoration(
-              constraints: BoxConstraints(maxHeight: dSize.height * 0.045),
+            controller: TextEditingController(text: text),
+            decoration: const InputDecoration(
+              focusedBorder: OutlineInputBorder( borderSide: BorderSide(color: Color(0xFF00B0BD), width: 2)),
+              enabledBorder: OutlineInputBorder( borderSide: BorderSide(color: Color(0xFF00B0BD), width: 2)),
+              contentPadding: EdgeInsets.all(8),
+              isDense: true,
               border: InputBorder.none,
             ),
           ),
@@ -30,7 +29,7 @@ class CustomWidgetBuilder{
     return Text(
       title,
       style:
-      TextStyle(fontSize: dSize.width * 0.04, color: Color(0xFF0F6671), fontWeight: FontWeight.bold),
+      TextStyle(fontSize: dSize.width * 0.03, color: Color(0xFF0F6671), fontWeight: FontWeight.bold),
     );
   }
 
@@ -57,12 +56,30 @@ class CustomWidgetBuilder{
 
   static TableRow buildRow(List<dynamic> cells, {bool isHeader = false}) => TableRow(
     decoration: BoxDecoration(
-        color: isHeader ? Color(0xFFFFA227) : Colors.grey[200],
-        borderRadius: isHeader ? BorderRadius.circular(10) : BorderRadius.circular(0)
-    ),
-    children: cells.map((cell)=> Padding(
+        color: isHeader
+            ? Color(0xFFFFA227)
+            : cells[0] % 2 == 0
+            ? Colors.grey[200]
+            : Colors.grey[300],
+        borderRadius: isHeader
+            ? BorderRadius.circular(10)
+            : BorderRadius.circular(0)),
+    children: cells
+        .map((cell) => Padding(
       padding: EdgeInsets.all(8.0),
-      child: cell.runtimeType == String ? Text(cell, style: TextStyle(color: isHeader ? Colors.white : Color(0xFF0F6671), fontWeight: isHeader ? FontWeight.bold : FontWeight.normal),) : cell,
-    )).toList(),
+      child: cell.runtimeType == String || cell.runtimeType == int
+          ? Text(
+        '$cell',
+        style: TextStyle(
+            fontSize: 11,
+            color:
+            isHeader ? Colors.white : Color(0xFF0F6671),
+            fontWeight: isHeader
+                ? FontWeight.bold
+                : FontWeight.normal),
+      )
+          : cell,
+    ))
+        .toList(),
   );
 }

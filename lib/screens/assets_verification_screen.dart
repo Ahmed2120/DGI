@@ -116,7 +116,7 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                                   border: Border(
                                       bottom: BorderSide(
                                           color: Color(0xFF00B0BD), width: 2))),
-                              width: dSize.width * 0.4,
+                              width: dSize.width * 0.5,
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton<String>(
                                   value: category,
@@ -163,7 +163,7 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                                   border: Border(
                                       bottom: BorderSide(
                                           color: Color(0xFF00B0BD), width: 2))),
-                              width: dSize.width * 0.4,
+                              width: dSize.width * 0.5,
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton<String>(
                                   value: city,
@@ -206,40 +206,6 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                         SizedBox(
                           height: dSize.height * 0.01,
                         ),
-                        CustomWidgetBuilder.buildTextFormField(
-                            dSize,
-                            'DEPARTMENT',
-                            departments.isNotEmpty
-                                ? departments[0].name
-                                : "dump"),
-                        SizedBox(
-                          height: dSize.height * 0.01,
-                        ),
-                        CustomWidgetBuilder.buildTextFormField(
-                            dSize, 'BUSINESS UNIT', assetLocation.businessUnit),
-                        SizedBox(
-                          height: dSize.height * 0.01,
-                        ),
-                        CustomWidgetBuilder.buildTextFormField(
-                            dSize, 'NAME', assetLocation.name),
-                        SizedBox(
-                          height: dSize.height * 0.01,
-                        ),
-                        CustomWidgetBuilder.buildTextFormField(
-                            dSize, 'BLDG NAME', assetLocation.buildingName),
-                        SizedBox(
-                          height: dSize.height * 0.01,
-                        ),
-                        CustomWidgetBuilder.buildTextFormField(dSize,
-                            'BLDG ADDRESS', assetLocation.buildingAddress),
-                        SizedBox(
-                          height: dSize.height * 0.01,
-                        ),
-                        CustomWidgetBuilder.buildTextFormField(dSize,
-                            'BUILDING NO', assetLocation.buildingNo.toString()),
-                        SizedBox(
-                          height: dSize.height * 0.01,
-                        ),
                         Row(
                           children: [
                             CustomWidgetBuilder.buildText(
@@ -250,7 +216,7 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                                   border: Border(
                                       bottom: BorderSide(
                                           color: Color(0xFF00B0BD), width: 2))),
-                              width: dSize.width * 0.4,
+                              width: dSize.width * 0.5,
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton<String>(
                                   value: location,
@@ -327,7 +293,7 @@ class _AssetsVerificationState extends State<AssetsVerification> {
               ),
               const Spacer(),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

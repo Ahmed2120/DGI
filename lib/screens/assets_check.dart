@@ -37,7 +37,7 @@ class _AssetsCheckState extends State<AssetsCheck> {
         body: SafeArea(
       child: SingleChildScrollView(
         child: Container(
-          height: dSize.height - dSize.height * 0.08,
+          height: dSize.height - dSize.height * 0.035,
           child: Column(
             children: [
               Container(
@@ -139,31 +139,17 @@ class _AssetsCheckState extends State<AssetsCheck> {
                           children: [
                             buildText('BARCODE', dSize),
                             const Spacer(),
-                            asset == null
-                                ? InkWell(
+                            InkWell(
                                     onTap: () => scanBarcodeNormal(),
                                     child: Container(
                                       padding: EdgeInsets.all(10),
-                                      width: dSize.width * 0.4,
+                                      width: dSize.width * 0.5,
                                       decoration: BoxDecoration(
                                         border: Border.all(
                                             color: const Color(0xFF00B0BD),
                                             width: 2.0),
                                       ),
-                                      child: Text('Tab to scan barcode'),
-                                    ),
-                                  )
-                                : Container(
-                                    padding: EdgeInsets.all(10),
-                                    width: dSize.width * 0.4,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: const Color(0xFF00B0BD),
-                                          width: 2.0),
-                                    ),
-                                    child: Image.memory(
-                                      base64Decode(asset!.barcodeImage),
-                                      height: 30,
+                                      child: Text('Tab to scan barcode', textAlign: TextAlign.center,),
                                     ),
                                   ),
                             SizedBox(
@@ -191,6 +177,7 @@ class _AssetsCheckState extends State<AssetsCheck> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             Container(
+                              width: dSize.width * 0.577,
                                 // alignment: Alignment.centerRight,
                                 decoration: BoxDecoration(
                                   border: Border.all(
@@ -202,13 +189,12 @@ class _AssetsCheckState extends State<AssetsCheck> {
                                     ? Image.asset(
                                         'assets/icons/img.png',
                                         fit: BoxFit.cover,
-                                        width: dSize.width * 0.477,
+                                        width: dSize.width * 0.577,
                                       )
                                     : Image.memory(
                                         base64Decode(asset!.image),
-                                        fit: BoxFit.cover,
-                                        width: dSize.width * 0.477,
-                                        height: dSize.height * 0.2,
+                                  width: 300,
+                                  height: 100,
                                       )),
                           ],
                         ),
@@ -385,16 +371,14 @@ class _AssetsCheckState extends State<AssetsCheck> {
   List<TableRow> _getListings(Size dSize) {
     List<TableRow> listings = <TableRow>[];
     int i = 0;
+      listings.add(
+        buildRow(['No', 'ASSETS', 'DESC', 'CHECK'], isHeader: true),
+      );
     for (i = 0; i < assets.length; i++) {
-      if (i == 0) {
-        listings.add(
-          buildRow(['No', 'ASSETS', 'DESC', 'CHECK'], isHeader: true),
-        );
-      }
       listings.add(
         CustomWidgetBuilder.buildRow(
           [
-            (i + 1).toString(),
+            i + 1,
             'ASSETS',
             assets[i].description,
             checkContainer(dSize, assets[i].correct>0?true:false),

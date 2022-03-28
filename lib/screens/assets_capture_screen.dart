@@ -48,7 +48,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
         body: SafeArea(
       child: SingleChildScrollView(
         child: SizedBox(
-          height: dSize.height - dSize.height * 0.08,
+          height: dSize.height - 24,
           child: Column(
             children: [
               Container(
@@ -126,15 +126,13 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                           Spacer(),
                           Container(
                             width: dSize.width * 0.5,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: const Color(0xFF00B0BD), width: 2.0),
-                            ),
                             child: TextFormField(
                               controller: descriptionController,
-                              decoration: InputDecoration(
-                                constraints: BoxConstraints(
-                                    maxHeight: dSize.height * 0.045),
+                              decoration: const InputDecoration(
+                                enabledBorder: OutlineInputBorder( borderSide: BorderSide(color: Color(0xFF00B0BD), width: 2)),
+                                focusedBorder: OutlineInputBorder( borderSide: BorderSide(color: Color(0xFF00B0BD), width: 2)),
+                                contentPadding: EdgeInsets.all(8),
+                                isDense: true,
                                 border: InputBorder.none,
                               ),
                             ),
@@ -308,34 +306,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
     ));
   }
 
-  TableRow buildRow(List<dynamic> cells, {bool isHeader = false}) => TableRow(
-        decoration: BoxDecoration(
-            color: isHeader
-                ? Color(0xFFFFA227)
-                : cells[0] % 2 == 0
-                    ? Colors.grey[200]
-                    : Colors.grey[300],
-            borderRadius: isHeader
-                ? BorderRadius.circular(10)
-                : BorderRadius.circular(0)),
-        children: cells
-            .map((cell) => Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: cell.runtimeType == String || cell.runtimeType == int
-                      ? Text(
-                          '$cell',
-                          style: TextStyle(
-                            fontSize: 11,
-                              color:
-                                  isHeader ? Colors.white : Color(0xFF0F6671),
-                              fontWeight: isHeader
-                                  ? FontWeight.bold
-                                  : FontWeight.normal),
-                        )
-                      : cell,
-                ))
-            .toList(),
-      );
+
 
 
   initCategories() async {
@@ -418,11 +389,11 @@ class _AssetsCaptureState extends State<AssetsCapture> {
     List<TableRow> listings = <TableRow>[];
     int i = 0;
       listings.add(
-        buildRow(['No', 'TYPE', 'DESC', 'QNT', 'PHOTO'], isHeader: true),
+        CustomWidgetBuilder.buildRow(['No', 'TYPE', 'DESC', 'QNT', 'PHOTO'], isHeader: true),
       );
     for (i = 0; i < items.length; i++) {
       listings.add(
-        buildRow(
+        CustomWidgetBuilder.buildRow(
           [
             i + 1,
             'TYPE',
