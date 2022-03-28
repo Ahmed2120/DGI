@@ -23,7 +23,7 @@ class AssetsCapture extends StatefulWidget {
 
 class _AssetsCaptureState extends State<AssetsCapture> {
   List<Category> categories = [];
-  String? value;
+  String? category;
   String? imagePath;
   var descriptionController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey();
@@ -276,20 +276,6 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // InkWell(
-                    //   onTap: ()=>Navigator.of(context).push(
-                    //       MaterialPageRoute(
-                    //           builder: (context) => AssetsCounter())),
-                    //   child: Container(
-                    //     padding: EdgeInsets.all(5),
-                    //     alignment: Alignment.center,
-                    //     decoration: BoxDecoration(
-                    //         color: Color(0xFF00B0BD),
-                    //         borderRadius: BorderRadius.circular(5)
-                    //     ),
-                    //     child: Icon(Icons.arrow_forward_ios, color: Colors.white,),
-                    //   ),
-                    // ),
                     CustomWidgetBuilder.buildArrow(
                         context,
                         dSize,
@@ -306,13 +292,11 @@ class _AssetsCaptureState extends State<AssetsCapture> {
     ));
   }
 
-
-
-
   initCategories() async {
     categoryService.retrieve().then((result) => {
           setState(() {
             categories = result;
+            category = categories[0].name;
           })
         });
   }
@@ -356,17 +340,11 @@ class _AssetsCaptureState extends State<AssetsCapture> {
 
   void saveItem() async {
     File file = File(imagePath!);
-    print('image: $file');
     final Uint8List bytes = file.readAsBytesSync();
-    print('byte: ${imagePath}');
     String base64Image = base64Encode(bytes);
-    print('base64Image: $base64Image');
-    // print('base6: ${base64Decode(items[0].image)}');
-
-    // print('base6jjjj: ${Image.memory(base64Decode(items[0].image))}');
     String description = descriptionController.text;
     int? categoryId =
-        categories.firstWhere((element) => element.name == value).id;
+        categories.firstWhere((element) => element.name == category).id;
     itemService.insert(Item(
       assetLocationId: widget.assetLocationId,
       categoryId: categoryId,
@@ -375,6 +353,13 @@ class _AssetsCaptureState extends State<AssetsCapture> {
       quantity: quantity,
     ));
     getItems();
+    resetForm();
+    // delete file to avoid cash overload
+    try {
+      file.deleteSync();
+    }catch(ex){
+      print(ex);
+    }
   }
 
   void getItems() async {
@@ -396,7 +381,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
         CustomWidgetBuilder.buildRow(
           [
             i + 1,
-            'TYPE',
+            categories.firstWhere((element) => element.id==items[i].categoryId).name,
             items[i].description,
             items[i].quantity.toString(),
             Image.memory(
@@ -422,7 +407,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
           width: dSize.width * 0.5,
           child: DropdownButtonHideUnderline(
             child: DropdownButton<String>(
-              value: value,
+              value: category,
               iconSize: 30,
               icon: const Icon(
                 Icons.arrow_drop_down,
@@ -441,7 +426,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
               }).toList(),
               onChanged: (val) {
                 setState(() {
-                  value = val;
+                  category = val;
                 });
               },
             ),
@@ -459,5 +444,11 @@ class _AssetsCaptureState extends State<AssetsCapture> {
           color: Color(0xFF0F6671),
           fontWeight: FontWeight.bold),
     );
+  }
+
+  void resetForm() {
+    quantity =0;
+    imagePath=null;
+    descriptionController.text="";
   }
 }

@@ -5,7 +5,6 @@ import 'package:dgi/model/sectionType.dart';
 import 'package:dgi/screens/assets_capture_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import '../Utility/footer.dart';
 import 'package:dgi/Services/CategoryService.dart';
 import 'package:dgi/model/category.dart';
@@ -18,7 +17,6 @@ import 'package:dgi/Services/FloorService.dart';
 import 'package:dgi/model/area.dart';
 import 'package:dgi/model/assetLocation.dart';
 import 'package:dgi/model/city.dart';
-import 'package:dgi/model/country.dart';
 import 'package:dgi/model/department.dart';
 import 'package:dgi/model/floor.dart';
 
@@ -31,7 +29,7 @@ class ItemCapture extends StatefulWidget {
 
 class _ItemCaptureState extends State<ItemCapture> {
   List<Category> categories = [];
-  List<Country> countries = [];
+  //List<Country> countries = [];
   List<City> cities = [];
   List<Floor> floors = [];
   List<Department> departments=[];
@@ -46,7 +44,7 @@ class _ItemCaptureState extends State<ItemCapture> {
   final assetLocationService = AssetLocationService();
   final categoryService = CategoryService();
   final sectionService = SectionTypeService();
-  String? cat;
+  String? category;
   String? city;
   String? location;
   List<String> locations = ['STORE', 'BUILDING', 'OFFICE'];
@@ -93,7 +91,7 @@ class _ItemCaptureState extends State<ItemCapture> {
                             width: dSize.width * 0.5,
                             child: DropdownButtonHideUnderline(
                               child: DropdownButton<String>(
-                                value: cat,
+                                value: category,
                                 iconSize: 30,
                                 icon: const Icon(
                                   Icons.arrow_drop_down,
@@ -114,7 +112,7 @@ class _ItemCaptureState extends State<ItemCapture> {
                                 }).toList(),
                                 onChanged: (val) {
                                   setState(() {
-                                    cat = val;
+                                    category = val;
                                   });
                                   print(val);
                                 },
@@ -224,13 +222,13 @@ class _ItemCaptureState extends State<ItemCapture> {
                       ),
                       SizedBox(height: dSize.height * 0.015,),
                       if(location == 'OFFICE' || location == 'BUILDING')
-                        CustomWidgetBuilder.buildTextFormField(dSize,'FLOOR NO',floors.isNotEmpty?areas[0].name:'2'),
+                        CustomWidgetBuilder.buildTextFormField(dSize,'FLOOR NO',floors.isNotEmpty?floors[0].name:'2'),
                       SizedBox(height: dSize.height * 0.01,),
                       if(location == 'OFFICE' || location == 'BUILDING')
-                        CustomWidgetBuilder.buildTextFormField(dSize,'SECTION NO',sections.isNotEmpty?areas[0].name:'2'),
+                        CustomWidgetBuilder.buildTextFormField(dSize,'SECTION NO',sections.isNotEmpty?sections[0].name:'2'),
                       SizedBox(height: dSize.height * 0.01,),
                       if(location == 'OFFICE' || location == 'STORE')
-                        CustomWidgetBuilder.buildTextFormField(dSize,'DEPARTMENT',departments.isNotEmpty?areas[0].name:'2'),
+                        CustomWidgetBuilder.buildTextFormField(dSize,'DEPARTMENT',departments.isNotEmpty?departments[0].name:'2'),
                       SizedBox(height: dSize.height * 0.01,),
                     ],
                   ),
@@ -245,7 +243,7 @@ class _ItemCaptureState extends State<ItemCapture> {
                     CustomWidgetBuilder.buildArrow(context,dSize,Icon(Icons.arrow_back_ios_rounded), ()=>Navigator.of(context).pop()),
                     CustomWidgetBuilder.buildArrow(context,dSize,Icon(Icons.arrow_forward_ios), ()=> Navigator.of(context).push(
                         MaterialPageRoute(
-                            builder: (context) => AssetsCapture(assetLocationId: 20,))))
+                            builder: (context) => AssetsCapture(assetLocationId: assetLocation.id,))))
                   ],
                 ),
               ),
@@ -257,30 +255,11 @@ class _ItemCaptureState extends State<ItemCapture> {
     ));
   }
   initData() async{
-/*    await cityService.insert(City(name: 'Cairo'));
-    await countryService.insert(Country(name: 'Egypt'));
-    await areaService.insert(Area(name: 'helwan'));
-    await floorService.insert(Floor(name: '8'));
-    await departmentService.insert(Department(name: 'Technology'));
-    await assetLocationService.insert(AssetLocation(name: "location",areaId: 1,buildingAddress: "test building Address",
-    buildingName: "building Name",buildingNo: '10',businessUnit: 'businessUnit',departmentId: 10,floorId: 10,id: 10,sectionId: 22));
-    await cityService.insert(City(name: 'Fayioun'));
-    await countryService.insert(Country(name: 'KSA'));
-    await areaService.insert(Area(name: 'baaa'));
-    await floorService.insert(Floor(name: '12'));
-    await departmentService.insert(Department(name: 'HR'));
-    CategoryService categoryService = CategoryService();
-    Category category = Category(name: 'A');
-    await categoryService.insert(category);
-    category = Category(name: 'B');
-    await categoryService.insert(category);
-    category = Category(name: 'C');
-    await categoryService.insert(category);
-    category = Category(name: 'D');
-    await categoryService.insert(category);*/
     categories = await categoryService.retrieve();
-    countries = await countryService.retrieve();
+    category = categories[0].name;
+    //countries = await countryService.retrieve();
     cities = await cityService.retrieve();
+    city = cities[0].name;
     floors = await floorService.retrieve();
     departments = await departmentService.retrieve();
     areas = await areaService.retrieve();
