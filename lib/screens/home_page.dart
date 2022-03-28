@@ -121,7 +121,7 @@ class HomePage extends StatelessWidget {
                         ),
                       ],
                       crossAxisCount: 2,
-                        childAspectRatio: (dsize.width * 0.009) / (dsize.height * 0.0044),
+                        childAspectRatio: (dsize.width * 0.009) / (dsize.height * 0.00455),
                         crossAxisSpacing: dsize.width * 0.009,
                         mainAxisSpacing: dsize.height * 0.0227,
                       // ),

@@ -7,7 +7,7 @@ class Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dSize = MediaQuery.of(context).size;
-    print('hhh ${dSize.height * 0.01}');
+    print('head ${dSize.height * 0.004}');
     print('hhh ${dSize.width * 0.04}');
     return Container(
       width: double.infinity,
@@ -37,8 +37,8 @@ class Header extends StatelessWidget {
             children: [
               Container(
                   alignment: Alignment.centerLeft,
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 2, horizontal: 25),
+                  padding: EdgeInsets.symmetric(
+                      vertical: dSize.height * 0.004, horizontal: 25),
                   decoration: const BoxDecoration(
                     color: Color(0xFFFFA227),
                     borderRadius: BorderRadius.only(
@@ -67,7 +67,7 @@ class Header extends StatelessWidget {
             height: dSize.height * 0.011,
           ),
           Container(
-            padding: const EdgeInsets.symmetric(vertical: 6),
+            padding: EdgeInsets.symmetric(vertical: dSize.height * 0.007),
             width: double.infinity,
             decoration: BoxDecoration(color: Colors.white),
             child: Row(

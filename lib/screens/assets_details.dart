@@ -43,7 +43,7 @@ class _AssetsDetailsState extends State<AssetsDetails> {
         body: SafeArea(
       child: SingleChildScrollView(
         child: SizedBox(
-          height: dSize.height - dSize.height * 0.035,
+          height: dSize.height - 24,
           child: Column(
             children: [
               Container(
@@ -106,7 +106,7 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                       height: dSize.height * 0.011,
                     ),
                     Container(
-                      padding: const EdgeInsets.symmetric(vertical: 6),
+                      padding: EdgeInsets.symmetric(vertical: dSize.height * 0.007),
                       width: double.infinity,
                       decoration: const BoxDecoration(color: Colors.white),
                       child: Row(
@@ -134,7 +134,7 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                 padding:
                     const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
                 child: SizedBox(
-                  height: dSize.height * 0.635,
+                  height: dSize.height * 0.676,
                   child: Form(
                     key: _formKey,
                     child: Column(
@@ -148,7 +148,7 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                             InkWell(
                               onTap: ()=>scanBarcodeNormal(),
                               child: Container(
-                                padding: const EdgeInsets.all(10),
+                                padding: EdgeInsets.all(dSize.height * 0.007),
                                 width: dSize.width * 0.5,
                                 decoration: BoxDecoration(
                                   border: Border.all(
@@ -221,7 +221,7 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                             children: [
                               Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 15),
-                                height: dSize.height * 0.187,
+                                height: dSize.height * 0.2,
                                 child:ClipRRect(
                                   borderRadius: BorderRadius.circular(12),
                                   child: ListView(
@@ -274,7 +274,7 @@ class _AssetsDetailsState extends State<AssetsDetails> {
       listings.add(
         CustomWidgetBuilder.buildRow(
           [
-            (i + 1),
+            i + 1,
             widget.category.name,
             assets[i].description,
             Image.memory(

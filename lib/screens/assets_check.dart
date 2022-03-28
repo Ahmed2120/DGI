@@ -33,11 +33,12 @@ class _AssetsCheckState extends State<AssetsCheck> {
   @override
   Widget build(BuildContext context) {
     final dSize = MediaQuery.of(context).size;
+    print('dffd: ${dSize.height * 0.033}');
     return Scaffold(
         body: SafeArea(
       child: SingleChildScrollView(
         child: Container(
-          height: dSize.height - dSize.height * 0.035,
+          height: dSize.height - 24,
           child: Column(
             children: [
               Container(
@@ -69,8 +70,8 @@ class _AssetsCheckState extends State<AssetsCheck> {
                       children: [
                         Container(
                             alignment: Alignment.centerLeft,
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 2, horizontal: 25),
+                            padding: EdgeInsets.symmetric(
+                                vertical: dSize.height * 0.004, horizontal: 25),
                             decoration: const BoxDecoration(
                               color: Color(0xFFFFA227),
                               borderRadius: BorderRadius.only(
@@ -100,7 +101,7 @@ class _AssetsCheckState extends State<AssetsCheck> {
                       height: dSize.height * 0.011,
                     ),
                     Container(
-                      padding: EdgeInsets.symmetric(vertical: 6),
+                      padding: EdgeInsets.symmetric(vertical: dSize.height * 0.007),
                       width: double.infinity,
                       decoration: BoxDecoration(color: Colors.white),
                       child: Row(
@@ -128,7 +129,7 @@ class _AssetsCheckState extends State<AssetsCheck> {
                 padding:
                     const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
                 child: SizedBox(
-                  height: dSize.height * 0.635,
+                  height: dSize.height * 0.67,
                   child: Form(
                     key: _formKey,
                     child: Column(
@@ -142,7 +143,7 @@ class _AssetsCheckState extends State<AssetsCheck> {
                             InkWell(
                                     onTap: () => scanBarcodeNormal(),
                                     child: Container(
-                                      padding: EdgeInsets.all(10),
+                                      padding: EdgeInsets.all(7),
                                       width: dSize.width * 0.5,
                                       decoration: BoxDecoration(
                                         border: Border.all(
@@ -212,11 +213,10 @@ class _AssetsCheckState extends State<AssetsCheck> {
                           child: Column(
                             children: [
                               SizedBox(
-                                height: dSize.height * 0.25,
+                                height: dSize.height * 0.26,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(12),
                                   child: ListView(
-                                    reverse: true,
                                     children: [
                                       Table(
                                         border: TableBorder(
@@ -229,7 +229,7 @@ class _AssetsCheckState extends State<AssetsCheck> {
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: EdgeInsets.all(dSize.height * 0.007),
                                 child: Text(
                                   'CLICK THE ASSETS FOR MORE DETAILS',
                                   style: TextStyle(
@@ -372,7 +372,7 @@ class _AssetsCheckState extends State<AssetsCheck> {
     List<TableRow> listings = <TableRow>[];
     int i = 0;
       listings.add(
-        buildRow(['No', 'ASSETS', 'DESC', 'CHECK'], isHeader: true),
+        CustomWidgetBuilder.buildRow(['No', 'ASSETS', 'DESC', 'CHECK'], isHeader: true),
       );
     for (i = 0; i < assets.length; i++) {
       listings.add(
