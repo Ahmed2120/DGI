@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dgi/Services/AssetService.dart';
 import 'package:dgi/Utility/footer.dart';
 import 'package:dgi/model/asset.dart';
+import 'package:dgi/model/category.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,7 +12,8 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import '../Utility/CustomWidgetBuilder.dart';
 
 class AssetsCheck extends StatefulWidget {
-  const AssetsCheck({Key? key}) : super(key: key);
+  Category category;
+  AssetsCheck({Key? key,required this.category}) : super(key: key);
 
   @override
   State<AssetsCheck> createState() => _AssetsCheckState();
@@ -379,7 +381,7 @@ class _AssetsCheckState extends State<AssetsCheck> {
         CustomWidgetBuilder.buildRow(
           [
             i + 1,
-            'ASSETS',
+            widget.category.name,
             assets[i].description,
             checkContainer(dSize, assets[i].correct>0?true:false),
           ],

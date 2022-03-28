@@ -2,7 +2,6 @@ import 'package:dgi/Services/SectionTypeService.dart';
 import 'package:dgi/Utility/CustomWidgetBuilder.dart';
 import 'package:dgi/Utility/header.dart';
 import 'package:dgi/model/sectionType.dart';
-import 'package:dgi/screens/assets_capture_screen.dart';
 import 'package:dgi/screens/assets_check.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +31,7 @@ class AssetsCounter extends StatefulWidget {
 
 class _AssetsCounterState extends State<AssetsCounter> {
   List<Category> categories = [];
-  List<Country> countries = [];
+  //List<Country> countries = [];
   List<City> cities = [];
   List<Floor> floors = [];
   List<Department> departments=[];
@@ -47,7 +46,7 @@ class _AssetsCounterState extends State<AssetsCounter> {
   final assetLocationService = AssetLocationService();
   final categoryService = CategoryService();
   final sectionService = SectionTypeService();
-  String? cat;
+  String? category;
   String? city;
   String? location;
   List<String> locations = ['STORE', 'BUILDING', 'OFFICE'];
@@ -94,7 +93,7 @@ class _AssetsCounterState extends State<AssetsCounter> {
                                 width: dSize.width * 0.5,
                                 child: DropdownButtonHideUnderline(
                                   child: DropdownButton<String>(
-                                    value: cat,
+                                    value: category,
                                     iconSize: 30,
                                     icon: const Icon(
                                       Icons.arrow_drop_down,
@@ -115,9 +114,8 @@ class _AssetsCounterState extends State<AssetsCounter> {
                                     }).toList(),
                                     onChanged: (val) {
                                       setState(() {
-                                        cat = val;
+                                        category = val;
                                       });
-                                      print(val);
                                     },
                                   ),
                                 ),
@@ -246,7 +244,7 @@ class _AssetsCounterState extends State<AssetsCounter> {
                         CustomWidgetBuilder.buildArrow(context,dSize,Icon(Icons.arrow_back_ios_rounded), ()=>Navigator.of(context).pop()),
                         CustomWidgetBuilder.buildArrow(context,dSize,Icon(Icons.arrow_forward_ios), ()=> Navigator.of(context).push(
                             MaterialPageRoute(
-                                builder: (context) => AssetsCheck())))
+                                builder: (context) => AssetsCheck(category: categories.where((element) => element.name==category).first,))))
                       ],
                     ),
                   ),
@@ -258,30 +256,11 @@ class _AssetsCounterState extends State<AssetsCounter> {
         ));
   }
   initData() async{
-/*    await cityService.insert(City(name: 'Cairo'));
-    await countryService.insert(Country(name: 'Egypt'));
-    await areaService.insert(Area(name: 'helwan'));
-    await floorService.insert(Floor(name: '8'));
-    await departmentService.insert(Department(name: 'Technology'));
-    await assetLocationService.insert(AssetLocation(name: "location",areaId: 1,buildingAddress: "test building Address",
-    buildingName: "building Name",buildingNo: '10',businessUnit: 'businessUnit',departmentId: 10,floorId: 10,id: 10,sectionId: 22));
-    await cityService.insert(City(name: 'Fayioun'));
-    await countryService.insert(Country(name: 'KSA'));
-    await areaService.insert(Area(name: 'baaa'));
-    await floorService.insert(Floor(name: '12'));
-    await departmentService.insert(Department(name: 'HR'));
-    CategoryService categoryService = CategoryService();
-    Category category = Category(name: 'A');
-    await categoryService.insert(category);
-    category = Category(name: 'B');
-    await categoryService.insert(category);
-    category = Category(name: 'C');
-    await categoryService.insert(category);
-    category = Category(name: 'D');
-    await categoryService.insert(category);*/
     categories = await categoryService.retrieve();
-    countries = await countryService.retrieve();
+    category = categories[0].name;
+    //countries = await countryService.retrieve();
     cities = await cityService.retrieve();
+    city = cities[0].name;
     floors = await floorService.retrieve();
     departments = await departmentService.retrieve();
     areas = await areaService.retrieve();
