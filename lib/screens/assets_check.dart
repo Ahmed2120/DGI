@@ -21,6 +21,7 @@ class _AssetsCheckState extends State<AssetsCheck> {
   Asset? asset;
   final assetService = AssetService();
   List<Asset> assets = [];
+  List<Asset> allAssets = [];
   final GlobalKey<FormState> _formKey = GlobalKey();
   @override
   void initState() {
@@ -106,13 +107,13 @@ class _AssetsCheckState extends State<AssetsCheck> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           Text(
-                            'ASSETS TOTAL : 1000235',
+                            'ASSETS TOTAL : '+allAssets.length.toString(),
                             style: TextStyle(
                                 color: Color(0xFF0F6671),
                                 fontSize: dSize.width * 0.031),
                           ),
                           Text(
-                            'REMAIN : 1000235',
+                            'REMAIN : '+allAssets.where((element) => element.isCounted==0).toList().length.toString(),
                             style: TextStyle(
                                 color: Color(0xFF0F6671),
                                 fontSize: dSize.width * 0.037),
@@ -256,19 +257,19 @@ class _AssetsCheckState extends State<AssetsCheck> {
                                 children: [
                                   Column(
                                     children: [
-                                      buildText('100236', dSize),
+                                      buildText(allAssets.length.toString(), dSize),
                                       buildText('TOTAL ASSETS', dSize),
                                     ],
                                   ),
                                   Column(
                                     children: [
-                                      buildText('100184', dSize),
+                                      buildText(allAssets.where((element) => element.correct>0).toList().length.toString(), dSize),
                                       checkContainer(dSize, true),
                                     ],
                                   ),
                                   Column(
                                     children: [
-                                      buildText('50', dSize),
+                                      buildText(allAssets.where((element) => element.correct==0&&element.isCounted>0).toList().length.toString(), dSize),
                                       checkContainer(dSize, false),
                                     ],
                                   ),
@@ -406,6 +407,7 @@ class _AssetsCheckState extends State<AssetsCheck> {
 
   getItems() async {
     assets = await assetService.getAllCountedItems();
+    allAssets = await assetService.retrieve();
     setState(() {});
   }
 
