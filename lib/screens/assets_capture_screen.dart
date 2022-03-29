@@ -48,13 +48,13 @@ class _AssetsCaptureState extends State<AssetsCapture> {
         body: SafeArea(
       child: SingleChildScrollView(
         child: SizedBox(
-          height: dSize.height - 24,
+          height: dSize.height,
           child: Column(
             children: [
               Container(
                 width: double.infinity,
                 height: dSize.height * 0.122,
-                padding: EdgeInsets.symmetric(vertical: dSize.height * 0.01),
+                padding: EdgeInsets.symmetric(vertical: dSize.height * 0.007),
                 decoration: const BoxDecoration(
                     gradient: LinearGradient(
                         colors: [
@@ -66,22 +66,22 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                         stops: [0, 1])),
                 child: Column(
                   children: [
-                    const Text(
+                    Text(
                       'DGI ASSETS TRACKING',
                       style: TextStyle(
-                          fontSize: 15,
+                          fontSize: dSize.height * 0.027,
                           color: Colors.white,
                           fontFamily: 'Montserrat'),
                     ),
                     SizedBox(
-                      height: dSize.height * 0.035,
+                      height: dSize.height * 0.03,
                     ),
                     Row(
                       children: [
                         Container(
                             alignment: Alignment.centerLeft,
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 2, horizontal: 25),
+                            padding: EdgeInsets.symmetric(
+                                vertical: dSize.height * 0.004, horizontal: 25),
                             decoration: const BoxDecoration(
                               color: Color(0xFFFFA227),
                               borderRadius: BorderRadius.only(

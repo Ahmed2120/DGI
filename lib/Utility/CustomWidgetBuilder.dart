@@ -29,7 +29,7 @@ class CustomWidgetBuilder{
     return Text(
       title,
       style:
-      TextStyle(fontSize: dSize.width * 0.03, color: Color(0xFF0F6671), fontWeight: FontWeight.bold),
+      TextStyle(fontSize: dSize.height * 0.027, color: Color(0xFF0F6671), fontWeight: FontWeight.bold),
     );
   }
 

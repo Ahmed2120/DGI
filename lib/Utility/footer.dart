@@ -10,7 +10,7 @@ class Footer extends StatelessWidget {
     // print('hhh ${dSize.width * 0.04}');
     return Container(
         width: double.infinity,
-        height: dSize.height * 0.04,
+        // height: dSize.height * 0.04,
         padding:
         EdgeInsets.symmetric(vertical: dSize.height * 0.001, horizontal: 20),
         decoration: const BoxDecoration(
@@ -24,16 +24,16 @@ class Footer extends StatelessWidget {
                 stops: [0, 1])),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
+          children: const [
             Text(
               'USER NAME : MO GAMAL',
               style: TextStyle(
-                  color: Colors.white, fontSize: dSize.width * 0.037),
+                  color: Colors.white, fontSize: 15.17),
             ),
             Text(
               'PDA NO : 1023088',
               style: TextStyle(
-                  color: Colors.white, fontSize: dSize.width * 0.037),
+                  color: Colors.white, fontSize: 15.17),
             ),
           ],
         ));

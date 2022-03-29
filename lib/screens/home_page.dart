@@ -15,7 +15,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final dsize = MediaQuery.of(context).size;
     print('hhhi ${dsize.height * 0.0042}');
-    print('hhh ${dsize.width * 0.009}');
+    print('hhh ${dsize.width * 0.039}');
     return Scaffold(
       body: Stack(
         children: [
@@ -31,7 +31,7 @@ class HomePage extends StatelessWidget {
                     stops: [0, 1])),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(vertical:dsize.height * 0.041, horizontal: 30),
+            padding: EdgeInsets.only(top:dsize.height * 0.041, left: 30, right: 30),
             child: Center(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -54,7 +54,7 @@ class HomePage extends StatelessWidget {
                       children: [
                         Image.asset(
                           'assets/icons/0-22.png',
-                          width: dsize.width * 0.5,
+                          width: dsize.width <= 551 ? dsize.width * 0.5 : 277,
                         ),
                         Container(
                           padding: EdgeInsets.symmetric(vertical: dsize.height * 0.008),
@@ -65,7 +65,7 @@ class HomePage extends StatelessWidget {
                           child: Text(
                             'FIXED ASSET RACKING Software v 1.0.0',
                             style: TextStyle(
-                              fontSize: dsize.width * 0.039,
+                              fontSize: dsize.width <= 551 ? dsize.width * 0.039 : 21.528,
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                             ),
@@ -128,12 +128,14 @@ class HomePage extends StatelessWidget {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(top: dsize.height * 0.0029),
-                    child: Text('SAGECO Dashboard',
-                        style: TextStyle(
-                            color: Color(0xFF0F6671),
-                            fontSize: dsize.width * 0.042,
-                            fontFamily: 'Montserrat')),
+                    padding: EdgeInsets.only(top: dsize.height * 0.0035),
+                    child: FittedBox(
+                      child: Text('SAGECO Dashboard',
+                          style: TextStyle(
+                              color: Color(0xFF0F6671),
+                              fontSize: dsize.height * 0.028,
+                              fontFamily: 'Montserrat')),
+                    ),
                   ),
                 ],
               ),
@@ -152,7 +154,7 @@ class HomePage extends StatelessWidget {
           decoration: BoxDecoration(
               color: const Color(0xFFFFFFFF).withOpacity(0.3),
               borderRadius: BorderRadius.circular(20)),
-          child: Image.asset('assets/icons/$img.png', height: dsize.height * 0.122,),
+          child: Image.asset('assets/icons/$img.png', height: dsize.height * 0.152,),
         ),
         SizedBox(height: dsize.height * 0.0044,),//2
         Text(

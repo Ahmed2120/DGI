@@ -7,8 +7,8 @@ class Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dSize = MediaQuery.of(context).size;
-    print('head ${dSize.height * 0.004}');
-    print('hhh ${dSize.width * 0.04}');
+    print('head ${dSize.height * 0.025}');
+    print('hhh ${dSize.width * 0.037}');
     return Container(
       width: double.infinity,
       height: dSize.height * 0.172,
@@ -24,14 +24,14 @@ class Header extends StatelessWidget {
               stops: [0, 1])),
       child: Column(
         children: [
-          const Text(
+          Text(
             'DGI ASSETS TRACKING',
             style: TextStyle(
-                fontSize: 15,
+                fontSize: dSize.height * 0.027,
                 color: Colors.white,),
           ),
           SizedBox(
-            height: dSize.height * 0.035,
+            height: dSize.height * 0.03,
           ),
           Row(
             children: [
@@ -73,23 +73,25 @@ class Header extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Text(
-                  'DATE : 14-03-2022',
-                  style: TextStyle(
-                      color: Color(0xFF0F6671),
-                      fontSize: dSize.width * 0.037),
+                FittedBox(
+                  child: Text(
+                    'DATE : 14-03-2022',
+                    style: TextStyle(
+                        color: Color(0xFF0F6671),
+                        fontSize: dSize.height * 0.02),
+                  ),
                 ),
                 Text(
                   'TIME : 24,00',
                   style: TextStyle(
                       color: Color(0xFF0F6671),
-                      fontSize: dSize.width * 0.037),
+                      fontSize: dSize.height * 0.02),
                 ),
                 Text(
                   'NO. : 01223997',
                   style: TextStyle(
                       color: Color(0xFF0F6671),
-                      fontSize: dSize.width * 0.037),
+                      fontSize: dSize.height * 0.02),
                 ),
               ],
             ),
