@@ -185,7 +185,7 @@ class _AuthCardState extends State<AuthCard>
     final sectionTypeService = SectionTypeService();
     final assetService = AssetService();
     String random = getRandomString(8);
-    Category category = Category(name: random);
+    Category category = Category(name: random, mainCategoryId: rng);
     await categoryService.insert(category);
     await cityService.insert(City(name: random));
     await countryService.insert(Country(name: random));
