@@ -1,10 +1,12 @@
 import 'package:dgi/Services/SectionTypeService.dart';
 import 'package:dgi/Utility/CustomWidgetBuilder.dart';
 import 'package:dgi/Utility/header.dart';
+import 'package:dgi/db/CategoryRepository.dart';
 import 'package:dgi/model/sectionType.dart';
 import 'package:dgi/screens/assets_capture_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../Services/MainCategoryService.dart';
 import '../Utility/footer.dart';
 import 'package:dgi/Services/CategoryService.dart';
 import 'package:dgi/model/category.dart';
@@ -20,6 +22,8 @@ import 'package:dgi/model/city.dart';
 import 'package:dgi/model/department.dart';
 import 'package:dgi/model/floor.dart';
 
+import '../model/mainCategory.dart';
+
 class ItemCapture extends StatefulWidget {
   const ItemCapture({Key? key}) : super(key: key);
 
@@ -29,6 +33,7 @@ class ItemCapture extends StatefulWidget {
 
 class _ItemCaptureState extends State<ItemCapture> {
   List<Category> categories = [];
+  List<MainCategory> mainCategories = [];
   //List<Country> countries = [];
   List<City> cities = [];
   List<Floor> floors = [];
@@ -43,10 +48,13 @@ class _ItemCaptureState extends State<ItemCapture> {
   final departmentService = DepartmentService();
   final assetLocationService = AssetLocationService();
   final categoryService = CategoryService();
+  final mainCategoryService = MainCategoryService();
   final sectionService = SectionTypeService();
   String? category;
+  String? mainCategory;
   String? city;
   String? location;
+  MainCategory? _main;
   List<String> locations = ['STORE', 'BUILDING', 'OFFICE'];
 
   @override
@@ -80,6 +88,51 @@ class _ItemCaptureState extends State<ItemCapture> {
                           child: const Text('ASSET LOCATION INFORMATION', style:
                           TextStyle(fontSize: 13, color: Color(0xFF0F6671), fontWeight: FontWeight.bold),),
                         ),
+                        Row(
+                          children: [
+                            CustomWidgetBuilder.buildText('Main CATEGORY', dSize),
+                            const Spacer(),
+                            Container(
+                              decoration: const BoxDecoration(
+                                  border: Border(
+                                      bottom: BorderSide(
+                                          color: Color(0xFF00B0BD), width: 2))),
+                              width: dSize.width * 0.5,
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton<String>(
+                                  value: mainCategory,
+                                  iconSize: 30,
+                                  icon: const Icon(
+                                    Icons.arrow_drop_down,
+                                    color: Color(0xFF00B0BD),
+                                  ),
+                                  isDense: true,
+                                  isExpanded: true,
+                                  items:
+                                  mainCategories.map((e) => e.name).map((String item) {
+                                    return DropdownMenuItem<String>(
+                                      value: item,
+                                      child: Text(
+                                        item,
+                                        style: const TextStyle(
+                                            color: Color(0xFF0F6671), fontSize: 20),
+                                      ),
+                                    );
+                                  }).toList(),
+                                  onChanged: (val) {
+                                    setState(() {
+                                      mainCategory = val;
+                                      _main = mainCategories.firstWhere((e) => val == e.name);
+                                      getCatByMainCat();
+                                    });
+                                    print(val);
+                                  },
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: dSize.height * 0.01,),
                         Row(
                           children: [
                             CustomWidgetBuilder.buildText('CATEGORY', dSize),
@@ -257,8 +310,12 @@ class _ItemCaptureState extends State<ItemCapture> {
     ));
   }
   initData() async{
-    categories = await categoryService.retrieve();
-    category = categories[0].name;
+    // categories = await categoryService.retrieve();
+    // category = categories[0].name;
+    mainCategories = await mainCategoryService.retrieve();
+    mainCategory = mainCategories[0].name;
+    _main = mainCategories[0];
+    getCatByMainCat();
     //countries = await countryService.retrieve();
     cities = await cityService.retrieve();
     city = cities[0].name;
@@ -275,6 +332,13 @@ class _ItemCaptureState extends State<ItemCapture> {
     });
     setState(() {
 
+    });
+  }
+
+  getCatByMainCat()async{
+      await categoryService.retrieve().then((values) => categories = (values.where((e) => _main!.id == e.mainCategoryId).toList()));
+      category = categories[0].name;
+    setState((){
     });
   }
 

@@ -22,9 +22,12 @@ import 'package:dgi/model/city.dart';
 import 'package:dgi/model/country.dart';
 import 'package:dgi/model/department.dart';
 import 'package:dgi/model/floor.dart';
+import 'package:dgi/model/mainCategory.dart';
 import 'package:dgi/model/sectionType.dart';
 import 'package:dgi/screens/home_page.dart';
 import 'package:flutter/material.dart';
+
+import '../Services/MainCategoryService.dart';
 
 class AuthScreen extends StatelessWidget {
 
@@ -176,6 +179,7 @@ class _AuthCardState extends State<AuthCard>
   initData()async{
     var rng = Random().nextInt(1000);
     CategoryService categoryService = CategoryService();
+    MainCategoryService mainCategoryService = MainCategoryService();
     final countryService = CountryService();
     final cityService = CityService();
     final floorService = FloorService();
@@ -185,8 +189,22 @@ class _AuthCardState extends State<AuthCard>
     final sectionTypeService = SectionTypeService();
     final assetService = AssetService();
     String random = getRandomString(8);
-    Category category = Category(name: random, mainCategoryId: rng);
-    await categoryService.insert(category);
+    Category category1 = Category(name: 'table1', mainCategoryId: 1);
+    Category category2 = Category(name: 'table2', mainCategoryId: 1);
+    Category category3 = Category(name: 'table3', mainCategoryId: 1);
+    Category category4 = Category(name: 'chair1', mainCategoryId: 2);
+    Category category5 = Category(name: 'chair2', mainCategoryId: 2);
+    Category category6 = Category(name: 'chair3', mainCategoryId: 2);
+    MainCategory mainCategory1 = MainCategory(name: 'table');
+    MainCategory mainCategory2 = MainCategory(name: 'chair');
+    await mainCategoryService.insert(mainCategory1);
+    await mainCategoryService.insert(mainCategory2);
+    await categoryService.insert(category1);
+    await categoryService.insert(category2);
+    await categoryService.insert(category3);
+    await categoryService.insert(category4);
+    await categoryService.insert(category5);
+    await categoryService.insert(category6);
     await cityService.insert(City(name: random));
     await countryService.insert(Country(name: random));
     await areaService.insert(Area(name: random));
