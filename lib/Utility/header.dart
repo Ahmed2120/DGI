@@ -7,8 +7,8 @@ class Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dSize = MediaQuery.of(context).size;
-    print('head ${dSize.height * 0.025}');
-    print('hhh ${dSize.width * 0.037}');
+    print('head ${dSize.height * 0.004}');
+    print('hffhh ${dSize.width * 0.03}');
     return Container(
       width: double.infinity,
       height: dSize.height * 0.172,

@@ -15,7 +15,7 @@ class CustomWidgetBuilder{
             decoration: InputDecoration(
               focusedBorder: OutlineInputBorder( borderSide: BorderSide(color: Color(0xFF00B0BD), width: 2)),
               enabledBorder: OutlineInputBorder( borderSide: BorderSide(color: Color(0xFF00B0BD), width: 2)),
-              contentPadding: EdgeInsets.all(dSize.height * 0.007),
+              contentPadding: EdgeInsets.all(dSize.width <= 400 ? dSize.height * 0.009 : 12),
               isDense: true,
               border: InputBorder.none,
             ),
@@ -29,13 +29,13 @@ class CustomWidgetBuilder{
     return Text(
       title,
       style:
-      TextStyle(fontSize: dSize.height * 0.027, color: Color(0xFF0F6671), fontWeight: FontWeight.bold),
+      TextStyle(fontSize: dSize.height <= 500 ? dSize.height * 0.027 : 13.75, color: Color(0xFF0F6671), fontWeight: FontWeight.bold),
     );
   }
 
  static Container buildArrow(BuildContext context, Size dSize, Icon icon, Function function) {
     return Container(
-      padding: EdgeInsets.all(dSize.width * 0.006),
+      padding: EdgeInsets.all(dSize.width <= 551 ? dSize.width * 0.006 : 3.312),
       // alignment: Alignment.center,
       decoration: BoxDecoration(
           color: Color(0xFF00B0BD),
@@ -46,7 +46,7 @@ class CustomWidgetBuilder{
           alignment: Alignment.center,
           child: Icon(
             icon.icon,
-            size: dSize.width * 0.07,
+            size: dSize.width <= 551 ? dSize.width * 0.07 : 38.64,
             color: Colors.white,
           ),
         ),

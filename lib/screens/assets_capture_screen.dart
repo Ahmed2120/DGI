@@ -43,12 +43,12 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   @override
   Widget build(BuildContext context) {
     final dSize = MediaQuery.of(context).size;
-    print('width: ${dSize.height * 0.007}');
+    print('width: ${dSize.height * 0.04}');
     return Scaffold(
         body: SafeArea(
       child: SingleChildScrollView(
         child: SizedBox(
-          height: dSize.height - 24,
+          height: dSize.height,
           child: Column(
             children: [
               Container(
@@ -122,7 +122,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                           categories.map((e) => e.name).toList()),
                       Row(
                         children: [
-                          buildText('ITEM DESC', dSize),
+                          CustomWidgetBuilder.buildText('ITEM DESC', dSize),
                           Spacer(),
                           Container(
                             width: dSize.width * 0.5,
@@ -141,7 +141,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                       ),
                       Row(
                         children: [
-                          buildText('QUANTITY', dSize),
+                          CustomWidgetBuilder.buildText('QUANTITY', dSize),
                           Spacer(),
                           SizedBox(
                             width: dSize.width * 0.5,
@@ -168,8 +168,8 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                                 ),
                                 Container(
                                   padding: EdgeInsets.symmetric(
-                                      vertical: dSize.height * 0.004,
-                                      horizontal: dSize.width * 0.06),
+                                      vertical: 2.024,
+                                      horizontal: 22.919),
                                   decoration: BoxDecoration(
                                       border: Border.all(
                                           color: const Color(0xFF00B0BD),
@@ -180,7 +180,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                                     quantity.toString(),
                                     style: TextStyle(
                                         color: Color(0xFF0F6671),
-                                        fontSize: dSize.width * 0.04,
+                                        fontSize: 15.28,
                                         fontWeight: FontWeight.bold),
                                   ),
                                 ),
@@ -207,7 +207,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                       ),
                       Row(
                         children: [
-                          buildText('PHOTO', dSize),
+                          CustomWidgetBuilder.buildText('PHOTO', dSize),
                           Spacer(),
                           InkWell(
                             child: SizedBox(
@@ -257,7 +257,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                       child: Text(
                         'ITEM TOTAL     ${items.length}',
                         style: TextStyle(
-                          fontSize: dSize.width * 0.03,
+                          fontSize: dSize.width <= 600 ? dSize.width * 0.03 : 20.16,
                             color: Color(0xFF0F6671),
                             fontWeight: FontWeight.bold),
                       ),
@@ -397,7 +397,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   dropdownMenu(String title, Size dSize, List<String> values) {
     return Row(
       children: [
-        buildText(title, dSize),
+        CustomWidgetBuilder.buildText(title, dSize),
         Spacer(),
         Container(
           decoration: const BoxDecoration(

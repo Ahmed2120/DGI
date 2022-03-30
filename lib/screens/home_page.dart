@@ -15,7 +15,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final dsize = MediaQuery.of(context).size;
     print('hhhi ${dsize.height * 0.0042}');
-    print('hhh ${dsize.width * 0.039}');
+    print('hhh ${dsize.width * 0.07}');
     return Scaffold(
       body: Stack(
         children: [

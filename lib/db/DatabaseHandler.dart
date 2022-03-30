@@ -12,6 +12,7 @@ class DatabaseHandler {
         batch.execute("CREATE TABLE locationType(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL)");
         batch.execute("CREATE TABLE sectionType(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL,floorId INTEGER)");
         batch.execute("CREATE TABLE area(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL)");
+        batch.execute("CREATE TABLE mainCategory(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL)");
         batch.execute("CREATE TABLE city(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL)");
         batch.execute("CREATE TABLE department(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL)");
         batch.execute("CREATE TABLE country(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL)");
