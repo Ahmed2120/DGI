@@ -43,12 +43,12 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   @override
   Widget build(BuildContext context) {
     final dSize = MediaQuery.of(context).size;
-    print('width: ${dSize.width * 0.01}');
+    print('width: ${dSize.height * 0.007}');
     return Scaffold(
         body: SafeArea(
       child: SingleChildScrollView(
         child: SizedBox(
-          height: dSize.height,
+          height: dSize.height - 24,
           child: Column(
             children: [
               Container(
@@ -212,26 +212,21 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                           InkWell(
                             child: SizedBox(
                               width: dSize.width * 0.5,
-                              child: Image.asset(
+                              child: imagePath == null ?
+                              Image.asset(
                                 'assets/icons/0-16.jpg',
                                 height: dSize.height * 0.055,
                                 alignment: Alignment.centerLeft,
+                              ) : Image.file(
+                                File(imagePath!),
+                                height: dSize.height * 0.055,
+                                alignment: Alignment.bottomLeft,
                               ),
                             ),
                             onTap: () async {
                               _showCamera();
                             },
                           ),
-                          imagePath != null
-                              ? SizedBox(
-                                  width: dSize.width * 0.4,
-                                  child: Image.file(
-                                    File(imagePath!),
-                                    height: dSize.height * 0.055,
-                                    alignment: Alignment.centerLeft,
-                                  ),
-                                )
-                              : Container(),
                         ],
                       ),
                       buildAddButton(),
@@ -339,6 +334,9 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   }
 
   void saveItem() async {
+    if(descriptionController.text.isEmpty || imagePath == null)
+      _showErrorDialog('Fill in the empty fields');
+    else{
     File file = File(imagePath!);
     final Uint8List bytes = file.readAsBytesSync();
     String base64Image = base64Encode(bytes);
@@ -359,7 +357,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
       file.deleteSync();
     }catch(ex){
       print(ex);
-    }
+    }}
   }
 
   void getItems() async {
@@ -386,7 +384,8 @@ class _AssetsCaptureState extends State<AssetsCapture> {
             items[i].quantity.toString(),
             Image.memory(
               base64Decode(items[i].image),
-              height: 30,
+              height: 40,
+              fit: BoxFit.fill,
             )
           ],
         ),
@@ -447,8 +446,25 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   }
 
   void resetForm() {
-    quantity =0;
+    quantity =1;
     imagePath=null;
     descriptionController.text="";
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('An error Occurred'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        ));
   }
 }
