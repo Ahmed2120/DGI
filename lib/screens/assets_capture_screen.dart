@@ -3,10 +3,10 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:camera/camera.dart';
 import 'package:dgi/Services/CategoryService.dart';
-import 'package:dgi/Services/ItemService.dart';
+import 'package:dgi/Services/CaptureDetailsService.dart';
 import 'package:dgi/Utility/footer.dart';
 import 'package:dgi/model/category.dart';
-import 'package:dgi/model/item.dart';
+import 'package:dgi/model/CaptureDetails.dart';
 import 'package:dgi/screens/take_picture_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,9 +28,9 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   var descriptionController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey();
   final categoryService = CategoryService();
-  final itemService = ItemService();
+  final captureDetailsService = CaptureDetailsService();
   int quantity = 1;
-  List<Item> items = [];
+  List<CaptureDetails> captureDetails = [];
 
   @override
   void initState() {
@@ -255,7 +255,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                     Container(
                       padding: EdgeInsets.only(left: 15),
                       child: Text(
-                        'ITEM TOTAL     ${items.length}',
+                        'ITEM TOTAL     ${captureDetails.length}',
                         style: TextStyle(
                           fontSize: dSize.width <= 600 ? dSize.width * 0.03 : 20.16,
                             color: Color(0xFF0F6671),
@@ -343,7 +343,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
     String description = descriptionController.text;
     int? categoryId =
         categories.firstWhere((element) => element.name == category).id;
-    itemService.insert(Item(
+    captureDetailsService.insert(CaptureDetails(
       assetLocationId: widget.assetLocationId,
       categoryId: categoryId,
       description: description,
@@ -361,9 +361,9 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   }
 
   void getItems() async {
-    itemService.retrieve().then((value) => {
+    captureDetailsService.retrieve().then((value) => {
           setState(() {
-            items = value;
+            captureDetails = value;
           })
         });
   }
@@ -374,16 +374,16 @@ class _AssetsCaptureState extends State<AssetsCapture> {
       listings.add(
         CustomWidgetBuilder.buildRow(['No', 'TYPE', 'DESC', 'QNT', 'PHOTO'], isHeader: true),
       );
-    for (i = 0; i < items.length; i++) {
+    for (i = 0; i < captureDetails.length; i++) {
       listings.add(
         CustomWidgetBuilder.buildRow(
           [
             i + 1,
-            categories.firstWhere((element) => element.id==items[i].categoryId).name,
-            items[i].description,
-            items[i].quantity.toString(),
+            categories.firstWhere((element) => element.id==captureDetails[i].categoryId).name,
+            captureDetails[i].description,
+            captureDetails[i].quantity.toString(),
             Image.memory(
-              base64Decode(items[i].image),
+              base64Decode(captureDetails[i].image),
               height: 40,
               fit: BoxFit.fill,
             )

@@ -1,12 +1,12 @@
-class Item{
+class TransactionLookUp{
   final int? id;
   final String name;
 
-  Item(
+  TransactionLookUp(
       { this.id,
         required this.name});
 
-  Item.fromMap(Map<String, dynamic> res)
+  TransactionLookUp.fromMap(Map<String, dynamic> res)
       : id = res["id"],
         name = res["name"];
 

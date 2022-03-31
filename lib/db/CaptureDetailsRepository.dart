@@ -1,27 +1,26 @@
 import 'package:dgi/db/DatabaseHandler.dart';
+import 'package:dgi/model/CaptureDetails.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../model/mainCategory.dart';
-
-class MainCategoryRepository{
-  static const String TABLE_NAME = "mainCategory";
+class CaptureDetailsRepository{
+  static const String TABLE_NAME = "captureDetails";
   DatabaseHandler databaseHandler = DatabaseHandler();
-  Future<int> insert(MainCategory mainCategory) async {
+  Future<int> insert(CaptureDetails captureDetails) async {
     int result = 0;
     final Database db = await databaseHandler.initializeDB();
-    result = await db.insert(TABLE_NAME, mainCategory.toMap());
+    result = await db.insert(TABLE_NAME, captureDetails.toMap());
     return result;
   }
-  Future<List<MainCategory>> retrieve() async {
+  Future<List<CaptureDetails>> retrieve() async {
     final Database db = await databaseHandler.initializeDB();
     final List<Map<String, Object?>> queryResult = await db.query(TABLE_NAME);
-    return queryResult.map((e) => MainCategory.fromMap(e)).toList();
+    return queryResult.map((e) => CaptureDetails.fromMap(e)).toList();
   }
-  Future<int> batch(List<MainCategory> mainCategories) async {
+  Future<int> batch(List<CaptureDetails> captureDetails) async {
     int result = 0;
     final Database db = await databaseHandler.initializeDB();
-    for(var mainCategory in mainCategories){
-      result = await db.insert(TABLE_NAME, mainCategory.toMap());
+    for(var item in captureDetails){
+      result = await db.insert(TABLE_NAME, item.toMap());
     }
     return result;
   }

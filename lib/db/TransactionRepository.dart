@@ -1,27 +1,26 @@
 import 'package:dgi/db/DatabaseHandler.dart';
+import 'package:dgi/model/transaction.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../model/mainCategory.dart';
-
-class MainCategoryRepository{
-  static const String TABLE_NAME = "mainCategory";
+class TransactionRepository{
+  static const String TABLE_NAME = "transaction";
   DatabaseHandler databaseHandler = DatabaseHandler();
-  Future<int> insert(MainCategory mainCategory) async {
+  Future<int> insert(TransactionLookUp transaction) async {
     int result = 0;
     final Database db = await databaseHandler.initializeDB();
-    result = await db.insert(TABLE_NAME, mainCategory.toMap());
+    result = await db.insert(TABLE_NAME, transaction.toMap());
     return result;
   }
-  Future<List<MainCategory>> retrieve() async {
+  Future<List<TransactionLookUp>> retrieve() async {
     final Database db = await databaseHandler.initializeDB();
     final List<Map<String, Object?>> queryResult = await db.query(TABLE_NAME);
-    return queryResult.map((e) => MainCategory.fromMap(e)).toList();
+    return queryResult.map((e) => TransactionLookUp.fromMap(e)).toList();
   }
-  Future<int> batch(List<MainCategory> mainCategories) async {
+  Future<int> batch(List<TransactionLookUp> transactionLookUps) async {
     int result = 0;
     final Database db = await databaseHandler.initializeDB();
-    for(var mainCategory in mainCategories){
-      result = await db.insert(TABLE_NAME, mainCategory.toMap());
+    for(var transactionLookUp in transactionLookUps){
+      result = await db.insert(TABLE_NAME, transactionLookUp.toMap());
     }
     return result;
   }
