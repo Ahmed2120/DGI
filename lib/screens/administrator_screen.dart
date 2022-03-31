@@ -38,9 +38,9 @@ class _AdministratorState extends State<Administrator> {
                       stops: [0, 1])),
               child: Column(
                 children: [
-                  Image.asset('assets/icons/0-18.png'),
+                  Image.asset('assets/icons/0-18.png', width: dSize.height * 0.2,),
                   SizedBox(
-                    height: dSize.height * 0.035,
+                    height: dSize.height * 0.06,
                   ),
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 5),
@@ -51,7 +51,7 @@ class _AdministratorState extends State<Administrator> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           color: Color(0xFF0F6671),
-                          fontSize: dSize.width * 0.039, fontWeight: FontWeight.bold),
+                          fontSize: dSize.height * 0.025, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ],
@@ -67,14 +67,14 @@ class _AdministratorState extends State<Administrator> {
                       // alignment: Alignment.centerLeft,
                       padding: const EdgeInsets.only(bottom: 5),
 
-                      child: buildText('PLEASE ENTER', dSize)
+                      child: CustomWidgetBuilder.buildText('PLEASE ENTER', dSize)
                     ),
                     SizedBox(
                       height: dSize.height * 0.035,
                     ),
                     Row(
                       children: [
-                        buildText('PDA NO', dSize),
+                        CustomWidgetBuilder.buildText('PDA NO', dSize),
                         Spacer(),
                         Container(
                           width: dSize.width * 0.4,
@@ -98,7 +98,7 @@ class _AdministratorState extends State<Administrator> {
                     ),
                     Row(
                       children: [
-                        buildText('PDA NAME', dSize),
+                        CustomWidgetBuilder.buildText('PDA NAME', dSize),
                         Spacer(),
                         Container(
                           width: dSize.width * 0.4,
@@ -120,7 +120,7 @@ class _AdministratorState extends State<Administrator> {
                       height: dSize.height * 0.035,
                     ),
                     ElevatedButton(
-                      child: Text('DONE'),
+                      child: Text('DONE', style: TextStyle(fontSize: dSize.height <= 500 ? dSize.height * 0.027 : 13.75),),
                       onPressed: ()=> Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=> AuthScreen())),
                       style: ElevatedButton.styleFrom(
                           primary: const Color(0xFFFFA227),
@@ -139,7 +139,7 @@ class _AdministratorState extends State<Administrator> {
                 width: double.infinity,
                 height: dSize.height * 0.12,
                 padding:
-                const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                EdgeInsets.symmetric(vertical: dSize.height * 0.007, horizontal: 20),
                 decoration: const BoxDecoration(
                     gradient: LinearGradient(
                         colors: [
@@ -155,19 +155,19 @@ class _AdministratorState extends State<Administrator> {
                       'ASSET TRACKING',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          color: Colors.white, fontSize: dSize.width * 0.039),
+                          color: Colors.white, fontSize: dSize.height <= 455 ? 9.5 : 13),
                     ),
                     Text(
                       'Internal Version',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          color: Colors.white, fontSize: dSize.width * 0.039),
+                          color: Colors.white, fontSize: dSize.height <= 455 ? 9.5 : 13),
                     ),
                     Text(
                       'v 1.0.0',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          color: Colors.white, fontSize: dSize.width * 0.039),
+                          color: Colors.white, fontSize: dSize.height <= 455 ? 9.5 : 13),
                     ),
                   ],
                 ))

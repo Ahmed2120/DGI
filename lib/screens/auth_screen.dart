@@ -54,10 +54,10 @@ class AuthScreen extends StatelessWidget {
           ),
           SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.only(top: 30),
+              padding: EdgeInsets.only(top: deviceSize.height * 0.014),
               child: Container(
                 // color: Colors.red,
-                height: deviceSize.height - 30,
+                height: deviceSize.height ,
                 width: deviceSize.width,
                 child: Center(
                   child: Column(
@@ -68,17 +68,17 @@ class AuthScreen extends StatelessWidget {
                         flex: 0,
                         child: CircleAvatar(
                             backgroundColor: Colors.white.withOpacity(0.5),
-                            radius: deviceSize.width * 0.2,
-                            child: Image.asset('assets/icons/0-18.png', width: deviceSize.width * 0.25,)),
+                            radius: deviceSize.height * 0.1,
+                            child: Image.asset('assets/icons/0-18.png', width: deviceSize.height * 0.15,)),
                       ),
                       Flexible(
                           child: Container(
-                            margin: const EdgeInsets.only(top: 10),
+                            margin: EdgeInsets.only(top: deviceSize.height * 0.004),
                             child: Text(
                               'Welcome!',
                               style: TextStyle(
                                 color: Color(0xFFFFFFFF),
-                                fontSize: deviceSize.width * 0.1,
+                                fontSize: deviceSize.height <= 405 ? 14 : deviceSize.height * 0.06,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -236,6 +236,7 @@ class _AuthCardState extends State<AuthCard>
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
+    print('deviceSize:xx ${deviceSize.height * 0.03}');
 
     return SizedBox(
       width: deviceSize.width * 0.75,
@@ -244,7 +245,7 @@ class _AuthCardState extends State<AuthCard>
         child: Column(
           children: [
             TextFormField(
-              decoration: InputDecoration(labelText: 'username', labelStyle: TextStyle(color: Colors.white),enabledBorder: UnderlineInputBorder(
+              decoration: InputDecoration(labelText: 'username', labelStyle: TextStyle(color: Colors.white), isDense: true, enabledBorder: UnderlineInputBorder(
                 borderSide: BorderSide(color: Colors.white),
               ),),
               keyboardType: TextInputType.emailAddress,
@@ -292,8 +293,8 @@ class _AuthCardState extends State<AuthCard>
                       borderRadius: BorderRadius.circular(50)),
                   minimumSize: const Size(double.infinity, 34)),
             ),
-            const SizedBox(
-              height: 12,
+            SizedBox(
+              height: deviceSize.height * 0.02,
             ),
             ElevatedButton(
               child: const Text('Close'),
@@ -313,34 +314,34 @@ class _AuthCardState extends State<AuthCard>
               'Modyle Name : ASSET TRACKING',
               style: TextStyle(
                 color: Color(0xFFFFFFFF),
-                fontSize: deviceSize.width * 0.04,
+                fontSize: deviceSize.height <= 430 ? deviceSize.height * 0.03 : 12,
               ),
             ),
-            const SizedBox(
-              height: 10,
+            SizedBox(
+              height: deviceSize.height * 0.015,
             ),
             Text(
               'Internal Version',
               style: TextStyle(
                 color: Color(0xFFFFFFFF),
-                fontSize: deviceSize.width * 0.04,
+                fontSize: deviceSize.height * 0.03,
               ),
             ),
-            const Text(
+            Text(
               'V 1.0.0',
               style: TextStyle(
                 color: Color(0xFFFFFFFF),
-                fontSize: 14,
+                fontSize: deviceSize.height * 0.03,
               ),
             ),
-            const SizedBox(
-              height: 15,
+            SizedBox(
+              height: deviceSize.height * 0.01,
             ),
             Text(
               'DGI SYSTEM',
               style: TextStyle(
                   color: Color(0xFF0F6671),
-                  fontSize: deviceSize.width * 0.045,
+                  fontSize: deviceSize.height * 0.042,
                   fontWeight: FontWeight.bold
               ),
             ),
