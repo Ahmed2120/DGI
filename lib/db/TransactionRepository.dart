@@ -3,7 +3,7 @@ import 'package:dgi/model/transaction.dart';
 import 'package:sqflite/sqflite.dart';
 
 class TransactionRepository{
-  static const String TABLE_NAME = "transaction";
+  static const String TABLE_NAME = "transactionTable";
   DatabaseHandler databaseHandler = DatabaseHandler();
   Future<int> insert(TransactionLookUp transaction) async {
     int result = 0;

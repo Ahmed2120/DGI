@@ -1,10 +1,9 @@
 import 'package:dgi/Services/SectionTypeService.dart';
 import 'package:dgi/Utility/CustomWidgetBuilder.dart';
 import 'package:dgi/Utility/header.dart';
-import 'package:dgi/db/CategoryRepository.dart';
+import 'package:dgi/model/item.dart';
 import 'package:dgi/model/sectionType.dart';
 import 'package:dgi/screens/assets_capture_screen.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../Services/MainCategoryService.dart';
 import '../Utility/footer.dart';

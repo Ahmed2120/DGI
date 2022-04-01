@@ -2,7 +2,7 @@ import 'package:dgi/db/DatabaseHandler.dart';
 import 'package:dgi/model/item.dart';
 import 'package:sqflite/sqflite.dart';
 
-class AreaRepository{
+class ItemRepository{
   static const String TABLE_NAME = "item";
   DatabaseHandler databaseHandler = DatabaseHandler();
   Future<int> insert(Item item) async {

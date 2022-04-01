@@ -4,16 +4,19 @@ import 'dart:typed_data';
 import 'package:camera/camera.dart';
 import 'package:dgi/Services/CategoryService.dart';
 import 'package:dgi/Services/CaptureDetailsService.dart';
+import 'package:dgi/Services/ItemService.dart';
+import 'package:dgi/Services/MainCategoryService.dart';
 import 'package:dgi/Utility/footer.dart';
 import 'package:dgi/model/category.dart';
 import 'package:dgi/model/CaptureDetails.dart';
+import 'package:dgi/model/item.dart';
+import 'package:dgi/model/mainCategory.dart';
 import 'package:dgi/screens/take_picture_page.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../Utility/CustomWidgetBuilder.dart';
 
 class AssetsCapture extends StatefulWidget {
-  int assetLocationId;
+  final assetLocationId;
 
   AssetsCapture({Key? key, required this.assetLocationId}) : super(key: key);
 
@@ -22,13 +25,23 @@ class AssetsCapture extends StatefulWidget {
 }
 
 class _AssetsCaptureState extends State<AssetsCapture> {
-  List<Category> categories = [];
   String? category;
+  String?mainCategory;
+  String?item;
   String? imagePath;
+
+  List<Category> categories = [];
+  List<MainCategory> mainCategories=[];
+  List<Item> items=[];
+  List<Category> allCategories = [];
+  List<Item> allItems=[];
+
   var descriptionController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey();
   final categoryService = CategoryService();
   final captureDetailsService = CaptureDetailsService();
+  final mainCategoryService = MainCategoryService();
+  final itemService = ItemService();
   int quantity = 1;
   List<CaptureDetails> captureDetails = [];
 
@@ -36,14 +49,34 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    initCategories();
+    initData();
     getItems();
+  }
+  changeCategory(value){
+    setState(() {
+      category = value;
+      Category selected = categories.firstWhere((element) => element.name==category);
+      items = allItems.where((element) => element.categoryId==selected.id).toList();
+      changeItem(items[0].name);
+    });
+  }
+  changeMainCategory(value){
+    setState(() {
+      mainCategory = value;
+      MainCategory selected = mainCategories.firstWhere((element) => element.name==mainCategory);
+      categories = allCategories.where((element) => element.mainCategoryId==selected.id).toList();
+      changeCategory(categories[0].name);
+    });
+  }
+  changeItem(value){
+    setState(() {
+      item = value;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final dSize = MediaQuery.of(context).size;
-    print('width: ${dSize.height * 0.04}');
     return Scaffold(
         body: SafeArea(
       child: SingleChildScrollView(
@@ -111,15 +144,20 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                 ),
               ),
               Container(
-                height: dSize.height * 0.32,
+                height: dSize.height * 0.37,
                 padding: EdgeInsets.symmetric(horizontal: dSize.height * 0.016),
                 child: Form(
                   key: _formKey,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
+                      dropdownMenu('MAIN CATEGORY', dSize,
+                          mainCategories.map((e) => e.name).toList(),changeMainCategory,mainCategory),
                       dropdownMenu('CATEGORY', dSize,
-                          categories.map((e) => e.name).toList()),
+                          categories.map((e) => e.name).toList(),changeCategory,category),
+                      dropdownMenu('ITEM', dSize,
+                          items.map((e) => e.name).toList(),changeItem,item),
+                      SizedBox(height:dSize.height * 0.01 ,),
                       Row(
                         children: [
                           CustomWidgetBuilder.buildText('ITEM DESC', dSize),
@@ -287,7 +325,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
     ));
   }
 
-  initCategories() async {
+  initMainCategories() async {
     categoryService.retrieve().then((result) => {
           setState(() {
             categories = result;
@@ -394,7 +432,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
     return listings;
   }
 
-  dropdownMenu(String title, Size dSize, List<String> values) {
+  dropdownMenu(String title, Size dSize, List<String> values,Function onChange,String? value) {
     return Row(
       children: [
         CustomWidgetBuilder.buildText(title, dSize),
@@ -406,7 +444,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
           width: dSize.width * 0.5,
           child: DropdownButtonHideUnderline(
             child: DropdownButton<String>(
-              value: category,
+              value: value,
               iconSize: 30,
               icon: const Icon(
                 Icons.arrow_drop_down,
@@ -423,11 +461,9 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                   ),
                 );
               }).toList(),
-              onChanged: (val) {
-                setState(() {
-                  category = val;
-                });
-              },
+              onChanged: (val)=>{
+                onChange(val)
+              }
             ),
           ),
         ),
@@ -466,5 +502,18 @@ class _AssetsCaptureState extends State<AssetsCapture> {
             )
           ],
         ));
+  }
+
+  void initData()async {
+    mainCategories = await mainCategoryService.retrieve();
+    allCategories = await categoryService.retrieve();
+    allItems = await itemService.retrieve();
+    setState(() {
+      mainCategory = mainCategories[0].name;
+      categories = allCategories.where((element) => element.mainCategoryId==mainCategories[0].id).toList();
+      category = categories[0].name;
+      items = allItems.where((element) => element.categoryId==categories[0].id).toList();
+      item = items[0].name;
+    });
   }
 }
