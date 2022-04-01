@@ -16,12 +16,12 @@ class User {
         required this.email});
 
   User.fromMap(Map<String, dynamic> res)
-      : id = res["id"],
-        name = res["name"],
-        username = res["username"],
-        password = res["password"],
-        email = res["email"],
-        address = res["address"];
+      : id = res["Id"],
+        name = res["Name"],
+        username = res["Username"],
+        password = res["Password"],
+        email = res["Email"],
+        address = res["Address"];
 
   Map<String, Object?> toMap() {
     return {'id':id,'name': name, 'username': username, 'password': password, 'email': email,'address':address};

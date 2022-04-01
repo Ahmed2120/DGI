@@ -38,8 +38,6 @@ class AuthScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
-    print('deviceSize: ${deviceSize.width * 0.1}');
-
     return Scaffold(
       body: Stack(
         children: [
@@ -223,14 +221,14 @@ class _AuthCardState extends State<AuthCard>
     await itemService.insert(item7);
     await itemService.insert(item8);
     await cityService.insert(City(name: random));
-    await countryService.insert(Country(name: random));
-    await areaService.insert(Area(name: random));
+    await countryService.insert(Country(name: random,id: 1));
+    await areaService.insert(Area(name: random,id: 10));
     await floorService.insert(Floor(name: rng.toString()));
     await departmentService.insert(Department(name: random));
     await sectionTypeService.insert(SectionType(name:rng.toString(),floorId: rng));
     await assetLocationService.insert(AssetLocation(name: "location",areaId: 1,buildingAddress: "test building Address",
     buildingName: "building Name",buildingNo: '10',businessUnit: 'businessUnit',departmentId: 10,floorId: 10,id: rng,sectionId: 22));
-    await assetService.insert(Asset(itemId: rng, barcode: "test", barcodeImage: image, serialnumber: "serial 010", assetLocationId: rng, description: "description item", image: image));
+    await assetService.insert(Asset(id:10,itemId: rng, barcode: "test", barcodeImage: image, serialnumber: "serial 010", assetLocationId: rng, description: "description item", image: image));
   }
 
   void _showErrorDialog(String message) {

@@ -24,19 +24,19 @@ class AssetLocation{
       });
 
   AssetLocation.fromMap(Map<String, dynamic> res)
-      : id = res["id"],
-        name = res["name"],
-        businessUnit = res["businessUnit"],
-        buildingAddress = res["buildingAddress"],
-        buildingName = res["buildingName"],
-        buildingNo = res["buildingNo"],
-        areaId = res["areaId"],
-        departmentId = res["departmentId"],
-        floorId = res["floorId"],
-        sectionId = res["sectionId"];
+      : id = res["Id"],
+        name = res["Name"],
+        businessUnit = res["BusinessUnit"],
+        buildingAddress = res["BuildingAddress"],
+        buildingName = res["BuildingName"],
+        buildingNo = res["BuildingNo"],
+        areaId = res["AreaId"],
+        departmentId = res["DepartmentId"],
+        floorId = res["FloorId"],
+        sectionId = res["SectionId"];
 
   Map<String, Object?> toMap() {
-    return {'id':id,'name': name,'businessUnit':businessUnit,'buildingAddress':buildingAddress,'buildingName':buildingName,
-    'buildingNo':buildingNo,'areaId':areaId,'departmentId':departmentId,'floorId':floorId,'sectionId':sectionId};
+    return {'Id':id,'Name': name,'BusinessUnit':businessUnit,'BuildingAddress':buildingAddress,'BuildingName':buildingName,
+    'BuildingNo':buildingNo,'AreaId':areaId,'DepartmentId':departmentId,'FloorId':floorId,'SectionId':sectionId};
   }
 }

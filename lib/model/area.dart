@@ -1,16 +1,16 @@
 class Area{
-  final int? id;
+  final int id;
   final String name;
 
   Area(
-      { this.id,
+      { required this.id,
         required this.name});
 
   Area.fromMap(Map<String, dynamic> res)
-      : id = res["id"],
-        name = res["name"];
+      : id = res["Id"],
+        name = res["Name"];
 
   Map<String, Object?> toMap() {
-    return {'id':id,'name': name};
+    return {'Id':id,'Name': name};
   }
 }

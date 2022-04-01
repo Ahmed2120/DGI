@@ -1,16 +1,16 @@
 class Country{
-  final int? id;
+  final int id;
   final String name;
 
   Country(
-      { this.id,
+      { required this.id,
         required this.name});
 
   Country.fromMap(Map<String, dynamic> res)
-      : id = res["id"],
-        name = res["name"];
+      : id = res["Id"],
+        name = res["Name"];
 
   Map<String, Object?> toMap() {
-    return {'id':id,'name': name};
+    return {'Id':id,'Name': name};
   }
 }

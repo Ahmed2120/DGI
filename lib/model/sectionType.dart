@@ -9,11 +9,11 @@ class SectionType{
         required this.floorId});
 
   SectionType.fromMap(Map<String, dynamic> res)
-      : id = res["id"],
-        name = res["name"],
-        floorId = res["floorId"];
+      : id = res["Id"],
+        name = res["Name"],
+        floorId = res["FloorId"];
 
   Map<String, Object?> toMap() {
-    return {'id':id,'name': name,'floorId':floorId};
+    return {'Id':id,'Name': name,'FloorId':floorId};
   }
 }

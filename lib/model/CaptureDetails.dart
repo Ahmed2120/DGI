@@ -15,13 +15,13 @@ class CaptureDetails {
       required this.quantity});
 
   CaptureDetails.fromMap(Map<String, dynamic> res)
-      : id = res["id"],
-        name = res["name"],
-        categoryId = res['categoryId'],
-        quantity = res['quantity'],
-        description = res['description'],
-        image = res['image'],
-        assetLocationId = res['assetLocationId'];
+      : id = res["Id"],
+        name = res["Name"],
+        categoryId = res['CategoryId'],
+        quantity = res['Quantity'],
+        description = res['Description'],
+        image = res['Image'],
+        assetLocationId = res['AssetLocationId'];
 
   Map<String, Object?> toMap() {
     return {'id': id, 'name': name,'image':image,'categoryId':categoryId,'assetLocationId':assetLocationId,

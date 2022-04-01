@@ -1,6 +1,6 @@
 class Asset {
-  final int? id;
-  final int? itemId;
+  final int id;
+  final int itemId;
   final String barcode;
   final String barcodeImage;
   final String serialnumber;
@@ -12,7 +12,7 @@ class Asset {
   int isVerified;
 
   Asset(
-      { this.id,
+      { required this.id,
         required this.itemId,
         required this.barcode,
         required this.barcodeImage,
@@ -25,21 +25,21 @@ class Asset {
         this.isVerified=0});
 
   Asset.fromMap(Map<String, dynamic> res)
-      : id = res["id"],
-        itemId = res["itemId"],
-        barcode = res["barcode"],
-        barcodeImage = res["barcodeImage"],
-        serialnumber = res["serialnumber"],
-        assetLocationId = res["assetLocationId"],
-        description = res["description"],
-        image = res["image"],
+      : id = res["Id"],
+        itemId = res["ItemId"],
+        barcode = res["Barcode"],
+        barcodeImage = res["BarcodeImage"],
+        serialnumber = res["Serialnumber"],
+        assetLocationId = res["AssetLocationId"],
+        description = res["Description"],
+        image = res["Image"],
         correct = res["correct"],
         isVerified = res["isVerified"],
         isCounted = res["isCounted"];
 
   Map<String, Object?> toMap() {
-    return {'id':id,'itemId': itemId, 'barcode': barcode, 'barcodeImage': barcodeImage,
-      'serialnumber':serialnumber,'assetLocationId':assetLocationId,'description':description ,
-      'image':image,'correct':correct,'isVerified':isVerified,'isCounted':isCounted};
+    return {'Id':id,'ItemId': itemId, 'Barcode': barcode, 'BarcodeImage': barcodeImage,
+      'Serialnumber':serialnumber,'AssetLocationId':assetLocationId,'Description':description ,
+      'Image':image,'correct':correct,'isVerified':isVerified,'isCounted':isCounted};
   }
 }

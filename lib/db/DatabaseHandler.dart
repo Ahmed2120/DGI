@@ -8,21 +8,21 @@ class DatabaseHandler {
       join(path, 'dgi.db'),
       onCreate: (database, version) async {
         Batch batch = database.batch();
-        batch.execute("CREATE TABLE category(id INTEGER, name TEXT NOT NULL, mainCategoryId INTEGER)");
-        batch.execute("CREATE TABLE locationType(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL)");
-        batch.execute("CREATE TABLE sectionType(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL,floorId INTEGER)");
-        batch.execute("CREATE TABLE area(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL)");
-        batch.execute("CREATE TABLE transactionTable(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL)");
-        batch.execute("CREATE TABLE mainCategory(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL)");
-        batch.execute("CREATE TABLE city(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL)");
-        batch.execute("CREATE TABLE department(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL)");
-        batch.execute("CREATE TABLE country(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL)");
-        batch.execute("CREATE TABLE floor(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL)");
-        batch.execute("CREATE TABLE item(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL,categoryId INTEGER)");
-        batch.execute("CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT , name TEXT NOT NULL,username TEXT NOT NULL, password TEXT NOT NULL, email TEXT NOT NULL,address TEXT NOT NULL)",);
-        batch.execute("CREATE TABLE assetLocation(id INTEGER PRIMARY KEY , name TEXT NOT NULL,buildingAddress TEXT NOT NULL,buildingName TEXT NOT NULL,buildingNo TEXT NOT NULL,floorId INTEGER NOT NULL,departmentId INTEGER NOT NULL,areaId INTEGER NOT NULL,businessUnit TEXT NOT NULL,sectionId INTEGER)",);
-        batch.execute("CREATE TABLE captureDetails(id INTEGER PRIMARY KEY AUTOINCREMENT , name TEXT,image BLOB NOT NULL,itemId  INTEGER NOT NULL,assetLocationId INTEGER NOT NULL,description TEXT NOT NULL,quantity INTEGER NOT NULL)");
-        batch.execute("CREATE TABLE asset(id INTEGER PRIMARY KEY AUTOINCREMENT ,itemId INTEGER,barcode TEXT, serialnumber TEXT,image BLOB NOT NULL,barcodeImage BLOB NOT NULL,assetLocationId INTEGER NOT NULL,description TEXT NOT NULL,isVerified BOOLEAN DEFAULT false,isCounted BOOLEAN DEFAULT false,correct BOOLEAN DEFAULT false)",);
+        batch.execute("CREATE TABLE category(Id INTEGER, Name TEXT NOT NULL, MainCategoryId INTEGER)");
+        batch.execute("CREATE TABLE locationType(Id INTEGER PRIMARY KEY, Name TEXT NOT NULL)");
+        batch.execute("CREATE TABLE sectionType(Id INTEGER PRIMARY KEY , Name TEXT NOT NULL,floorId INTEGER)");
+        batch.execute("CREATE TABLE area(Id INTEGER PRIMARY KEY , Name TEXT NOT NULL)");
+        batch.execute("CREATE TABLE transactionTable(Id INTEGER PRIMARY KEY , Name TEXT NOT NULL)");
+        batch.execute("CREATE TABLE mainCategory(id INTEGER PRIMARY KEY , Name TEXT NOT NULL)");
+        batch.execute("CREATE TABLE city(Id INTEGER PRIMARY KEY , Name TEXT NOT NULL)");
+        batch.execute("CREATE TABLE department(Id INTEGER PRIMARY KEY , Name TEXT NOT NULL)");
+        batch.execute("CREATE TABLE country(Id INTEGER PRIMARY KEY, Name TEXT NOT NULL)");
+        batch.execute("CREATE TABLE floor(Id INTEGER PRIMARY KEY AUTOINCREMENT, Name TEXT NOT NULL)");
+        batch.execute("CREATE TABLE item(Id INTEGER PRIMARY KEY AUTOINCREMENT, Name TEXT NOT NULL,CategoryId INTEGER)");
+        batch.execute("CREATE TABLE users(Id INTEGER PRIMARY KEY AUTOINCREMENT , Name TEXT NOT NULL,Username TEXT NOT NULL, Password TEXT NOT NULL, Email TEXT NOT NULL,Address TEXT NOT NULL)",);
+        batch.execute("CREATE TABLE assetLocation(Id INTEGER PRIMARY KEY , Name TEXT NOT NULL,BuildingAddress TEXT NOT NULL,BuildingName TEXT NOT NULL,BuildingNo TEXT NOT NULL,FloorId INTEGER NOT NULL,DepartmentId INTEGER NOT NULL,AreaId INTEGER NOT NULL,BusinessUnit TEXT NOT NULL,SectionId INTEGER)",);
+        batch.execute("CREATE TABLE captureDetails(Id INTEGER PRIMARY KEY AUTOINCREMENT , Name TEXT,Image BLOB NOT NULL,ItemId  INTEGER NOT NULL,AssetLocationId INTEGER NOT NULL,Description TEXT NOT NULL,Quantity INTEGER NOT NULL)");
+        batch.execute("CREATE TABLE asset(Id INTEGER PRIMARY KEY ,ItemId INTEGER,Barcode TEXT, Serialnumber TEXT,Image BLOB NOT NULL,BarcodeImage BLOB NOT NULL,AssetLocationId INTEGER NOT NULL,Description TEXT NOT NULL,isVerified BOOLEAN DEFAULT false,isCounted BOOLEAN DEFAULT false,correct BOOLEAN DEFAULT false)",);
         await batch.commit();
       },
       version: 2,
