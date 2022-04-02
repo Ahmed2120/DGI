@@ -1,39 +1,15 @@
 import 'dart:convert';
-import 'dart:math';
 import 'package:crypto/crypto.dart';
-import 'package:dgi/Services/AreaService.dart';
-import 'package:dgi/Services/AssetLocationService.dart';
-import 'package:dgi/Services/AssetService.dart';
-import 'package:dgi/Services/CategoryService.dart';
-import 'package:dgi/Services/CityService.dart';
-import 'package:dgi/Services/CountryService.dart';
-import 'package:dgi/Services/DepartmentService.dart';
-import 'package:dgi/Services/FloorService.dart';
-import 'package:dgi/Services/ItemService.dart';
-import 'package:dgi/Services/SectionTypeService.dart';
-
+import 'package:dgi/Services/ServerService.dart';
+import 'package:dgi/Services/UserService.dart';
 import 'package:dgi/authentication.dart';
-import 'package:dgi/db/UserRepository.dart';
 import 'package:dgi/model/User.dart';
-import 'package:dgi/model/area.dart';
-import 'package:dgi/model/asset.dart';
-import 'package:dgi/model/assetLocation.dart';
-import 'package:dgi/model/category.dart';
-import 'package:dgi/model/city.dart';
-import 'package:dgi/model/country.dart';
-import 'package:dgi/model/department.dart';
-import 'package:dgi/model/floor.dart';
-import 'package:dgi/model/item.dart';
-import 'package:dgi/model/mainCategory.dart';
-import 'package:dgi/model/sectionType.dart';
 import 'package:dgi/screens/home_page.dart';
 import 'package:flutter/material.dart';
 
-import '../Services/MainCategoryService.dart';
-
 class AuthScreen extends StatelessWidget {
-
-  const AuthScreen({Key? key}) : super(key: key);
+  String pdaNo;
+  AuthScreen({Key? key,required this.pdaNo}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -56,12 +32,10 @@ class AuthScreen extends StatelessWidget {
             child: Padding(
               padding: EdgeInsets.only(top: deviceSize.height * 0.014),
               child: Container(
-                // color: Colors.red,
                 height: deviceSize.height ,
                 width: deviceSize.width,
                 child: Center(
                   child: Column(
-                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Flexible(
@@ -83,8 +57,8 @@ class AuthScreen extends StatelessWidget {
                               ),
                             ),
                           )),
-                      const Flexible(
-                        child: AuthCard(),
+                       Flexible(
+                        child: AuthCard(pdaNo: pdaNo,),
                         flex: 0,
                       ),
                     ],
@@ -100,7 +74,8 @@ class AuthScreen extends StatelessWidget {
 }
 
 class AuthCard extends StatefulWidget {
-  const AuthCard({Key? key}) : super(key: key);
+  String pdaNo;
+  AuthCard({Key? key,required this.pdaNo}) : super(key: key);
 
   @override
   _AuthCardState createState() => _AuthCardState();
@@ -109,20 +84,25 @@ class AuthCard extends StatefulWidget {
 class _AuthCardState extends State<AuthCard>
     with SingleTickerProviderStateMixin {
 
-  String _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
-  Random _rnd = Random();
-  String image = "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";
+  final serverService = ServerService();
+
   final GlobalKey<FormState> _formKey = GlobalKey();
 
   final Map<String, String> _authData = {'username': '', 'password': ''};
 
   bool isLoading = false;
   final _passwordController = TextEditingController();
+  final userService = UserService();
 
   @override
   void initState() {
     super.initState();
     initData();
+  }
+  void initData()async{
+    List<User> users = await userService.retrieve();
+    if(users.isEmpty)
+      await serverService.syncro(widget.pdaNo);
   }
 
   @override
@@ -143,20 +123,7 @@ class _AuthCardState extends State<AuthCard>
     try {
       var bytes1 = utf8.encode(_authData['password']!);         // data being hashed
       var digest1 = sha256.convert(bytes1);
-      User user = User(
-          name: 'ahmad',
-          username: _authData['username']!,
-          password: digest1.toString(),
-          address: 'address',
-          email: 'email');
       Authentication auth = Authentication();
-      UserRepository userRepository = UserRepository();
-      userRepository.insert(user);
-       userRepository.retrieve().then((value) {
-         for (var val in value) {
-          print('${val.username}');
-       }
-       });
 
       auth.logIn(_authData['username']!, digest1.toString()).then((value) {
         setState(() {
@@ -174,9 +141,7 @@ class _AuthCardState extends State<AuthCard>
       _showErrorDialog(err.toString());
     }
   }
-  String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
-      length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
-  initData()async{
+  /*initData()async{
     var rng = Random().nextInt(1000);
     CategoryService categoryService = CategoryService();
     MainCategoryService mainCategoryService = MainCategoryService();
@@ -229,7 +194,7 @@ class _AuthCardState extends State<AuthCard>
     await assetLocationService.insert(AssetLocation(name: "location",areaId: 1,buildingAddress: "test building Address",
     buildingName: "building Name",buildingNo: '10',businessUnit: 'businessUnit',departmentId: 10,floorId: 10,id: rng,sectionId: 22));
     await assetService.insert(Asset(id:10,itemId: rng, barcode: "test", barcodeImage: image, serialnumber: "serial 010", assetLocationId: rng, description: "description item", image: image));
-  }
+  }*/
 
   void _showErrorDialog(String message) {
     showDialog(
@@ -251,8 +216,6 @@ class _AuthCardState extends State<AuthCard>
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
-    print('deviceSize:xx ${deviceSize.height * 0.03}');
-
     return SizedBox(
       width: deviceSize.width * 0.75,
       child: Form(

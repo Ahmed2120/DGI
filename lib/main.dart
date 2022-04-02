@@ -1,29 +1,23 @@
-import 'package:dgi/Services/ServerService.dart';
-import 'package:dgi/model/country.dart';
-import 'package:dgi/screens/administrator_screen.dart';
-import 'package:dgi/screens/assets_capture_screen.dart';
-import 'package:dgi/screens/assets_counter_screen.dart';
-import 'package:dgi/screens/assets_custodian.dart';
-import 'package:dgi/screens/assets_verification_screen.dart';
-import 'package:dgi/screens/auth_screen.dart';
-import 'package:dgi/screens/home_page.dart';
-import 'package:dgi/screens/item_capture_screen.dart';
+import 'package:dgi/Services/SettingService.dart';
+import 'package:dgi/model/settings.dart';
 import 'package:dgi/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'screens/assets_check.dart';
-import 'screens/assets_details.dart';
-
 Future<void> main() async {
-  final serverService = ServerService();
-  List<Country> countries = await serverService.getAllCountries();
-  print(countries[0].id.toString() + countries[0].name);
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  final settingService = SettingService();
+  List<Setting> settings = await settingService.retrieve();
+  String pdaNo="";
+  if(settings.length>0){
+    pdaNo = settings[0].pdaNo;
+  }
+  runApp(MyApp(pdaNo: pdaNo,));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  String pdaNo;
+  MyApp({Key? key,required this.pdaNo}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +32,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         fontFamily: 'Montserrat'
       ),
-      home: const SplashScreen(),
+      home: SplashScreen(pdaNo: pdaNo,),
     );
   }
 }

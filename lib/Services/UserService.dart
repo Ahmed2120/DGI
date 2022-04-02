@@ -1,7 +1,7 @@
 import 'package:dgi/db/UserRepository.dart';
 import 'package:dgi/model/User.dart';
 
-class CategoryService{
+class UserService{
   UserRepository userRepository = UserRepository();
   Future<int> insert(User user) async {
     return userRepository.insert(user);

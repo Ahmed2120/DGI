@@ -1,16 +1,19 @@
 class TransactionLookUp{
-  final int? id;
-  final String name;
+  final int id;
+  final int transactionType;
+  final String transActionTypeName;
 
   TransactionLookUp(
-      { this.id,
-        required this.name});
+      { required this.id,
+        required this.transactionType,
+        required this.transActionTypeName});
 
   TransactionLookUp.fromMap(Map<String, dynamic> res)
       : id = res["Id"],
-        name = res["Name"];
+        transactionType = res["TransactionType"],
+        transActionTypeName = res["TransActionTypeName"];
 
   Map<String, Object?> toMap() {
-    return {'Id':id,'Name': name};
+    return {'Id':id,'TransActionTypeName':transActionTypeName,'TransactionType':transactionType};
   }
 }

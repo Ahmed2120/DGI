@@ -1,7 +1,4 @@
 import 'package:dgi/db/MainCategoryRepository.dart';
-import 'package:dgi/model/area.dart';
-
-import '../db/AreaRepository.dart';
 import '../model/mainCategory.dart';
 
 class MainCategoryService{
@@ -12,7 +9,7 @@ class MainCategoryService{
   Future<List<MainCategory>> retrieve() async {
     return mainCategoryRepository.retrieve();
   }
-  Future<int> insertCategories(List<MainCategory> mainCategories) async {
+  Future<int> batch(List<MainCategory> mainCategories) async {
     return mainCategoryRepository.batch(mainCategories);
   }
   Future<void> delete(int id) async {

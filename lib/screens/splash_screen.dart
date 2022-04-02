@@ -1,19 +1,12 @@
 import 'dart:async';
-import 'dart:convert';
-
-import 'package:crypto/crypto.dart';
 import 'package:dgi/screens/administrator_screen.dart';
 import 'package:dgi/screens/auth_screen.dart';
-import 'package:dgi/screens/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
-import '../authentication.dart';
-import '../db/UserRepository.dart';
-import '../model/User.dart';
-
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  String pdaNo;
+  SplashScreen({Key? key,required this.pdaNo}) : super(key: key);
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -24,27 +17,20 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    var bytes1 = utf8.encode('1234');         // data being hashed
-    var digest1 = sha256.convert(bytes1);
-    User user = User(
-        name: 'ahmad',
-        username: 'ahmad',
-        password: digest1.toString(),
-        address: 'address',
-        email: 'email');
-    Authentication auth = Authentication();
-    UserRepository userRepository = UserRepository();
-    userRepository.insert(user);
-    Timer(const Duration(milliseconds: 3000), ()=>
-        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=> Administrator()))
+    Timer(const Duration(milliseconds: 3000), () {
+      if(widget.pdaNo != ""){
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => AuthScreen(pdaNo: widget.pdaNo,)));
+      }else {
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => Administrator()));
+      }
+    }
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final dSize = MediaQuery.of(context).size;
-    print('hhh ${dSize.height * 0.0412}');
-    print('hhh ${dSize.width * 0.315}');
     return Scaffold(
       backgroundColor: Color(0xFFFFA227),
       body: Padding(
