@@ -10,7 +10,7 @@ class Authentication{
 
   Future<String> logIn(String username, String password) async {
     final Database db = await databaseHandler.initializeDB();
-    final List<Map<String, Object?>> queryResult = await db.query(UserRepository.TABLE_NAME, where: 'username = ? and password = ?', whereArgs: [username, password]);
+    final List<Map<String, Object?>> queryResult = await db.query(UserRepository.TABLE_NAME, where: 'UserName = ? and HashedPassword = ?', whereArgs: [username, password]);
     if(queryResult.isEmpty) {
       print('user $queryResult');
       return 'failed';

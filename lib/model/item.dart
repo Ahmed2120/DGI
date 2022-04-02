@@ -1,12 +1,12 @@
 class Item{
-  final int? id;
+  final int id;
   final String name;
-  final int categoryId;
+  final int? categoryId;
 
   Item(
-      { this.id,
+      {required this.id,
         required this.name,
-        required this.categoryId});
+        this.categoryId});
 
   Item.fromMap(Map<String, dynamic> res)
       : id = res["Id"],

@@ -95,7 +95,6 @@ class ServerService{
     List<Category> categories = await getAllCategories();
     List<MainCategory> mainCategories = await getAllMainCategories();
     List<Item> items = await getAllItems();
-    await userService.insert(response.user);
     await assetLocationService.insert(AssetLocation(
         id: response.assetLocation.id,
         name: response.assetLocation.name,

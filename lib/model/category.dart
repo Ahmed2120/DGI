@@ -1,12 +1,12 @@
 class Category{
   final int id;
   final String name;
-  final int mainCategoryId;
+  final int? mainCategoryId;
 
   Category(
       { required this.id,
         required this.name,
-        required this.mainCategoryId});
+        this.mainCategoryId});
 
   Category.fromMap(Map<String, dynamic> res)
       : id = res["Id"],
