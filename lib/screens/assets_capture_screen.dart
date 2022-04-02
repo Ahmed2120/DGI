@@ -6,6 +6,7 @@ import 'package:dgi/Services/CategoryService.dart';
 import 'package:dgi/Services/CaptureDetailsService.dart';
 import 'package:dgi/Services/ItemService.dart';
 import 'package:dgi/Services/MainCategoryService.dart';
+import 'package:dgi/Services/ServerService.dart';
 import 'package:dgi/Utility/footer.dart';
 import 'package:dgi/model/category.dart';
 import 'package:dgi/model/CaptureDetails.dart';
@@ -41,6 +42,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   final categoryService = CategoryService();
   final captureDetailsService = CaptureDetailsService();
   final mainCategoryService = MainCategoryService();
+  final serverService = ServerService();
   final itemService = ItemService();
   int quantity = 1;
   List<CaptureDetails> captureDetails = [];
@@ -49,6 +51,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    serverService.uploadData();
     initData();
     getItems();
   }
@@ -379,11 +382,11 @@ class _AssetsCaptureState extends State<AssetsCapture> {
     final Uint8List bytes = file.readAsBytesSync();
     String base64Image = base64Encode(bytes);
     String description = descriptionController.text;
-    int? categoryId =
-        categories.firstWhere((element) => element.name == category).id;
+    int? itemId =
+        items.firstWhere((element) => element.name == item).id;
     captureDetailsService.insert(CaptureDetails(
       assetLocationId: widget.assetLocationId,
-      categoryId: categoryId,
+      itemId: itemId,
       description: description,
       image: base64Image,
       quantity: quantity,
@@ -417,7 +420,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
         CustomWidgetBuilder.buildRow(
           [
             i + 1,
-            categories.firstWhere((element) => element.id==captureDetails[i].categoryId).name,
+            items.firstWhere((element) => element.id==captureDetails[i].itemId).name,
             captureDetails[i].description,
             captureDetails[i].quantity.toString(),
             Image.memory(

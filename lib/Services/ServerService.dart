@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:dgi/Services/AreaService.dart';
 import 'package:dgi/Services/AssetLocationService.dart';
+import 'package:dgi/Services/CaptureDetailsService.dart';
 import 'package:dgi/Services/CategoryService.dart';
 import 'package:dgi/Services/CountryService.dart';
 import 'package:dgi/Services/DepartmentService.dart';
@@ -9,6 +10,8 @@ import 'package:dgi/Services/ItemService.dart';
 import 'package:dgi/Services/MainCategoryService.dart';
 import 'package:dgi/Services/TransactionService.dart';
 import 'package:dgi/Services/UserService.dart';
+import 'package:dgi/model/CaptureDetails.dart';
+import 'package:dgi/model/CaptureDetailsRequest.dart';
 import 'package:dgi/model/assetLocation.dart';
 import 'package:dgi/model/category.dart';
 import 'package:dgi/model/item.dart';
@@ -118,6 +121,25 @@ class ServerService{
     mainCategoryService.batch(mainCategories);
     itemService.batch(items);
     categoryService.batch(categories);
+  }
+
+  uploadData()async{
+    // get all cupture
+    final captureService = CaptureDetailsService();
+    final transactionService = TransactionService();
+    List<CaptureDetails> captureDetails = await captureService.retrieve();
+    List<TransactionLookUp> transactions = await transactionService.retrieve();
+    List<CaptureDetailsRequest> request = captureDetails.map((e) =>
+        CaptureDetailsRequest(quantity: e.quantity,image: e.image,description: e.description,id: e.id,
+            assetLocationId: e.assetLocationId,itemId: e.itemId,name: e.name,transactionId: transactions[0].id)).toList();
+    print(jsonEncode(request));
+    final response = await http.post(
+      Uri.parse(MyConfig.UPLOAD_API),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(captureDetails)
+    );
   }
 
 }
