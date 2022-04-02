@@ -233,7 +233,7 @@ class _AuthCardState extends State<AuthCard>
                 }
               },
               onSaved: (val){
-                _authData['email'] = val!;
+                _authData['username'] = val!;
               },
             ),
             TextFormField(
