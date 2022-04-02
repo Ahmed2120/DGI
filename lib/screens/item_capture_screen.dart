@@ -69,7 +69,7 @@ class _ItemCaptureState extends State<ItemCapture> {
         body: SafeArea(
       child: SingleChildScrollView(
         child: SizedBox(
-          height: dSize.height - 24,
+          height: dSize.height,
           child: Column(
             children: [
               const Header(title: 'ITEM', subTitle: 'Capture',),
@@ -100,7 +100,7 @@ class _ItemCaptureState extends State<ItemCapture> {
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton<String>(
                                   value: mainCategory,
-                                  iconSize: 30,
+                                  iconSize: 20,
                                   icon: const Icon(
                                     Icons.arrow_drop_down,
                                     color: Color(0xFF00B0BD),
@@ -145,7 +145,7 @@ class _ItemCaptureState extends State<ItemCapture> {
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton<String>(
                                   value: category,
-                                  iconSize: 30,
+                                  iconSize: 20,
                                   icon: const Icon(
                                     Icons.arrow_drop_down,
                                     color: Color(0xFF00B0BD),
@@ -188,7 +188,7 @@ class _ItemCaptureState extends State<ItemCapture> {
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton<String>(
                                   value: city,
-                                  iconSize: 30,
+                                  iconSize: 20,
                                   icon: const Icon(
                                     Icons.arrow_drop_down,
                                     color: Color(0xFF00B0BD),
@@ -234,7 +234,7 @@ class _ItemCaptureState extends State<ItemCapture> {
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton<String>(
                                   value: location,
-                                  iconSize: 30,
+                                  iconSize: 20,
                                   icon: const Icon(
                                     Icons.arrow_drop_down,
                                     color: Color(0xFF00B0BD),

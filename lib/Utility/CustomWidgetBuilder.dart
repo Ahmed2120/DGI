@@ -29,13 +29,13 @@ class CustomWidgetBuilder{
     return Text(
       title,
       style:
-      TextStyle(fontSize: dSize.height <= 500 ? dSize.height * 0.027 : 13.75, color: Color(0xFF0F6671), fontWeight: FontWeight.bold),
+      TextStyle(fontSize: dSize.height <= 500 ? 10 : dSize.height * 0.02, color: Color(0xFF0F6671), fontWeight: FontWeight.bold),
     );
   }
 
  static Container buildArrow(BuildContext context, Size dSize, Icon icon, Function function) {
     return Container(
-      padding: EdgeInsets.all(dSize.width <= 551 ? dSize.width * 0.006 : 3.312),
+      padding: EdgeInsets.all(dSize.height <= 500 ? dSize.height * 0.006 : 3.312),
       // alignment: Alignment.center,
       decoration: BoxDecoration(
           color: Color(0xFF00B0BD),
@@ -46,7 +46,7 @@ class CustomWidgetBuilder{
           alignment: Alignment.center,
           child: Icon(
             icon.icon,
-            size: dSize.width <= 551 ? dSize.width * 0.07 : 38.64,
+            size: dSize.height <= 500 ? dSize.height * 0.04 : 25,
             color: Colors.white,
           ),
         ),
@@ -71,7 +71,7 @@ class CustomWidgetBuilder{
           ? Text(
         '$cell',
         style: TextStyle(
-            fontSize: 11,
+            fontSize: 10,
             color:
             isHeader ? Colors.white : Color(0xFF0F6671),
             fontWeight: isHeader

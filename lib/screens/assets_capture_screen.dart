@@ -166,10 +166,10 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                             width: dSize.width * 0.5,
                             child: TextFormField(
                               controller: descriptionController,
-                              decoration: const InputDecoration(
+                              decoration: InputDecoration(
                                 enabledBorder: OutlineInputBorder( borderSide: BorderSide(color: Color(0xFF00B0BD), width: 2)),
                                 focusedBorder: OutlineInputBorder( borderSide: BorderSide(color: Color(0xFF00B0BD), width: 2)),
-                                contentPadding: EdgeInsets.all(8),
+                                contentPadding: EdgeInsets.all(dSize.height <= 430 ? dSize.height * 0.009 : 7),
                                 isDense: true,
                                 border: InputBorder.none,
                               ),
@@ -197,8 +197,8 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                                   child: const CircleAvatar(
                                     backgroundColor: Color(0xFFFFA227),
                                     foregroundColor: Colors.white,
-                                    radius: 12,
-                                    child: Icon(Icons.remove),
+                                    radius: 10,
+                                    child: Icon(Icons.remove, size: 20,),
                                   ),
                                 ),
                                 SizedBox(
@@ -206,12 +206,12 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                                 ),
                                 Container(
                                   padding: EdgeInsets.symmetric(
-                                      vertical: 2.024,
+                                      vertical: dSize.height * 0.001,
                                       horizontal: 22.919),
                                   decoration: BoxDecoration(
                                       border: Border.all(
                                           color: const Color(0xFF00B0BD),
-                                          width: 2.0),
+                                          width: dSize.height >= 430 ? 1.5 : 0.5),
                                       borderRadius:
                                           BorderRadius.circular(15)),
                                   child: Text(
@@ -234,8 +234,8 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                                   child: const CircleAvatar(
                                     backgroundColor: Color(0xFF00B0BD),
                                     foregroundColor: Colors.white,
-                                    radius: 12,
-                                    child: Icon(Icons.add),
+                                    radius: 10,
+                                    child: Icon(Icons.add, size: 20),
                                   ),
                                 ),
                               ],
@@ -277,7 +277,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                   children: [
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
-                      height: dSize.height * 0.36,
+                      height: dSize.height < 600 ? dSize.height * 0.36 : dSize.height * 0.39,
                       child:ClipRRect(
                         borderRadius: BorderRadius.circular(12),
                         child: ListView(
@@ -295,7 +295,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                       child: Text(
                         'ITEM TOTAL     ${captureDetails.length}',
                         style: TextStyle(
-                          fontSize: dSize.width <= 600 ? dSize.width * 0.03 : 20.16,
+                          fontSize: dSize.width <= 500 ? dSize.width * 0.02 : 12,
                             color: Color(0xFF0F6671),
                             fontWeight: FontWeight.bold),
                       ),
@@ -354,7 +354,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
           Text(
             'ADD ',
             style: const TextStyle(
-                fontSize: 13,
+                fontSize: 11,
                 color: Color(0xFF0F6671),
                 fontWeight: FontWeight.bold),
           ),
@@ -445,7 +445,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
           child: DropdownButtonHideUnderline(
             child: DropdownButton<String>(
               value: value,
-              iconSize: 30,
+              iconSize: 20,
               icon: const Icon(
                 Icons.arrow_drop_down,
                 color: Color(0xFF00B0BD),

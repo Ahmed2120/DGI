@@ -43,7 +43,7 @@ class _AssetsDetailsState extends State<AssetsDetails> {
         body: SafeArea(
       child: SingleChildScrollView(
         child: SizedBox(
-          height: dSize.height - 24,
+          height: dSize.height,
           child: Column(
             children: [
               Container(

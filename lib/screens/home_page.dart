@@ -54,7 +54,7 @@ class HomePage extends StatelessWidget {
                       children: [
                         Image.asset(
                           'assets/icons/0-22.png',
-                          width: dsize.width <= 551 ? dsize.width * 0.5 : 277,
+                          width: dsize.width <= 551 ? dsize.width * 0.3 : 160,
                         ),
                         Container(
                           padding: EdgeInsets.symmetric(vertical: dsize.height * 0.008),
@@ -65,7 +65,7 @@ class HomePage extends StatelessWidget {
                           child: Text(
                             'FIXED ASSET RACKING Software v 1.0.0',
                             style: TextStyle(
-                              fontSize: dsize.width <= 551 ? dsize.width * 0.039 : 21.528,
+                              fontSize: dsize.width <= 551 ? dsize.width * 0.034 : 19,
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                             ),
@@ -86,7 +86,7 @@ class HomePage extends StatelessWidget {
                       shrinkWrap: true,
                       scrollDirection: Axis.vertical,
                       padding:
-                          EdgeInsets.symmetric(vertical: dsize.height * 0.0092, horizontal: dsize.width * 0.04),
+                          EdgeInsets.symmetric(vertical: dsize.height * 0.0092, horizontal: dsize.width * 0.01),
                       children: [
                         InkWell(
                           child: buildColumn('ITEM CAPTURE', dsize, '1-15'),
@@ -160,7 +160,7 @@ class HomePage extends StatelessWidget {
         Text(
           title,
           textAlign: TextAlign.center,
-          style: TextStyle(color: Colors.white, fontSize: dsize.height * 0.01780),
+          style: TextStyle(color: Colors.white, fontSize: dsize.width * 0.02),
         ),
       ],
     );

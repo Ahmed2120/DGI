@@ -40,7 +40,7 @@ class _AssetsCheckState extends State<AssetsCheck> {
         body: SafeArea(
       child: SingleChildScrollView(
         child: Container(
-          height: dSize.height - 24,
+          height: dSize.height,
           child: Column(
             children: [
               Container(

@@ -71,7 +71,7 @@ class _AssetsCounterState extends State<AssetsCounter> {
         body: SafeArea(
           child: SingleChildScrollView(
             child: SizedBox(
-              height: dSize.height - 24,
+              height: dSize.height,
               child: Column(
                 children: [
                   const Header(title: 'ASSETS', subTitle: 'Counter',),
@@ -102,7 +102,7 @@ class _AssetsCounterState extends State<AssetsCounter> {
                                   child: DropdownButtonHideUnderline(
                                     child: DropdownButton<String>(
                                       value: mainCategory,
-                                      iconSize: 30,
+                                      iconSize: 20,
                                       icon: const Icon(
                                         Icons.arrow_drop_down,
                                         color: Color(0xFF00B0BD),
@@ -147,7 +147,7 @@ class _AssetsCounterState extends State<AssetsCounter> {
                                   child: DropdownButtonHideUnderline(
                                     child: DropdownButton<String>(
                                       value: category,
-                                      iconSize: 30,
+                                      iconSize: 20,
                                       icon: const Icon(
                                         Icons.arrow_drop_down,
                                         color: Color(0xFF00B0BD),
@@ -189,7 +189,7 @@ class _AssetsCounterState extends State<AssetsCounter> {
                                   child: DropdownButtonHideUnderline(
                                     child: DropdownButton<String>(
                                       value: city,
-                                      iconSize: 30,
+                                      iconSize: 20,
                                       icon: const Icon(
                                         Icons.arrow_drop_down,
                                         color: Color(0xFF00B0BD),
@@ -235,7 +235,7 @@ class _AssetsCounterState extends State<AssetsCounter> {
                                   child: DropdownButtonHideUnderline(
                                     child: DropdownButton<String>(
                                       value: location,
-                                      iconSize: 30,
+                                      iconSize: 20,
                                       icon: const Icon(
                                         Icons.arrow_drop_down,
                                         color: Color(0xFF00B0BD),

@@ -70,7 +70,7 @@ class _AssetsVerificationState extends State<AssetsVerification> {
         body: SafeArea(
       child: SingleChildScrollView(
         child: Container(
-          height: dSize.height - 24,
+          height: dSize.height,
           child: Column(
             children: [
               const Header(
@@ -79,7 +79,7 @@ class _AssetsVerificationState extends State<AssetsVerification> {
               ),
               Padding(
                 padding:
-                    const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+                    const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
                 child: SizedBox(
                   height: dSize.height * 0.58,
                   child: Form(
@@ -112,7 +112,7 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                                 child: DropdownButtonHideUnderline(
                                   child: DropdownButton<String>(
                                     value: mainCategory,
-                                    iconSize: 30,
+                                    iconSize: 20,
                                     icon: const Icon(
                                       Icons.arrow_drop_down,
                                       color: Color(0xFF00B0BD),
@@ -157,7 +157,7 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                                 child: DropdownButtonHideUnderline(
                                   child: DropdownButton<String>(
                                     value: category,
-                                    iconSize: 30,
+                                    iconSize: 20,
                                     icon: const Icon(
                                       Icons.arrow_drop_down,
                                       color: Color(0xFF00B0BD),
@@ -204,7 +204,7 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                                 child: DropdownButtonHideUnderline(
                                   child: DropdownButton<String>(
                                     value: city,
-                                    iconSize: 30,
+                                    iconSize: 20,
                                     icon: const Icon(
                                       Icons.arrow_drop_down,
                                       color: Color(0xFF00B0BD),
@@ -257,7 +257,7 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                                 child: DropdownButtonHideUnderline(
                                   child: DropdownButton<String>(
                                     value: location,
-                                    iconSize: 30,
+                                    iconSize: 20,
                                     icon: const Icon(
                                       Icons.arrow_drop_down,
                                       color: Color(0xFF00B0BD),
