@@ -1,8 +1,20 @@
 import 'dart:convert';
-
+import 'package:dgi/Services/AreaService.dart';
+import 'package:dgi/Services/AssetLocationService.dart';
+import 'package:dgi/Services/CategoryService.dart';
+import 'package:dgi/Services/CountryService.dart';
+import 'package:dgi/Services/DepartmentService.dart';
+import 'package:dgi/Services/FloorService.dart';
+import 'package:dgi/Services/ItemService.dart';
+import 'package:dgi/Services/MainCategoryService.dart';
+import 'package:dgi/Services/TransactionService.dart';
+import 'package:dgi/Services/UserService.dart';
+import 'package:dgi/model/assetLocation.dart';
 import 'package:dgi/model/category.dart';
 import 'package:dgi/model/item.dart';
 import 'package:dgi/model/mainCategory.dart';
+import 'package:dgi/model/transaction.dart';
+import 'package:dgi/model/transcationResponse.dart';
 import 'package:http/http.dart' as http;
 import 'package:dgi/Utility/configration.dart';
 import 'package:dgi/model/country.dart';
@@ -51,6 +63,62 @@ class ServerService{
     } else {
       throw Exception('Failed to load items');
     }
+  }
+
+  Future<TransactionResponse> getTransaction(String pdaNo) async{
+    final queryParameters = {
+      'PDANo': pdaNo,
+    };
+    String queryString = Uri(queryParameters: queryParameters).query;
+    final uri = MyConfig.TRANSACTION_API + '?' + queryString;
+    final response = await http.get(Uri.parse(uri));
+    if (response.statusCode == 200) {
+      return TransactionResponse.fromMap(json.decode(response.body));
+    } else {
+      throw Exception('Failed to load transaction');
+    }
+  }
+
+  syncro(String pdaNo) async{
+    final floorService = FloorService();
+    final areaService = AreaService();
+    final departmentService = DepartmentService();
+    final assetLocationService = AssetLocationService();
+    final userService = UserService();
+    final transactionService = TransactionService();
+    final countryService = CountryService();
+    final categoryService = CategoryService();
+    final itemService = ItemService();
+    final mainCategoryService = MainCategoryService();
+    TransactionResponse response = await getTransaction(pdaNo);
+    List<Country> countries = await getAllCountries();
+    List<Category> categories = await getAllCategories();
+    List<MainCategory> mainCategories = await getAllMainCategories();
+    List<Item> items = await getAllItems();
+    await userService.insert(response.user);
+    await assetLocationService.insert(AssetLocation(
+        id: response.assetLocation.id,
+        name: response.assetLocation.name,
+        buildingAddress: response.assetLocation.buildingAddress,
+        buildingName: response.assetLocation.buildingName,
+        buildingNo: response.assetLocation.buildingNo,
+        businessUnit: response.assetLocation.businessUnit,
+        areaId: response.assetLocation.areaId,
+        departmentId: response.assetLocation.departmentId,
+        floorId: response.assetLocation.floorId,
+        sectionId: response.assetLocation.sectionId));
+    await userService.insert(response.user);
+    await floorService.insert(response.assetLocation.floor);
+    await areaService.insert(response.assetLocation.area);
+    await departmentService.insert(response.assetLocation.department);
+    await transactionService.insert(TransactionLookUp(
+        id: response.id,
+        transactionType: response.transactionType,
+        transActionTypeName: response.transActionTypeName));
+    countryService.batch(countries);
+    mainCategoryService.batch(mainCategories);
+    itemService.batch(items);
+    categoryService.batch(categories);
   }
 
 }
