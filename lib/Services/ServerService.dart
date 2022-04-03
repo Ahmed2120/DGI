@@ -108,7 +108,9 @@ class ServerService{
         areaId: response.assetLocation.areaId,
         departmentId: response.assetLocation.departmentId,
         floorId: response.assetLocation.floorId,
-        sectionId: response.assetLocation.sectionId));
+        sectionId: response.assetLocation.sectionId,
+        locationType:response.assetLocation.locationType,
+        locationTypeName: response.assetLocation.locationTypeName));
     await userService.insert(response.user);
     await floorService.insert(response.assetLocation.floor);
     await areaService.insert(response.assetLocation.area);
@@ -124,7 +126,6 @@ class ServerService{
   }
 
   uploadData()async{
-    // get all cupture
     final captureService = CaptureDetailsService();
     final transactionService = TransactionService();
     List<CaptureDetails> captureDetails = await captureService.retrieve();
@@ -132,14 +133,17 @@ class ServerService{
     List<CaptureDetailsRequest> request = captureDetails.map((e) =>
         CaptureDetailsRequest(quantity: e.quantity,image: e.image,description: e.description,id: e.id,
             assetLocationId: e.assetLocationId,itemId: e.itemId,name: e.name,transactionId: transactions[0].id)).toList();
-    print(jsonEncode(request));
     final response = await http.post(
       Uri.parse(MyConfig.UPLOAD_API),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(captureDetails)
+      body: jsonEncode(request)
     );
+    if(response.statusCode == 200) {
+      return true;
+    }
+    return false;
   }
 
 }

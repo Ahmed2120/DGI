@@ -1,7 +1,6 @@
 import 'package:dgi/Services/SectionTypeService.dart';
 import 'package:dgi/Utility/CustomWidgetBuilder.dart';
 import 'package:dgi/Utility/header.dart';
-import 'package:dgi/model/item.dart';
 import 'package:dgi/model/sectionType.dart';
 import 'package:dgi/screens/assets_capture_screen.dart';
 import 'package:flutter/material.dart';
@@ -33,13 +32,13 @@ class ItemCapture extends StatefulWidget {
 class _ItemCaptureState extends State<ItemCapture> {
   List<Category> categories = [];
   List<MainCategory> mainCategories = [];
-  //List<Country> countries = [];
   List<City> cities = [];
   List<Floor> floors = [];
   List<Department> departments=[];
   List<Area> areas =[];
   List<SectionType> sections =[];
-  AssetLocation assetLocation = AssetLocation(id:1, name: '', buildingAddress: '', buildingName: '', buildingNo: '', businessUnit: '', areaId: 1, departmentId: 1, floorId: 1,sectionId: 10);
+  AssetLocation assetLocation = AssetLocation(id:1, name: '', buildingAddress: '', buildingName: '', buildingNo: '',
+      businessUnit: '', areaId: 1, departmentId: 1, floorId: 1,sectionId: 10,locationTypeName: 'Building',locationType: 1);
   final countryService = CountryService();
   final cityService = CityService();
   final floorService = FloorService();
@@ -54,7 +53,7 @@ class _ItemCaptureState extends State<ItemCapture> {
   String? city;
   String? location;
   MainCategory? _main;
-  List<String> locations = ['STORE', 'BUILDING', 'OFFICE'];
+  List<String> locations = [];
 
   @override
   void initState() {
@@ -274,13 +273,13 @@ class _ItemCaptureState extends State<ItemCapture> {
                           ],
                         ),
                         SizedBox(height: dSize.height * 0.015,),
-                        if(location == 'OFFICE' || location == 'BUILDING')
+                        if(location == 'Office' || location == 'Building')
                           CustomWidgetBuilder.buildTextFormField(dSize,'FLOOR NO',floors.isNotEmpty?floors[0].name:'2'),
                         SizedBox(height: dSize.height * 0.01,),
-                        if(location == 'OFFICE' || location == 'BUILDING')
+                        if(location == 'Office' || location == 'Building')
                           CustomWidgetBuilder.buildTextFormField(dSize,'SECTION NO',sections.isNotEmpty?sections[0].name:'2'),
                         SizedBox(height: dSize.height * 0.01,),
-                        if(location == 'OFFICE' || location == 'STORE')
+                        if(location == 'Office' || location == 'Store')
                           CustomWidgetBuilder.buildTextFormField(dSize,'DEPARTMENT',departments.isNotEmpty?departments[0].name:'2'),
                         SizedBox(height: dSize.height * 0.01,),
                       ],
@@ -317,7 +316,7 @@ class _ItemCaptureState extends State<ItemCapture> {
     getCatByMainCat();
     //countries = await countryService.retrieve();
     cities = await cityService.retrieve();
-    city = cities[0].name;
+    //city = cities[0].name;
     floors = await floorService.retrieve();
     departments = await departmentService.retrieve();
     areas = await areaService.retrieve();
@@ -326,6 +325,8 @@ class _ItemCaptureState extends State<ItemCapture> {
       setState(() {
         if(value.isNotEmpty) {
           assetLocation = value[0];
+          locations = [assetLocation.locationTypeName];
+          location = assetLocation.locationTypeName;
         }
       });
     });

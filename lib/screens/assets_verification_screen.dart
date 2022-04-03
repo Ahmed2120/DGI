@@ -4,7 +4,6 @@ import 'package:dgi/Utility/CustomWidgetBuilder.dart';
 import 'package:dgi/model/category.dart';
 import 'package:dgi/model/sectionType.dart';
 import 'package:dgi/screens/assets_details.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dgi/Services/AreaService.dart';
 import 'package:dgi/Services/AssetLocationService.dart';
@@ -39,7 +38,8 @@ class _AssetsVerificationState extends State<AssetsVerification> {
   List<Department> departments=[];
   List<Area> areas =[];
   List<SectionType> sections =[];
-  AssetLocation assetLocation = AssetLocation(id:1, name: '', buildingAddress: '', buildingName: '', buildingNo: '', businessUnit: '', areaId: 1, departmentId: 1, floorId: 1,sectionId: 10);
+  AssetLocation assetLocation = AssetLocation(id:1, name: '', buildingAddress: '', buildingName: '', buildingNo: '',
+      businessUnit: '', areaId: 1, departmentId: 1, floorId: 1,sectionId: 10,locationTypeName: 'Building',locationType: 1);
   final countryService = CountryService();
   final cityService = CityService();
   final floorService = FloorService();
@@ -54,7 +54,7 @@ class _AssetsVerificationState extends State<AssetsVerification> {
   String? city;
   String? location;
   MainCategory? _main;
-  List<String> locations = ['STORE', 'BUILDING', 'OFFICE'];
+  List<String> locations = [];
   final GlobalKey<FormState> _formKey = GlobalKey();
   @override
   void initState() {
@@ -299,7 +299,7 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                           SizedBox(
                             height: dSize.height * 0.01,
                           ),
-                          if (location == 'OFFICE' || location == 'BUILDING')
+                          if (location == 'Office' || location == 'Building')
                             CustomWidgetBuilder.buildTextFormField(
                                 dSize,
                                 'FLOOR NO',
@@ -307,7 +307,7 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                           SizedBox(
                             height: dSize.height * 0.01,
                           ),
-                          if (location == 'OFFICE' || location == 'BUILDING')
+                          if (location == 'Office' || location == 'Building')
                             CustomWidgetBuilder.buildTextFormField(
                                 dSize,
                                 'SECTION NO',
@@ -315,7 +315,7 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                           SizedBox(
                             height: dSize.height * 0.01,
                           ),
-                          if (location == 'OFFICE' || location == 'STORE')
+                          if (location == 'Office' || location == 'Store')
                             CustomWidgetBuilder.buildTextFormField(
                                 dSize,
                                 'DEPARTMENT',
@@ -375,6 +375,8 @@ class _AssetsVerificationState extends State<AssetsVerification> {
       setState(() {
         if(value.isNotEmpty) {
           assetLocation = value[0];
+          locations = [assetLocation.locationTypeName];
+          location = assetLocation.locationTypeName;
         }
       });
     });

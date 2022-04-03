@@ -41,7 +41,8 @@ class _AssetsCounterState extends State<AssetsCounter> {
   List<Department> departments=[];
   List<Area> areas =[];
   List<SectionType> sections =[];
-  AssetLocation assetLocation = AssetLocation(id:1, name: '', buildingAddress: '', buildingName: '', buildingNo: '', businessUnit: '', areaId: 1, departmentId: 1, floorId: 1,sectionId: 10);
+  AssetLocation assetLocation = AssetLocation(id:1, name: '', buildingAddress: '', buildingName: '', buildingNo: '', businessUnit: '',
+      areaId: 1, departmentId: 1, floorId: 1,sectionId: 10,locationTypeName: 'Building',locationType: 1);
   final countryService = CountryService();
   final cityService = CityService();
   final floorService = FloorService();
@@ -56,7 +57,7 @@ class _AssetsCounterState extends State<AssetsCounter> {
   String? city;
   String? location;
   MainCategory? _main;
-  List<String> locations = ['STORE', 'BUILDING', 'OFFICE'];
+  List<String> locations = [];
 
   @override
   void initState() {
@@ -275,13 +276,13 @@ class _AssetsCounterState extends State<AssetsCounter> {
                               ],
                             ),
                             SizedBox(height: dSize.height * 0.015,),
-                            if(location == 'OFFICE' || location == 'BUILDING')
+                            if(location == 'Office' || location == 'Building')
                               CustomWidgetBuilder.buildTextFormField(dSize,'FLOOR NO',floors.isNotEmpty?areas[0].name:'2'),
                             SizedBox(height: dSize.height * 0.01,),
-                            if(location == 'OFFICE' || location == 'BUILDING')
+                            if(location == 'Office' || location == 'Building')
                               CustomWidgetBuilder.buildTextFormField(dSize,'SECTION NO',sections.isNotEmpty?areas[0].name:'2'),
                             SizedBox(height: dSize.height * 0.01,),
-                            if(location == 'OFFICE' || location == 'STORE')
+                            if(location == 'Office' || location == 'Store')
                               CustomWidgetBuilder.buildTextFormField(dSize,'DEPARTMENT',departments.isNotEmpty?areas[0].name:'2'),
                             SizedBox(height: dSize.height * 0.01,),
                           ],
@@ -327,6 +328,8 @@ class _AssetsCounterState extends State<AssetsCounter> {
       setState(() {
         if(value.isNotEmpty) {
           assetLocation = value[0];
+          locations = [assetLocation.locationTypeName];
+          location = assetLocation.locationTypeName;
         }
       });
     });
