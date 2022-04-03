@@ -1,4 +1,6 @@
 import 'package:dgi/model/area.dart';
+import 'package:dgi/model/city.dart';
+import 'package:dgi/model/country.dart';
 import 'package:dgi/model/department.dart';
 import 'package:dgi/model/floor.dart';
 
@@ -18,6 +20,8 @@ class AssetLocationResponse{
   final Floor floor;
   final Area area;
   final Department department;
+  final City city;
+  final Country country;
 
   AssetLocationResponse(
       { required this.id,
@@ -34,7 +38,9 @@ class AssetLocationResponse{
         required this.locationTypeName,
         required this.floor,
         required this.area,
-        required this.department
+        required this.department,
+        required this.country,
+        required this.city
       });
 
   AssetLocationResponse.fromMap(Map<String, dynamic> res)
@@ -52,13 +58,15 @@ class AssetLocationResponse{
         locationTypeName = res["LocationTypeName"],
         floor = Floor.fromMap(res["Floor"]),
         area = Area.fromMap(res["Area"]),
-        department = Department.fromMap(res["Department"]);
+        department = Department.fromMap(res["Department"]),
+        city = City.fromMap(res["City"]),
+        country = Country.fromMap(res["Country"]);
 
 
   Map<String, Object?> toMap() {
     return {'Id':id,'Name': name,'BusinessUnit':businessUnit,'BuildingAddress':buildingAddress,'BuildingName':buildingName,
       'BuildingNo':buildingNo,'AreaId':areaId,'DepartmentId':departmentId,'FloorId':floorId,'SectionId':sectionId,
       'LocationType': locationType, 'LocationTypeName': locationTypeName,'Floor':floor.toMap(),'Area':area.toMap(),
-    'Department':department.toMap()};
+    'Department':department.toMap(),'City':city.toMap(),'Country':country.toMap()};
   }
 }

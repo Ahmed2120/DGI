@@ -311,12 +311,12 @@ class _ItemCaptureState extends State<ItemCapture> {
     // categories = await categoryService.retrieve();
     // category = categories[0].name;
     mainCategories = await mainCategoryService.retrieve();
-    mainCategory = mainCategories[0].name;
+    mainCategory = mainCategories.isNotEmpty?mainCategories[0].name:"";
     _main = mainCategories[0];
     getCatByMainCat();
     //countries = await countryService.retrieve();
     cities = await cityService.retrieve();
-    //city = cities[0].name;
+    city = cities.isNotEmpty?cities[0].name:"";
     floors = await floorService.retrieve();
     departments = await departmentService.retrieve();
     areas = await areaService.retrieve();

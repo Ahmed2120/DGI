@@ -10,7 +10,7 @@ Future<void> main() async {
   List<Setting> settings = await settingService.retrieve();
   String pdaNo="";
   print('pda: ${settings.length}');
-  if(settings.length>0){
+  if(settings.isNotEmpty){
     pdaNo = settings[0].pdaNo;
   }
   runApp(MyApp(pdaNo: pdaNo,));

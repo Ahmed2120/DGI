@@ -319,7 +319,7 @@ class _AssetsCounterState extends State<AssetsCounter> {
     getCatByMainCat();
     //countries = await countryService.retrieve();
     cities = await cityService.retrieve();
-    city = cities[0].name;
+    city = cities.isNotEmpty?cities[0].name:"";
     floors = await floorService.retrieve();
     departments = await departmentService.retrieve();
     areas = await areaService.retrieve();

@@ -1,8 +1,12 @@
+import 'package:dgi/Services/ServerService.dart';
+import 'package:dgi/Services/SettingService.dart';
 import 'package:dgi/Services/TransactionService.dart';
 import 'package:dgi/enum.dart';
+import 'package:dgi/model/settings.dart';
 import 'package:dgi/model/transaction.dart';
 import 'package:dgi/screens/about.dart';
 import 'package:dgi/screens/assets_verification_screen.dart';
+import 'package:dgi/screens/auth_screen.dart';
 import 'package:dgi/screens/item_capture_screen.dart';
 import 'package:dgi/screens/settings.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,6 +23,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   TransactionType transactionType = TransactionType.none;
   final transactionService = TransactionService();
+  final serverService = ServerService();
+  final settingService = SettingService();
 
   @override
   void initState() {
@@ -167,6 +173,24 @@ class _HomePageState extends State<HomePage> {
                               MaterialPageRoute(
                                   builder: (context) => Settings())),
                         ),
+                        InkWell(
+                          child: buildColumn('UPLOAD', dsize, ''),
+                          onTap: ()async {
+                            bool success = await serverService.uploadData();
+                            if(success){
+                              await serverService.clearData();
+                              List<Setting> settings = await settingService.retrieve();
+                              String pdaNo="";
+                              if(settings.isNotEmpty) {
+                                pdaNo = settings[0].pdaNo;
+                              }
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => AuthScreen(pdaNo: pdaNo)));
+                            }else{
+                              _showErrorDialog("fail uploading to server please try again");
+                            }
+                          },
+                        ),
                       ],
                       crossAxisCount: 2,
                       childAspectRatio:
@@ -203,9 +227,12 @@ class _HomePageState extends State<HomePage> {
           decoration: BoxDecoration(
               color: const Color(0xFFFFFFFF).withOpacity(0.3),
               borderRadius: BorderRadius.circular(20)),
-          child: Image.asset(
+          child: img != ''? Image.asset(
             'assets/icons/$img.png',
             height: dsize.height * 0.152,
+          ):Padding(
+            padding:  EdgeInsets.all(dsize.height * 0.01),
+            child: Icon(Icons.cloud_upload,size: dsize.height * 0.13),
           ),
         ),
         SizedBox(

@@ -30,7 +30,7 @@ class DatabaseHandler {
     );
   }
 
-  clearData() async {
+  Future<List<Object?>> clearData() async {
     final Database db = await initializeDB();
     Batch batch = db.batch();
     batch.execute("delete from category");
@@ -47,7 +47,8 @@ class DatabaseHandler {
     batch.execute("delete from assetLocation");
     batch.execute("delete from captureDetails");
     batch.execute("delete from asset");
-    await batch.commit();
+    batch.execute("delete from country");
+    return await batch.commit();
   }
 
 }

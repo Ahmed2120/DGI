@@ -5,7 +5,7 @@ class MyConfig {
   static const String CATEGORY_API = '${SERVER}/Category/GetCategories';
   static const String ITEM_API = '${SERVER}/Item/GetItems';
   static const String TRANSACTION_API = '${SERVER}/Transaction/GetTrasnaction';
-  static const String UPLOAD_API = '${SERVER}/UploadCupture';
+  static const String UPLOAD_API = '${SERVER}/Api/Cupture/UploadCupture';
   /*static const String TRANSACTION_API = '${SERVER}/Transaction/GetMainCategories';
   static const String TRANSACTION_API = '${SERVER}/Transaction/GetMainCategories';*/
 

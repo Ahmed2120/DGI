@@ -51,7 +51,6 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    serverService.uploadData();
     initData();
     getItems();
   }
