@@ -9,6 +9,7 @@ Future<void> main() async {
   final settingService = SettingService();
   List<Setting> settings = await settingService.retrieve();
   String pdaNo="";
+  print('pda: ${settings.length}');
   if(settings.length>0){
     pdaNo = settings[0].pdaNo;
   }
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+    print('PdaNo: $pdaNo');
     return MaterialApp(
       title: 'SAGECO',
       theme: ThemeData(

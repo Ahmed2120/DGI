@@ -116,7 +116,7 @@ class _AssetsCounterState extends State<AssetsCounter> {
                                           child: Text(
                                             item,
                                             style: const TextStyle(
-                                                color: Color(0xFF0F6671), fontSize: 20),
+                                                color: Color(0xFF0F6671), fontSize: 15),
                                           ),
                                         );
                                       }).toList(),
@@ -161,7 +161,7 @@ class _AssetsCounterState extends State<AssetsCounter> {
                                           child: Text(
                                             item,
                                             style: const TextStyle(
-                                                color: Color(0xFF0F6671), fontSize: 20),
+                                                color: Color(0xFF0F6671), fontSize: 15),
                                           ),
                                         );
                                       }).toList(),
@@ -203,7 +203,7 @@ class _AssetsCounterState extends State<AssetsCounter> {
                                           child: Text(
                                             item,
                                             style: const TextStyle(
-                                                color: Color(0xFF0F6671), fontSize: 20),
+                                                color: Color(0xFF0F6671), fontSize: 15),
                                           ),
                                         );
                                       }).toList(),
@@ -241,7 +241,7 @@ class _AssetsCounterState extends State<AssetsCounter> {
                                         color: Color(0xFF00B0BD),
                                       ),
                                       style: const TextStyle(
-                                          color: Colors.white, fontSize: 20),
+                                          color: Colors.white, fontSize: 15),
                                       selectedItemBuilder: (BuildContext context) {
                                         return locations.map((String value) {
                                           return Text(

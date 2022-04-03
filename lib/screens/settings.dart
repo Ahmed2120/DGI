@@ -19,6 +19,8 @@ class _SettingsState extends State<Settings> {
   CategoryService categoryService = CategoryService();
   List<String> categories = [];
 
+  bool radio = true;
+
   @override
   void initState(){
     // TODO: implement initState
@@ -31,13 +33,11 @@ class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     final dSize = MediaQuery.of(context).size;
-    print('hhh ${dSize.height * 0.004}');
-    print('hhh ${dSize.width * 0.04}');
     return Scaffold(
         body: SafeArea(
           child: SingleChildScrollView(
             child: SizedBox(
-              height: dSize.height - 24,
+              height: dSize.height,
               child: Column(
                 children: [
                   Container(
@@ -243,18 +243,39 @@ class _SettingsState extends State<Settings> {
                                 buildText('ASSETS POSITION', dSize),
                                 Spacer(),
                                 Container(
-                                  width: dSize.width * 0.4,
-                                  decoration: BoxDecoration(
-                                    border: Border(
-                                        bottom: BorderSide(
-                                            color: Color(0xFF00B0BD), width: 2)),
-                                  ),
-                                  child: TextFormField(
-                                    decoration: InputDecoration(
-                                      constraints: BoxConstraints(maxHeight: 20),
-                                      border: InputBorder.none,
-                                    ),
-                                  ),
+                                  width: dSize.width * 0.47,
+                                  child: Row(
+                                    children: <Widget>[
+                                      Expanded(
+                                        child: ListTile(
+                                          leading: Radio<bool>(
+                                            activeColor: Color(0xFF0F6671),
+                                            value: true,
+                                            groupValue: radio,
+                                            onChanged: (bool? value) {
+                                              setState(() {
+                                                radio = value!;
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: ListTile(
+                                          leading: Radio<bool>(
+                                            activeColor: Color(0xFF0F6671),
+                                            value: false,
+                                            groupValue: radio,
+                                            onChanged: (bool? value) {
+                                              setState(() {
+                                                radio = value!;
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  )
                                 ),
                               ],
                             ),

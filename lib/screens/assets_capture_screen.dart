@@ -453,6 +453,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                 Icons.arrow_drop_down,
                 color: Color(0xFF00B0BD),
               ),
+              isDense: true,
               isExpanded: true,
               items: values.map((String item) {
                 return DropdownMenuItem<String>(
@@ -460,7 +461,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                   child: Text(
                     item,
                     style:
-                        const TextStyle(color: Color(0xFF0F6671), fontSize: 20),
+                        const TextStyle(color: Color(0xFF0F6671), fontSize: 15),
                   ),
                 );
               }).toList(),

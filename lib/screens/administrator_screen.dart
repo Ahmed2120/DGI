@@ -19,6 +19,8 @@ class _AdministratorState extends State<Administrator> {
   final settingService = SettingService();
   final serverService = ServerService();
 
+  bool _isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     final dSize = MediaQuery.of(context).size;
@@ -86,22 +88,24 @@ class _AdministratorState extends State<Administrator> {
                             CustomWidgetBuilder.buildText('PDA NO', dSize),
                             Spacer(),
                             Container(
-                              width: dSize.width * 0.4,
-                              decoration: BoxDecoration(
-                                border: Border(
-                                    bottom: BorderSide(
-                                        color: Color(0xFF00B0BD), width: 2)),
-                              ),
+                              width: dSize.width * 0.5,
                               child: TextFormField(
                                 controller: noController,
                                 decoration: InputDecoration(
+                                  enabledBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(color: Color(0xFF00B0BD)),
+                                  ),
                                   contentPadding: EdgeInsets.all(
                                       dSize.width <= 400
                                           ? dSize.height * 0.009
                                           : 12),
                                   isDense: true,
-                                  border: InputBorder.none,
                                 ),
+                                validator: (val){
+                                  if (val!.isEmpty) {
+                                    return 'please enter PDA NO';
+                                  }
+                                },
                               ),
                             ),
                           ],
@@ -114,22 +118,25 @@ class _AdministratorState extends State<Administrator> {
                             CustomWidgetBuilder.buildText('PDA NAME', dSize),
                             Spacer(),
                             Container(
-                              width: dSize.width * 0.4,
-                              decoration: BoxDecoration(
-                                border: Border(
-                                    bottom: BorderSide(
-                                        color: Color(0xFF00B0BD), width: 2)),
-                              ),
+                              width: dSize.width * 0.5,
+
                               child: TextFormField(
                                 controller: nameController,
                                 decoration: InputDecoration(
+                                  enabledBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(color: Color(0xFF00B0BD)),
+                                  ),
                                   contentPadding: EdgeInsets.all(
                                       dSize.width <= 400
                                           ? dSize.height * 0.009
                                           : 12),
                                   isDense: true,
-                                  border: InputBorder.none,
                                 ),
+                                validator: (val){
+                                  if (val!.isEmpty) {
+                                    return 'please enter PDA NAME';
+                                  }
+                                },
                               ),
                             ),
                           ],
@@ -138,14 +145,14 @@ class _AdministratorState extends State<Administrator> {
                           height: dSize.height * 0.035,
                         ),
                         ElevatedButton(
-                          child: Text(
+                          child: _isLoading ? CircularProgressIndicator() : Text(
                             'DONE',
                             style: TextStyle(
                                 fontSize: dSize.height <= 500
                                     ? dSize.height * 0.027
                                     : 13.75),
                           ),
-                          onPressed: () => {getTransaction()},
+                          onPressed: () => {_submit()},
                           style: ElevatedButton.styleFrom(
                               primary: const Color(0xFFFFA227),
                               textStyle: const TextStyle(fontSize: 20),
@@ -217,13 +224,70 @@ class _AdministratorState extends State<Administrator> {
   }
 
   getTransaction() async {
-    await settingService
-        .insert(Setting(name: nameController.text, pdaNo: noController.text));
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => AuthScreen(
-                  pdaNo: noController.text,
-                )));
+    try{
+    setState(() {
+      _isLoading = true;
+    });
+
+      await serverService.syncro(noController.text);
+      await settingService
+          .insert(Setting(name: nameController.text, pdaNo: noController.text)).whenComplete(() => setState(() {
+        _isLoading = false;
+      }));
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => AuthScreen(
+                pdaNo: noController.text,
+              )));
+    }catch(e){
+      _showErrorDialog('Please enter a valid PDA NO');
+    }
+  }
+
+  Future _submit() async{
+    if(!_formKey.currentState!.validate()){
+      return;
+    }
+    FocusScope.of(context).unfocus();
+    _formKey.currentState!.save();
+    getTransaction();
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('An error Occurred'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                setState(() {
+                  _isLoading = false;
+                });
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        ));
+  }
+
+  void _showDownloadDialog(int length) {
+    showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('An error Occurred'),
+          content: Text('message'),
+          actions: [
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        ));
   }
 }
