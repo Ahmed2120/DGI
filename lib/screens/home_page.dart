@@ -1,5 +1,7 @@
+import 'package:dgi/Services/TransactionService.dart';
+import 'package:dgi/enum.dart';
+import 'package:dgi/model/transaction.dart';
 import 'package:dgi/screens/about.dart';
-import 'package:dgi/screens/assets_capture_screen.dart';
 import 'package:dgi/screens/assets_verification_screen.dart';
 import 'package:dgi/screens/item_capture_screen.dart';
 import 'package:dgi/screens/settings.dart';
@@ -8,14 +10,35 @@ import 'package:flutter/material.dart';
 
 import 'assets_counter_screen.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  TransactionType transactionType = TransactionType.none;
+  final transactionService = TransactionService();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getTransaction();
+  }
+
+  getTransaction() async {
+    List<TransactionLookUp> transactions = await transactionService.retrieve();
+    setState(() {
+      if (transactions.isNotEmpty) {
+        transactionType = TransactionType.values[transactions[0].transactionType];
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final dsize = MediaQuery.of(context).size;
-    print('hhhi ${dsize.height * 0.0042}');
-    print('hhh ${dsize.width * 0.07}');
     return Scaffold(
       body: Stack(
         children: [
@@ -31,7 +54,8 @@ class HomePage extends StatelessWidget {
                     stops: [0, 1])),
           ),
           Padding(
-            padding: EdgeInsets.only(top:dsize.height * 0.041, left: 30, right: 30),
+            padding:
+                EdgeInsets.only(top: dsize.height * 0.041, left: 30, right: 30),
             child: Center(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -45,7 +69,9 @@ class HomePage extends StatelessWidget {
                         fontWeight: FontWeight.bold),
                   ),
                   Container(
-                    margin: EdgeInsets.only(top: dsize.height * 0.015, bottom: dsize.height * 0.013),
+                    margin: EdgeInsets.only(
+                        top: dsize.height * 0.015,
+                        bottom: dsize.height * 0.013),
                     width: double.infinity,
                     decoration: BoxDecoration(
                         color: Color(0xFFFFA227),
@@ -57,7 +83,8 @@ class HomePage extends StatelessWidget {
                           width: dsize.width <= 551 ? dsize.width * 0.3 : 160,
                         ),
                         Container(
-                          padding: EdgeInsets.symmetric(vertical: dsize.height * 0.008),
+                          padding: EdgeInsets.symmetric(
+                              vertical: dsize.height * 0.008),
                           width: double.infinity,
                           decoration: BoxDecoration(
                               color: const Color(0xFFFFFFFF).withOpacity(0.3),
@@ -65,7 +92,8 @@ class HomePage extends StatelessWidget {
                           child: Text(
                             'FIXED ASSET RACKING Software v 1.0.0',
                             style: TextStyle(
-                              fontSize: dsize.width <= 551 ? dsize.width * 0.034 : 19,
+                              fontSize:
+                                  dsize.width <= 551 ? dsize.width * 0.034 : 19,
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                             ),
@@ -85,27 +113,47 @@ class HomePage extends StatelessWidget {
                     child: GridView.count(
                       shrinkWrap: true,
                       scrollDirection: Axis.vertical,
-                      padding:
-                          EdgeInsets.symmetric(vertical: dsize.height * 0.0092, horizontal: dsize.width * 0.01),
+                      padding: EdgeInsets.symmetric(
+                          vertical: dsize.height * 0.0092,
+                          horizontal: dsize.width * 0.01),
                       children: [
                         InkWell(
                           child: buildColumn('ITEM CAPTURE', dsize, '1-15'),
-                          onTap: () => Navigator.of(context).push(
-                              MaterialPageRoute(
-                                  builder: (context) => ItemCapture())),
+                          onTap: () {
+                            if (transactionType == TransactionType.capture) {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => ItemCapture()));
+                            } else {
+                              _showErrorDialog(
+                                  "This transaction not assign to you ");
+                            }
+                          },
                         ),
                         InkWell(
                           child:
                               buildColumn('ASSET VERIFICATION', dsize, '1-12'),
-                          onTap: () => Navigator.of(context).push(
-                              MaterialPageRoute(
-                                  builder: (context) => AssetsVerification())),
+                          onTap: () {
+                            if (transactionType ==
+                                TransactionType.verification) {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => AssetsVerification()));
+                            } else {
+                              _showErrorDialog(
+                                  "This transaction not assign to you ");
+                            }
+                          },
                         ),
                         InkWell(
                           child: buildColumn('ASSET COUNTER', dsize, '1-13'),
-                          onTap: () => Navigator.of(context).push(
-                              MaterialPageRoute(
-                                  builder: (context) => AssetsCounter())),
+                          onTap: () {
+                            if (transactionType == TransactionType.inventory) {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => AssetsCounter()));
+                            } else {
+                              _showErrorDialog(
+                                  "This transaction not assign to you ");
+                            }
+                          },
                         ),
                         InkWell(
                           child: buildColumn('ABOUT US', dsize, '0-19'),
@@ -121,9 +169,10 @@ class HomePage extends StatelessWidget {
                         ),
                       ],
                       crossAxisCount: 2,
-                        childAspectRatio: (dsize.width * 0.009) / (dsize.height * 0.00455),
-                        crossAxisSpacing: dsize.width * 0.009,
-                        mainAxisSpacing: dsize.height * 0.0227,
+                      childAspectRatio:
+                          (dsize.width * 0.009) / (dsize.height * 0.00455),
+                      crossAxisSpacing: dsize.width * 0.009,
+                      mainAxisSpacing: dsize.height * 0.0227,
                       // ),
                     ),
                   ),
@@ -154,9 +203,14 @@ class HomePage extends StatelessWidget {
           decoration: BoxDecoration(
               color: const Color(0xFFFFFFFF).withOpacity(0.3),
               borderRadius: BorderRadius.circular(20)),
-          child: Image.asset('assets/icons/$img.png', height: dsize.height * 0.152,),
+          child: Image.asset(
+            'assets/icons/$img.png',
+            height: dsize.height * 0.152,
+          ),
         ),
-        SizedBox(height: dsize.height * 0.0044,),//2
+        SizedBox(
+          height: dsize.height * 0.0044,
+        ), //2
         Text(
           title,
           textAlign: TextAlign.center,
@@ -164,5 +218,22 @@ class HomePage extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+              title: const Text('An error Occurred'),
+              content: Text(message),
+              actions: [
+                TextButton(
+                  child: const Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            ));
   }
 }
