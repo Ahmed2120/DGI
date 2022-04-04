@@ -27,15 +27,15 @@ class AssetsCapture extends StatefulWidget {
 
 class _AssetsCaptureState extends State<AssetsCapture> {
   String? category;
-  String?mainCategory;
-  String?item;
+  String? mainCategory;
+  String? item;
   String? imagePath;
 
   List<Category> categories = [];
-  List<MainCategory> mainCategories=[];
-  List<Item> items=[];
+  List<MainCategory> mainCategories = [];
+  List<Item> items = [];
   List<Category> allCategories = [];
-  List<Item> allItems=[];
+  List<Item> allItems = [];
 
   var descriptionController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey();
@@ -54,23 +54,32 @@ class _AssetsCaptureState extends State<AssetsCapture> {
     initData();
     getItems();
   }
-  changeCategory(value){
+
+  changeCategory(value) {
     setState(() {
       category = value;
-      Category selected = categories.firstWhere((element) => element.name==category);
-      items = allItems.where((element) => element.categoryId==selected.id).toList();
+      Category selected =
+          categories.firstWhere((element) => element.name == category);
+      items = allItems
+          .where((element) => element.categoryId == selected.id)
+          .toList();
       item = null;
     });
   }
-  changeMainCategory(value){
+
+  changeMainCategory(value) {
     setState(() {
       mainCategory = value;
-      MainCategory selected = mainCategories.firstWhere((element) => element.name==mainCategory);
-      categories = allCategories.where((element) => element.mainCategoryId==selected.id).toList();
+      MainCategory selected =
+          mainCategories.firstWhere((element) => element.name == mainCategory);
+      categories = allCategories
+          .where((element) => element.mainCategoryId == selected.id)
+          .toList();
       category = null;
     });
   }
-  changeItem(value){
+
+  changeItem(value) {
     setState(() {
       item = value;
     });
@@ -153,15 +162,29 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      dropdownMenu('MAIN CATEGORY', dSize,
-                          mainCategories.map((e) => e.name).toList(),changeMainCategory,mainCategory),
-                      if(mainCategory != null)
-                        dropdownMenu('CATEGORY', dSize,
-                            categories.map((e) => e.name).toList(),changeCategory,category),
-                      if(category != null)
-                        dropdownMenu('ITEM', dSize,
-                            items.map((e) => e.name).toList(),changeItem,item),
-                      SizedBox(height:dSize.height * 0.01 ,),
+                      dropdownMenu(
+                          'MAIN CATEGORY',
+                          dSize,
+                          mainCategories.map((e) => e.name).toList(),
+                          changeMainCategory,
+                          mainCategory),
+                      if (mainCategory != null)
+                        dropdownMenu(
+                            'CATEGORY',
+                            dSize,
+                            categories.map((e) => e.name).toList(),
+                            changeCategory,
+                            category),
+                      if (category != null)
+                        dropdownMenu(
+                            'ITEM',
+                            dSize,
+                            items.map((e) => e.name).toList(),
+                            changeItem,
+                            item),
+                      SizedBox(
+                        height: dSize.height * 0.01,
+                      ),
                       Row(
                         children: [
                           CustomWidgetBuilder.buildText('ITEM DESC', dSize),
@@ -171,9 +194,16 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                             child: TextFormField(
                               controller: descriptionController,
                               decoration: InputDecoration(
-                                enabledBorder: OutlineInputBorder( borderSide: BorderSide(color: Color(0xFF00B0BD), width: 2)),
-                                focusedBorder: OutlineInputBorder( borderSide: BorderSide(color: Color(0xFF00B0BD), width: 2)),
-                                contentPadding: EdgeInsets.all(dSize.height <= 430 ? dSize.height * 0.009 : 7),
+                                enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Color(0xFF00B0BD), width: 2)),
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Color(0xFF00B0BD), width: 2)),
+                                contentPadding: EdgeInsets.all(
+                                    dSize.height <= 430
+                                        ? dSize.height * 0.009
+                                        : 7),
                                 isDense: true,
                                 border: InputBorder.none,
                               ),
@@ -202,7 +232,10 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                                     backgroundColor: Color(0xFFFFA227),
                                     foregroundColor: Colors.white,
                                     radius: 10,
-                                    child: Icon(Icons.remove, size: 20,),
+                                    child: Icon(
+                                      Icons.remove,
+                                      size: 20,
+                                    ),
                                   ),
                                 ),
                                 SizedBox(
@@ -215,9 +248,9 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                                   decoration: BoxDecoration(
                                       border: Border.all(
                                           color: const Color(0xFF00B0BD),
-                                          width: dSize.height >= 430 ? 1.5 : 0.5),
-                                      borderRadius:
-                                          BorderRadius.circular(15)),
+                                          width:
+                                              dSize.height >= 430 ? 1.5 : 0.5),
+                                      borderRadius: BorderRadius.circular(15)),
                                   child: Text(
                                     quantity.toString(),
                                     style: TextStyle(
@@ -254,16 +287,17 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                           InkWell(
                             child: SizedBox(
                               width: dSize.width * 0.5,
-                              child: imagePath == null ?
-                              Image.asset(
-                                'assets/icons/0-16.jpg',
-                                height: dSize.height * 0.055,
-                                alignment: Alignment.centerLeft,
-                              ) : Image.file(
-                                File(imagePath!),
-                                height: dSize.height * 0.055,
-                                alignment: Alignment.bottomLeft,
-                              ),
+                              child: imagePath == null
+                                  ? Image.asset(
+                                      'assets/icons/0-16.jpg',
+                                      height: dSize.height * 0.055,
+                                      alignment: Alignment.centerLeft,
+                                    )
+                                  : Image.file(
+                                      File(imagePath!),
+                                      height: dSize.height * 0.055,
+                                      alignment: Alignment.bottomLeft,
+                                    ),
                             ),
                             onTap: () async {
                               _showCamera();
@@ -281,8 +315,10 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                   children: [
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
-                      height: dSize.height < 600 ? dSize.height * 0.36 : dSize.height * 0.39,
-                      child:ClipRRect(
+                      height: dSize.height < 600
+                          ? dSize.height * 0.36
+                          : dSize.height * 0.39,
+                      child: ClipRRect(
                         borderRadius: BorderRadius.circular(12),
                         child: ListView(
                           children: [
@@ -299,7 +335,8 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                       child: Text(
                         'ITEM TOTAL     ${captureDetails.length}',
                         style: TextStyle(
-                          fontSize: dSize.width <= 500 ? dSize.width * 0.02 : 12,
+                            fontSize:
+                                dSize.width <= 500 ? dSize.width * 0.02 : 12,
                             color: Color(0xFF0F6671),
                             fontWeight: FontWeight.bold),
                       ),
@@ -376,35 +413,30 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   }
 
   void saveItem() async {
-    if(descriptionController.text.isEmpty || imagePath == null || item == null)
+    if (descriptionController.text.isEmpty || imagePath == null || item == null)
       _showErrorDialog('Fill in the empty fields');
-    else{
-      bool itemExist = false;
-      captureDetails.forEach((element) {if(element.itemId == items.firstWhere((element) => element.name == item).id) itemExist = true;});
-      if(itemExist) {
-        _showErrorDialog('Item Already Exist');
-      }else{
-    File file = File(imagePath!);
-    final Uint8List bytes = file.readAsBytesSync();
-    String base64Image = base64Encode(bytes);
-    String description = descriptionController.text;
-    int? itemId =
-        items.firstWhere((element) => element.name == item).id;
-    captureDetailsService.insert(CaptureDetails(
-      assetLocationId: widget.assetLocationId,
-      itemId: itemId,
-      description: description,
-      image: base64Image,
-      quantity: quantity,
-    ));
-    getItems();
-    resetForm();
-    // delete file to avoid cash overload
-    try {
-      file.deleteSync();
-    }catch(ex){
-      print(ex);
-    }}}
+    else {
+      File file = File(imagePath!);
+      final Uint8List bytes = file.readAsBytesSync();
+      String base64Image = base64Encode(bytes);
+      String description = descriptionController.text;
+      int? itemId = items.firstWhere((element) => element.name == item).id;
+      captureDetailsService.insert(CaptureDetails(
+        assetLocationId: widget.assetLocationId,
+        itemId: itemId,
+        description: description,
+        image: base64Image,
+        quantity: quantity,
+      ));
+      getItems();
+      resetForm();
+      // delete file to avoid cash overload
+      try {
+        file.deleteSync();
+      } catch (ex) {
+        print(ex);
+      }
+    }
   }
 
   void getItems() async {
@@ -418,15 +450,18 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   List<TableRow> _getListings() {
     List<TableRow> listings = <TableRow>[];
     int i = 0;
-      listings.add(
-        CustomWidgetBuilder.buildRow(['No', 'TYPE', 'DESC', 'QNT', 'PHOTO'], isHeader: true),
-      );
+    listings.add(
+      CustomWidgetBuilder.buildRow(['No', 'TYPE', 'DESC', 'QNT', 'PHOTO'],
+          isHeader: true),
+    );
     for (i = 0; i < captureDetails.length; i++) {
       listings.add(
         CustomWidgetBuilder.buildRow(
           [
             i + 1,
-            allItems.firstWhere((element) => element.id==captureDetails[i].itemId).name,
+            allItems
+                .firstWhere((element) => element.id == captureDetails[i].itemId)
+                .name,
             captureDetails[i].description,
             captureDetails[i].quantity.toString(),
             Image.memory(
@@ -441,7 +476,8 @@ class _AssetsCaptureState extends State<AssetsCapture> {
     return listings;
   }
 
-  dropdownMenu(String title, Size dSize, List<String> values,Function onChange,String? value) {
+  dropdownMenu(String title, Size dSize, List<String> values, Function onChange,
+      String? value) {
     return Row(
       children: [
         CustomWidgetBuilder.buildText(title, dSize),
@@ -453,28 +489,25 @@ class _AssetsCaptureState extends State<AssetsCapture> {
           width: dSize.width * 0.5,
           child: DropdownButtonHideUnderline(
             child: DropdownButton<String>(
-              value: value,
-              iconSize: 20,
-              icon: const Icon(
-                Icons.arrow_drop_down,
-                color: Color(0xFF00B0BD),
-              ),
-              isDense: true,
-              isExpanded: true,
-              items: values.map((String item) {
-                return DropdownMenuItem<String>(
-                  value: item,
-                  child: Text(
-                    item,
-                    style:
-                        const TextStyle(color: Color(0xFF0F6671), fontSize: 15),
-                  ),
-                );
-              }).toList(),
-              onChanged: (val)=>{
-                onChange(val)
-              }
-            ),
+                value: value,
+                iconSize: 20,
+                icon: const Icon(
+                  Icons.arrow_drop_down,
+                  color: Color(0xFF00B0BD),
+                ),
+                isDense: true,
+                isExpanded: true,
+                items: values.map((String item) {
+                  return DropdownMenuItem<String>(
+                    value: item,
+                    child: Text(
+                      item,
+                      style: const TextStyle(
+                          color: Color(0xFF0F6671), fontSize: 15),
+                    ),
+                  );
+                }).toList(),
+                onChanged: (val) => {onChange(val)}),
           ),
         ),
       ],
@@ -492,33 +525,32 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   }
 
   void resetForm() {
-    quantity =1;
-    imagePath=null;
-    descriptionController.text="";
+    quantity = 1;
+    imagePath = null;
+    descriptionController.text = "";
   }
 
   void _showErrorDialog(String message) {
     showDialog(
         context: context,
         builder: (ctx) => AlertDialog(
-          title: const Text('An error Occurred'),
-          content: Text(message),
-          actions: [
-            TextButton(
-              child: const Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            )
-          ],
-        ));
+              title: const Text('An error Occurred'),
+              content: Text(message),
+              actions: [
+                TextButton(
+                  child: const Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            ));
   }
 
-  void initData()async {
+  void initData() async {
     mainCategories = await mainCategoryService.retrieve();
     allCategories = await categoryService.retrieve();
     allItems = await itemService.retrieve();
-    setState(() {
-    });
+    setState(() {});
   }
 }
