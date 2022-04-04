@@ -378,6 +378,11 @@ class _AssetsCaptureState extends State<AssetsCapture> {
     if(descriptionController.text.isEmpty || imagePath == null)
       _showErrorDialog('Fill in the empty fields');
     else{
+      bool itemExist = false;
+      captureDetails.forEach((element) {if(element.itemId == items.firstWhere((element) => element.name == item).id) itemExist = true;});
+      if(itemExist) {
+        _showErrorDialog('Item Already Exist');
+      }else{
     File file = File(imagePath!);
     final Uint8List bytes = file.readAsBytesSync();
     String base64Image = base64Encode(bytes);
@@ -398,7 +403,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
       file.deleteSync();
     }catch(ex){
       print(ex);
-    }}
+    }}}
   }
 
   void getItems() async {
