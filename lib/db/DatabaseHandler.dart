@@ -14,7 +14,7 @@ class DatabaseHandler {
         batch.execute("CREATE TABLE sectionType(Id INTEGER PRIMARY KEY , Name TEXT ,floorId INTEGER)");
         batch.execute("CREATE TABLE area(Id INTEGER PRIMARY KEY , Name TEXT)");
         batch.execute("CREATE TABLE transactionTable(Id INTEGER PRIMARY KEY ,TransactionType INTEGER,TransActionTypeName TEXT)");
-        batch.execute("CREATE TABLE mainCategory(id INTEGER PRIMARY KEY , Name TEXT NOT NULL)");
+        batch.execute("CREATE TABLE mainCategory(Id INTEGER PRIMARY KEY , Name TEXT NOT NULL)");
         batch.execute("CREATE TABLE city(Id INTEGER PRIMARY KEY , Name TEXT NOT NULL)");
         batch.execute("CREATE TABLE department(Id INTEGER PRIMARY KEY , Name TEXT NOT NULL)");
         batch.execute("CREATE TABLE country(Id INTEGER PRIMARY KEY, Name TEXT NOT NULL)");

@@ -59,8 +59,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
       category = value;
       Category selected = categories.firstWhere((element) => element.name==category);
       items = allItems.where((element) => element.categoryId==selected.id).toList();
-      if(items.isNotEmpty)
-      changeItem(items[0].name);
+      item = null;
     });
   }
   changeMainCategory(value){
@@ -68,7 +67,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
       mainCategory = value;
       MainCategory selected = mainCategories.firstWhere((element) => element.name==mainCategory);
       categories = allCategories.where((element) => element.mainCategoryId==selected.id).toList();
-      changeCategory(categories[0].name);
+      category = null;
     });
   }
   changeItem(value){
@@ -156,10 +155,12 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                     children: [
                       dropdownMenu('MAIN CATEGORY', dSize,
                           mainCategories.map((e) => e.name).toList(),changeMainCategory,mainCategory),
-                      dropdownMenu('CATEGORY', dSize,
-                          categories.map((e) => e.name).toList(),changeCategory,category),
-                      dropdownMenu('ITEM', dSize,
-                          items.map((e) => e.name).toList(),changeItem,item),
+                      if(mainCategory != null)
+                        dropdownMenu('CATEGORY', dSize,
+                            categories.map((e) => e.name).toList(),changeCategory,category),
+                      if(category != null)
+                        dropdownMenu('ITEM', dSize,
+                            items.map((e) => e.name).toList(),changeItem,item),
                       SizedBox(height:dSize.height * 0.01 ,),
                       Row(
                         children: [
@@ -375,7 +376,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   }
 
   void saveItem() async {
-    if(descriptionController.text.isEmpty || imagePath == null)
+    if(descriptionController.text.isEmpty || imagePath == null || item == null)
       _showErrorDialog('Fill in the empty fields');
     else{
       bool itemExist = false;
@@ -518,11 +519,6 @@ class _AssetsCaptureState extends State<AssetsCapture> {
     allCategories = await categoryService.retrieve();
     allItems = await itemService.retrieve();
     setState(() {
-      mainCategory = mainCategories[0].name;
-      categories = allCategories.where((element) => element.mainCategoryId==mainCategories[0].id).toList();
-      category = categories[0].name;
-      items = allItems.where((element) => element.categoryId==categories[0].id).toList();
-      item = items[0].name;
     });
   }
 }

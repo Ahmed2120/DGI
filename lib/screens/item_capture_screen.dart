@@ -31,8 +31,6 @@ class ItemCapture extends StatefulWidget {
 }
 
 class _ItemCaptureState extends State<ItemCapture> {
-  List<Category> categories = [];
-  List<MainCategory> mainCategories = [];
   List<City> cities = [];
   List<Country> countries = [];
   List<Floor> floors = [];
@@ -47,15 +45,10 @@ class _ItemCaptureState extends State<ItemCapture> {
   final areaService = AreaService();
   final departmentService = DepartmentService();
   final assetLocationService = AssetLocationService();
-  final categoryService = CategoryService();
-  final mainCategoryService = MainCategoryService();
   final sectionService = SectionTypeService();
-  String? category;
-  String? mainCategory;
   String? city;
   String? country;
   String? location;
-  MainCategory? _main;
   List<String> locations = [];
 
   @override
@@ -353,13 +346,6 @@ class _ItemCaptureState extends State<ItemCapture> {
     ));
   }
   initData() async{
-    // categories = await categoryService.retrieve();
-    // category = categories[0].name;
-    mainCategories = await mainCategoryService.retrieve();
-    mainCategory = mainCategories.isNotEmpty?mainCategories[0].name:"";
-    _main = mainCategories[0];
-    getCatByMainCat();
-    //countries = await countryService.retrieve();
     cities = await cityService.retrieve();
     countries = await countryService.retrieve();
     country = countries[0].name;
@@ -379,13 +365,6 @@ class _ItemCaptureState extends State<ItemCapture> {
     });
     setState(() {
 
-    });
-  }
-
-  getCatByMainCat()async{
-      await categoryService.retrieve().then((values) => categories = (values.where((e) => _main!.id == e.mainCategoryId).toList()));
-      category = categories[0].name;
-    setState((){
     });
   }
 
