@@ -11,6 +11,7 @@ import 'package:dgi/screens/item_capture_screen.dart';
 import 'package:dgi/screens/settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'assets_counter_screen.dart';
 
@@ -25,6 +26,7 @@ class _HomePageState extends State<HomePage> {
   final transactionService = TransactionService();
   final serverService = ServerService();
   final settingService = SettingService();
+  bool loader=false;
 
   @override
   void initState() {
@@ -46,7 +48,8 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final dsize = MediaQuery.of(context).size;
     return Scaffold(
-      body: Stack(
+      body:!loader?
+      Stack(
         children: [
           Container(
             decoration: const BoxDecoration(
@@ -176,6 +179,9 @@ class _HomePageState extends State<HomePage> {
                         InkWell(
                           child: buildColumn('UPLOAD', dsize, ''),
                           onTap: ()async {
+                            setState(() {
+                              loader = true;
+                            });
                             bool success = await serverService.uploadData();
                             if(success){
                               await serverService.clearData();
@@ -184,9 +190,15 @@ class _HomePageState extends State<HomePage> {
                               if(settings.isNotEmpty) {
                                 pdaNo = settings[0].pdaNo;
                               }
+                              setState(() {
+                                loader = false;
+                              });
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => AuthScreen(pdaNo: pdaNo)));
                             }else{
+                              setState(() {
+                                loader = false;
+                              });
                               _showErrorDialog("fail uploading to server please try again");
                             }
                           },
@@ -215,7 +227,13 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ],
-      ),
+      ):buildSpanner(),
+    );
+  }
+  buildSpanner(){
+    return SpinKitRotatingCircle(
+      color: Colors.orangeAccent,
+      size: 50.0,
     );
   }
 
