@@ -426,7 +426,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
         CustomWidgetBuilder.buildRow(
           [
             i + 1,
-            items.firstWhere((element) => element.id==captureDetails[i].itemId).name,
+            allItems.firstWhere((element) => element.id==captureDetails[i].itemId).name,
             captureDetails[i].description,
             captureDetails[i].quantity.toString(),
             Image.memory(
