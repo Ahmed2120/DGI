@@ -239,7 +239,7 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                             height: dSize.height * 0.01,
                           ),
                           CustomWidgetBuilder.buildTextFormField(dSize, 'AREA',
-                              areas.isNotEmpty ? areas[0].name : 'dump'),
+                              areas.isNotEmpty ? areas[0].name : 'dump',false),
                           SizedBox(
                             height: dSize.height * 0.01,
                           ),
@@ -303,7 +303,7 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                             CustomWidgetBuilder.buildTextFormField(
                                 dSize,
                                 'FLOOR NO',
-                                floors.isNotEmpty ? floors[0].name : '0'),
+                                floors.isNotEmpty ? floors[0].name : '0',false),
                           SizedBox(
                             height: dSize.height * 0.01,
                           ),
@@ -311,7 +311,7 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                             CustomWidgetBuilder.buildTextFormField(
                                 dSize,
                                 'SECTION NO',
-                                sections.isNotEmpty ? sections[0].name : '0'),
+                                sections.isNotEmpty ? sections[0].name : '0',false),
                           SizedBox(
                             height: dSize.height * 0.01,
                           ),
@@ -319,7 +319,7 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                             CustomWidgetBuilder.buildTextFormField(
                                 dSize,
                                 'DEPARTMENT',
-                                departments.isNotEmpty ? departments[0].name : '0'),
+                                departments.isNotEmpty ? departments[0].name : '0',false),
                           SizedBox(
                             height: dSize.height * 0.01,
                           ),

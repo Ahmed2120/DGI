@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class CustomWidgetBuilder{
 
-  static buildTextFormField(Size dSize,String title,String text){
+  static buildTextFormField(Size dSize,String title,String text,bool enabled){
     return Row(
       children: [
         buildText(title, dSize),
@@ -13,8 +13,10 @@ class CustomWidgetBuilder{
           child: TextFormField(
             controller: TextEditingController(text: text),
             decoration: InputDecoration(
+              enabled: enabled,
               focusedBorder: OutlineInputBorder( borderSide: BorderSide(color: Color(0xFF00B0BD), width: 2)),
               enabledBorder: OutlineInputBorder( borderSide: BorderSide(color: Color(0xFF00B0BD), width: 2)),
+              disabledBorder: OutlineInputBorder( borderSide: BorderSide(color: Color(0xFF00B0BD), width: 2)) ,
               contentPadding: EdgeInsets.all(dSize.width <= 400 ? dSize.height * 0.009 : 12),
               isDense: true,
               border: InputBorder.none,

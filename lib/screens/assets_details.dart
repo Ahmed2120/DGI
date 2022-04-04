@@ -199,11 +199,11 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                         SizedBox(
                           height: dSize.height * 0.01,
                         ),
-                        CustomWidgetBuilder.buildTextFormField(dSize, 'ASSET DESC',asset==null?"": asset!.description),
+                        CustomWidgetBuilder.buildTextFormField(dSize, 'ASSET DESC',asset==null?"": asset!.description,false),
                         SizedBox(
                           height: dSize.height * 0.01,
                         ),
-                        CustomWidgetBuilder.buildTextFormField(dSize, 'SERIAL NO',asset==null?"": asset!.serialnumber),
+                        CustomWidgetBuilder.buildTextFormField(dSize, 'SERIAL NO',asset==null?"": asset!.serialnumber,false),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [

@@ -220,7 +220,7 @@ class _AssetsCounterState extends State<AssetsCounter> {
                               ],
                             ),
                             SizedBox(height: dSize.height * 0.01,),
-                            CustomWidgetBuilder.buildTextFormField(dSize,'AREA',areas.isNotEmpty?areas[0].name:'area'),
+                            CustomWidgetBuilder.buildTextFormField(dSize,'AREA',areas.isNotEmpty?areas[0].name:'area',false),
                             SizedBox(height: dSize.height * 0.01,),
                             Row(
                               children: [
@@ -277,13 +277,13 @@ class _AssetsCounterState extends State<AssetsCounter> {
                             ),
                             SizedBox(height: dSize.height * 0.015,),
                             if(location == 'Office' || location == 'Building')
-                              CustomWidgetBuilder.buildTextFormField(dSize,'FLOOR NO',floors.isNotEmpty?areas[0].name:'2'),
+                              CustomWidgetBuilder.buildTextFormField(dSize,'FLOOR NO',floors.isNotEmpty?areas[0].name:'2',false),
                             SizedBox(height: dSize.height * 0.01,),
                             if(location == 'Office' || location == 'Building')
-                              CustomWidgetBuilder.buildTextFormField(dSize,'SECTION NO',sections.isNotEmpty?areas[0].name:'2'),
+                              CustomWidgetBuilder.buildTextFormField(dSize,'SECTION NO',sections.isNotEmpty?areas[0].name:'2',false),
                             SizedBox(height: dSize.height * 0.01,),
                             if(location == 'Office' || location == 'Store')
-                              CustomWidgetBuilder.buildTextFormField(dSize,'DEPARTMENT',departments.isNotEmpty?areas[0].name:'2'),
+                              CustomWidgetBuilder.buildTextFormField(dSize,'DEPARTMENT',departments.isNotEmpty?areas[0].name:'2',false),
                             SizedBox(height: dSize.height * 0.01,),
                           ],
                         ),

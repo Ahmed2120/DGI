@@ -207,7 +207,7 @@ class _AssetsCheckState extends State<AssetsCheck> {
                         CustomWidgetBuilder.buildTextFormField(
                             dSize,
                             'ASSET DESC',
-                            asset == null ? "" : asset!.description),
+                            asset == null ? "" : asset!.description,true),
                         SizedBox(
                           height: dSize.height * 0.01,
                         ),
