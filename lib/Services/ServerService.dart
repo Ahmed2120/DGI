@@ -137,7 +137,7 @@ class ServerService{
     List<TransactionLookUp> transactions = await transactionService.retrieve();
     List<CaptureDetailsRequest> captureDetailsList = captureDetails.map((e) =>
         CaptureDetailsRequest(quantity: e.quantity,image: e.image,description: e.description,id: e.id,
-            assetLocationId: e.assetLocationId,itemId: e.itemId,name: e.name,transactionId: transactions[0].id)).toList();
+            assetLocationId: e.assetLocationId,itemId: e.itemId,transactionId: transactions[0].id)).toList();
     CaptureDetailsList request = CaptureDetailsList(captureDetailsList: captureDetailsList);
     print(jsonEncode(request));
     final response = await http.post(
@@ -147,7 +147,8 @@ class ServerService{
       },
       body: jsonEncode(request)
     );
-    if(response.statusCode == 200) {
+    final responseJson = jsonDecode(response.body);
+    if(response.statusCode == 200 && responseJson["Succeeded"]) {
       return true;
     }
     return false;

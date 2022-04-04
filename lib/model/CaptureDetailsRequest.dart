@@ -1,6 +1,5 @@
 class CaptureDetailsRequest {
   final int? id;
-  final String? name;
   final int quantity;
   final String description;
   final String image;
@@ -9,7 +8,7 @@ class CaptureDetailsRequest {
   final int transactionId;
 
   CaptureDetailsRequest(
-      {this.id, this.name,
+      {this.id,
       required this.image,
       required this.assetLocationId,
       required this.description,
@@ -18,16 +17,15 @@ class CaptureDetailsRequest {
 
   CaptureDetailsRequest.fromJson(Map<String, dynamic> res)
       : id = res["Id"],
-        name = res["Name"],
         quantity = res['Quantity'],
         description = res['Description'],
-        image = res['Image'],
+        image = res['ItemImage'],
         assetLocationId = res['AssetLocationId'],
         itemId = res['ItemId'],
         transactionId = res['TransactionId'];
 
   Map<String, Object?> toJson() {
-    return {'Id': id, 'Name': name,'Image':image,'AssetLocationId':assetLocationId, 'ItemId':itemId,
+    return {'Id': id,'ItemImage':image,'AssetLocationId':assetLocationId, 'ItemId':itemId,
       'Description':description,'Quantity':quantity,'TransactionId':transactionId};
   }
 }

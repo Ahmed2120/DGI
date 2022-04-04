@@ -8,6 +8,6 @@ class CaptureDetailsList{
       {required this.captureDetailsList});
 
   Map<String, Object?> toJson() {
-    return {'Captures':jsonEncode(captureDetailsList)};
+    return {'Captures':captureDetailsList};
   }
 }
