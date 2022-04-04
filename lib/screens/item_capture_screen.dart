@@ -1,6 +1,7 @@
 import 'package:dgi/Services/SectionTypeService.dart';
 import 'package:dgi/Utility/CustomWidgetBuilder.dart';
 import 'package:dgi/Utility/header.dart';
+import 'package:dgi/model/country.dart';
 import 'package:dgi/model/sectionType.dart';
 import 'package:dgi/screens/assets_capture_screen.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,7 @@ class _ItemCaptureState extends State<ItemCapture> {
   List<Category> categories = [];
   List<MainCategory> mainCategories = [];
   List<City> cities = [];
+  List<Country> countries = [];
   List<Floor> floors = [];
   List<Department> departments=[];
   List<Area> areas =[];
@@ -51,6 +53,7 @@ class _ItemCaptureState extends State<ItemCapture> {
   String? category;
   String? mainCategory;
   String? city;
+  String? country;
   String? location;
   MainCategory? _main;
   List<String> locations = [];
@@ -86,10 +89,97 @@ class _ItemCaptureState extends State<ItemCapture> {
                           child: const Text('ASSET LOCATION INFORMATION', style:
                           TextStyle(fontSize: 13, color: Color(0xFF0F6671), fontWeight: FontWeight.bold),),
                         ),
+                        // Row(
+                        //   children: [
+                        //     CustomWidgetBuilder.buildText('Main CATEGORY', dSize),
+                        //     const Spacer(),
+                        //     Container(
+                        //       decoration: const BoxDecoration(
+                        //           border: Border(
+                        //               bottom: BorderSide(
+                        //                   color: Color(0xFF00B0BD), width: 2))),
+                        //       width: dSize.width * 0.5,
+                        //       child: DropdownButtonHideUnderline(
+                        //         child: DropdownButton<String>(
+                        //           value: mainCategory,
+                        //           iconSize: 20,
+                        //           icon: const Icon(
+                        //             Icons.arrow_drop_down,
+                        //             color: Color(0xFF00B0BD),
+                        //           ),
+                        //           isDense: true,
+                        //           isExpanded: true,
+                        //           items:
+                        //           mainCategories.map((e) => e.name).map((String item) {
+                        //             return DropdownMenuItem<String>(
+                        //               value: item,
+                        //               child: Text(
+                        //                 item,
+                        //                 style: const TextStyle(
+                        //                     color: Color(0xFF0F6671), fontSize: 15),
+                        //               ),
+                        //             );
+                        //           }).toList(),
+                        //           onChanged: (val) {
+                        //             setState(() {
+                        //               mainCategory = val;
+                        //               _main = mainCategories.firstWhere((e) => val == e.name);
+                        //               getCatByMainCat();
+                        //             });
+                        //             print(val);
+                        //           },
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
+                        // SizedBox(height: dSize.height * 0.01,),
+                        // Row(
+                        //   children: [
+                        //     CustomWidgetBuilder.buildText('CATEGORY', dSize),
+                        //     const Spacer(),
+                        //     Container(
+                        //       decoration: const BoxDecoration(
+                        //           border: Border(
+                        //               bottom: BorderSide(
+                        //                   color: Color(0xFF00B0BD), width: 2))),
+                        //       width: dSize.width * 0.5,
+                        //       child: DropdownButtonHideUnderline(
+                        //         child: DropdownButton<String>(
+                        //           value: category,
+                        //           iconSize: 20,
+                        //           icon: const Icon(
+                        //             Icons.arrow_drop_down,
+                        //             color: Color(0xFF00B0BD),
+                        //           ),
+                        //           isDense: true,
+                        //           isExpanded: true,
+                        //           items:
+                        //           categories.map((e) => e.name).map((String item) {
+                        //             return DropdownMenuItem<String>(
+                        //               value: item,
+                        //               child: Text(
+                        //                 item,
+                        //                 style: const TextStyle(
+                        //                     color: Color(0xFF0F6671), fontSize: 15),
+                        //               ),
+                        //             );
+                        //           }).toList(),
+                        //           onChanged: (val) {
+                        //             setState(() {
+                        //               category = val;
+                        //             });
+                        //             print(val);
+                        //           },
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
                         Row(
                           children: [
-                            CustomWidgetBuilder.buildText('Main CATEGORY', dSize),
-                            const Spacer(),
+                            CustomWidgetBuilder.buildText('COUNTRY', dSize),
+                            Spacer(),
                             Container(
                               decoration: const BoxDecoration(
                                   border: Border(
@@ -98,7 +188,7 @@ class _ItemCaptureState extends State<ItemCapture> {
                               width: dSize.width * 0.5,
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton<String>(
-                                  value: mainCategory,
+                                  value: country,
                                   iconSize: 20,
                                   icon: const Icon(
                                     Icons.arrow_drop_down,
@@ -107,7 +197,7 @@ class _ItemCaptureState extends State<ItemCapture> {
                                   isDense: true,
                                   isExpanded: true,
                                   items:
-                                  mainCategories.map((e) => e.name).map((String item) {
+                                  countries.map((e) => e.name).map((String item) {
                                     return DropdownMenuItem<String>(
                                       value: item,
                                       child: Text(
@@ -119,52 +209,7 @@ class _ItemCaptureState extends State<ItemCapture> {
                                   }).toList(),
                                   onChanged: (val) {
                                     setState(() {
-                                      mainCategory = val;
-                                      _main = mainCategories.firstWhere((e) => val == e.name);
-                                      getCatByMainCat();
-                                    });
-                                    print(val);
-                                  },
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: dSize.height * 0.01,),
-                        Row(
-                          children: [
-                            CustomWidgetBuilder.buildText('CATEGORY', dSize),
-                            const Spacer(),
-                            Container(
-                              decoration: const BoxDecoration(
-                                  border: Border(
-                                      bottom: BorderSide(
-                                          color: Color(0xFF00B0BD), width: 2))),
-                              width: dSize.width * 0.5,
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton<String>(
-                                  value: category,
-                                  iconSize: 20,
-                                  icon: const Icon(
-                                    Icons.arrow_drop_down,
-                                    color: Color(0xFF00B0BD),
-                                  ),
-                                  isDense: true,
-                                  isExpanded: true,
-                                  items:
-                                  categories.map((e) => e.name).map((String item) {
-                                    return DropdownMenuItem<String>(
-                                      value: item,
-                                      child: Text(
-                                        item,
-                                        style: const TextStyle(
-                                            color: Color(0xFF0F6671), fontSize: 15),
-                                      ),
-                                    );
-                                  }).toList(),
-                                  onChanged: (val) {
-                                    setState(() {
-                                      category = val;
+                                      country = val;
                                     });
                                     print(val);
                                   },
@@ -316,6 +361,8 @@ class _ItemCaptureState extends State<ItemCapture> {
     getCatByMainCat();
     //countries = await countryService.retrieve();
     cities = await cityService.retrieve();
+    countries = await countryService.retrieve();
+    country = countries[0].name;
     city = cities.isNotEmpty?cities[0].name:"";
     floors = await floorService.retrieve();
     departments = await departmentService.retrieve();

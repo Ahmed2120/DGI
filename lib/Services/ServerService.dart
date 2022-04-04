@@ -9,6 +9,7 @@ import 'package:dgi/Services/DepartmentService.dart';
 import 'package:dgi/Services/FloorService.dart';
 import 'package:dgi/Services/ItemService.dart';
 import 'package:dgi/Services/MainCategoryService.dart';
+import 'package:dgi/Services/SettingService.dart';
 import 'package:dgi/Services/TransactionService.dart';
 import 'package:dgi/Services/UserService.dart';
 import 'package:dgi/db/DatabaseHandler.dart';
@@ -19,6 +20,7 @@ import 'package:dgi/model/assetLocation.dart';
 import 'package:dgi/model/category.dart';
 import 'package:dgi/model/item.dart';
 import 'package:dgi/model/mainCategory.dart';
+import 'package:dgi/model/settings.dart';
 import 'package:dgi/model/transaction.dart';
 import 'package:dgi/model/transcationResponse.dart';
 import 'package:http/http.dart' as http;
@@ -26,6 +28,8 @@ import 'package:dgi/Utility/configration.dart';
 import 'package:dgi/model/country.dart';
 
 class ServerService{
+
+  SettingService settingService = SettingService();
 
   Future<List<Country>> getAllCountries() async{
     final response = await http
@@ -155,8 +159,10 @@ class ServerService{
   }
 
   clearData()async{
+    final pdaNo = await settingService.retrieve();
    final dataHandler = DatabaseHandler();
    await dataHandler.clearData();
+    await settingService.insert(Setting(name: pdaNo[0].name, pdaNo: pdaNo[0].pdaNo));
   }
 
 }

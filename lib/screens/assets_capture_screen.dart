@@ -59,6 +59,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
       category = value;
       Category selected = categories.firstWhere((element) => element.name==category);
       items = allItems.where((element) => element.categoryId==selected.id).toList();
+      if(items.isNotEmpty)
       changeItem(items[0].name);
     });
   }

@@ -1,3 +1,4 @@
+import 'package:dgi/authentication.dart';
 import 'package:flutter/material.dart';
 
 class Footer extends StatelessWidget {
@@ -26,7 +27,7 @@ class Footer extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'USER NAME : MO GAMAL',
+              'USER NAME : ${Authentication.userName}',
               style: TextStyle(
                   color: Colors.white, fontSize: dSize.width <= 551 ? dSize.width * 0.03 : 15.36),
             ),
