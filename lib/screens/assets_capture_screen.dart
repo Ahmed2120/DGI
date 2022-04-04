@@ -413,9 +413,9 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   }
 
   void saveItem() async {
-    if (descriptionController.text.isEmpty || imagePath == null || item == null)
+    if (descriptionController.text.isEmpty || imagePath == null || item == null) {
       _showErrorDialog('Fill in the empty fields');
-    else {
+    } else {
       File file = File(imagePath!);
       final Uint8List bytes = file.readAsBytesSync();
       String base64Image = base64Encode(bytes);

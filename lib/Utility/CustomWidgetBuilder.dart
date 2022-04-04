@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class CustomWidgetBuilder{
 
@@ -84,4 +85,14 @@ class CustomWidgetBuilder{
     ))
         .toList(),
   );
+
+  static buildSpanner(){
+    return Container(
+      color: const Color(0xFFFFA227),
+      child: const SpinKitFadingCube(
+        color: Colors.white,
+        size: 70.0,
+      ),
+    );
+  }
 }

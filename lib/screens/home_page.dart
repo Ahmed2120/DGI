@@ -1,6 +1,7 @@
 import 'package:dgi/Services/ServerService.dart';
 import 'package:dgi/Services/SettingService.dart';
 import 'package:dgi/Services/TransactionService.dart';
+import 'package:dgi/Utility/CustomWidgetBuilder.dart';
 import 'package:dgi/enum.dart';
 import 'package:dgi/model/settings.dart';
 import 'package:dgi/model/transaction.dart';
@@ -227,15 +228,10 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ],
-      ):buildSpanner(),
+      ):CustomWidgetBuilder.buildSpanner(),
     );
   }
-  buildSpanner(){
-    return SpinKitRotatingCircle(
-      color: Colors.orangeAccent,
-      size: 50.0,
-    );
-  }
+
 
   Column buildColumn(String title, dsize, String img) {
     return Column(

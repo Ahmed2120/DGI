@@ -46,7 +46,7 @@ class _AdministratorState extends State<Administrator> {
   Widget build(BuildContext context) {
     final dSize = MediaQuery.of(context).size;
     return Scaffold(
-      body: SafeArea(
+      body: !_isLoading ? SafeArea(
         child: SingleChildScrollView(
           child: SizedBox(
             height: dSize.height,
@@ -119,7 +119,7 @@ class _AdministratorState extends State<Administrator> {
                                   contentPadding: EdgeInsets.all(
                                       dSize.width <= 400
                                           ? dSize.height * 0.009
-                                          : 12),
+                                          : 8),
                                   isDense: true,
                                 ),
                                 keyboardType: TextInputType.number,
@@ -151,7 +151,7 @@ class _AdministratorState extends State<Administrator> {
                                   contentPadding: EdgeInsets.all(
                                       dSize.width <= 400
                                           ? dSize.height * 0.009
-                                          : 12),
+                                          : 8),
                                   isDense: true,
                                 ),
                                 validator: (val){
@@ -231,7 +231,7 @@ class _AdministratorState extends State<Administrator> {
             ),
           ),
         ),
-      ),
+      ) : CustomWidgetBuilder.buildSpanner(),
     );
   }
 
@@ -263,6 +263,9 @@ class _AdministratorState extends State<Administrator> {
                 pdaNo: noController.text,
               )));
     }catch(e){
+      setState(() {
+        _isLoading = false;
+      });
       _showErrorDialog('Please enter a valid PDA NO');
     }
   }
