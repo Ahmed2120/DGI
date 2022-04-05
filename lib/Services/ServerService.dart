@@ -175,10 +175,8 @@ class ServerService{
   }
 
   clearData()async{
-    final pdaNo = await settingService.retrieve();
    final dataHandler = DatabaseHandler();
    await dataHandler.clearData();
-    await settingService.insert(Setting(name: pdaNo[0].name, pdaNo: pdaNo[0].pdaNo));
   }
 
 }

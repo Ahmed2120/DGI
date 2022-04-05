@@ -1,28 +1,8 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:dgi/Services/ServerService.dart';
 import 'package:dgi/Services/SettingService.dart';
 import 'package:dgi/model/settings.dart';
 import 'package:flutter/material.dart';
-import '../Services/AreaService.dart';
-import '../Services/AssetLocationService.dart';
-import '../Services/CategoryService.dart';
-import '../Services/CountryService.dart';
-import '../Services/DepartmentService.dart';
-import '../Services/FloorService.dart';
-import '../Services/ItemService.dart';
-import '../Services/MainCategoryService.dart';
-import '../Services/TransactionService.dart';
-import '../Services/UserService.dart';
 import '../Utility/CustomWidgetBuilder.dart';
-import '../Utility/configration.dart';
-import '../model/assetLocation.dart';
-import '../model/category.dart';
-import '../model/country.dart';
-import '../model/item.dart';
-import '../model/mainCategory.dart';
-import '../model/transaction.dart';
-import '../model/transcationResponse.dart';
 import 'auth_screen.dart';
 
 class Administrator extends StatefulWidget {
@@ -40,7 +20,6 @@ class _AdministratorState extends State<Administrator> {
   final serverService = ServerService();
 
   bool _isLoading = false;
-  double progress = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -118,7 +97,7 @@ class _AdministratorState extends State<Administrator> {
                                   ),
                                   contentPadding: EdgeInsets.all(
                                       dSize.width <= 400
-                                          ? dSize.height * 0.009
+                                          ? dSize.height * 0.007
                                           : 8),
                                   isDense: true,
                                 ),
@@ -150,7 +129,7 @@ class _AdministratorState extends State<Administrator> {
                                   ),
                                   contentPadding: EdgeInsets.all(
                                       dSize.width <= 400
-                                          ? dSize.height * 0.009
+                                          ? dSize.height * 0.007
                                           : 8),
                                   isDense: true,
                                 ),
@@ -167,7 +146,7 @@ class _AdministratorState extends State<Administrator> {
                           height: dSize.height * 0.035,
                         ),
                         ElevatedButton(
-                          child: _isLoading ? CircularProgressIndicator() : Text(
+                          child: Text(
                             'DONE',
                             style: TextStyle(
                                 fontSize: dSize.height <= 500
