@@ -21,7 +21,7 @@ class DatabaseHandler {
         batch.execute("CREATE TABLE floor(Id INTEGER PRIMARY KEY , Name TEXT NOT NULL)");
         batch.execute("CREATE TABLE item(Id INTEGER PRIMARY KEY , Name TEXT NOT NULL,CategoryId INTEGER)");
         batch.execute("CREATE TABLE users(Id INTEGER PRIMARY KEY , Name TEXT,UserName TEXT NOT NULL, HashedPassword TEXT NOT NULL, EmailAddress TEXT,Address TEXT)",);
-        batch.execute("CREATE TABLE assetLocation(Id INTEGER PRIMARY KEY , Name TEXT NOT NULL,BuildingAddress TEXT NOT NULL,BuildingName TEXT,BuildingNo TEXT,FloorId INTEGER NOT NULL,DepartmentId INTEGER NOT NULL,AreaId INTEGER NOT NULL,BusinessUnit TEXT ,SectionId INTEGER,LocationType INTEGER,LocationTypeName TEXT)",);
+        batch.execute("CREATE TABLE assetLocation(Id INTEGER PRIMARY KEY , Name TEXT,BuildingAddress TEXT,BuildingName TEXT,BuildingNo TEXT,FloorId INTEGER,DepartmentId INTEGER,AreaId INTEGER NOT NULL,BusinessUnit TEXT ,SectionId INTEGER,LocationType INTEGER,LocationTypeName TEXT)",);
         batch.execute("CREATE TABLE captureDetails(Id INTEGER PRIMARY KEY AUTOINCREMENT , Name TEXT,Image BLOB NOT NULL,ItemId  INTEGER NOT NULL,AssetLocationId INTEGER NOT NULL,Description TEXT NOT NULL,Quantity INTEGER NOT NULL)");
         batch.execute("CREATE TABLE asset(Id INTEGER PRIMARY KEY ,ItemId INTEGER,Barcode TEXT, Serialnumber TEXT,Image BLOB NOT NULL,BarcodeImage BLOB NOT NULL,AssetLocationId INTEGER NOT NULL,Description TEXT NOT NULL,isVerified BOOLEAN DEFAULT false,isCounted BOOLEAN DEFAULT false,correct BOOLEAN DEFAULT false)",);
         await batch.commit();

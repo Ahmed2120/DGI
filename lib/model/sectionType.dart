@@ -1,12 +1,12 @@
 class SectionType{
   final int? id;
   final String name;
-  final int floorId;
+  final int? floorId;
 
   SectionType(
       { this.id,
         required this.name,
-        required this.floorId});
+        this.floorId});
 
   SectionType.fromMap(Map<String, dynamic> res)
       : id = res["Id"],

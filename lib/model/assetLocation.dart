@@ -1,9 +1,9 @@
 class AssetLocation{
   final int id;
   final int areaId;
-  final String businessUnit;
+  final String? businessUnit;
   final int? departmentId;
-  final String name;
+  final String? name;
   final String? buildingName;
   final String? buildingAddress;
   final String? buildingNo;
@@ -14,15 +14,15 @@ class AssetLocation{
 
   AssetLocation(
       { required this.id,
-        required this.name,
+        this.name,
         this.buildingAddress,
         this.buildingName,
         this.buildingNo,
-        required this.businessUnit,
+        this.businessUnit,
         required this.areaId,
-        required this.departmentId,
-        required this.floorId,
-        required this.sectionId,
+        this.departmentId,
+        this.floorId,
+        this.sectionId,
         required this.locationTypeName,
         required this.locationType
       });

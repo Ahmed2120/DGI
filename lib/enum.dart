@@ -4,3 +4,10 @@ enum TransactionType{
   verification,
   inventory
 }
+
+enum LocationType{
+  none,
+  building,
+  store,
+  office
+}

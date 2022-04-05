@@ -9,17 +9,22 @@ import 'package:dgi/Services/DepartmentService.dart';
 import 'package:dgi/Services/FloorService.dart';
 import 'package:dgi/Services/ItemService.dart';
 import 'package:dgi/Services/MainCategoryService.dart';
+import 'package:dgi/Services/SectionTypeService.dart';
 import 'package:dgi/Services/SettingService.dart';
 import 'package:dgi/Services/TransactionService.dart';
 import 'package:dgi/Services/UserService.dart';
 import 'package:dgi/db/DatabaseHandler.dart';
+import 'package:dgi/enum.dart';
 import 'package:dgi/model/CaptuerDeatailsList.dart';
 import 'package:dgi/model/CaptureDetails.dart';
 import 'package:dgi/model/CaptureDetailsRequest.dart';
 import 'package:dgi/model/assetLocation.dart';
 import 'package:dgi/model/category.dart';
+import 'package:dgi/model/department.dart';
+import 'package:dgi/model/floor.dart';
 import 'package:dgi/model/item.dart';
 import 'package:dgi/model/mainCategory.dart';
+import 'package:dgi/model/sectionType.dart';
 import 'package:dgi/model/settings.dart';
 import 'package:dgi/model/transaction.dart';
 import 'package:dgi/model/transcationResponse.dart';
@@ -101,6 +106,7 @@ class ServerService{
     final itemService = ItemService();
     final mainCategoryService = MainCategoryService();
     final cityService = CityService();
+    final sectionService = SectionTypeService();
     TransactionResponse response = await getTransaction(pdaNo);
     List<Category> categories = await getAllCategories();
     List<MainCategory> mainCategories = await getAllMainCategories();
@@ -119,9 +125,19 @@ class ServerService{
         locationType:response.assetLocation.locationType,
         locationTypeName: response.assetLocation.locationTypeName));
     await userService.insert(response.user);
-    await floorService.insert(response.assetLocation.floor);
+    if(LocationType.values[response.assetLocation.locationType] == LocationType.building ){
+      await floorService.insert(Floor(name: response.assetLocation.floor!.name,id: response.assetLocation.floor!.id));
+      await sectionService.insert(SectionType(name: response.assetLocation.section!.name,id: response.assetLocation.section!.id));
+    }
+    else if(LocationType.values[response.assetLocation.locationType] == LocationType.store ){
+      await sectionService.insert(SectionType(name: response.assetLocation.section!.name,id: response.assetLocation.section!.id));
+    }
+    else if(LocationType.values[response.assetLocation.locationType] == LocationType.office ){
+      await departmentService.insert(Department(name:response.assetLocation.department!.name,id: response.assetLocation.department!.id));
+      await floorService.insert(Floor(name: response.assetLocation.floor!.name,id: response.assetLocation.floor!.id));
+      await sectionService.insert(SectionType(name: response.assetLocation.section!.name,id: response.assetLocation.section!.id));
+    }
     await areaService.insert(response.assetLocation.area);
-    await departmentService.insert(response.assetLocation.department);
     await transactionService.insert(TransactionLookUp(
         id: response.id,
         transactionType: response.transactionType,
