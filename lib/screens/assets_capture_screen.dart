@@ -8,6 +8,7 @@ import 'package:dgi/Services/ItemService.dart';
 import 'package:dgi/Services/MainCategoryService.dart';
 import 'package:dgi/Services/ServerService.dart';
 import 'package:dgi/Utility/footer.dart';
+import 'package:dgi/model/assetLocation.dart';
 import 'package:dgi/model/category.dart';
 import 'package:dgi/model/CaptureDetails.dart';
 import 'package:dgi/model/item.dart';
@@ -17,9 +18,12 @@ import 'package:flutter/material.dart';
 import '../Utility/CustomWidgetBuilder.dart';
 
 class AssetsCapture extends StatefulWidget {
-  final assetLocationId;
+  final AssetLocation assetLocation;
+  final int? departmentId;
+  final int? sectionId;
+  final int? floorId;
 
-  AssetsCapture({Key? key, required this.assetLocationId}) : super(key: key);
+  AssetsCapture({Key? key, required this.assetLocation,this.sectionId,this.floorId,this.departmentId}) : super(key: key);
 
   @override
   State<AssetsCapture> createState() => _AssetsCaptureState();
@@ -37,7 +41,8 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   List<Category> allCategories = [];
   List<Item> allItems = [];
 
-  var descriptionController = TextEditingController();
+  final  descriptionController = TextEditingController();
+  final serialNoController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey();
   final categoryService = CategoryService();
   final captureDetailsService = CaptureDetailsService();
@@ -52,7 +57,6 @@ class _AssetsCaptureState extends State<AssetsCapture> {
     // TODO: implement initState
     super.initState();
     initData();
-    getItems();
   }
 
   changeCategory(value) {
@@ -76,6 +80,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
           .where((element) => element.mainCategoryId == selected.id)
           .toList();
       category = null;
+      item = null;
     });
   }
 
@@ -165,21 +170,21 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                       dropdownMenu(
                           'MAIN CATEGORY',
                           dSize,
-                          mainCategories.map((e) => e.name).toList(),
+                          mainCategories.map((e) => e.name).toSet().toList(),
                           changeMainCategory,
                           mainCategory),
                       if (mainCategory != null)
                         dropdownMenu(
                             'CATEGORY',
                             dSize,
-                            categories.map((e) => e.name).toList(),
+                            categories.map((e) => e.name).toSet().toList(),
                             changeCategory,
                             category),
                       if (category != null)
                         dropdownMenu(
                             'ITEM',
                             dSize,
-                            items.map((e) => e.name).toList(),
+                            items.map((e) => e.name).toSet().toList(),
                             changeItem,
                             item),
                       SizedBox(
@@ -193,6 +198,32 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                             width: dSize.width * 0.5,
                             child: TextFormField(
                               controller: descriptionController,
+                              decoration: InputDecoration(
+                                enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Color(0xFF00B0BD), width: 2)),
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Color(0xFF00B0BD), width: 2)),
+                                contentPadding: EdgeInsets.all(
+                                    dSize.height <= 430
+                                        ? dSize.height * 0.009
+                                        : 7),
+                                isDense: true,
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          CustomWidgetBuilder.buildText('SERIAL NO', dSize),
+                          Spacer(),
+                          Container(
+                            width: dSize.width * 0.5,
+                            child: TextFormField(
+                              controller: serialNoController,
                               decoration: InputDecoration(
                                 enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
@@ -366,15 +397,6 @@ class _AssetsCaptureState extends State<AssetsCapture> {
     ));
   }
 
-  initMainCategories() async {
-    categoryService.retrieve().then((result) => {
-          setState(() {
-            categories = result;
-            category = categories[0].name;
-          })
-        });
-  }
-
   _showCamera() async {
     final cameras = await availableCameras();
     final camera = cameras.first;
@@ -413,16 +435,21 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   }
 
   void saveItem() async {
-    if (descriptionController.text.isEmpty || imagePath == null || item == null) {
-      _showErrorDialog('Fill in the empty fields');
+    if (descriptionController.text.isEmpty || imagePath == null || item == null || serialNoController.text.isEmpty) {
+      CustomWidgetBuilder.showMessageDialog(context,'Fill in the empty fields',true);
     } else {
       File file = File(imagePath!);
       final Uint8List bytes = file.readAsBytesSync();
       String base64Image = base64Encode(bytes);
       String description = descriptionController.text;
+      String serialNumber = serialNoController.text;
       int? itemId = items.firstWhere((element) => element.name == item).id;
       captureDetailsService.insert(CaptureDetails(
-        assetLocationId: widget.assetLocationId,
+        serialNumber: serialNumber,
+        sectionId: widget.sectionId,
+        floorId: widget.floorId,
+        departmentId: widget.departmentId,
+        assetLocationId: widget.assetLocation.id,
         itemId: itemId,
         description: description,
         image: base64Image,
@@ -528,29 +555,14 @@ class _AssetsCaptureState extends State<AssetsCapture> {
     quantity = 1;
     imagePath = null;
     descriptionController.text = "";
-  }
-
-  void _showErrorDialog(String message) {
-    showDialog(
-        context: context,
-        builder: (ctx) => AlertDialog(
-              title: const Text('An error Occurred'),
-              content: Text(message),
-              actions: [
-                TextButton(
-                  child: const Text('OK'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                )
-              ],
-            ));
+    serialNoController.text="";
   }
 
   void initData() async {
     mainCategories = await mainCategoryService.retrieve();
     allCategories = await categoryService.retrieve();
     allItems = await itemService.retrieve();
+    getItems();
     setState(() {});
   }
 }

@@ -27,6 +27,24 @@ class CustomWidgetBuilder{
       ],
     );
   }
+  static void showMessageDialog(BuildContext context,String message,bool dismissible,
+      {String title = 'An error Occurred'}) {
+    showDialog(
+        context: context,
+        barrierDismissible: dismissible,
+        builder: (ctx) => AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: [
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        ));
+  }
 
   static Text buildText(String title, dSize) {
     return Text(

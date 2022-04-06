@@ -236,25 +236,43 @@ class _AdministratorState extends State<Administrator> {
       setState(() {
         _isLoading = true;
       });
-
-      await serverService.syncro(noController.text);
-      await settingService
-          .insert(Setting(name: nameController.text, pdaNo: noController.text))
-          .whenComplete(() => setState(() {
-                _isLoading = false;
-              }));
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => AuthScreen(
-                    pdaNo: noController.text,
-                  )));
+      String response = await serverService.syncro(noController.text);
+      if(response == "Success"){
+        await settingService
+            .insert(
+            Setting(name: nameController.text, pdaNo: noController.text))
+            .whenComplete(() =>
+            setState(() {
+              _isLoading = false;
+            }));
+        showSuccessDialog(noController.text);
+      }else {
+        _showErrorDialog(response);
+      }
     } catch (e) {
       setState(() {
         _isLoading = false;
       });
       _showErrorDialog('Please enter a valid PDA NO');
     }
+  }
+  void showSuccessDialog(String pdaNo) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (ctx) => AlertDialog(
+          title: const Text("Synchronization done successfully"),
+          content: const Text('Please Log in to start your transaction'),
+          actions: [
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => AuthScreen(pdaNo: pdaNo)));
+              },
+            )
+          ],
+        ));
   }
 
   Future _submit() async {

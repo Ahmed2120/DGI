@@ -14,7 +14,6 @@ import 'package:dgi/Services/SettingService.dart';
 import 'package:dgi/Services/TransactionService.dart';
 import 'package:dgi/Services/UserService.dart';
 import 'package:dgi/db/DatabaseHandler.dart';
-import 'package:dgi/enum.dart';
 import 'package:dgi/model/CaptuerDeatailsList.dart';
 import 'package:dgi/model/CaptureDetails.dart';
 import 'package:dgi/model/CaptureDetailsRequest.dart';
@@ -25,7 +24,6 @@ import 'package:dgi/model/floor.dart';
 import 'package:dgi/model/item.dart';
 import 'package:dgi/model/mainCategory.dart';
 import 'package:dgi/model/sectionType.dart';
-import 'package:dgi/model/settings.dart';
 import 'package:dgi/model/transaction.dart';
 import 'package:dgi/model/transcationResponse.dart';
 import 'package:http/http.dart' as http;
@@ -80,7 +78,40 @@ class ServerService{
     }
   }
 
-  Future<TransactionResponse> getTransaction(String pdaNo) async{
+  Future<List<Department>> getAllDepartments() async{
+    final response = await http
+        .get(Uri.parse(MyConfig.DEPARTMENT_API));
+    if (response.statusCode == 200) {
+      final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
+      return parsed.map<Department>((json) => Department.fromMap(json)).toList();
+    } else {
+      throw Exception('Failed to load department');
+    }
+  }
+
+  Future<List<SectionType>> getAllSections() async{
+    final response = await http
+        .get(Uri.parse(MyConfig.SECTION_API));
+    if (response.statusCode == 200) {
+      final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
+      return parsed.map<SectionType>((json) => SectionType.fromMap(json)).toList();
+    } else {
+      throw Exception('Failed to load sections');
+    }
+  }
+
+  Future<List<Floor>> getAllFloors() async{
+    final response = await http
+        .get(Uri.parse(MyConfig.FLOOR_API));
+    if (response.statusCode == 200) {
+      final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
+      return parsed.map<Floor>((json) => Floor.fromMap(json)).toList();
+    } else {
+      throw Exception('Failed to load floors');
+    }
+  }
+
+  Future<TransactionResponse?> getTransaction(String pdaNo) async{
     final queryParameters = {
       'PDANo': pdaNo,
     };
@@ -88,6 +119,10 @@ class ServerService{
     final uri = MyConfig.TRANSACTION_API + '?' + queryString;
     final response = await http.get(Uri.parse(uri));
     if (response.statusCode == 200) {
+      final responseJson = json.decode(response.body);
+      if(responseJson != null && responseJson["Succeeded"] != null && ! responseJson["Succeeded"]){
+        return null;
+      }
       return TransactionResponse.fromMap(json.decode(response.body));
     } else {
       throw Exception('Failed to load transaction');
@@ -107,25 +142,31 @@ class ServerService{
     final mainCategoryService = MainCategoryService();
     final cityService = CityService();
     final sectionService = SectionTypeService();
-    TransactionResponse response = await getTransaction(pdaNo);
-    List<Category> categories = await getAllCategories();
-    List<MainCategory> mainCategories = await getAllMainCategories();
-    List<Item> items = await getAllItems();
-    await assetLocationService.insert(AssetLocation(
-        id: response.assetLocation.id,
-        name: response.assetLocation.name,
-        buildingAddress: response.assetLocation.buildingAddress,
-        buildingName: response.assetLocation.buildingName,
-        buildingNo: response.assetLocation.buildingNo,
-        businessUnit: response.assetLocation.businessUnit,
-        areaId: response.assetLocation.areaId,
-        departmentId: response.assetLocation.departmentId,
-        floorId: response.assetLocation.floorId,
-        sectionId: response.assetLocation.sectionId,
-        locationType:response.assetLocation.locationType,
-        locationTypeName: response.assetLocation.locationTypeName));
-    await userService.insert(response.user);
-    if(LocationType.values[response.assetLocation.locationType] == LocationType.building ){
+    TransactionResponse? response = await getTransaction(pdaNo);
+    if(response == null){
+      return "Error in Synchronization please try again later";
+    }else{
+      List<Category> categories = await getAllCategories();
+      List<MainCategory> mainCategories = await getAllMainCategories();
+      List<Item> items = await getAllItems();
+      List<Department> departments = await getAllDepartments();
+      List<SectionType> sections = await getAllSections();
+      List<Floor> floors = await getAllFloors();
+      await assetLocationService.insert(AssetLocation(
+          id: response.assetLocation.id,
+          name: response.assetLocation.name,
+          buildingAddress: response.assetLocation.buildingAddress,
+          buildingName: response.assetLocation.buildingName,
+          buildingNo: response.assetLocation.buildingNo,
+          businessUnit: response.assetLocation.businessUnit,
+          areaId: response.assetLocation.areaId,
+          departmentId: response.assetLocation.departmentId,
+          floorId: response.assetLocation.floorId,
+          sectionId: response.assetLocation.sectionId,
+          locationType:response.assetLocation.locationType,
+          locationTypeName: response.assetLocation.locationTypeName));
+      await userService.insert(response.user);
+/*    if(LocationType.values[response.assetLocation.locationType] == LocationType.building ){
       await floorService.insert(Floor(name: response.assetLocation.floor!.name,id: response.assetLocation.floor!.id));
       await sectionService.insert(SectionType(name: response.assetLocation.section!.name,id: response.assetLocation.section!.id));
     }
@@ -136,17 +177,22 @@ class ServerService{
       await departmentService.insert(Department(name:response.assetLocation.department!.name,id: response.assetLocation.department!.id));
       await floorService.insert(Floor(name: response.assetLocation.floor!.name,id: response.assetLocation.floor!.id));
       await sectionService.insert(SectionType(name: response.assetLocation.section!.name,id: response.assetLocation.section!.id));
+    }*/
+      await areaService.insert(response.assetLocation.area);
+      await transactionService.insert(TransactionLookUp(
+          id: response.id,
+          transactionType: response.transactionType,
+          transActionTypeName: response.transActionTypeName));
+      await countryService.insert(response.assetLocation.country);
+      await cityService.insert(response.assetLocation.city);
+      await mainCategoryService.batch(mainCategories);
+      await itemService.batch(items);
+      await categoryService.batch(categories);
+      await departmentService.batch(departments);
+      await sectionService.batch(sections);
+      await floorService.batch(floors);
+      return "Success";
     }
-    await areaService.insert(response.assetLocation.area);
-    await transactionService.insert(TransactionLookUp(
-        id: response.id,
-        transactionType: response.transactionType,
-        transActionTypeName: response.transActionTypeName));
-    await countryService.insert(response.assetLocation.country);
-    await cityService.insert(response.assetLocation.city);
-    mainCategoryService.batch(mainCategories);
-    itemService.batch(items);
-    categoryService.batch(categories);
   }
 
   Future<bool> uploadData()async{
@@ -157,6 +203,7 @@ class ServerService{
     List<TransactionLookUp> transactions = await transactionService.retrieve();
     List<CaptureDetailsRequest> captureDetailsList = captureDetails.map((e) =>
         CaptureDetailsRequest(quantity: e.quantity,image: e.image,description: e.description,id: e.id,
+            departmentId: e.departmentId,floorId: e.floorId,sectionId: e.sectionId,serialNumber: e.serialNumber,
             assetLocationId: e.assetLocationId,itemId: e.itemId,transactionId: transactions[0].id)).toList();
     CaptureDetailsList request = CaptureDetailsList(captureDetailsList: captureDetailsList);
     print(jsonEncode(request));
@@ -170,8 +217,9 @@ class ServerService{
     final responseJson = jsonDecode(response.body);
     if(response.statusCode == 200 && responseJson["Succeeded"]) {
       return true;
+    }else {
+      return false;
     }
-    return false;
   }
 
   clearData()async{

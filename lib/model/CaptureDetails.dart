@@ -6,6 +6,10 @@ class CaptureDetails {
   final String image;
   final int assetLocationId;
   final int itemId;
+  final int? floorId;
+  final int? departmentId;
+  final int? sectionId;
+  final String? serialNumber;
 
   CaptureDetails(
       {this.id, this.name,
@@ -13,7 +17,9 @@ class CaptureDetails {
       required this.assetLocationId,
       required this.description,
       required this.quantity,
-      required this.itemId});
+      required this.itemId,
+      required this.departmentId,required this.floorId,
+      required this.sectionId,required this.serialNumber});
 
   CaptureDetails.fromMap(Map<String, dynamic> res)
       : id = res["Id"],
@@ -22,10 +28,15 @@ class CaptureDetails {
         description = res['Description'],
         image = res['Image'],
         assetLocationId = res['AssetLocationId'],
-        itemId = res['ItemId'];
+        itemId = res['ItemId'],
+        floorId = res['FloorId'],
+        departmentId = res['DepartmentId'],
+        sectionId = res['SectionId'],
+        serialNumber = res['SerialNumber'];
 
   Map<String, Object?> toMap() {
     return {'Id': id, 'Name': name,'Image':image,'AssetLocationId':assetLocationId, 'ItemId':itemId,
-      'Description':description,'Quantity':quantity};
+      'Description':description,'Quantity':quantity,'FloorId':floorId,
+      'DepartmentId':departmentId,'SectionId':sectionId,'SerialNumber':serialNumber};
   }
 }

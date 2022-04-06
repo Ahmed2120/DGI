@@ -9,7 +9,7 @@ class SectionTypeService{
   Future<List<SectionType>> retrieve() async {
     return sectionTypeRepository.retrieve();
   }
-  Future<int> insertCategories(List<SectionType> sectionTypes) async {
+  Future<int> batch(List<SectionType> sectionTypes) async {
     return sectionTypeRepository.batch(sectionTypes);
   }
   Future<void> delete(int id) async {
