@@ -8,7 +8,7 @@ class DatabaseHandler {
       join(path, 'dgi.db'),
       onCreate: (database, version) async {
         Batch batch = database.batch();
-        batch.execute("CREATE TABLE setting(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT,pdaNo TEXT)");
+        batch.execute("CREATE TABLE setting(id INTEGER PRIMARY KEY AUTOINCREMENT,pdaNo TEXT,ipAddress TEXT)");
         batch.execute("CREATE TABLE category(Id INTEGER, Name TEXT, MainCategoryId INTEGER)");
         batch.execute("CREATE TABLE locationType(Id INTEGER PRIMARY KEY, Name TEXT)");
         batch.execute("CREATE TABLE sectionType(Id INTEGER PRIMARY KEY , Name TEXT ,floorId INTEGER)");
