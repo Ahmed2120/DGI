@@ -12,8 +12,6 @@ import 'package:dgi/screens/item_capture_screen.dart';
 import 'package:dgi/screens/settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-
 import 'assets_counter_screen.dart';
 
 class HomePage extends StatefulWidget {
