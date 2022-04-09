@@ -13,6 +13,7 @@ import 'package:dgi/model/category.dart';
 import 'package:dgi/model/CaptureDetails.dart';
 import 'package:dgi/model/item.dart';
 import 'package:dgi/model/mainCategory.dart';
+import 'package:dgi/screens/home_page.dart';
 import 'package:dgi/screens/take_picture_page.dart';
 import 'package:flutter/material.dart';
 import '../Utility/CustomWidgetBuilder.dart';
@@ -394,7 +395,15 @@ class _AssetsCaptureState extends State<AssetsCapture> {
           ),
         ),
       ),
-    ));
+    ),
+      floatingActionButton: FloatingActionButton(onPressed: () {
+        Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => HomePage()));
+      },
+        backgroundColor: Colors.orangeAccent,
+        child: Icon(Icons.home,color: Colors.white,),
+      ),
+    );
   }
 
   _showCamera() async {
