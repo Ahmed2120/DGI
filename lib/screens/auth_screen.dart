@@ -1,15 +1,17 @@
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:dgi/Services/ServerService.dart';
+import 'package:dgi/Services/TransactionService.dart';
 import 'package:dgi/Services/UserService.dart';
 import 'package:dgi/authentication.dart';
 import 'package:dgi/model/User.dart';
+import 'package:dgi/model/transaction.dart';
 import 'package:dgi/screens/home_page.dart';
 import 'package:flutter/material.dart';
 
 class AuthScreen extends StatelessWidget {
   String pdaNo;
-  AuthScreen({Key? key,required this.pdaNo}) : super(key: key);
+  AuthScreen({Key? key, required this.pdaNo}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +34,7 @@ class AuthScreen extends StatelessWidget {
             child: Padding(
               padding: EdgeInsets.only(top: deviceSize.height * 0.014),
               child: Container(
-                height: deviceSize.height ,
+                height: deviceSize.height,
                 width: deviceSize.width,
                 child: Center(
                   child: Column(
@@ -43,22 +45,29 @@ class AuthScreen extends StatelessWidget {
                         child: CircleAvatar(
                             backgroundColor: Colors.white.withOpacity(0.5),
                             radius: deviceSize.height * 0.1,
-                            child: Image.asset('assets/icons/0-18.png', width: deviceSize.height * 0.15,)),
+                            child: Image.asset(
+                              'assets/icons/0-18.png',
+                              width: deviceSize.height * 0.15,
+                            )),
                       ),
                       Flexible(
                           child: Container(
-                            margin: EdgeInsets.only(top: deviceSize.height * 0.004),
-                            child: Text(
-                              'Welcome!',
-                              style: TextStyle(
-                                color: Color(0xFFFFFFFF),
-                                fontSize: deviceSize.height <= 405 ? 14 : deviceSize.height * 0.06,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          )),
-                       Flexible(
-                        child: AuthCard(pdaNo: pdaNo,),
+                        margin: EdgeInsets.only(top: deviceSize.height * 0.004),
+                        child: Text(
+                          'Welcome!',
+                          style: TextStyle(
+                            color: Color(0xFFFFFFFF),
+                            fontSize: deviceSize.height <= 405
+                                ? 14
+                                : deviceSize.height * 0.06,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      )),
+                      Flexible(
+                        child: AuthCard(
+                          pdaNo: pdaNo,
+                        ),
                         flex: 0,
                       ),
                     ],
@@ -75,7 +84,7 @@ class AuthScreen extends StatelessWidget {
 
 class AuthCard extends StatefulWidget {
   String pdaNo;
-  AuthCard({Key? key,required this.pdaNo}) : super(key: key);
+  AuthCard({Key? key, required this.pdaNo}) : super(key: key);
 
   @override
   _AuthCardState createState() => _AuthCardState();
@@ -83,26 +92,41 @@ class AuthCard extends StatefulWidget {
 
 class _AuthCardState extends State<AuthCard>
     with SingleTickerProviderStateMixin {
-
   final serverService = ServerService();
 
   final GlobalKey<FormState> _formKey = GlobalKey();
 
-  final Map<String, String> _authData = {'username': '', 'password': ''};
+  final Map<String, String> _authData = {'password': ''};
 
   bool isLoading = false;
   final _passwordController = TextEditingController();
   final userService = UserService();
-
+  TransactionLookUp? transaction;
+  User? user;
   @override
   void initState() {
     super.initState();
     initData();
   }
-  void initData()async{
+
+  void initData() async {
     List<User> users = await userService.retrieve();
-    if(users.isEmpty)
-      await serverService.syncro(widget.pdaNo);
+    if (users.isEmpty) {
+      try{
+        await serverService.syncro(widget.pdaNo);
+        users = await userService.retrieve();
+        user = users.isNotEmpty?users[0]:null;
+      }catch(e){
+        _showErrorDialog(e.toString().replaceAll("Exception: ", ""));
+      }
+    }
+    List<TransactionLookUp> transactions =
+        await TransactionService().retrieve();
+    if (transactions.isNotEmpty) {
+      setState(() {
+        transaction = transactions[0];
+      });
+    }
   }
 
   @override
@@ -111,7 +135,7 @@ class _AuthCardState extends State<AuthCard>
   }
 
   Future _submit() async {
-    if(!_formKey.currentState!.validate()){
+    if (!_formKey.currentState!.validate()) {
       return;
     }
     FocusScope.of(context).unfocus();
@@ -121,96 +145,43 @@ class _AuthCardState extends State<AuthCard>
     });
 
     try {
-      var bytes1 = utf8.encode(_authData['password']!);         // data being hashed
+      var bytes1 = utf8.encode(_authData['password']!); // data being hashed
       var digest1 = sha256.convert(bytes1);
       Authentication auth = Authentication();
-
-      auth.logIn(_authData['username']!, digest1.toString()).then((value) {
+      List<User> users = await userService.retrieve();
+      user = users.isNotEmpty?users[0]:null;
+      auth.logIn(user!.username, digest1.toString()).then((value) {
         setState(() {
           isLoading = false;
         });
-        if(value == 'success'){
-          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=> const HomePage()));
-        }else{
-          _showErrorDialog('Invalid username or password');
+        if (value == 'success') {
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => const HomePage()));
+        } else {
+          _showErrorDialog('Invalid password');
         }
       });
-
     } catch (err) {
       var errMessage = 'Could not authenticate you. please try again later';
       _showErrorDialog(err.toString());
     }
   }
-  /*initData()async{
-    var rng = Random().nextInt(1000);
-    CategoryService categoryService = CategoryService();
-    MainCategoryService mainCategoryService = MainCategoryService();
-    final countryService = CountryService();
-    final cityService = CityService();
-    final floorService = FloorService();
-    final areaService = AreaService();
-    final departmentService = DepartmentService();
-    final assetLocationService = AssetLocationService();
-    final sectionTypeService = SectionTypeService();
-    final assetService = AssetService();
-    final itemService =ItemService();
-    String random = getRandomString(8);
-    Item item1 = Item(name: 'cat1item1',categoryId: 1);
-    Item item2 = Item(name: 'cat1item2',categoryId: 1);
-    Item item3 = Item(name: 'cat2item3',categoryId: 2);
-    Item item4 = Item(name: 'cat2item1',categoryId: 2);
-    Item item5 = Item(name: 'cat3item2',categoryId: 3);
-    Item item6 = Item(name: 'cat3item1',categoryId: 3);
-    Item item7 = Item(name: 'cat4item2',categoryId: 4);
-    Item item8 = Item(name: 'cat5item2',categoryId: 5);
-    Category category1 = Category(id:1,name: 'table1', mainCategoryId: 1);
-    Category category2 = Category(id:2,name: 'table2', mainCategoryId: 1);
-    Category category3 = Category(id:3,name: 'table3', mainCategoryId: 1);
-    Category category4 = Category(id:4,name: 'chair1', mainCategoryId: 2);
-    Category category5 = Category(id:5,name: 'chair2', mainCategoryId: 2);
-    MainCategory mainCategory1 = MainCategory(name: 'table');
-    MainCategory mainCategory2 = MainCategory(name: 'chair');
-    await mainCategoryService.insert(mainCategory1);
-    await mainCategoryService.insert(mainCategory2);
-    await categoryService.insert(category1);
-    await categoryService.insert(category2);
-    await categoryService.insert(category3);
-    await categoryService.insert(category4);
-    await categoryService.insert(category5);
-    await itemService.insert(item1);
-    await itemService.insert(item2);
-    await itemService.insert(item3);
-    await itemService.insert(item4);
-    await itemService.insert(item5);
-    await itemService.insert(item6);
-    await itemService.insert(item7);
-    await itemService.insert(item8);
-    await cityService.insert(City(name: random));
-    await countryService.insert(Country(name: random,id: 1));
-    await areaService.insert(Area(name: random,id: 10));
-    await floorService.insert(Floor(name: rng.toString()));
-    await departmentService.insert(Department(name: random));
-    await sectionTypeService.insert(SectionType(name:rng.toString(),floorId: rng));
-    await assetLocationService.insert(AssetLocation(name: "location",areaId: 1,buildingAddress: "test building Address",
-    buildingName: "building Name",buildingNo: '10',businessUnit: 'businessUnit',departmentId: 10,floorId: 10,id: rng,sectionId: 22));
-    await assetService.insert(Asset(id:10,itemId: rng, barcode: "test", barcodeImage: image, serialnumber: "serial 010", assetLocationId: rng, description: "description item", image: image));
-  }*/
 
   void _showErrorDialog(String message) {
     showDialog(
         context: context,
         builder: (ctx) => AlertDialog(
-          title: const Text('An error Occurred'),
-          content: Text(message),
-          actions: [
-            TextButton(
-              child: const Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            )
-          ],
-        ));
+              title: const Text('An error Occurred'),
+              content: Text(message),
+              actions: [
+                TextButton(
+                  child: const Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            ));
   }
 
   @override
@@ -221,20 +192,34 @@ class _AuthCardState extends State<AuthCard>
       child: Form(
         key: _formKey,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TextFormField(
-              decoration: InputDecoration(labelText: 'username', labelStyle: TextStyle(color: Colors.white), isDense: true, enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.white),
-              ),),
-              keyboardType: TextInputType.emailAddress,
-              validator: (val){
-                if(val!.isEmpty){
-                  return 'Inavalid username';
-                }
-              },
-              onSaved: (val){
-                _authData['username'] = val!;
-              },
+            Center(
+                child: Text(user != null ?"${user?.name}":"",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                    ))),
+            SizedBox(
+              height: deviceSize.height * 0.02,
+            ),
+            Text(
+              "PDA NO ${widget.pdaNo}",
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+            SizedBox(
+              height: deviceSize.height * 0.002,
+            ),
+            Text(
+              "TRANSACTION NO : ${transaction != null ?transaction?.id:''}",
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+            SizedBox(
+              height: deviceSize.height * 0.002,
+            ),
+            Text(
+              "TRANSACTION NAME : ${transaction != null ?transaction?.transActionTypeName:''}",
+              style: TextStyle(color: Colors.white, fontSize: 20),
             ),
             TextFormField(
               decoration: const InputDecoration(
@@ -242,8 +227,7 @@ class _AuthCardState extends State<AuthCard>
                   labelText: 'Password',
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.white),
-                  )
-              ),
+                  )),
               obscureText: true,
               controller: _passwordController,
               validator: (val) {
@@ -288,39 +272,45 @@ class _AuthCardState extends State<AuthCard>
             const SizedBox(
               height: 10,
             ),
-            Text(
-              'Modyle Name : ASSET TRACKING',
-              style: TextStyle(
-                color: Color(0xFFFFFFFF),
-                fontSize: deviceSize.height <= 430 ? deviceSize.height * 0.03 : 12,
-              ),
-            ),
-            SizedBox(
-              height: deviceSize.height * 0.015,
-            ),
-            Text(
-              'Internal Version',
-              style: TextStyle(
-                color: Color(0xFFFFFFFF),
-                fontSize: deviceSize.height * 0.03,
-              ),
-            ),
-            Text(
-              'V 1.0.0',
-              style: TextStyle(
-                color: Color(0xFFFFFFFF),
-                fontSize: deviceSize.height * 0.03,
-              ),
-            ),
-            SizedBox(
-              height: deviceSize.height * 0.01,
-            ),
-            Text(
-              'DGI SYSTEM',
-              style: TextStyle(
-                  color: Color(0xFF0F6671),
-                  fontSize: deviceSize.height * 0.042,
-                  fontWeight: FontWeight.bold
+            Center(
+              child: Column(
+                children: [
+                  Text(
+                    'Modyle Name : ASSET TRACKING',
+                    style: TextStyle(
+                      color: Color(0xFFFFFFFF),
+                      fontSize:
+                      deviceSize.height <= 430 ? deviceSize.height * 0.03 : 12,
+                    ),
+                  ),
+                  SizedBox(
+                    height: deviceSize.height * 0.015,
+                  ),
+                  Text(
+                    'Internal Version',
+                    style: TextStyle(
+                      color: Color(0xFFFFFFFF),
+                      fontSize: deviceSize.height * 0.03,
+                    ),
+                  ),
+                  Text(
+                    'V 1.0.0',
+                    style: TextStyle(
+                      color: Color(0xFFFFFFFF),
+                      fontSize: deviceSize.height * 0.03,
+                    ),
+                  ),
+                  SizedBox(
+                    height: deviceSize.height * 0.01,
+                  ),
+                  Text(
+                    'DGI SYSTEM',
+                    style: TextStyle(
+                        color: Color(0xFF0F6671),
+                        fontSize: deviceSize.height * 0.042,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ],
               ),
             ),
           ],
