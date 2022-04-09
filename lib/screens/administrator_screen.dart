@@ -1,5 +1,6 @@
 import 'package:dgi/Services/ServerService.dart';
 import 'package:dgi/Services/SettingService.dart';
+import 'package:dgi/Utility/configration.dart';
 import 'package:dgi/model/settings.dart';
 import 'package:flutter/material.dart';
 import '../Utility/CustomWidgetBuilder.dart';
@@ -14,8 +15,9 @@ class Administrator extends StatefulWidget {
 
 class _AdministratorState extends State<Administrator> {
   final GlobalKey<FormState> _formKey = GlobalKey();
-  TextEditingController nameController = TextEditingController();
+  //TextEditingController nameController = TextEditingController();
   TextEditingController noController = TextEditingController();
+  TextEditingController ipAddressController = TextEditingController();
   final settingService = SettingService();
   final serverService = ServerService();
 
@@ -121,12 +123,12 @@ class _AdministratorState extends State<Administrator> {
                               Row(
                                 children: [
                                   CustomWidgetBuilder.buildText(
-                                      'PDA NAME', dSize),
+                                      'IP address', dSize),
                                   const Spacer(),
                                   SizedBox(
                                     width: dSize.width * 0.5,
                                     child: TextFormField(
-                                      controller: nameController,
+                                      controller: ipAddressController,
                                       decoration: InputDecoration(
                                         enabledBorder: const UnderlineInputBorder(
                                           borderSide: BorderSide(
@@ -140,7 +142,7 @@ class _AdministratorState extends State<Administrator> {
                                       ),
                                       validator: (val) {
                                         if (val!.isEmpty) {
-                                          return 'please enter PDA NAME';
+                                          return 'please enter IP address';
                                         }
                                       },
                                     ),
@@ -236,11 +238,12 @@ class _AdministratorState extends State<Administrator> {
       setState(() {
         _isLoading = true;
       });
+      MyConfig.SERVER = ipAddressController.text;
       String response = await serverService.syncro(noController.text);
       if(response == "Success"){
         await settingService
             .insert(
-            Setting(name: nameController.text, pdaNo: noController.text))
+            Setting(pdaNo: noController.text,ipAddress: ipAddressController.text))
             .whenComplete(() =>
             setState(() {
               _isLoading = false;
@@ -253,9 +256,10 @@ class _AdministratorState extends State<Administrator> {
       setState(() {
         _isLoading = false;
       });
-      _showErrorDialog('Please enter a valid PDA NO');
+      _showErrorDialog(e.toString().replaceAll("Exception: ", ""));
     }
   }
+
   void showSuccessDialog(String pdaNo) {
     showDialog(
         context: context,

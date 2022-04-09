@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:dgi/Services/AreaService.dart';
 import 'package:dgi/Services/AssetLocationService.dart';
 import 'package:dgi/Services/CaptureDetailsService.dart';
@@ -24,6 +25,7 @@ import 'package:dgi/model/floor.dart';
 import 'package:dgi/model/item.dart';
 import 'package:dgi/model/mainCategory.dart';
 import 'package:dgi/model/sectionType.dart';
+import 'package:dgi/model/settings.dart';
 import 'package:dgi/model/transaction.dart';
 import 'package:dgi/model/transcationResponse.dart';
 import 'package:http/http.dart' as http;
@@ -35,8 +37,11 @@ class ServerService{
   SettingService settingService = SettingService();
 
   Future<List<Country>> getAllCountries() async{
+    if(MyConfig.SERVER == ''){
+      await setServerIPAddress();
+    }
     final response = await http
-          .get(Uri.parse(MyConfig.COUNTRY_API));
+          .get(Uri.parse('${MyConfig.SERVER}${MyConfig.COUNTRY_API}'));
     if (response.statusCode == 200) {
       final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
       return parsed.map<Country>((json) => Country.fromMap(json)).toList();
@@ -46,8 +51,11 @@ class ServerService{
   }
 
   Future<List<MainCategory>> getAllMainCategories() async{
+    if(MyConfig.SERVER == ''){
+      await setServerIPAddress();
+    }
     final response = await http
-        .get(Uri.parse(MyConfig.MAIN_CATEGORY_API));
+        .get(Uri.parse('${MyConfig.SERVER}${MyConfig.MAIN_CATEGORY_API}'));
     if (response.statusCode == 200) {
       final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
       return parsed.map<MainCategory>((json) => MainCategory.fromMap(json)).toList();
@@ -57,8 +65,11 @@ class ServerService{
   }
 
   Future<List<Category>> getAllCategories() async{
+    if(MyConfig.SERVER == ''){
+      await setServerIPAddress();
+    }
     final response = await http
-        .get(Uri.parse(MyConfig.CATEGORY_API));
+        .get(Uri.parse('${MyConfig.SERVER}${MyConfig.CATEGORY_API}'));
     if (response.statusCode == 200) {
       final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
       return parsed.map<Category>((json) => Category.fromMap(json)).toList();
@@ -68,8 +79,11 @@ class ServerService{
   }
 
   Future<List<Item>> getAllItems() async{
+    if(MyConfig.SERVER == ''){
+      await setServerIPAddress();
+    }
     final response = await http
-        .get(Uri.parse(MyConfig.ITEM_API));
+        .get(Uri.parse('${MyConfig.SERVER}${MyConfig.ITEM_API}'));
     if (response.statusCode == 200) {
       final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
       return parsed.map<Item>((json) => Item.fromMap(json)).toList();
@@ -79,8 +93,11 @@ class ServerService{
   }
 
   Future<List<Department>> getAllDepartments() async{
+    if(MyConfig.SERVER == ''){
+      await setServerIPAddress();
+    }
     final response = await http
-        .get(Uri.parse(MyConfig.DEPARTMENT_API));
+        .get(Uri.parse('${MyConfig.SERVER}${MyConfig.DEPARTMENT_API}'));
     if (response.statusCode == 200) {
       final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
       return parsed.map<Department>((json) => Department.fromMap(json)).toList();
@@ -90,8 +107,11 @@ class ServerService{
   }
 
   Future<List<SectionType>> getAllSections() async{
+    if(MyConfig.SERVER == ''){
+      await setServerIPAddress();
+    }
     final response = await http
-        .get(Uri.parse(MyConfig.SECTION_API));
+        .get(Uri.parse('${MyConfig.SERVER}${MyConfig.SECTION_API}'));
     if (response.statusCode == 200) {
       final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
       return parsed.map<SectionType>((json) => SectionType.fromMap(json)).toList();
@@ -101,8 +121,11 @@ class ServerService{
   }
 
   Future<List<Floor>> getAllFloors() async{
+    if(MyConfig.SERVER == ''){
+      await setServerIPAddress();
+    }
     final response = await http
-        .get(Uri.parse(MyConfig.FLOOR_API));
+        .get(Uri.parse("${MyConfig.SERVER}${MyConfig.FLOOR_API}"));
     if (response.statusCode == 200) {
       final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
       return parsed.map<Floor>((json) => Floor.fromMap(json)).toList();
@@ -112,24 +135,39 @@ class ServerService{
   }
 
   Future<TransactionResponse?> getTransaction(String pdaNo) async{
+    if(MyConfig.SERVER == ''){
+      await setServerIPAddress();
+    }
     final queryParameters = {
       'PDANo': pdaNo,
     };
     String queryString = Uri(queryParameters: queryParameters).query;
-    final uri = MyConfig.TRANSACTION_API + '?' + queryString;
-    final response = await http.get(Uri.parse(uri));
-    if (response.statusCode == 200) {
-      final responseJson = json.decode(response.body);
-      if(responseJson != null && responseJson["Succeeded"] != null && ! responseJson["Succeeded"]){
-        return null;
+    final uri = '${MyConfig.SERVER}${MyConfig.TRANSACTION_API}' + '?' + queryString;
+    try{
+      final response = await http.get(Uri.parse(uri));
+      if (response.statusCode == 200) {
+        final responseJson = json.decode(response.body);
+        if(responseJson != null && responseJson["Succeeded"] != null && ! responseJson["Succeeded"]){
+          return null;
+        }
+        if(responseJson == null){
+          throw Exception('This PDANo not assign to transaction');
+        }
+        return TransactionResponse.fromMap(json.decode(response.body));
+      }else {
+        _handleStatusCode(response.statusCode);
       }
-      return TransactionResponse.fromMap(json.decode(response.body));
-    } else {
-      throw Exception('Failed to load transaction');
+    }on SocketException{
+      throw Exception('Failed to connect to server make sure you connect to the internet');
+    } catch(e){
+      throw Exception(e);
     }
   }
 
   syncro(String pdaNo) async{
+    if(MyConfig.SERVER == ''){
+      await setServerIPAddress();
+    }
     final floorService = FloorService();
     final areaService = AreaService();
     final departmentService = DepartmentService();
@@ -196,9 +234,11 @@ class ServerService{
   }
 
   Future<bool> uploadData()async{
+    if(MyConfig.SERVER == ''){
+      await setServerIPAddress();
+    }
     final captureService = CaptureDetailsService();
     final transactionService = TransactionService();
-
     List<CaptureDetails> captureDetails = await captureService.retrieve();
     List<TransactionLookUp> transactions = await transactionService.retrieve();
     List<CaptureDetailsRequest> captureDetailsList = captureDetails.map((e) =>
@@ -208,7 +248,7 @@ class ServerService{
     CaptureDetailsList request = CaptureDetailsList(captureDetailsList: captureDetailsList);
     print(jsonEncode(request));
     final response = await http.post(
-      Uri.parse(MyConfig.UPLOAD_API),
+      Uri.parse('${MyConfig.SERVER}${MyConfig.UPLOAD_API}'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -225,6 +265,27 @@ class ServerService{
   clearData()async{
    final dataHandler = DatabaseHandler();
    await dataHandler.clearData();
+  }
+
+  setServerIPAddress()async{
+    List<Setting> settings = await settingService.retrieve();
+    if(settings.isNotEmpty){
+      MyConfig.SERVER = settings[0].ipAddress;
+    }else{
+      throw Exception("Fail to get setting");
+    }
+  }
+
+  void _handleStatusCode(int statusCode) {
+    if(statusCode == 404){
+      throw Exception("Invalid IP Address");
+    } else if (statusCode == 401) {
+      throw Exception("Unauthorized");
+    } else if (statusCode == 500) {
+      throw Exception("Server Error");
+    } else {
+      throw Exception("Something does wen't wrong");
+    }
   }
 
 }
