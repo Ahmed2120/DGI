@@ -1,5 +1,6 @@
 import 'package:dgi/Services/SettingService.dart';
 import 'package:dgi/model/settings.dart';
+import 'package:dgi/screens/auth_screen.dart';
 import 'package:dgi/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -27,6 +28,10 @@ class MyApp extends StatelessWidget {
     print('PdaNo: $pdaNo');
     return MaterialApp(
       title: 'SAGECO',
+      initialRoute: '/',
+      routes: {
+        '/login': (context) => AuthScreen(pdaNo: pdaNo),
+      },
       theme: ThemeData(
         colorScheme: ColorScheme.fromSwatch().copyWith(
           primary: const Color(0xFF0F6671)

@@ -109,21 +109,26 @@ class _AuthCardState extends State<AuthCard>
     initData();
   }
 
-  void initData() async {
+  initData() async {
     List<User> users = await userService.retrieve();
     if (users.isEmpty) {
       try{
         await serverService.syncro(widget.pdaNo);
         users = await userService.retrieve();
-        user = users.isNotEmpty?users[0]:null;
+        setState(() {
+          user = users.isNotEmpty?users[0]:null;
+        });
       }catch(e){
-        _showErrorDialog(e.toString().replaceAll("Exception: ", ""));
+        print(e.toString());
+        //_showErrorDialog(e.toString().replaceAll("Exception: ", ""));
       }
     }
+
     List<TransactionLookUp> transactions =
         await TransactionService().retrieve();
     if (transactions.isNotEmpty) {
       setState(() {
+        user = users.isNotEmpty?users[0]:null;
         transaction = transactions[0];
       });
     }
@@ -148,23 +153,35 @@ class _AuthCardState extends State<AuthCard>
       var bytes1 = utf8.encode(_authData['password']!); // data being hashed
       var digest1 = sha256.convert(bytes1);
       Authentication auth = Authentication();
-      List<User> users = await userService.retrieve();
-      user = users.isNotEmpty?users[0]:null;
-      auth.logIn(user!.username, digest1.toString()).then((value) {
-        setState(() {
-          isLoading = false;
+      if (user == null) {
+        await initData();
+        user = await getUser();
+      }
+      if(user != null){
+        auth.logIn(user!.username, digest1.toString()).then((value) {
+          setState(() {
+            isLoading = false;
+          });
+          if (value == 'success') {
+            Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => const HomePage()));
+          } else {
+            _showErrorDialog('Invalid password');
+          }
         });
-        if (value == 'success') {
-          Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => const HomePage()));
-        } else {
-          _showErrorDialog('Invalid password');
-        }
-      });
-    } catch (err) {
+      }
+      else{
+        _showErrorDialog('There is no transaction assign to this device');
+      }
+  }catch (err) {
       var errMessage = 'Could not authenticate you. please try again later';
       _showErrorDialog(err.toString());
     }
+  }
+
+  getUser()async{
+    List<User> users = await userService.retrieve();
+    return users.isNotEmpty ? users[0] : null;
   }
 
   void _showErrorDialog(String message) {
@@ -177,6 +194,9 @@ class _AuthCardState extends State<AuthCard>
                 TextButton(
                   child: const Text('OK'),
                   onPressed: () {
+                    setState(() {
+                      isLoading = false;
+                    });
                     Navigator.of(context).pop();
                   },
                 )
@@ -210,17 +230,27 @@ class _AuthCardState extends State<AuthCard>
             SizedBox(
               height: deviceSize.height * 0.002,
             ),
-            Text(
-              "TRANSACTION NO : ${transaction != null ?transaction?.id:''}",
-              style: TextStyle(color: Colors.white, fontSize: 20),
-            ),
-            SizedBox(
-              height: deviceSize.height * 0.002,
-            ),
-            Text(
-              "TRANSACTION NAME : ${transaction != null ?transaction?.transActionTypeName:''}",
-              style: TextStyle(color: Colors.white, fontSize: 20),
-            ),
+            if(transaction != null)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                Text(
+                  "TRANSACTION NO : ${transaction != null ?transaction?.id:''}",
+                  style: TextStyle(color: Colors.white, fontSize: 20),
+                ),
+                SizedBox(
+                  height: deviceSize.height * 0.002,
+                ),
+                Text(
+                  "TRANSACTION NAME : ${transaction != null ?transaction?.transActionTypeName:''}",
+                  style: TextStyle(color: Colors.white, fontSize: 20),
+                ),
+              ],),
+            if(transaction == null)
+              Text(
+                "THERE IS NO TRANSACTION ASSIGN TO THIS DEVICE",
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
             TextFormField(
               decoration: const InputDecoration(
                   labelStyle: TextStyle(color: Colors.white),
@@ -246,7 +276,7 @@ class _AuthCardState extends State<AuthCard>
             //   const CircularProgressIndicator()
             ElevatedButton(
               child: isLoading ? CircularProgressIndicator() : Text('Log In'),
-              onPressed: _submit,
+              onPressed: isLoading?null:_submit,
               style: ElevatedButton.styleFrom(
                   primary: const Color(0xFFFFA227),
                   textStyle: const TextStyle(fontSize: 20),
@@ -260,7 +290,7 @@ class _AuthCardState extends State<AuthCard>
             ),
             ElevatedButton(
               child: const Text('Close'),
-              onPressed: () {},
+              onPressed: () {Navigator.pop(context);},
               style: ElevatedButton.styleFrom(
                   primary: Color(0xFF0F6671),
                   textStyle: TextStyle(fontSize: 20),

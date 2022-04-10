@@ -263,8 +263,7 @@ class _HomePageState extends State<HomePage> {
             TextButton(
               child: const Text('OK'),
               onPressed: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => AuthScreen(pdaNo: pdaNo)));
+                Navigator.pushNamedAndRemoveUntil(context, "/login",(Route<dynamic> route) => false);
               },
             )
           ],
