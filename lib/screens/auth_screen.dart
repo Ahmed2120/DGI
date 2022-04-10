@@ -1,96 +1,26 @@
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:dgi/Services/ServerService.dart';
+import 'package:dgi/Services/SettingService.dart';
 import 'package:dgi/Services/TransactionService.dart';
 import 'package:dgi/Services/UserService.dart';
+import 'package:dgi/Utility/CustomWidgetBuilder.dart';
 import 'package:dgi/authentication.dart';
 import 'package:dgi/model/User.dart';
+import 'package:dgi/model/settings.dart';
 import 'package:dgi/model/transaction.dart';
 import 'package:dgi/screens/home_page.dart';
 import 'package:flutter/material.dart';
 
-class AuthScreen extends StatelessWidget {
+class AuthScreen extends StatefulWidget {
   String pdaNo;
   AuthScreen({Key? key, required this.pdaNo}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final deviceSize = MediaQuery.of(context).size;
-    return Scaffold(
-      body: Stack(
-        children: [
-          Container(
-            decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                    colors: [
-                      Color(0xFF26BB9B),
-                      Color(0xFF00B0BD),
-                    ],
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                    stops: [0, 1])),
-          ),
-          SingleChildScrollView(
-            child: Padding(
-              padding: EdgeInsets.only(top: deviceSize.height * 0.014),
-              child: Container(
-                height: deviceSize.height,
-                width: deviceSize.width,
-                child: Center(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Flexible(
-                        flex: 0,
-                        child: CircleAvatar(
-                            backgroundColor: Colors.white.withOpacity(0.5),
-                            radius: deviceSize.height * 0.1,
-                            child: Image.asset(
-                              'assets/icons/0-18.png',
-                              width: deviceSize.height * 0.15,
-                            )),
-                      ),
-                      Flexible(
-                          child: Container(
-                        margin: EdgeInsets.only(top: deviceSize.height * 0.004),
-                        child: Text(
-                          'Welcome!',
-                          style: TextStyle(
-                            color: Color(0xFFFFFFFF),
-                            fontSize: deviceSize.height <= 405
-                                ? 14
-                                : deviceSize.height * 0.06,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      )),
-                      Flexible(
-                        child: AuthCard(
-                          pdaNo: pdaNo,
-                        ),
-                        flex: 0,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          )
-        ],
-      ),
-    );
-  }
+  _AuthScreenState createState() => _AuthScreenState();
 }
 
-class AuthCard extends StatefulWidget {
-  String pdaNo;
-  AuthCard({Key? key, required this.pdaNo}) : super(key: key);
-
-  @override
-  _AuthCardState createState() => _AuthCardState();
-}
-
-class _AuthCardState extends State<AuthCard>
+class _AuthScreenState extends State<AuthScreen>
     with SingleTickerProviderStateMixin {
   final serverService = ServerService();
 
@@ -99,6 +29,7 @@ class _AuthCardState extends State<AuthCard>
   final Map<String, String> _authData = {'password': ''};
 
   bool isLoading = false;
+  bool loader = false;
   final _passwordController = TextEditingController();
   final userService = UserService();
   TransactionLookUp? transaction;
@@ -110,10 +41,14 @@ class _AuthCardState extends State<AuthCard>
   }
 
   initData() async {
+    if(widget.pdaNo == null || widget.pdaNo == ''){
+      List<Setting> settings = await SettingService().retrieve();
+      widget.pdaNo = settings[0].pdaNo;
+    }
     List<User> users = await userService.retrieve();
     if (users.isEmpty) {
       try{
-        await serverService.syncro(widget.pdaNo);
+        await syncro();
         users = await userService.retrieve();
         setState(() {
           user = users.isNotEmpty?users[0]:null;
@@ -121,6 +56,10 @@ class _AuthCardState extends State<AuthCard>
       }catch(e){
         print(e.toString());
         //_showErrorDialog(e.toString().replaceAll("Exception: ", ""));
+      }finally{
+        setState(() {
+          loader = false;
+        });
       }
     }
 
@@ -132,6 +71,13 @@ class _AuthCardState extends State<AuthCard>
         transaction = transactions[0];
       });
     }
+  }
+
+   syncro() async{
+    setState(() {
+      loader = true;
+    });
+    await serverService.syncro(widget.pdaNo);
   }
 
   @override
@@ -207,6 +153,70 @@ class _AuthCardState extends State<AuthCard>
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
+    return Scaffold(
+      body: !loader? Stack(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                    colors: [
+                      Color(0xFF26BB9B),
+                      Color(0xFF00B0BD),
+                    ],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                    stops: [0, 1])),
+          ),
+          SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.only(top: deviceSize.height * 0.014),
+              child: Container(
+                height: deviceSize.height,
+                width: deviceSize.width,
+                child: Center(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Flexible(
+                        flex: 0,
+                        child: CircleAvatar(
+                            backgroundColor: Colors.white.withOpacity(0.5),
+                            radius: deviceSize.height * 0.1,
+                            child: Image.asset(
+                              'assets/icons/0-18.png',
+                              width: deviceSize.height * 0.15,
+                            )),
+                      ),
+                      Flexible(
+                          child: Container(
+                            margin: EdgeInsets.only(top: deviceSize.height * 0.004),
+                            child: Text(
+                              'Welcome!',
+                              style: TextStyle(
+                                color: Color(0xFFFFFFFF),
+                                fontSize: deviceSize.height <= 405
+                                    ? 14
+                                    : deviceSize.height * 0.06,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          )),
+                      Flexible(
+                        child: buildLoginForm(deviceSize),
+                        flex: 0,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          )
+        ],
+      )
+      : CustomWidgetBuilder.buildSpanner(),
+    );
+  }
+  buildLoginForm(deviceSize){
     return SizedBox(
       width: deviceSize.width * 0.75,
       child: Form(
@@ -234,18 +244,18 @@ class _AuthCardState extends State<AuthCard>
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                Text(
-                  "TRANSACTION NO : ${transaction != null ?transaction?.id:''}",
-                  style: TextStyle(color: Colors.white, fontSize: 20),
-                ),
-                SizedBox(
-                  height: deviceSize.height * 0.002,
-                ),
-                Text(
-                  "TRANSACTION NAME : ${transaction != null ?transaction?.transActionTypeName:''}",
-                  style: TextStyle(color: Colors.white, fontSize: 20),
-                ),
-              ],),
+                  Text(
+                    "TRANSACTION NO : ${transaction != null ?transaction?.id:''}",
+                    style: TextStyle(color: Colors.white, fontSize: 20),
+                  ),
+                  SizedBox(
+                    height: deviceSize.height * 0.002,
+                  ),
+                  Text(
+                    "TRANSACTION NAME : ${transaction != null ?transaction?.transActionTypeName:''}",
+                    style: TextStyle(color: Colors.white, fontSize: 20),
+                  ),
+                ],),
             if(transaction == null)
               Text(
                 "THERE IS NO TRANSACTION ASSIGN TO THIS DEVICE",
@@ -345,7 +355,7 @@ class _AuthCardState extends State<AuthCard>
             ),
           ],
         ),
-      ),
+      )
     );
   }
 }
