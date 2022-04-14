@@ -12,4 +12,5 @@ class MyConfig {
   static const String BUILDING = "Building";
   static const String OFFICE = "Office";
   static const String STORE = "Store";
+  static const int PAGE_SIZE = 20;
 }

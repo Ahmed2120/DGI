@@ -7,7 +7,6 @@ import 'package:dgi/model/settings.dart';
 import 'package:dgi/model/transaction.dart';
 import 'package:dgi/screens/about.dart';
 import 'package:dgi/screens/assets_verification_screen.dart';
-import 'package:dgi/screens/auth_screen.dart';
 import 'package:dgi/screens/item_capture_screen.dart';
 import 'package:dgi/screens/settings.dart';
 import 'package:flutter/cupertino.dart';
@@ -232,8 +231,8 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       loader = true;
     });
-    bool success = await serverService.uploadData();
-    if (success) {
+    try {
+      await serverService.uploadData();
       await serverService.clearData();
       List<Setting> settings = await settingService.retrieve();
       String pdaNo = "";
@@ -244,30 +243,32 @@ class _HomePageState extends State<HomePage> {
         loader = false;
       });
       showSuccessDialog(pdaNo);
-    } else {
+    } catch (e) {
       setState(() {
         loader = false;
       });
-      CustomWidgetBuilder.showMessageDialog(
-          context, "fail uploading to server please try again", true);
+      CustomWidgetBuilder.showMessageDialog(context, e.toString(), true);
     }
   }
-   void showSuccessDialog(String pdaNo) {
+
+  void showSuccessDialog(String pdaNo) {
     showDialog(
         context: context,
         barrierDismissible: false,
         builder: (ctx) => AlertDialog(
-          title: const Text("Transaction done successfully"),
-          content: const Text('Please Log in again to get another transaction'),
-          actions: [
-            TextButton(
-              child: const Text('OK'),
-              onPressed: () {
-                Navigator.pushNamedAndRemoveUntil(context, "/login",(Route<dynamic> route) => false);
-              },
-            )
-          ],
-        ));
+              title: const Text("Transaction done successfully"),
+              content:
+                  const Text('Please Log in again to get another transaction'),
+              actions: [
+                TextButton(
+                  child: const Text('OK'),
+                  onPressed: () {
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, "/login", (Route<dynamic> route) => false);
+                  },
+                )
+              ],
+            ));
   }
 
   Column buildColumn(String title, dsize, String img) {

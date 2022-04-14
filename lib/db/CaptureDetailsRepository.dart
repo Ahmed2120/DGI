@@ -16,6 +16,26 @@ class CaptureDetailsRepository{
     final List<Map<String, Object?>> queryResult = await db.query(TABLE_NAME);
     return queryResult.map((e) => CaptureDetails.fromMap(e)).toList();
   }
+  Future<List<CaptureDetails>> retrieveTopElement(int size) async {
+    try{
+      final Database db = await databaseHandler.initializeDB();
+      final List<Map<String, Object?>> queryResult = await db.query(TABLE_NAME,where: "isUploaded = ?",whereArgs: [0],limit: size);
+      return queryResult.map((e) => CaptureDetails.fromMap(e)).toList();
+    }catch(e){
+      rethrow;
+    }
+  }
+  void update(List<CaptureDetails> items)async{
+    try{
+      final Database db = await databaseHandler.initializeDB();
+      for(CaptureDetails item in items){
+        item.isUploaded = 1;
+        db.update(TABLE_NAME, item.toMap(),where: "Id = ?",whereArgs: [item.id]);
+      }
+    }catch(e){
+      throw Exception(e);
+    }
+  }
   Future<int> batch(List<CaptureDetails> captureDetails) async {
     int result = 0;
     final Database db = await databaseHandler.initializeDB();

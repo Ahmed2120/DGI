@@ -204,18 +204,6 @@ class ServerService{
           locationType:response.assetLocation.locationType,
           locationTypeName: response.assetLocation.locationTypeName));
       await userService.insert(response.user);
-/*    if(LocationType.values[response.assetLocation.locationType] == LocationType.building ){
-      await floorService.insert(Floor(name: response.assetLocation.floor!.name,id: response.assetLocation.floor!.id));
-      await sectionService.insert(SectionType(name: response.assetLocation.section!.name,id: response.assetLocation.section!.id));
-    }
-    else if(LocationType.values[response.assetLocation.locationType] == LocationType.store ){
-      await sectionService.insert(SectionType(name: response.assetLocation.section!.name,id: response.assetLocation.section!.id));
-    }
-    else if(LocationType.values[response.assetLocation.locationType] == LocationType.office ){
-      await departmentService.insert(Department(name:response.assetLocation.department!.name,id: response.assetLocation.department!.id));
-      await floorService.insert(Floor(name: response.assetLocation.floor!.name,id: response.assetLocation.floor!.id));
-      await sectionService.insert(SectionType(name: response.assetLocation.section!.name,id: response.assetLocation.section!.id));
-    }*/
       await areaService.insert(response.assetLocation.area);
       await transactionService.insert(TransactionLookUp(
           id: response.id,
@@ -233,32 +221,50 @@ class ServerService{
     }
   }
 
-  Future<bool> uploadData()async{
+  uploadData()async{
+    final captureService = CaptureDetailsService();
+    final transactionService = TransactionService();
+    List<TransactionLookUp> transactions = await transactionService.retrieve();
     if(MyConfig.SERVER == ''){
       await setServerIPAddress();
     }
-    final captureService = CaptureDetailsService();
-    final transactionService = TransactionService();
-    List<CaptureDetails> captureDetails = await captureService.retrieve();
-    List<TransactionLookUp> transactions = await transactionService.retrieve();
+    try{
+      while(true){
+        List<CaptureDetails> captureDetails = await captureService.retrieveTopElement();
+        if(captureDetails.isEmpty) {
+          break;
+        }
+        await uploadToServer(captureDetails, transactions[0]);
+        await captureService.update(captureDetails);
+      }
+    }on SocketException{
+      throw Exception('Failed to connect to server make sure you connect to the internet');
+    }on FormatException{
+      throw Exception("Bad response");
+    }catch(e){
+      rethrow;
+    }
+  }
+
+  uploadToServer(List<CaptureDetails> captureDetails,TransactionLookUp transaction) async {
     List<CaptureDetailsRequest> captureDetailsList = captureDetails.map((e) =>
         CaptureDetailsRequest(quantity: e.quantity,image: e.image,description: e.description,id: e.id,
             departmentId: e.departmentId,floorId: e.floorId,sectionId: e.sectionId,serialNumber: e.serialNumber,
-            assetLocationId: e.assetLocationId,itemId: e.itemId,transactionId: transactions[0].id)).toList();
+            assetLocationId: e.assetLocationId,itemId: e.itemId,transactionId: transaction.id)).toList();
     CaptureDetailsList request = CaptureDetailsList(captureDetailsList: captureDetailsList);
-    print(jsonEncode(request));
+    print('====' + jsonEncode(request));
     final response = await http.post(
-      Uri.parse('${MyConfig.SERVER}${MyConfig.UPLOAD_API}'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(request)
+        Uri.parse('${MyConfig.SERVER}${MyConfig.UPLOAD_API}'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(request)
     );
     final responseJson = jsonDecode(response.body);
     if(response.statusCode == 200 && responseJson["Succeeded"]) {
       return true;
-    }else {
-      return false;
+    }else{
+      _handleStatusCode(response.statusCode);
     }
   }
 
