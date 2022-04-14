@@ -153,6 +153,7 @@ class _AuthScreenState extends State<AuthScreen>
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
+    final bottomPadding = MediaQuery.of(context).padding.top;
     return Scaffold(
       body: !loader? Stack(
         children: [
@@ -168,44 +169,47 @@ class _AuthScreenState extends State<AuthScreen>
                     stops: [0, 1])),
           ),
           SingleChildScrollView(
-            child: Padding(
-              padding: EdgeInsets.only(top: deviceSize.height * 0.014),
-              child: Container(
-                height: deviceSize.height,
-                width: deviceSize.width,
-                child: Center(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Flexible(
-                        flex: 0,
-                        child: CircleAvatar(
-                            backgroundColor: Colors.white.withOpacity(0.5),
-                            radius: deviceSize.height * 0.1,
-                            child: Image.asset(
-                              'assets/icons/0-18.png',
-                              width: deviceSize.height * 0.15,
-                            )),
-                      ),
-                      Flexible(
-                          child: Container(
-                            margin: EdgeInsets.only(top: deviceSize.height * 0.004),
-                            child: Text(
-                              'Welcome!',
-                              style: TextStyle(
-                                color: Color(0xFFFFFFFF),
-                                fontSize: deviceSize.height <= 405
-                                    ? 14
-                                    : deviceSize.height * 0.06,
-                                fontWeight: FontWeight.bold,
+            child: SizedBox(
+              height: deviceSize.height - bottomPadding,
+              child: Padding(
+                padding: EdgeInsets.only(top: 30),
+                child: Container(
+                  height: deviceSize.height,
+                  width: deviceSize.width,
+                  child: Center(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Flexible(
+                          flex: 0,
+                          child: CircleAvatar(
+                              backgroundColor: Colors.white.withOpacity(0.5),
+                              radius: deviceSize.height * 0.1,
+                              child: Image.asset(
+                                'assets/icons/0-18.png',
+                                width: deviceSize.height * 0.15,
+                              )),
+                        ),
+                        Flexible(
+                            child: Container(
+                              margin: EdgeInsets.only(top: deviceSize.height * 0.004),
+                              child: Text(
+                                'Welcome!',
+                                style: TextStyle(
+                                  color: Color(0xFFFFFFFF),
+                                  fontSize: deviceSize.height <= 405
+                                      ? 13
+                                      : deviceSize.height * 0.05,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                          )),
-                      Flexible(
-                        child: buildLoginForm(deviceSize),
-                        flex: 0,
-                      ),
-                    ],
+                            )),
+                        Flexible(
+                          child: buildLoginForm(deviceSize),
+                          flex: 0,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -317,10 +321,11 @@ class _AuthScreenState extends State<AuthScreen>
                 children: [
                   Text(
                     'Modyle Name : ASSET TRACKING',
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Color(0xFFFFFFFF),
                       fontSize:
-                      deviceSize.height <= 430 ? deviceSize.height * 0.03 : 12,
+                      deviceSize.height <= 430 ? deviceSize.height * 0.03 : 16,
                     ),
                   ),
                   SizedBox(
@@ -330,14 +335,14 @@ class _AuthScreenState extends State<AuthScreen>
                     'Internal Version',
                     style: TextStyle(
                       color: Color(0xFFFFFFFF),
-                      fontSize: deviceSize.height * 0.03,
+                      fontSize: deviceSize.height <= 430 ? deviceSize.height * 0.03 : 16,
                     ),
                   ),
                   Text(
                     'V 1.0.0',
                     style: TextStyle(
                       color: Color(0xFFFFFFFF),
-                      fontSize: deviceSize.height * 0.03,
+                      fontSize: deviceSize.height <= 430 ? deviceSize.height * 0.03 : 16,
                     ),
                   ),
                   SizedBox(
@@ -347,7 +352,7 @@ class _AuthScreenState extends State<AuthScreen>
                     'DGI SYSTEM',
                     style: TextStyle(
                         color: Color(0xFF0F6671),
-                        fontSize: deviceSize.height * 0.042,
+                        fontSize: deviceSize.height * 0.04,
                         fontWeight: FontWeight.bold),
                   ),
                 ],
