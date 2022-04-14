@@ -33,7 +33,7 @@ class AssetRepository{
   }
   Future<int> update(Asset asset) async{
     final Database db = await databaseHandler.initializeDB();
-    return db.update(TABLE_NAME, asset.toMap(),where: "id = ?",whereArgs: [asset.id]);
+    return db.update(TABLE_NAME, asset.toMap(),where: "Id = ?",whereArgs: [asset.id]);
   }
   Future<int> batch(List<Asset> assets) async {
     int result = 0;
