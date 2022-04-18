@@ -11,17 +11,28 @@ class CaptureDetails {
   final int? sectionId;
   final String? serialNumber;
   int? isUploaded;
+  final double height;
+  final double width;
+  final double length;
+  final String color;
 
   CaptureDetails(
-      {this.id, this.name,
+      {this.id,
+      this.name,
       required this.image,
       required this.assetLocationId,
       required this.description,
       required this.quantity,
       required this.itemId,
-      required this.departmentId,required this.floorId,
-      required this.sectionId,required this.serialNumber,
-      this.isUploaded=0});
+      required this.departmentId,
+      required this.floorId,
+      required this.sectionId,
+      required this.serialNumber,
+      this.isUploaded = 0,
+      required this.length,
+      required this.height,
+      required this.color,
+      required this.width});
 
   CaptureDetails.fromMap(Map<String, dynamic> res)
       : id = res["Id"],
@@ -35,11 +46,30 @@ class CaptureDetails {
         departmentId = res['DepartmentId'],
         sectionId = res['SectionId'],
         serialNumber = res['SerialNumber'],
-        isUploaded = res["isUploaded"];
+        isUploaded = res["isUploaded"],
+        color = res['Color'],
+        width = res["Width"].toDouble(),
+        height = res["Height"].toDouble(),
+        length = res["Length"].toDouble();
 
   Map<String, Object?> toMap() {
-    return {'Id': id, 'Name': name,'Image':image,'AssetLocationId':assetLocationId, 'ItemId':itemId,
-      'Description':description,'Quantity':quantity,'FloorId':floorId,
-      'DepartmentId':departmentId,'SectionId':sectionId,'SerialNumber':serialNumber,'isUploaded':isUploaded};
+    return {
+      'Id': id,
+      'Name': name,
+      'AssetLocationId': assetLocationId,
+      'ItemId': itemId,
+      'Description': description,
+      'Quantity': quantity,
+      'FloorId': floorId,
+      'DepartmentId': departmentId,
+      'SectionId': sectionId,
+      'SerialNumber': serialNumber,
+      'isUploaded': isUploaded,
+      'Color': color,
+      'Width': width,
+      'Height': height,
+      'Length': length,
+      'Image': image,
+    };
   }
 }

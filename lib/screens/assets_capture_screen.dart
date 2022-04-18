@@ -8,6 +8,7 @@ import 'package:dgi/Services/ItemService.dart';
 import 'package:dgi/Services/MainCategoryService.dart';
 import 'package:dgi/Services/ServerService.dart';
 import 'package:dgi/Utility/footer.dart';
+import 'package:dgi/Utility/utilityService.dart';
 import 'package:dgi/model/assetLocation.dart';
 import 'package:dgi/model/category.dart';
 import 'package:dgi/model/CaptureDetails.dart';
@@ -16,6 +17,7 @@ import 'package:dgi/model/mainCategory.dart';
 import 'package:dgi/screens/home_page.dart';
 import 'package:dgi/screens/take_picture_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import '../Utility/CustomWidgetBuilder.dart';
 
 class AssetsCapture extends StatefulWidget {
@@ -24,7 +26,13 @@ class AssetsCapture extends StatefulWidget {
   final int? sectionId;
   final int? floorId;
 
-  AssetsCapture({Key? key, required this.assetLocation,this.sectionId,this.floorId,this.departmentId}) : super(key: key);
+  AssetsCapture(
+      {Key? key,
+      required this.assetLocation,
+      this.sectionId,
+      this.floorId,
+      this.departmentId})
+      : super(key: key);
 
   @override
   State<AssetsCapture> createState() => _AssetsCaptureState();
@@ -35,6 +43,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   String? mainCategory;
   String? item;
   String? imagePath;
+  bool isChangeColor = false;
 
   List<Category> categories = [];
   List<MainCategory> mainCategories = [];
@@ -42,8 +51,11 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   List<Category> allCategories = [];
   List<Item> allItems = [];
 
-  final  descriptionController = TextEditingController();
+  final descriptionController = TextEditingController();
   final serialNoController = TextEditingController();
+  final heightController = TextEditingController();
+  final lengthController = TextEditingController();
+  final widthController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey();
   final categoryService = CategoryService();
   final captureDetailsService = CaptureDetailsService();
@@ -52,6 +64,14 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   final itemService = ItemService();
   int quantity = 1;
   List<CaptureDetails> captureDetails = [];
+  // create some values
+  Color pickerColor = Color(0xff443a49);
+  Color currentColor = Color(0xff443a49);
+
+  void changeColor(Color color) {
+    isChangeColor = true;
+    setState(() => pickerColor = color);
+  }
 
   @override
   void initState() {
@@ -95,313 +115,407 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   Widget build(BuildContext context) {
     final dSize = MediaQuery.of(context).size;
     return Scaffold(
-        body: SafeArea(
-      child: SingleChildScrollView(
-        child: SizedBox(
-          height: dSize.height,
-          child: Column(
-            children: [
-              Container(
-                width: double.infinity,
-                height: dSize.height * 0.122,
-                padding: EdgeInsets.symmetric(vertical: dSize.height * 0.007),
-                decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                        colors: [
-                          Color(0xFF26BB9B),
-                          Color(0xFF00B0BD),
-                        ],
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                        stops: [0, 1])),
-                child: Column(
-                  children: [
-                    Text(
-                      'DGI ASSETS TRACKING',
-                      style: TextStyle(
-                          fontSize: dSize.height * 0.027,
-                          color: Colors.white,
-                          fontFamily: 'Montserrat'),
-                    ),
-                    SizedBox(
-                      height: dSize.height * 0.03,
-                    ),
-                    Row(
-                      children: [
-                        Container(
-                            alignment: Alignment.centerLeft,
-                            padding: EdgeInsets.symmetric(
-                                vertical: dSize.height * 0.004, horizontal: 25),
-                            decoration: const BoxDecoration(
-                              color: Color(0xFFFFA227),
-                              borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(12),
-                                  bottomRight: Radius.circular(12)),
-                            ),
-                            child: Text.rich(
-                              TextSpan(
-                                  style: TextStyle(
-                                      fontSize: dSize.height * 0.028,
-                                      color: Colors.white,
-                                      fontFamily: 'Montserrat'),
-                                  children: const <InlineSpan>[
-                                    TextSpan(
-                                      text: 'ASSETS ',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    TextSpan(
-                                      text: 'CAPTURE',
-                                    ),
-                                  ]),
-                            )),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-              Container(
-                height: dSize.height * 0.37,
-                padding: EdgeInsets.symmetric(horizontal: dSize.height * 0.016),
-                child: Form(
-                  key: _formKey,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: SizedBox(
+            height: dSize.height,
+            child: Column(
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: dSize.height * 0.122,
+                  padding: EdgeInsets.symmetric(vertical: dSize.height * 0.007),
+                  decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                          colors: [
+                            Color(0xFF26BB9B),
+                            Color(0xFF00B0BD),
+                          ],
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                          stops: [0, 1])),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      dropdownMenu(
-                          'MAIN CATEGORY',
-                          dSize,
-                          mainCategories.map((e) => e.name).toSet().toList(),
-                          changeMainCategory,
-                          mainCategory),
-                      if (mainCategory != null)
-                        dropdownMenu(
-                            'CATEGORY',
-                            dSize,
-                            categories.map((e) => e.name).toSet().toList(),
-                            changeCategory,
-                            category),
-                      if (category != null)
-                        dropdownMenu(
-                            'ITEM',
-                            dSize,
-                            items.map((e) => e.name).toSet().toList(),
-                            changeItem,
-                            item),
+                      Text(
+                        'DGI ASSETS TRACKING',
+                        style: TextStyle(
+                            fontSize: dSize.height * 0.027,
+                            color: Colors.white,
+                            fontFamily: 'Montserrat'),
+                      ),
                       SizedBox(
-                        height: dSize.height * 0.01,
+                        height: dSize.height * 0.03,
                       ),
                       Row(
                         children: [
-                          CustomWidgetBuilder.buildText('ITEM DESC', dSize),
-                          Spacer(),
                           Container(
-                            width: dSize.width * 0.5,
-                            child: TextFormField(
-                              controller: descriptionController,
-                              decoration: InputDecoration(
-                                enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Color(0xFF00B0BD), width: 2)),
-                                focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Color(0xFF00B0BD), width: 2)),
-                                contentPadding: EdgeInsets.all(
-                                    dSize.height <= 430
-                                        ? dSize.height * 0.009
-                                        : 7),
-                                isDense: true,
-                                border: InputBorder.none,
+                              alignment: Alignment.centerLeft,
+                              padding: EdgeInsets.symmetric(
+                                  vertical: dSize.height * 0.004,
+                                  horizontal: 25),
+                              decoration: const BoxDecoration(
+                                color: Color(0xFFFFA227),
+                                borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(12),
+                                    bottomRight: Radius.circular(12)),
                               ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          CustomWidgetBuilder.buildText('SERIAL NO', dSize),
-                          Spacer(),
-                          Container(
-                            width: dSize.width * 0.5,
-                            child: TextFormField(
-                              controller: serialNoController,
-                              decoration: InputDecoration(
-                                enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Color(0xFF00B0BD), width: 2)),
-                                focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Color(0xFF00B0BD), width: 2)),
-                                contentPadding: EdgeInsets.all(
-                                    dSize.height <= 430
-                                        ? dSize.height * 0.009
-                                        : 7),
-                                isDense: true,
-                                border: InputBorder.none,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          CustomWidgetBuilder.buildText('QUANTITY', dSize),
-                          Spacer(),
-                          SizedBox(
-                            width: dSize.width * 0.5,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                InkWell(
-                                  onTap: () {
-                                    if (quantity > 1) {
-                                      setState(() {
-                                        quantity--;
-                                      });
-                                    }
-                                  },
-                                  child: const CircleAvatar(
-                                    backgroundColor: Color(0xFFFFA227),
-                                    foregroundColor: Colors.white,
-                                    radius: 10,
-                                    child: Icon(
-                                      Icons.remove,
-                                      size: 20,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: dSize.width * 0.0159,
-                                ),
-                                Container(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: dSize.height * 0.001,
-                                      horizontal: 22.919),
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: const Color(0xFF00B0BD),
-                                          width:
-                                              dSize.height >= 430 ? 1.5 : 0.5),
-                                      borderRadius: BorderRadius.circular(15)),
-                                  child: Text(
-                                    quantity.toString(),
+                              child: Text.rich(
+                                TextSpan(
                                     style: TextStyle(
-                                        color: Color(0xFF0F6671),
-                                        fontSize: 15.28,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: dSize.width * 0.0159,
-                                ),
-                                InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      quantity++;
-                                    });
-                                  },
-                                  child: const CircleAvatar(
-                                    backgroundColor: Color(0xFF00B0BD),
-                                    foregroundColor: Colors.white,
-                                    radius: 10,
-                                    child: Icon(Icons.add, size: 20),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
+                                        fontSize: dSize.height * 0.028,
+                                        color: Colors.white,
+                                        fontFamily: 'Montserrat'),
+                                    children: const <InlineSpan>[
+                                      TextSpan(
+                                        text: 'ASSETS ',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      TextSpan(
+                                        text: 'CAPTURE',
+                                      ),
+                                    ]),
+                              )),
                         ],
-                      ),
-                      Row(
-                        children: [
-                          CustomWidgetBuilder.buildText('PHOTO', dSize),
-                          Spacer(),
-                          InkWell(
-                            child: SizedBox(
-                              width: dSize.width * 0.5,
-                              child: imagePath == null
-                                  ? Image.asset(
-                                      'assets/icons/0-16.jpg',
-                                      height: dSize.height * 0.055,
-                                      alignment: Alignment.centerLeft,
-                                    )
-                                  : Image.file(
-                                      File(imagePath!),
-                                      height: dSize.height * 0.055,
-                                      alignment: Alignment.bottomLeft,
-                                    ),
-                            ),
-                            onTap: () async {
-                              _showCamera();
-                            },
-                          ),
-                        ],
-                      ),
-                      buildAddButton(),
+                      )
                     ],
                   ),
                 ),
-              ),
-              Expanded(
-                child: Column(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      height: dSize.height < 600
-                          ? dSize.height * 0.36
-                          : dSize.height * 0.39,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: ListView(
+                Container(
+                  height: dSize.height * 0.41,
+                  padding:
+                      EdgeInsets.symmetric(horizontal: dSize.height * 0.016),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        dropdownMenu(
+                            'MAIN CATEGORY',
+                            dSize,
+                            mainCategories.map((e) => e.name).toSet().toList(),
+                            changeMainCategory,
+                            mainCategory),
+                        if (mainCategory != null)
+                          dropdownMenu(
+                              'CATEGORY',
+                              dSize,
+                              categories.map((e) => e.name).toSet().toList(),
+                              changeCategory,
+                              category),
+                        if (category != null)
+                          dropdownMenu(
+                              'ITEM',
+                              dSize,
+                              items.map((e) => e.name).toSet().toList(),
+                              changeItem,
+                              item),
+                        SizedBox(
+                          height: dSize.height * 0.01,
+                        ),
+                        Row(
                           children: [
-                            Table(
-                                border: TableBorder(
-                                    borderRadius: BorderRadius.circular(10)),
-                                children: _getListings()),
+                            CustomWidgetBuilder.buildText('ITEM DESC', dSize),
+                            Spacer(),
+                            Container(
+                              width: dSize.width * 0.5,
+                              child: TextFormField(
+                                controller: descriptionController,
+                                decoration: InputDecoration(
+                                  enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Color(0xFF00B0BD), width: 2)),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Color(0xFF00B0BD), width: 2)),
+                                  contentPadding: EdgeInsets.all(
+                                      dSize.height <= 430
+                                          ? dSize.height * 0.009
+                                          : 7),
+                                  isDense: true,
+                                  border: InputBorder.none,
+                                ),
+                              ),
+                            ),
                           ],
                         ),
-                      ),
+                        Row(
+                          children: [
+                            CustomWidgetBuilder.buildText('SERIAL NO', dSize),
+                            Spacer(),
+                            Container(
+                              width: dSize.width * 0.5,
+                              child: TextFormField(
+                                controller: serialNoController,
+                                decoration: InputDecoration(
+                                  enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Color(0xFF00B0BD), width: 2)),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Color(0xFF00B0BD), width: 2)),
+                                  contentPadding: EdgeInsets.all(
+                                      dSize.height <= 430
+                                          ? dSize.height * 0.009
+                                          : 7),
+                                  isDense: true,
+                                  border: InputBorder.none,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            CustomWidgetBuilder.buildText('WIDTH', dSize),
+                            Spacer(),
+                            Container(
+                              width: dSize.width * 0.5,
+                              child: TextFormField(
+                                controller: widthController,
+                                keyboardType: TextInputType.number,
+                                decoration: InputDecoration(
+                                  hintText: "ENTER VALUE IN CM",
+                                  enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Color(0xFF00B0BD), width: 2)),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Color(0xFF00B0BD), width: 2)),
+                                  contentPadding: EdgeInsets.all(
+                                      dSize.height <= 430
+                                          ? dSize.height * 0.009
+                                          : 7),
+                                  isDense: true,
+                                  border: InputBorder.none,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            CustomWidgetBuilder.buildText('HEIGHT', dSize),
+                            Spacer(),
+                            Container(
+                              width: dSize.width * 0.5,
+                              child: TextFormField(
+                                keyboardType: TextInputType.number,
+                                controller: heightController,
+                                decoration: InputDecoration(
+                                  hintText: "ENTER VALUE IN CM",
+                                  enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Color(0xFF00B0BD), width: 2)),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Color(0xFF00B0BD), width: 2)),
+                                  contentPadding: EdgeInsets.all(
+                                      dSize.height <= 430
+                                          ? dSize.height * 0.009
+                                          : 7),
+                                  isDense: true,
+                                  border: InputBorder.none,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            CustomWidgetBuilder.buildText('LENGTH', dSize),
+                            Spacer(),
+                            Container(
+                              width: dSize.width * 0.5,
+                              child: TextFormField(
+                                keyboardType: TextInputType.number,
+                                controller: lengthController,
+                                decoration: InputDecoration(
+                                  hintText: "ENTER VALUE IN CM",
+                                  enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Color(0xFF00B0BD), width: 2)),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Color(0xFF00B0BD), width: 2)),
+                                  contentPadding: EdgeInsets.all(
+                                      dSize.height <= 430
+                                          ? dSize.height * 0.009
+                                          : 7),
+                                  isDense: true,
+                                  border: InputBorder.none,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            CustomWidgetBuilder.buildText('QUANTITY', dSize),
+                            Spacer(),
+                            SizedBox(
+                              width: dSize.width * 0.5,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  InkWell(
+                                    onTap: () {
+                                      if (quantity > 1) {
+                                        setState(() {
+                                          quantity--;
+                                        });
+                                      }
+                                    },
+                                    child: const CircleAvatar(
+                                      backgroundColor: Color(0xFFFFA227),
+                                      foregroundColor: Colors.white,
+                                      radius: 10,
+                                      child: Icon(
+                                        Icons.remove,
+                                        size: 20,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: dSize.width * 0.0159,
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: dSize.height * 0.001,
+                                        horizontal: 22.919),
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: const Color(0xFF00B0BD),
+                                            width: dSize.height >= 430
+                                                ? 1.5
+                                                : 0.5),
+                                        borderRadius:
+                                            BorderRadius.circular(15)),
+                                    child: Text(
+                                      quantity.toString(),
+                                      style: TextStyle(
+                                          color: Color(0xFF0F6671),
+                                          fontSize: 15.28,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: dSize.width * 0.0159,
+                                  ),
+                                  InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        quantity++;
+                                      });
+                                    },
+                                    child: const CircleAvatar(
+                                      backgroundColor: Color(0xFF00B0BD),
+                                      foregroundColor: Colors.white,
+                                      radius: 10,
+                                      child: Icon(Icons.add, size: 20),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            CustomWidgetBuilder.buildText('PHOTO', dSize),
+                            Spacer(),
+                            InkWell(
+                              child: SizedBox(
+                                width: dSize.width * 0.5,
+                                child: imagePath == null
+                                    ? Image.asset(
+                                        'assets/icons/0-16.jpg',
+                                        height: dSize.height * 0.055,
+                                        alignment: Alignment.centerLeft,
+                                      )
+                                    : Image.file(
+                                        File(imagePath!),
+                                        height: dSize.height * 0.055,
+                                        alignment: Alignment.bottomLeft,
+                                      ),
+                              ),
+                              onTap: () async {
+                                _showCamera();
+                              },
+                            ),
+                          ],
+                        ),
+                        buildColorButton(),
+                        SizedBox(height: 8),
+                        buildAddButton(),
+                      ],
                     ),
-                    Container(
-                      padding: EdgeInsets.only(left: 15),
-                      child: Text(
-                        'ITEM TOTAL     ${captureDetails.length}',
-                        style: TextStyle(
-                            fontSize:
-                                dSize.width <= 500 ? dSize.width * 0.02 : 12,
-                            color: Color(0xFF0F6671),
-                            fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Expanded(
+                  child: Column(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        height: dSize.height < 600
+                            ? dSize.height * 0.31
+                            : dSize.height * 0.34,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: ListView(
+                            children: [
+                              Table(
+                                  border: TableBorder(
+                                      borderRadius: BorderRadius.circular(10)),
+                                  children: _getListings()),
+                            ],
+                          ),
+                        ),
                       ),
-                      alignment: Alignment.centerLeft,
-                    ),
-                  ],
+                      Container(
+                        padding: EdgeInsets.only(left: 15),
+                        child: Text(
+                          'ITEM TOTAL     ${captureDetails.length}',
+                          style: TextStyle(
+                              fontSize:
+                                  dSize.width <= 500 ? dSize.width * 0.02 : 12,
+                              color: Color(0xFF0F6671),
+                              fontWeight: FontWeight.bold),
+                        ),
+                        alignment: Alignment.centerLeft,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    CustomWidgetBuilder.buildArrow(
-                        context,
-                        dSize,
-                        Icon(Icons.arrow_back_ios_rounded),
-                        () => Navigator.of(context).pop()),
-                  ],
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CustomWidgetBuilder.buildArrow(
+                          context,
+                          dSize,
+                          Icon(Icons.arrow_back_ios_rounded),
+                          () => Navigator.of(context).pop()),
+                    ],
+                  ),
                 ),
-              ),
-              Footer()
-            ],
+                Footer()
+              ],
+            ),
           ),
         ),
       ),
-    ),
-      floatingActionButton: FloatingActionButton(onPressed: () {
-        Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => HomePage()));
-      },
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => HomePage()));
+        },
         backgroundColor: Colors.orangeAccent,
-        child: Icon(Icons.home,color: Colors.white,),
+        child: Icon(
+          Icons.home,
+          color: Colors.white,
+        ),
       ),
     );
   }
@@ -443,9 +557,45 @@ class _AssetsCaptureState extends State<AssetsCapture> {
     );
   }
 
+  buildColorButton() {
+    return InkWell(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Icon(
+            Icons.color_lens_outlined,
+            size: 17,
+            color: Colors.orangeAccent,
+          ),
+          SizedBox(width: 5,),
+          Text(
+            'CHOOSE COLOR',
+            style: TextStyle(
+                fontSize: 12, color:Color(0xFF0F6671) , fontWeight: FontWeight.bold),
+          ),
+        ],
+      ),
+      onTap: () {
+        showColorPicker();
+      },
+    );
+  }
+
   void saveItem() async {
-    if (descriptionController.text.isEmpty || imagePath == null || item == null || serialNoController.text.isEmpty) {
-      CustomWidgetBuilder.showMessageDialog(context,'Fill in the empty fields',true);
+    if (descriptionController.text.isEmpty ||
+        imagePath == null ||
+        item == null ||
+        serialNoController.text.isEmpty) {
+      CustomWidgetBuilder.showMessageDialog(
+          context, 'Fill in the empty fields', true);
+    } else if (!UtilityService.isNumeric(heightController.text) ||
+        !UtilityService.isNumeric(widthController.text) ||
+        !UtilityService.isNumeric(lengthController.text)) {
+      CustomWidgetBuilder.showMessageDialog(
+          context, 'Pleas enter valid numbers', true);
+    } else if (!isChangeColor) {
+      CustomWidgetBuilder.showMessageDialog(
+          context, 'Pleas choose color', true);
     } else {
       File file = File(imagePath!);
       final Uint8List bytes = file.readAsBytesSync();
@@ -453,7 +603,11 @@ class _AssetsCaptureState extends State<AssetsCapture> {
       String description = descriptionController.text;
       String serialNumber = serialNoController.text;
       int? itemId = items.firstWhere((element) => element.name == item).id;
-      captureDetailsService.insert(CaptureDetails(
+      final captureDetails = CaptureDetails(
+        color: pickerColor.value.toString(),
+        height: double.parse(heightController.text),
+        width: double.parse(widthController.text),
+        length: double.parse(lengthController.text),
         serialNumber: serialNumber,
         sectionId: widget.sectionId,
         floorId: widget.floorId,
@@ -463,7 +617,9 @@ class _AssetsCaptureState extends State<AssetsCapture> {
         description: description,
         image: base64Image,
         quantity: quantity,
-      ));
+      );
+      print(captureDetails.toMap());
+      captureDetailsService.insert(captureDetails);
       getItems();
       resetForm();
       // delete file to avoid cash overload
@@ -564,7 +720,13 @@ class _AssetsCaptureState extends State<AssetsCapture> {
     quantity = 1;
     imagePath = null;
     descriptionController.text = "";
-    serialNoController.text="";
+    serialNoController.text = "";
+    isChangeColor = false;
+    widthController.text="";
+    heightController.text="";
+    lengthController.text="";
+    pickerColor = Color(0xff443a49);
+    currentColor = Color(0xff443a49);
   }
 
   void initData() async {
@@ -573,5 +735,30 @@ class _AssetsCaptureState extends State<AssetsCapture> {
     allItems = await itemService.retrieve();
     getItems();
     setState(() {});
+  }
+
+  showColorPicker() {
+    // raise the [showDialog] widget
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Pick a color!'),
+        content: SingleChildScrollView(
+          child: ColorPicker(
+            pickerColor: pickerColor,
+            onColorChanged: changeColor,
+          ),
+        ),
+        actions: <Widget>[
+          ElevatedButton(
+            child: const Text('Got it'),
+            onPressed: () {
+              setState(() => currentColor = pickerColor);
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      ),
+    );
   }
 }
