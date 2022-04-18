@@ -114,11 +114,12 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   @override
   Widget build(BuildContext context) {
     final dSize = MediaQuery.of(context).size;
+    final bottomPadding = MediaQuery.of(context).padding.top;
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
           child: SizedBox(
-            height: dSize.height,
+            height: dSize.height - bottomPadding,
             child: Column(
               children: [
                 Container(
@@ -182,7 +183,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                   ),
                 ),
                 Container(
-                  height: dSize.height * 0.41,
+                  height: dSize.height * 0.45,
                   padding:
                       EdgeInsets.symmetric(horizontal: dSize.height * 0.016),
                   child: Form(
@@ -210,9 +211,6 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                               items.map((e) => e.name).toSet().toList(),
                               changeItem,
                               item),
-                        SizedBox(
-                          height: dSize.height * 0.01,
-                        ),
                         Row(
                           children: [
                             CustomWidgetBuilder.buildText('ITEM DESC', dSize),
@@ -221,6 +219,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                               width: dSize.width * 0.5,
                               child: TextFormField(
                                 controller: descriptionController,
+                                style: const TextStyle(fontSize: 14),
                                 decoration: InputDecoration(
                                   enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
@@ -230,8 +229,8 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                                           color: Color(0xFF00B0BD), width: 2)),
                                   contentPadding: EdgeInsets.all(
                                       dSize.height <= 430
-                                          ? dSize.height * 0.009
-                                          : 7),
+                                          ? dSize.height * 0.004
+                                          : 4),
                                   isDense: true,
                                   border: InputBorder.none,
                                 ),
@@ -247,6 +246,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                               width: dSize.width * 0.5,
                               child: TextFormField(
                                 controller: serialNoController,
+                                style: const TextStyle(fontSize: 14),
                                 decoration: InputDecoration(
                                   enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
@@ -256,8 +256,8 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                                           color: Color(0xFF00B0BD), width: 2)),
                                   contentPadding: EdgeInsets.all(
                                       dSize.height <= 430
-                                          ? dSize.height * 0.009
-                                          : 7),
+                                          ? dSize.height * 0.004
+                                          : 4),
                                   isDense: true,
                                   border: InputBorder.none,
                                 ),
@@ -274,6 +274,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                               child: TextFormField(
                                 controller: widthController,
                                 keyboardType: TextInputType.number,
+                                style: const TextStyle(fontSize: 14),
                                 decoration: InputDecoration(
                                   hintText: "ENTER VALUE IN CM",
                                   enabledBorder: OutlineInputBorder(
@@ -284,8 +285,8 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                                           color: Color(0xFF00B0BD), width: 2)),
                                   contentPadding: EdgeInsets.all(
                                       dSize.height <= 430
-                                          ? dSize.height * 0.009
-                                          : 7),
+                                          ? dSize.height * 0.004
+                                          : 4),
                                   isDense: true,
                                   border: InputBorder.none,
                                 ),
@@ -302,6 +303,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                               child: TextFormField(
                                 keyboardType: TextInputType.number,
                                 controller: heightController,
+                                style: const TextStyle(fontSize: 14),
                                 decoration: InputDecoration(
                                   hintText: "ENTER VALUE IN CM",
                                   enabledBorder: OutlineInputBorder(
@@ -312,8 +314,8 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                                           color: Color(0xFF00B0BD), width: 2)),
                                   contentPadding: EdgeInsets.all(
                                       dSize.height <= 430
-                                          ? dSize.height * 0.009
-                                          : 7),
+                                          ? dSize.height * 0.004
+                                          : 4),
                                   isDense: true,
                                   border: InputBorder.none,
                                 ),
@@ -330,6 +332,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                               child: TextFormField(
                                 keyboardType: TextInputType.number,
                                 controller: lengthController,
+                                style: const TextStyle(fontSize: 14),
                                 decoration: InputDecoration(
                                   hintText: "ENTER VALUE IN CM",
                                   enabledBorder: OutlineInputBorder(
@@ -340,8 +343,8 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                                           color: Color(0xFF00B0BD), width: 2)),
                                   contentPadding: EdgeInsets.all(
                                       dSize.height <= 430
-                                          ? dSize.height * 0.009
-                                          : 7),
+                                          ? dSize.height * 0.004
+                                          : 4),
                                   isDense: true,
                                   border: InputBorder.none,
                                 ),
@@ -393,7 +396,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                                             BorderRadius.circular(15)),
                                     child: Text(
                                       quantity.toString(),
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           color: Color(0xFF0F6671),
                                           fontSize: 15.28,
                                           fontWeight: FontWeight.bold),
@@ -423,7 +426,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                         Row(
                           children: [
                             CustomWidgetBuilder.buildText('PHOTO', dSize),
-                            Spacer(),
+                            const Spacer(),
                             InkWell(
                               child: SizedBox(
                                 width: dSize.width * 0.5,
@@ -446,7 +449,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                           ],
                         ),
                         buildColorButton(),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         buildAddButton(),
                       ],
                     ),
@@ -458,8 +461,8 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 15),
                         height: dSize.height < 600
-                            ? dSize.height * 0.31
-                            : dSize.height * 0.34,
+                            ? dSize.height * 0.23
+                            : dSize.height * 0.27,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(12),
                           child: ListView(

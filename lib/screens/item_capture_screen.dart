@@ -70,11 +70,12 @@ class _ItemCaptureState extends State<ItemCapture> {
   @override
   Widget build(BuildContext context) {
     final dSize = MediaQuery.of(context).size;
+    final bottomPadding = MediaQuery.of(context).padding.top;
     return Scaffold(
         body: SafeArea(
       child: SingleChildScrollView(
         child: SizedBox(
-          height: dSize.height,
+          height: dSize.height - bottomPadding,
           child: Column(
             children: [
               const Header(
