@@ -183,7 +183,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                   ),
                 ),
                 Container(
-                  height: dSize.height * 0.45,
+                  height: dSize.height < 600 ? dSize.height * 0.55 : dSize.height * 0.48,
                   padding:
                       EdgeInsets.symmetric(horizontal: dSize.height * 0.016),
                   child: Form(
@@ -219,7 +219,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                               width: dSize.width * 0.5,
                               child: TextFormField(
                                 controller: descriptionController,
-                                style: const TextStyle(fontSize: 14),
+                                style: TextStyle(fontSize: dSize.height <= 500 ? 10 : dSize.height * 0.02),
                                 decoration: InputDecoration(
                                   enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
@@ -228,9 +228,9 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                                       borderSide: BorderSide(
                                           color: Color(0xFF00B0BD), width: 2)),
                                   contentPadding: EdgeInsets.all(
-                                      dSize.height <= 430
-                                          ? dSize.height * 0.004
-                                          : 4),
+                                      dSize.height <= 600
+                                          ? dSize.height * 0.015
+                                          : 6),
                                   isDense: true,
                                   border: InputBorder.none,
                                 ),
@@ -238,33 +238,33 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                             ),
                           ],
                         ),
-                        Row(
-                          children: [
-                            CustomWidgetBuilder.buildText('SERIAL NO', dSize),
-                            Spacer(),
-                            Container(
-                              width: dSize.width * 0.5,
-                              child: TextFormField(
-                                controller: serialNoController,
-                                style: const TextStyle(fontSize: 14),
-                                decoration: InputDecoration(
-                                  enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Color(0xFF00B0BD), width: 2)),
-                                  focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Color(0xFF00B0BD), width: 2)),
-                                  contentPadding: EdgeInsets.all(
-                                      dSize.height <= 430
-                                          ? dSize.height * 0.004
-                                          : 4),
-                                  isDense: true,
-                                  border: InputBorder.none,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                        // Row(
+                        //   children: [
+                        //     CustomWidgetBuilder.buildText('SERIAL NO', dSize),
+                        //     Spacer(),
+                        //     Container(
+                        //       width: dSize.width * 0.5,
+                        //       child: TextFormField(
+                        //         controller: serialNoController,
+                        //         style: const TextStyle(fontSize: 14),
+                        //         decoration: InputDecoration(
+                        //           enabledBorder: OutlineInputBorder(
+                        //               borderSide: BorderSide(
+                        //                   color: Color(0xFF00B0BD), width: 2)),
+                        //           focusedBorder: OutlineInputBorder(
+                        //               borderSide: BorderSide(
+                        //                   color: Color(0xFF00B0BD), width: 2)),
+                        //           contentPadding: EdgeInsets.all(
+                        //               dSize.height <= 430
+                        //                   ? dSize.height * 0.004
+                        //                   : 4),
+                        //           isDense: true,
+                        //           border: InputBorder.none,
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
                         Row(
                           children: [
                             CustomWidgetBuilder.buildText('WIDTH', dSize),
@@ -274,7 +274,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                               child: TextFormField(
                                 controller: widthController,
                                 keyboardType: TextInputType.number,
-                                style: const TextStyle(fontSize: 14),
+                                style: TextStyle(fontSize: dSize.height <= 500 ? 10 : dSize.height * 0.02),
                                 decoration: InputDecoration(
                                   hintText: "ENTER VALUE IN CM",
                                   enabledBorder: OutlineInputBorder(
@@ -284,9 +284,9 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                                       borderSide: BorderSide(
                                           color: Color(0xFF00B0BD), width: 2)),
                                   contentPadding: EdgeInsets.all(
-                                      dSize.height <= 430
-                                          ? dSize.height * 0.004
-                                          : 4),
+                                      dSize.height <= 600
+                                          ? dSize.height * 0.015
+                                          : 6),
                                   isDense: true,
                                   border: InputBorder.none,
                                 ),
@@ -303,7 +303,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                               child: TextFormField(
                                 keyboardType: TextInputType.number,
                                 controller: heightController,
-                                style: const TextStyle(fontSize: 14),
+                                style: TextStyle(fontSize: dSize.height <= 500 ? 10 : dSize.height * 0.02),
                                 decoration: InputDecoration(
                                   hintText: "ENTER VALUE IN CM",
                                   enabledBorder: OutlineInputBorder(
@@ -313,9 +313,9 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                                       borderSide: BorderSide(
                                           color: Color(0xFF00B0BD), width: 2)),
                                   contentPadding: EdgeInsets.all(
-                                      dSize.height <= 430
-                                          ? dSize.height * 0.004
-                                          : 4),
+                                      dSize.height <= 600
+                                          ? dSize.height * 0.015
+                                          : 6),
                                   isDense: true,
                                   border: InputBorder.none,
                                 ),
@@ -332,7 +332,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                               child: TextFormField(
                                 keyboardType: TextInputType.number,
                                 controller: lengthController,
-                                style: const TextStyle(fontSize: 14),
+                                style: TextStyle(fontSize: dSize.height <= 500 ? 10 : dSize.height * 0.02),
                                 decoration: InputDecoration(
                                   hintText: "ENTER VALUE IN CM",
                                   enabledBorder: OutlineInputBorder(
@@ -342,9 +342,9 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                                       borderSide: BorderSide(
                                           color: Color(0xFF00B0BD), width: 2)),
                                   contentPadding: EdgeInsets.all(
-                                      dSize.height <= 430
-                                          ? dSize.height * 0.004
-                                          : 4),
+                                      dSize.height <= 600
+                                          ? dSize.height * 0.015
+                                          : 6),
                                   isDense: true,
                                   border: InputBorder.none,
                                 ),
@@ -461,8 +461,8 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 15),
                         height: dSize.height < 600
-                            ? dSize.height * 0.23
-                            : dSize.height * 0.27,
+                            ? dSize.height * 0.2
+                            : dSize.height * 0.255,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(12),
                           child: ListView(
@@ -480,8 +480,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                         child: Text(
                           'ITEM TOTAL     ${captureDetails.length}',
                           style: TextStyle(
-                              fontSize:
-                                  dSize.width <= 500 ? dSize.width * 0.02 : 12,
+                              fontSize: dSize.height <= 500 ? 10 : dSize.height * 0.015,
                               color: Color(0xFF0F6671),
                               fontWeight: FontWeight.bold),
                         ),
@@ -563,7 +562,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   buildColorButton() {
     return InkWell(
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Icon(
             Icons.color_lens_outlined,
@@ -587,8 +586,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   void saveItem() async {
     if (descriptionController.text.isEmpty ||
         imagePath == null ||
-        item == null ||
-        serialNoController.text.isEmpty) {
+        item == null) {
       CustomWidgetBuilder.showMessageDialog(
           context, 'Fill in the empty fields', true);
     } else if (!UtilityService.isNumeric(heightController.text) ||
@@ -604,7 +602,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
       final Uint8List bytes = file.readAsBytesSync();
       String base64Image = base64Encode(bytes);
       String description = descriptionController.text;
-      String serialNumber = serialNoController.text;
+      String? serialNumber;
       int? itemId = items.firstWhere((element) => element.name == item).id;
       final captureDetails = CaptureDetails(
         color: pickerColor.value.toString(),

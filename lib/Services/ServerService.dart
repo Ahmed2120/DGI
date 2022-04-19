@@ -41,7 +41,7 @@ class ServerService{
       await setServerIPAddress();
     }
     final response = await http
-          .get(Uri.parse('${MyConfig.SERVER}${MyConfig.COUNTRY_API}'));
+        .get(Uri.parse('${MyConfig.SERVER}${MyConfig.COUNTRY_API}'));
     if (response.statusCode == 200) {
       final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
       return parsed.map<Country>((json) => Country.fromMap(json)).toList();
@@ -251,7 +251,7 @@ class ServerService{
         CaptureDetailsRequest(quantity: e.quantity,image: e.image,description: e.description,id: e.id,
             departmentId: e.departmentId,floorId: e.floorId,sectionId: e.sectionId,serialNumber: e.serialNumber,
             assetLocationId: e.assetLocationId,itemId: e.itemId,transactionId: transaction.id,color: e.color,
-        height: e.height,length: e.length,width: e.width)).toList();
+            height: e.height,length: e.length,width: e.width)).toList();
     CaptureDetailsList request = CaptureDetailsList(captureDetailsList: captureDetailsList);
     print('====' + jsonEncode(request));
     final response = await http.post(
@@ -272,8 +272,8 @@ class ServerService{
   }
 
   clearData()async{
-   final dataHandler = DatabaseHandler();
-   await dataHandler.clearData();
+    final dataHandler = DatabaseHandler();
+    await dataHandler.clearData();
   }
 
   setServerIPAddress()async{
