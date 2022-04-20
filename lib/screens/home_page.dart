@@ -198,6 +198,9 @@ class _HomePageState extends State<HomePage> {
                               InkWell(
                                   child: buildColumn('UPLOAD', dsize, ''),
                                   onTap: () => uploadData()),
+                              InkWell(
+                                  child: buildColumn('Excel', dsize, 'excel'),
+                                  onTap: () => serverService.excelServices()),
                             ],
                             crossAxisCount: 2,
                             childAspectRatio: (dsize.width * 0.009) /
