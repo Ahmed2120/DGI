@@ -11,6 +11,7 @@ import 'package:dgi/screens/item_capture_screen.dart';
 import 'package:dgi/screens/settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../Services/ExcelService.dart';
 import 'assets_counter_screen.dart';
 
 class HomePage extends StatefulWidget {
@@ -23,6 +24,7 @@ class _HomePageState extends State<HomePage> {
   TransactionType transactionType = TransactionType.none;
   final transactionService = TransactionService();
   final serverService = ServerService();
+  final excelService = ExcelService();
   final settingService = SettingService();
   bool loader = false;
 
@@ -200,7 +202,7 @@ class _HomePageState extends State<HomePage> {
                                   onTap: () => uploadData()),
                               InkWell(
                                   child: buildColumn('Excel', dsize, 'excel'),
-                                  onTap: () => serverService.excelServices()),
+                                  onTap: () => excelService.exportExcel()),
                             ],
                             crossAxisCount: 2,
                             childAspectRatio: (dsize.width * 0.009) /
