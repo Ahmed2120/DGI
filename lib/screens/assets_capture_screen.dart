@@ -427,29 +427,32 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                           children: [
                             CustomWidgetBuilder.buildText('PHOTO', dSize),
                             const Spacer(),
-                            InkWell(
-                              child: SizedBox(
-                                width: dSize.width * 0.5,
-                                child: imagePath == null
-                                    ? Image.asset(
-                                        'assets/icons/0-16.jpg',
-                                        height: dSize.height * 0.055,
-                                        alignment: Alignment.centerLeft,
-                                      )
-                                    : Image.file(
-                                        File(imagePath!),
-                                        height: dSize.height * 0.055,
-                                        alignment: Alignment.bottomLeft,
-                                      ),
+                            SizedBox(
+                              width: dSize.width * 0.5,
+                              child: Row(
+                                children: [
+                                  InkWell(
+                                    onTap: () async {
+                                      _showCamera();
+                                      },
+                                    child: imagePath == null
+                                        ? Image.asset(
+                                            'assets/icons/0-16.jpg',
+                                            height: dSize.height * 0.055,
+                                            alignment: Alignment.centerLeft,
+                                          )
+                                        : Image.file(
+                                            File(imagePath!),
+                                            height: dSize.height * 0.055,
+                                            alignment: Alignment.bottomLeft,
+                                          ),
+                                  ),
+                                ],
                               ),
-                              onTap: () async {
-                                _showCamera();
-                              },
                             ),
                           ],
                         ),
                         buildColorButton(),
-                        const SizedBox(height: 8),
                         buildAddButton(),
                       ],
                     ),
@@ -535,51 +538,69 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   }
 
   buildAddButton() {
-    return InkWell(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Text(
-            'ADD ',
-            style: const TextStyle(
-                fontSize: 11,
-                color: Color(0xFF0F6671),
-                fontWeight: FontWeight.bold),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        TextButton(
+          child: Row(
+            children: [
+              Text(
+                'ADD ',
+                style: const TextStyle(
+                    fontSize: 11,
+                    color: Color(0xFF0F6671),
+                    fontWeight: FontWeight.bold),
+              ),
+              Icon(
+                Icons.add,
+                size: 17,
+                color: Color(0xFF00B0BD),
+              ),
+            ],
           ),
-          Icon(
-            Icons.add,
-            size: 17,
-            color: Color(0xFF00B0BD),
-          ),
-        ],
-      ),
-      onTap: () {
-        saveItem();
-      },
+          onPressed: () {
+            saveItem();
+          },
+          style: TextButton.styleFrom(
+              padding: const EdgeInsets.all(5),
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              minimumSize: const Size(5, 2)),
+        ),
+
+      ],
     );
   }
 
   buildColorButton() {
-    return InkWell(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Icon(
-            Icons.color_lens_outlined,
-            size: 17,
-            color: Colors.orangeAccent,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        TextButton(
+          onPressed: () {
+            showColorPicker();
+          },
+          style: TextButton.styleFrom(
+              padding: const EdgeInsets.all(5),
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              minimumSize: const Size(5, 2)),
+          child: Row(
+            children: [
+              Icon(
+                Icons.color_lens_outlined,
+                size: 17,
+                color: Colors.orangeAccent,
+              ),
+              SizedBox(width: 5,),
+              Text(
+                'CHOOSE COLOR',
+                style: TextStyle(
+                    fontSize: 12, color:Color(0xFF0F6671) , fontWeight: FontWeight.bold),
+              ),
+            ],
           ),
-          SizedBox(width: 5,),
-          Text(
-            'CHOOSE COLOR',
-            style: TextStyle(
-                fontSize: 12, color:Color(0xFF0F6671) , fontWeight: FontWeight.bold),
-          ),
-        ],
-      ),
-      onTap: () {
-        showColorPicker();
-      },
+        ),
+
+      ],
     );
   }
 
