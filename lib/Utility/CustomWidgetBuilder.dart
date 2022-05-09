@@ -13,12 +13,16 @@ class CustomWidgetBuilder{
           width: dSize.width * 0.5,
           child: TextFormField(
             controller: TextEditingController(text: text),
+            style: TextStyle(fontSize: dSize.height <= 500 ? 10 : dSize.height * 0.02),
             decoration: InputDecoration(
               enabled: enabled,
               focusedBorder: OutlineInputBorder( borderSide: BorderSide(color: Color(0xFF00B0BD), width: 2)),
               enabledBorder: OutlineInputBorder( borderSide: BorderSide(color: Color(0xFF00B0BD), width: 2)),
               disabledBorder: OutlineInputBorder( borderSide: BorderSide(color: Color(0xFF00B0BD), width: 2)) ,
-              contentPadding: EdgeInsets.all(dSize.width <= 400 ? dSize.height * 0.009 : 12),
+              contentPadding: EdgeInsets.all(
+                  dSize.height <= 600
+                      ? dSize.height * 0.015
+                      : 6),
               isDense: true,
               border: InputBorder.none,
             ),
