@@ -116,7 +116,7 @@ class _AssetsCheckState extends State<AssetsCheck> {
                                 fontSize: dSize.width * 0.031),
                           ),
                           Text(
-                            'REMAIN : '+allAssets.where((element) => element.isCounted==0).toList().length.toString(),
+                            'REMAIN : '+allAssets.where((element) => element.isVerified==2).toList().length.toString(),
                             style: TextStyle(
                                 color: Color(0xFF0F6671),
                                 fontSize: dSize.width * 0.037),
@@ -207,7 +207,7 @@ class _AssetsCheckState extends State<AssetsCheck> {
                         CustomWidgetBuilder.buildTextFormField(
                             dSize,
                             'ASSET DESC',
-                            asset == null ? "" : asset!.description,true),
+                            asset == null && asset?.description!=null ? "" : asset!.description,true),
                         SizedBox(
                           height: dSize.height * 0.01,
                         ),
@@ -251,13 +251,13 @@ class _AssetsCheckState extends State<AssetsCheck> {
                                   ),
                                   Column(
                                     children: [
-                                      buildText(allAssets.where((element) => element.correct>0).toList().length.toString(), dSize),
+                                      buildText(allAssets.where((element) => element.isVerified==1).toList().length.toString(), dSize),
                                       checkContainer(dSize, true),
                                     ],
                                   ),
                                   Column(
                                     children: [
-                                      buildText(allAssets.where((element) => element.correct==0&&element.isCounted>0).toList().length.toString(), dSize),
+                                      buildText(allAssets.where((element) => element.isVerified==0).toList().length.toString(), dSize),
                                       checkContainer(dSize, false),
                                     ],
                                   ),
@@ -383,7 +383,7 @@ class _AssetsCheckState extends State<AssetsCheck> {
             i + 1,
             widget.category.name,
             assets[i].description,
-            checkContainer(dSize, assets[i].correct>0?true:false),
+            checkContainer(dSize, assets[i].isVerified==1?true:false),
           ],
         ),
       );
@@ -399,7 +399,7 @@ class _AssetsCheckState extends State<AssetsCheck> {
 
   updateItem(bool correct) {
     if(asset != null){
-      asset!.correct = correct?1:0;
+      asset!.isVerified = correct?1:0;
       asset!.isCounted=1;
       assetService.update(asset!);
       asset = null;

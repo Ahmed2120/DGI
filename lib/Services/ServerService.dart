@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:dgi/Services/AreaService.dart';
 import 'package:dgi/Services/AssetLocationService.dart';
+import 'package:dgi/Services/AssetService.dart';
 import 'package:dgi/Services/CaptureDetailsService.dart';
 import 'package:dgi/Services/CategoryService.dart';
 import 'package:dgi/Services/CityService.dart';
@@ -15,6 +16,7 @@ import 'package:dgi/Services/SettingService.dart';
 import 'package:dgi/Services/TransactionService.dart';
 import 'package:dgi/Services/UserService.dart';
 import 'package:dgi/db/DatabaseHandler.dart';
+import 'package:dgi/model/AssetVerificationResponse.dart';
 import 'package:dgi/model/CaptuerDeatailsList.dart';
 import 'package:dgi/model/CaptureDetails.dart';
 import 'package:dgi/model/CaptureDetailsRequest.dart';
@@ -31,9 +33,6 @@ import 'package:dgi/model/transcationResponse.dart';
 import 'package:http/http.dart' as http;
 import 'package:dgi/Utility/configration.dart';
 import 'package:dgi/model/country.dart';
-import 'package:open_file/open_file.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:syncfusion_flutter_xlsio/xlsio.dart';
 
 class ServerService{
 
@@ -220,8 +219,61 @@ class ServerService{
       await departmentService.batch(departments);
       await sectionService.batch(sections);
       await floorService.batch(floors);
+      if(response.transactionType == 2){
+        await uploadAssets(response.id);
+      }
       return "Success";
     }
+  }
+  uploadAssets(int transactionId) async {
+    AssetService assetService = AssetService();
+    try{
+      AssetVerificationResponse ? assetVerificationResponse = await getAssets(1, transactionId);
+      if(assetVerificationResponse == null) {
+        throw Exception("there is no data");
+      }else{
+        await assetService.batch(assetVerificationResponse.assets);
+        for(int i=2;i<=assetVerificationResponse!.totalPages;i++){
+          assetVerificationResponse = await getAssets(i, transactionId);
+          await assetService.batch(assetVerificationResponse!.assets);
+        }
+      }
+    }catch(e){
+      await clearData();
+      rethrow;
+    }
+  }
+  getAssets(int pageNumber,int transactionId)async{
+    if(MyConfig.SERVER == ''){
+      await setServerIPAddress();
+    }
+    final queryParameters = {
+      'pageNumber': pageNumber.toString(),
+      'pageSize': MyConfig.PAGE_SIZE.toString(),
+      'transactionId':transactionId.toString()
+    };
+    String queryString = Uri(queryParameters: queryParameters).query;
+    final uri = '${MyConfig.SERVER}${MyConfig.ASSET_VERFICATION}' + '?' + queryString;
+    try{
+      final response = await http.get(Uri.parse(uri));
+      if (response.statusCode == 200) {
+        final responseJson = json.decode(response.body);
+        if(responseJson == null){
+          throw Exception('This is no asset data assign to transaction');
+        }
+        return AssetVerificationResponse.fromMap(json.decode(response.body));
+      }else {
+        _handleStatusCode(response.statusCode);
+      }
+    }on SocketException {
+      throw Exception(
+          'Failed to connect to server make sure you connect to the internet');
+    } on FormatException{
+        throw Exception("Bad response");
+    } catch(e){
+      throw Exception(e);
+    }
+
   }
 
   uploadData()async{

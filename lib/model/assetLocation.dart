@@ -1,4 +1,4 @@
-class AssetLocation{
+class AssetLocation {
   final int id;
   final int areaId;
   final String? businessUnit;
@@ -13,19 +13,18 @@ class AssetLocation{
   final String locationTypeName;
 
   AssetLocation(
-      { required this.id,
-        this.name,
-        this.buildingAddress,
-        this.buildingName,
-        this.buildingNo,
-        this.businessUnit,
-        required this.areaId,
-        this.departmentId,
-        this.floorId,
-        this.sectionId,
-        required this.locationTypeName,
-        required this.locationType
-      });
+      {required this.id,
+      this.name,
+      this.buildingAddress,
+      this.buildingName,
+      this.buildingNo,
+      this.businessUnit,
+      required this.areaId,
+      this.departmentId,
+      this.floorId,
+      this.sectionId,
+      required this.locationTypeName,
+      required this.locationType});
 
   AssetLocation.fromMap(Map<String, dynamic> res)
       : id = res["Id"],
@@ -42,8 +41,19 @@ class AssetLocation{
         locationType = res["LocationType"];
 
   Map<String, Object?> toMap() {
-    return {'Id':id,'Name': name,'BusinessUnit':businessUnit,'BuildingAddress':buildingAddress,'BuildingName':buildingName,
-    'BuildingNo':buildingNo,'AreaId':areaId,'DepartmentId':departmentId,'FloorId':floorId,'SectionId':sectionId,
-    'LocationTypeName':locationTypeName,'LocationType':locationType};
+    return {
+      'Id': id,
+      'Name': name,
+      'BusinessUnit': businessUnit,
+      'BuildingAddress': buildingAddress,
+      'BuildingName': buildingName,
+      'BuildingNo': buildingNo,
+      'AreaId': areaId,
+      'DepartmentId': departmentId,
+      'FloorId': floorId,
+      'SectionId': sectionId,
+      'LocationTypeName': locationTypeName,
+      'LocationType': locationType,
+    };
   }
 }

@@ -4,7 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class CustomWidgetBuilder{
 
-  static buildTextFormField(Size dSize,String title,String text,bool enabled){
+  static buildTextFormField(Size dSize,String title,String ?text,bool enabled){
     return Row(
       children: [
         buildText(title, dSize),

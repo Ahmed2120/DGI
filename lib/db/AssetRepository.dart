@@ -13,12 +13,12 @@ class AssetRepository{
   }
   Future<List<Asset>> select(String barcode) async {
     final Database db = await databaseHandler.initializeDB();
-    final List<Map<String, Object?>> queryResult = await db.query(TABLE_NAME,where: "barcode = ?",whereArgs: [barcode]);
+    final List<Map<String, Object?>> queryResult = await db.query(TABLE_NAME,where: "Barcode = ?",whereArgs: [barcode]);
     return queryResult.map((e) => Asset.fromMap(e)).toList();
   }
   Future<List<Asset>> getAllVerifiedItems() async {
     final Database db = await databaseHandler.initializeDB();
-    final List<Map<String, Object?>> queryResult = await db.query(TABLE_NAME,where: "isVerified = ?",whereArgs: [1]);
+    final List<Map<String, Object?>> queryResult = await db.query(TABLE_NAME,where: "IsVerified = ?",whereArgs: [1]);
     return queryResult.map((e) => Asset.fromMap(e)).toList();
   }
   Future<List<Asset>> getAllCountedItems() async {
