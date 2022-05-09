@@ -220,12 +220,12 @@ class ServerService{
       await sectionService.batch(sections);
       await floorService.batch(floors);
       if(response.transactionType == 2){
-        await uploadAssets(response.id);
+        await downloadAssets(response.id);
       }
       return "Success";
     }
   }
-  uploadAssets(int transactionId) async {
+  downloadAssets(int transactionId) async {
     AssetService assetService = AssetService();
     try{
       AssetVerificationResponse ? assetVerificationResponse = await getAssets(1, transactionId);
