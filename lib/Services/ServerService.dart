@@ -331,6 +331,31 @@ class ServerService{
     await dataHandler.clearData();
   }
 
+  uploadAssetVerification()async{
+    List<CaptureDetailsRequest> captureDetailsList = captureDetails.map((e) =>
+        CaptureDetailsRequest(quantity: e.quantity,image: e.image,description: e.description,id: e.id,
+            departmentId: e.departmentId,floorId: e.floorId,sectionId: e.sectionId,serialNumber: e.serialNumber,
+            assetLocationId: e.assetLocationId,itemId: e.itemId,transactionId: transaction.id,color: e.color,
+            height: e.height,length: e.length,width: e.width)).toList();
+    CaptureDetailsList request = CaptureDetailsList(captureDetailsList: captureDetailsList);
+    print('====' + jsonEncode(request));
+    final response = await http.post(
+        Uri.parse('${MyConfig.SERVER}${MyConfig.UPLOAD_API}'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(request)
+    );
+    final responseJson = jsonDecode(response.body);
+    if(response.statusCode == 200 && responseJson["Succeeded"]) {
+      return true;
+    }else if(responseJson != null && responseJson["Message"] != null){
+      throw Exception(responseJson["Message"]);
+    }else{
+      _handleStatusCode(response.statusCode);
+    }
+  }
+
   setServerIPAddress()async{
     List<Setting> settings = await settingService.retrieve();
     if(settings.isNotEmpty){
