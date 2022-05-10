@@ -236,6 +236,7 @@ class ServerService{
         for(int i=2;i<=assetVerificationResponse!.totalPages;i++){
           assetVerificationResponse = await getAssets(i, transactionId);
           await assetService.batch(assetVerificationResponse!.assets);
+          print(assetVerificationResponse.assets[i].sectionId);
         }
       }
     }catch(e){

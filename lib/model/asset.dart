@@ -1,16 +1,16 @@
 class Asset {
   final int id;
   final String? barcode;
-  final String? serialnumber;
+  String? serialnumber;
   final String? description;
-  final String image;
+  String image;
   final double? height;
   final double? width;
   final double? length;
   final String? color;
-  final int? floorId;
-  final int? sectionId;
-  final int? departmentId;
+  int? floorId;
+  int? sectionId;
+  int? departmentId;
   int? isCounted;
   int? isVerified;
 

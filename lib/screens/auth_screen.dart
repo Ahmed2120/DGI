@@ -64,7 +64,7 @@ class _AuthScreenState extends State<AuthScreen>
     }
 
     List<TransactionLookUp> transactions =
-        await TransactionService().retrieve();
+    await TransactionService().retrieve();
     if (transactions.isNotEmpty) {
       setState(() {
         user = users.isNotEmpty?users[0]:null;
@@ -73,7 +73,7 @@ class _AuthScreenState extends State<AuthScreen>
     }
   }
 
-   syncro() async{
+  syncro() async{
     setState(() {
       loader = true;
     });
@@ -119,7 +119,7 @@ class _AuthScreenState extends State<AuthScreen>
       else{
         _showErrorDialog('There is no transaction assign to this device');
       }
-  }catch (err) {
+    }catch (err) {
       var errMessage = 'Could not authenticate you. please try again later';
       _showErrorDialog(err.toString());
     }
@@ -134,20 +134,20 @@ class _AuthScreenState extends State<AuthScreen>
     showDialog(
         context: context,
         builder: (ctx) => AlertDialog(
-              title: const Text('An error Occurred'),
-              content: Text(message),
-              actions: [
-                TextButton(
-                  child: const Text('OK'),
-                  onPressed: () {
-                    setState(() {
-                      isLoading = false;
-                    });
-                    Navigator.of(context).pop();
-                  },
-                )
-              ],
-            ));
+          title: const Text('An error Occurred'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                setState(() {
+                  isLoading = false;
+                });
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        ));
   }
 
   @override
@@ -217,150 +217,150 @@ class _AuthScreenState extends State<AuthScreen>
           )
         ],
       )
-      : CustomWidgetBuilder.buildSpanner(),
+          : CustomWidgetBuilder.buildSpanner(),
     );
   }
   buildLoginForm(deviceSize){
     return SizedBox(
-      width: deviceSize.width * 0.75,
-      child: Form(
-        key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-                child: Text(user != null ?"${user?.name}":"",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                    ))),
-            SizedBox(
-              height: deviceSize.height * 0.02,
-            ),
-            Text(
-              "PDA NO ${widget.pdaNo}",
-              style: TextStyle(color: Colors.white, fontSize: 20),
-            ),
-            SizedBox(
-              height: deviceSize.height * 0.002,
-            ),
-            if(transaction != null)
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "TRANSACTION NO : ${transaction != null ?transaction?.id:''}",
-                    style: TextStyle(color: Colors.white, fontSize: 20),
-                  ),
-                  SizedBox(
-                    height: deviceSize.height * 0.002,
-                  ),
-                  Text(
-                    "TRANSACTION NAME : ${transaction != null ?transaction?.transActionTypeName:''}",
-                    style: TextStyle(color: Colors.white, fontSize: 20),
-                  ),
-                ],),
-            if(transaction == null)
+        width: deviceSize.width * 0.75,
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                  child: Text(user != null ?"${user?.name}":"",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                      ))),
+              SizedBox(
+                height: deviceSize.height * 0.02,
+              ),
               Text(
-                "THERE IS NO TRANSACTION ASSIGN TO THIS DEVICE",
+                "PDA NO ${widget.pdaNo}",
                 style: TextStyle(color: Colors.white, fontSize: 20),
               ),
-            TextFormField(
-              decoration: const InputDecoration(
-                  labelStyle: TextStyle(color: Colors.white),
-                  labelText: 'Password',
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white),
-                  )),
-              obscureText: true,
-              controller: _passwordController,
-              validator: (val) {
-                if (val!.isEmpty) {
-                  return 'Type Password';
-                }
-              },
-              onSaved: (val) {
-                _authData['password'] = val!;
-              },
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            // if (isLoading)
-            //   const CircularProgressIndicator()
-            ElevatedButton(
-              child: isLoading ? CircularProgressIndicator() : Text('Log In'),
-              onPressed: isLoading?null:_submit,
-              style: ElevatedButton.styleFrom(
-                  primary: const Color(0xFFFFA227),
-                  textStyle: const TextStyle(fontSize: 20),
-                  padding: const EdgeInsets.all(15),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50)),
-                  minimumSize: const Size(double.infinity, 34)),
-            ),
-            SizedBox(
-              height: deviceSize.height * 0.02,
-            ),
-            ElevatedButton(
-              child: const Text('Close'),
-              onPressed: () {Navigator.pop(context);},
-              style: ElevatedButton.styleFrom(
-                  primary: Color(0xFF0F6671),
-                  textStyle: TextStyle(fontSize: 20),
-                  padding: EdgeInsets.all(15),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50)),
-                  minimumSize: Size(double.infinity, 34)),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Center(
-              child: Column(
-                children: [
-                  Text(
-                    'Modyle Name : ASSET TRACKING',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Color(0xFFFFFFFF),
-                      fontSize:
-                      deviceSize.height <= 430 ? deviceSize.height * 0.03 : 16,
-                    ),
-                  ),
-                  SizedBox(
-                    height: deviceSize.height * 0.015,
-                  ),
-                  Text(
-                    'Internal Version',
-                    style: TextStyle(
-                      color: Color(0xFFFFFFFF),
-                      fontSize: deviceSize.height <= 430 ? deviceSize.height * 0.03 : 16,
-                    ),
-                  ),
-                  Text(
-                    'V 1.0.0',
-                    style: TextStyle(
-                      color: Color(0xFFFFFFFF),
-                      fontSize: deviceSize.height <= 430 ? deviceSize.height * 0.03 : 16,
-                    ),
-                  ),
-                  SizedBox(
-                    height: deviceSize.height * 0.01,
-                  ),
-                  Text(
-                    'DGI SYSTEM',
-                    style: TextStyle(
-                        color: Color(0xFF0F6671),
-                        fontSize: deviceSize.height * 0.04,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ],
+              SizedBox(
+                height: deviceSize.height * 0.002,
               ),
-            ),
-          ],
-        ),
-      )
+              if(transaction != null)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "TRANSACTION NO : ${transaction != null ?transaction?.id:''}",
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                    SizedBox(
+                      height: deviceSize.height * 0.002,
+                    ),
+                    Text(
+                      "TRANSACTION NAME : ${transaction != null ?transaction?.transActionTypeName:''}",
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                  ],),
+              if(transaction == null)
+                Text(
+                  "THERE IS NO TRANSACTION ASSIGN TO THIS DEVICE",
+                  style: TextStyle(color: Colors.white, fontSize: 20),
+                ),
+              TextFormField(
+                decoration: const InputDecoration(
+                    labelStyle: TextStyle(color: Colors.white),
+                    labelText: 'Password',
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white),
+                    )),
+                obscureText: true,
+                controller: _passwordController,
+                validator: (val) {
+                  if (val!.isEmpty) {
+                    return 'Type Password';
+                  }
+                },
+                onSaved: (val) {
+                  _authData['password'] = val!;
+                },
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              // if (isLoading)
+              //   const CircularProgressIndicator()
+              ElevatedButton(
+                child: isLoading ? CircularProgressIndicator() : Text('Log In'),
+                onPressed: isLoading?null:_submit,
+                style: ElevatedButton.styleFrom(
+                    primary: const Color(0xFFFFA227),
+                    textStyle: const TextStyle(fontSize: 20),
+                    padding: const EdgeInsets.all(15),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50)),
+                    minimumSize: const Size(double.infinity, 34)),
+              ),
+              SizedBox(
+                height: deviceSize.height * 0.02,
+              ),
+              ElevatedButton(
+                child: const Text('Close'),
+                onPressed: () {Navigator.pop(context);},
+                style: ElevatedButton.styleFrom(
+                    primary: Color(0xFF0F6671),
+                    textStyle: TextStyle(fontSize: 20),
+                    padding: EdgeInsets.all(15),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50)),
+                    minimumSize: Size(double.infinity, 34)),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Center(
+                child: Column(
+                  children: [
+                    Text(
+                      'Modyle Name : ASSET TRACKING',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Color(0xFFFFFFFF),
+                        fontSize:
+                        deviceSize.height <= 430 ? deviceSize.height * 0.03 : 16,
+                      ),
+                    ),
+                    SizedBox(
+                      height: deviceSize.height * 0.015,
+                    ),
+                    Text(
+                      'Internal Version',
+                      style: TextStyle(
+                        color: Color(0xFFFFFFFF),
+                        fontSize: deviceSize.height <= 430 ? deviceSize.height * 0.03 : 16,
+                      ),
+                    ),
+                    Text(
+                      'V 1.0.0',
+                      style: TextStyle(
+                        color: Color(0xFFFFFFFF),
+                        fontSize: deviceSize.height <= 430 ? deviceSize.height * 0.03 : 16,
+                      ),
+                    ),
+                    SizedBox(
+                      height: deviceSize.height * 0.01,
+                    ),
+                    Text(
+                      'DGI SYSTEM',
+                      style: TextStyle(
+                          color: Color(0xFF0F6671),
+                          fontSize: deviceSize.height * 0.04,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        )
     );
   }
 }
