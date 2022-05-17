@@ -80,7 +80,7 @@ class Asset {
       'FloorId': floorId,
       'SectionId': sectionId,
       'SerialNumber': serialnumber,
-      'AssetImageInBase64': image,
+      'AssetImage': image,
       'IsVerified': isVerified,
       'Color': color,
       'Width': width,

@@ -9,6 +9,6 @@ class AssetVerificationRequest{
         required this.id});
 
   Map<String, Object?> toJson() {
-    return {'Id':id,'Verifications':verifications};
+    return {'transactionId':id,'Verifications':verifications};
   }
 }
