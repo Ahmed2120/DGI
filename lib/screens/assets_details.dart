@@ -22,9 +22,9 @@ import '../Services/SectionTypeService.dart';
 import '../Utility/CustomWidgetBuilder.dart';
 
 class AssetsDetails extends StatefulWidget {
-  //Category category;
+  Category category;
 
-  AssetsDetails({Key? key}) : super(key: key);
+  AssetsDetails({Key? key, required this.category}) : super(key: key);
 
   @override
   State<AssetsDetails> createState() => _AssetsDetailsState();
@@ -145,7 +145,7 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                           Text(
                             'REMAIN : ' +
                                 allAssets
-                                    .where((element) => element.isVerified == 2 || element.isVerified == null)
+                                    .where((element) => element.isVerified == 0)
                                     .toList()
                                     .length
                                     .toString(),
@@ -159,305 +159,310 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                   ],
                 ),
               ),
-              Padding(
+              Container(
                 padding:
-                    const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-                child: SizedBox(
-                  height: dSize.height * 0.676,
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            CustomWidgetBuilder.buildText('BARCODE', dSize),
-                            const Spacer(),
-                            InkWell(
-                              onTap: () => scanBarcodeNormal(),
-                              // onTap: ()=>getItemData('00502100231007'),
-                              child: Container(
-                                padding: EdgeInsets.all(dSize.height * 0.007),
-                                width: dSize.width * 0.5,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: const Color(0xFF00B0BD),
-                                      width: 2.0),
-                                ),
-                                child: const Text(
-                                  'Tap to scan barcode',
-                                  textAlign: TextAlign.center,
-                                ),
+                EdgeInsets.symmetric(horizontal: dSize.height * 0.016),
+                height: dSize.height < 600 ? dSize.height * 0.55 : dSize.height * 0.49,
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          CustomWidgetBuilder.buildText('BARCODE', dSize),
+                          const Spacer(),
+                          InkWell(
+                            onTap: () => scanBarcodeNormal(),
+                            // onTap: ()=>getItemData('00502100231007'),
+                            child: Container(
+                              padding: EdgeInsets.all(dSize.height * 0.007),
+                              width: dSize.width * 0.5,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: const Color(0xFF00B0BD),
+                                    width: 2.0),
                               ),
-                            ),
-                          ],
-                        ),
-                        if (error)
-                          const Padding(
-                            padding: EdgeInsets.all(2.0),
-                            child: Text(
-                              "There is no item found with this barcode",
-                              style: TextStyle(
-                                  color: Colors.red,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold),
+                              child: const Text(
+                                'Tap to scan barcode',
+                                textAlign: TextAlign.center,
+                              ),
                             ),
                           ),
-                        Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                CustomWidgetBuilder.buildText(
-                                    'ASSET DETAILS', dSize),
-                              ],
-                            ),
-                            // SizedBox(
-                            //   height: dSize.height * 0.01,
-                            // ),
-                            Container(
-                                width: 200,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: const Color(0xFF00B0BD),
-                                      width: 2.0),
-                                ),
-                                height: 100,
-                                child: asset == null
-                                    ? Image.asset(
-                                        'assets/icons/img.png',
-                                        fit: BoxFit.cover,
-                                        width: 300,
-                                      )
-                                    : InkWell(
-                                        onTap: () => _showCamera(),
-                                        child: Image.memory(
-                                          base64Decode(imagePath!),
-                                          width: 300,
-                                          height: 100,
-                                        ),
-                                      )),
-                          ],
+                        ],
+                      ),
+                      if (error)
+                        const Padding(
+                          padding: EdgeInsets.all(2.0),
+                          child: Text(
+                            "There is no item found with this barcode",
+                            style: TextStyle(
+                                color: Colors.red,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
-                        SizedBox(
-                          height: dSize.height * 0.01,
-                        ),
-                        Row(
-                          children: [
-                            CustomWidgetBuilder.buildText('SERIAL NO', dSize),
-                            const Spacer(),
-                            Container(
-                              width: dSize.width * 0.5,
-                              child: TextFormField(
-                                controller: serialController,
-                                style: TextStyle(
-                                    fontSize: dSize.height <= 500
-                                        ? 10
-                                        : dSize.height * 0.02),
-                                decoration: InputDecoration(
-                                  focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Color(0xFF00B0BD), width: 2)),
-                                  enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Color(0xFF00B0BD), width: 2)),
-                                  disabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Color(0xFF00B0BD), width: 2)),
-                                  contentPadding: EdgeInsets.all(
-                                      dSize.height <= 600
-                                          ? dSize.height * 0.015
-                                          : 6),
-                                  isDense: true,
-                                  border: InputBorder.none,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            CustomWidgetBuilder.buildText('SECTION', dSize),
-                            const Spacer(),
-                            Container(
-                              decoration: const BoxDecoration(
-                                  border: Border(
-                                      bottom: BorderSide(
-                                          color: Color(0xFF00B0BD), width: 2))),
-                              width: dSize.width * 0.5,
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton<String>(
-                                  value: _section,
-                                  iconSize: 20,
-                                  icon: const Icon(
-                                    Icons.arrow_drop_down,
-                                    color: Color(0xFF00B0BD),
-                                  ),
-                                  isDense: true,
-                                  isExpanded: true,
-                                  items: allSections
-                                      .map((e) => e.name)
-                                      .map((String item) {
-                                    return DropdownMenuItem<String>(
-                                      value: item,
-                                      child: Text(
-                                        item,
-                                        style: const TextStyle(
-                                            color: Color(0xFF0F6671),
-                                            fontSize: 15),
-                                      ),
-                                    );
-                                  }).toList(),
-                                  onChanged: (val) {
-                                    setState(() {
-                                      _section = val;
-                                    });
-                                    print(val);
-                                  },
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            CustomWidgetBuilder.buildText('DEPARTMENT', dSize),
-                            const Spacer(),
-                            Container(
-                              decoration: const BoxDecoration(
-                                  border: Border(
-                                      bottom: BorderSide(
-                                          color: Color(0xFF00B0BD), width: 2))),
-                              width: dSize.width * 0.5,
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton<String>(
-                                  value: _department,
-                                  iconSize: 20,
-                                  icon: const Icon(
-                                    Icons.arrow_drop_down,
-                                    color: Color(0xFF00B0BD),
-                                  ),
-                                  isDense: true,
-                                  isExpanded: true,
-                                  items: allDepartments
-                                      .map((e) => e.name)
-                                      .map((String item) {
-                                    return DropdownMenuItem<String>(
-                                      value: item,
-                                      child: Text(
-                                        item,
-                                        style: const TextStyle(
-                                            color: Color(0xFF0F6671),
-                                            fontSize: 15),
-                                      ),
-                                    );
-                                  }).toList(),
-                                  onChanged: (val) {
-                                    setState(() {
-                                      _department = val;
-                                    });
-                                    print(val);
-                                  },
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            CustomWidgetBuilder.buildText('FLOOR', dSize),
-                            const Spacer(),
-                            Container(
-                              decoration: const BoxDecoration(
-                                  border: Border(
-                                      bottom: BorderSide(
-                                          color: Color(0xFF00B0BD), width: 2))),
-                              width: dSize.width * 0.5,
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton<String>(
-                                  value: _floor,
-                                  iconSize: 20,
-                                  icon: const Icon(
-                                    Icons.arrow_drop_down,
-                                    color: Color(0xFF00B0BD),
-                                  ),
-                                  isDense: true,
-                                  isExpanded: true,
-                                  items: allFloors
-                                      .map((e) => e.name)
-                                      .map((String item) {
-                                    return DropdownMenuItem<String>(
-                                      value: item,
-                                      child: Text(
-                                        item,
-                                        style: const TextStyle(
-                                            color: Color(0xFF0F6671),
-                                            fontSize: 15),
-                                      ),
-                                    );
-                                  }).toList(),
-                                  onChanged: (val) {
-                                    setState(() {
-                                      _floor = val;
-                                    });
-                                  },
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                ElevatedButton(
-                                  child: const Text('UPDATE'),
-                                  onPressed: () => editAsset(),
-                                  style: ElevatedButton.styleFrom(
-                                      primary: const Color(0xFF00B0BD),
-                                      minimumSize: const Size(5, 30)),
-                                ),
-                              ],
-                            ),
-                            ElevatedButton(
-                              child: const Text('DONE'),
-                              onPressed: () => updateItem(),
-                              style: ElevatedButton.styleFrom(
-                                  primary: const Color(0xFF00B0BD),
-                                  minimumSize: const Size(5, 30)),
-                            ),
-                          ],
-                        ),
-                        Expanded(
-                          child: Column(
+                      Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Container(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 15),
-                                height: dSize.height * 0.2,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(12),
-                                  child: ListView(
-                                    children: [
-                                      Table(
-                                          border: TableBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          children: _getListings()),
-                                    ],
-                                  ),
-                                ),
-                              ),
+                              CustomWidgetBuilder.buildText(
+                                  'ASSET DETAILS', dSize),
                             ],
                           ),
-                        ),
-                      ],
-                    ),
+                          Container(
+                              width: 200,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: const Color(0xFF00B0BD),
+                                    width: 2.0),
+                              ),
+                              height: 100,
+                              child: asset == null
+                                  ? Image.asset(
+                                      'assets/icons/img.png',
+                                      fit: BoxFit.cover,
+                                      width: 300,
+                                    )
+                                  : InkWell(
+                                      onTap: () => _showCamera(),
+                                      child: Image.memory(
+                                        base64Decode(imagePath!),
+                                        width: 300,
+                                        height: 100,
+                                      ),
+                                    )),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          CustomWidgetBuilder.buildText('SERIAL NO', dSize),
+                          const Spacer(),
+                          Container(
+                            width: dSize.width * 0.5,
+                            child: TextFormField(
+                              controller: serialController,
+                              style: TextStyle(
+                                  fontSize: dSize.height <= 500
+                                      ? 10
+                                      : dSize.height * 0.02),
+                              enabled: asset != null ? true : false,
+                              decoration: InputDecoration(
+                                focusedBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Color(0xFF00B0BD), width: 2)),
+                                enabledBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Color(0xFF00B0BD), width: 2)),
+                                disabledBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Color(0xFF00B0BD), width: 2)),
+                                contentPadding: EdgeInsets.all(
+                                    dSize.height <= 600
+                                        ? dSize.height * 0.015
+                                        : 6),
+                                isDense: true,
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          CustomWidgetBuilder.buildText('SECTION', dSize),
+                          const Spacer(),
+                          Container(
+                            decoration: const BoxDecoration(
+                                border: Border(
+                                    bottom: BorderSide(
+                                        color: Color(0xFF00B0BD), width: 2))),
+                            width: dSize.width * 0.5,
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                value: _section,
+                                iconSize: 20,
+                                icon: const Icon(
+                                  Icons.arrow_drop_down,
+                                  color: Color(0xFF00B0BD),
+                                ),
+                                isDense: true,
+                                isExpanded: true,
+                                items: allSections
+                                    .map((e) => e.name)
+                                    .map((String item) {
+                                  return DropdownMenuItem<String>(
+                                    value: item,
+                                    child: Text(
+                                      item,
+                                      style: const TextStyle(
+                                          color: Color(0xFF0F6671),
+                                          fontSize: 15),
+                                    ),
+                                  );
+                                }).toList(),
+                                onChanged: (val) {
+                                  setState(() {
+                                    _section = val;
+                                  });
+                                  print(val);
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          CustomWidgetBuilder.buildText('DEPARTMENT', dSize),
+                          const Spacer(),
+                          Container(
+                            decoration: const BoxDecoration(
+                                border: Border(
+                                    bottom: BorderSide(
+                                        color: Color(0xFF00B0BD), width: 2))),
+                            width: dSize.width * 0.5,
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                value: _department,
+                                iconSize: 20,
+                                icon: const Icon(
+                                  Icons.arrow_drop_down,
+                                  color: Color(0xFF00B0BD),
+                                ),
+                                isDense: true,
+                                isExpanded: true,
+                                items: allDepartments
+                                    .map((e) => e.name)
+                                    .map((String item) {
+                                  return DropdownMenuItem<String>(
+                                    value: item,
+                                    child: Text(
+                                      item,
+                                      style: const TextStyle(
+                                          color: Color(0xFF0F6671),
+                                          fontSize: 15),
+                                    ),
+                                  );
+                                }).toList(),
+                                onChanged: (val) {
+                                  setState(() {
+                                    _department = val;
+                                  });
+                                  print(val);
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          CustomWidgetBuilder.buildText('FLOOR', dSize),
+                          const Spacer(),
+                          Container(
+                            decoration: const BoxDecoration(
+                                border: Border(
+                                    bottom: BorderSide(
+                                        color: Color(0xFF00B0BD), width: 2))),
+                            width: dSize.width * 0.5,
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                value: _floor,
+                                iconSize: 20,
+                                icon: const Icon(
+                                  Icons.arrow_drop_down,
+                                  color: Color(0xFF00B0BD),
+                                ),
+                                isDense: true,
+                                isExpanded: true,
+                                items: allFloors
+                                    .map((e) => e.name)
+                                    .map((String item) {
+                                  return DropdownMenuItem<String>(
+                                    value: item,
+                                    child: Text(
+                                      item,
+                                      style: const TextStyle(
+                                          color: Color(0xFF0F6671),
+                                          fontSize: 15),
+                                    ),
+                                  );
+                                }).toList(),
+                                onChanged: (val) {
+                                  setState(() {
+                                    _floor = val;
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.start,
+                      //   children: [
+                      //     ElevatedButton(
+                      //       child: const Text('UPDATE'),
+                      //       onPressed: () => editAsset(),
+                      //       style: ElevatedButton.styleFrom(
+                      //         primary: const Color(0xFF00B0BD),
+                      //           minimumSize: const Size(5, 30)
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          ElevatedButton(
+                            child: const Text('UPDATE'),
+                            onPressed: asset == null ? null : () => editAsset(),
+                            style: ElevatedButton.styleFrom(
+                                primary: const Color(0xFF00B0BD),
+                                minimumSize: const Size(5, 30)),
+                          ),
+                          ElevatedButton(
+                            child: const Text('DONE'),
+                            onPressed: () => updateItem(),
+                            style: ElevatedButton.styleFrom(
+                                primary: const Color(0xFF00B0BD),
+                                minimumSize: const Size(5, 30)),
+                          ),
+                        ],
+                      ),
+
+                    ],
                   ),
                 ),
               ),
-              const Spacer(),
+              Expanded(
+                child: Column(
+                  children: [
+                    Container(
+                      padding:
+                      const EdgeInsets.symmetric(horizontal: 15),
+                      height: dSize.height < 600
+                          ? dSize.height * 0.2
+                          : dSize.height * 0.21,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: ListView(
+                          children: [
+                            Table(
+                                border: TableBorder(
+                                    borderRadius:
+                                    BorderRadius.circular(10)),
+                                children: _getListings()),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 1),
@@ -484,7 +489,7 @@ class _AssetsDetailsState extends State<AssetsDetails> {
     List<TableRow> listings = <TableRow>[];
     int i = 0;
     listings.add(
-      CustomWidgetBuilder.buildRow(['No', 'DESC', 'PHOTO'],
+      CustomWidgetBuilder.buildRow(['No', 'ASSETS', 'DESC', 'PHOTO'],
           isHeader: true),
     );
     for (i = 0; i < assets.length; i++) {
@@ -492,7 +497,7 @@ class _AssetsDetailsState extends State<AssetsDetails> {
         CustomWidgetBuilder.buildRow(
           [
             i + 1,
-            //widget.category.name,
+            widget.category.name,
             assets[i].description,
             Image.memory(
               base64Decode(assets[i].image),
@@ -549,9 +554,6 @@ class _AssetsDetailsState extends State<AssetsDetails> {
               .firstWhere((element) => element.id == asset?.floorId)
               .name;
         }
-        if(asset != null && asset?.serialnumber != null){
-          serialController.text = asset!.serialnumber==null?'': asset!.serialnumber!;
-        }
       } else {
         error = true;
       }
@@ -564,12 +566,11 @@ class _AssetsDetailsState extends State<AssetsDetails> {
     setState(() {});
   }
 
-  updateItem() async{
+  updateItem() {
     if (asset != null) {
       asset!.isVerified = 1;
-      await assetService.update(asset!);
+      assetService.update(asset!);
       asset = null;
-      serialController.text="";
       getItems();
     }
   }
@@ -594,6 +595,8 @@ class _AssetsDetailsState extends State<AssetsDetails> {
       asset?.floorId =
           allFloors.firstWhere((element) => element.name == _floor).id;
     }
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Updated")));
     assetService.update(asset!);
   }
 
