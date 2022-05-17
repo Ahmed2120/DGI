@@ -16,6 +16,7 @@ import 'package:dgi/model/assetLocation.dart';
 import 'package:dgi/model/city.dart';
 import 'package:dgi/model/department.dart';
 import 'package:dgi/model/floor.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import '../Services/MainCategoryService.dart';
 import '../Utility/CustomWidgetBuilder.dart';
 import '../Utility/footer.dart';
@@ -49,9 +50,9 @@ class _AssetsVerificationState extends State<AssetsVerification> {
   final categoryService = CategoryService();
   final mainCategoryService = MainCategoryService();
   final sectionService = SectionTypeService();
-  String? category;
-  String? mainCategory;
-  String? city;
+  TextEditingController? category = TextEditingController();
+  TextEditingController? mainCategory = TextEditingController();
+  TextEditingController? city = TextEditingController();
   String? location;
   MainCategory? _main;
   List<String> locations = [];
@@ -110,36 +111,38 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                                         bottom: BorderSide(
                                             color: Color(0xFF00B0BD), width: 2))),
                                 width: dSize.width * 0.5,
-                                child: DropdownButtonHideUnderline(
-                                  child: DropdownButton<String>(
-                                    value: mainCategory,
-                                    iconSize: 20,
-                                    icon: const Icon(
-                                      Icons.arrow_drop_down,
-                                      color: Color(0xFF00B0BD),
-                                    ),
-                                    isDense: true,
-                                    isExpanded: true,
-                                    items:
-                                    mainCategories.map((e) => e.name).map((String item) {
-                                      return DropdownMenuItem<String>(
-                                        value: item,
-                                        child: Text(
-                                          item,
-                                          style: const TextStyle(
-                                              color: Color(0xFF0F6671), fontSize: 15),
-                                        ),
-                                      );
-                                    }).toList(),
-                                    onChanged: (val) {
-                                      setState(() {
-                                        mainCategory = val;
-                                        _main = mainCategories.firstWhere((e) => val == e.name);
-                                        getCatByMainCat();
-                                      });
-                                      print(val);
-                                    },
+                                child: TypeAheadField<MainCategory>(
+                                  textFieldConfiguration: TextFieldConfiguration(
+                                      style: TextStyle(fontSize: dSize.height <= 500 ? 10 : dSize.height * 0.02),
+                                      controller: this.mainCategory,
+                                      decoration: InputDecoration(
+                                        constraints: BoxConstraints(minHeight: 2, maxHeight: 30),
+                                          suffixIcon: const Icon(
+                                            Icons.arrow_drop_down,
+                                            color: Color(0xFF00B0BD),
+                                            size: 20,
+                                          ),
+                                        contentPadding: EdgeInsets.all(
+                                            dSize.height <= 600
+                                                ? dSize.height * 0.015
+                                                : 4),
+                                        isDense: true,
+                                        border: InputBorder.none,
+                                      )
                                   ),
+                                  suggestionsCallback: getMainCategoriesSuggestion,
+                                  itemBuilder: (context, suggestion) {
+                                    return ListTile(
+                                      title: Text(suggestion.name, style: const TextStyle(
+                                          color: Color(0xFF0F6671),
+                                          fontSize: 15),),
+                                    );
+                                  },
+                                  onSuggestionSelected: (suggestion){
+                                    mainCategory?.text = suggestion.name;
+                                    _main = suggestion;
+                                    getCatByMainCat();
+                                  },
                                 ),
                               ),
                             ],
@@ -155,36 +158,36 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                                         bottom: BorderSide(
                                             color: Color(0xFF00B0BD), width: 2))),
                                 width: dSize.width * 0.5,
-                                child: DropdownButtonHideUnderline(
-                                  child: DropdownButton<String>(
-                                    value: category,
-                                    iconSize: 20,
-                                    icon: const Icon(
-                                      Icons.arrow_drop_down,
-                                      color: Color(0xFF00B0BD),
-                                    ),
-                                    isDense: true,
-                                    isExpanded: true,
-                                    items: categories
-                                        .map((e) => e.name)
-                                        .map((String item) {
-                                      return DropdownMenuItem<String>(
-                                        value: item,
-                                        child: Text(
-                                          item,
-                                          style: const TextStyle(
-                                              color: Color(0xFF0F6671),
-                                              fontSize: 15),
+                                child: TypeAheadField<Category>(
+                                  textFieldConfiguration: TextFieldConfiguration(
+                                      style: TextStyle(fontSize: dSize.height <= 500 ? 10 : dSize.height * 0.02),
+                                      controller: this.category,
+                                      decoration: InputDecoration(
+                                        constraints: BoxConstraints(minHeight: 2, maxHeight: 30),
+                                        suffixIcon: const Icon(
+                                          Icons.arrow_drop_down,
+                                          color: Color(0xFF00B0BD),
+                                          size: 20,
                                         ),
-                                      );
-                                    }).toList(),
-                                    onChanged: (val) {
-                                      setState(() {
-                                        category = val!;
-                                      });
-                                      print(val);
-                                    },
+                                        contentPadding: EdgeInsets.all(
+                                            dSize.height <= 600
+                                                ? dSize.height * 0.015
+                                                : 4),
+                                        isDense: true,
+                                        border: InputBorder.none,
+                                      )
                                   ),
+                                  suggestionsCallback: getCategoriesSuggestion,
+                                  itemBuilder: (context, suggestion) {
+                                    return ListTile(
+                                      title: Text(suggestion.name, style: const TextStyle(
+                                          color: Color(0xFF0F6671),
+                                          fontSize: 15),),
+                                    );
+                                  },
+                                  onSuggestionSelected: (suggestion){
+                                    category!.text = suggestion.name;
+                                  },
                                 ),
                               ),
                             ],
@@ -202,36 +205,36 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                                         bottom: BorderSide(
                                             color: Color(0xFF00B0BD), width: 2))),
                                 width: dSize.width * 0.5,
-                                child: DropdownButtonHideUnderline(
-                                  child: DropdownButton<String>(
-                                    value: city,
-                                    iconSize: 20,
-                                    icon: const Icon(
-                                      Icons.arrow_drop_down,
-                                      color: Color(0xFF00B0BD),
-                                    ),
-                                    isDense: true,
-                                    isExpanded: true,
-                                    items: cities
-                                        .map((e) => e.name)
-                                        .map((String item) {
-                                      return DropdownMenuItem<String>(
-                                        value: item,
-                                        child: Text(
-                                          item,
-                                          style: const TextStyle(
-                                              color: Color(0xFF0F6671),
-                                              fontSize: 15),
+                                child: TypeAheadField<City>(
+                                  textFieldConfiguration: TextFieldConfiguration(
+                                      style: TextStyle(fontSize: dSize.height <= 500 ? 10 : dSize.height * 0.02),
+                                      controller: this.city,
+                                      decoration: InputDecoration(
+                                        constraints: BoxConstraints(minHeight: 2, maxHeight: 30),
+                                        suffixIcon: const Icon(
+                                          Icons.arrow_drop_down,
+                                          color: Color(0xFF00B0BD),
+                                          size: 20,
                                         ),
-                                      );
-                                    }).toList(),
-                                    onChanged: (val) {
-                                      setState(() {
-                                        city = val;
-                                      });
-                                      print(val);
-                                    },
+                                        contentPadding: EdgeInsets.all(
+                                            dSize.height <= 600
+                                                ? dSize.height * 0.015
+                                                : 4),
+                                        isDense: true,
+                                        border: InputBorder.none,
+                                      )
                                   ),
+                                  suggestionsCallback: getCitiesSuggestion,
+                                  itemBuilder: (context, suggestion) {
+                                    return ListTile(
+                                      title: Text(suggestion.name, style: const TextStyle(
+                                          color: Color(0xFF0F6671),
+                                          fontSize: 15),),
+                                    );
+                                  },
+                                  onSuggestionSelected: (suggestion){
+                                    city!.text = suggestion.name;
+                                  },
                                 ),
                               ),
                             ],
@@ -346,7 +349,7 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                         dSize,
                         const Icon(Icons.arrow_forward_ios),
                         () => Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => AssetsDetails(category: categories.where((element) => element.name==category).first,)))),
+                            builder: (context) => AssetsDetails(category: categories.where((element) => element.name==category!.text).first,)))),
                   ],
                 ),
               ),
@@ -362,12 +365,12 @@ class _AssetsVerificationState extends State<AssetsVerification> {
     // categories = await categoryService.retrieve();
     // category = categories[0].name;
     mainCategories = await mainCategoryService.retrieve();
-    mainCategory = mainCategories[0].name;
+    mainCategory?.text = mainCategories[0].name;
     _main = mainCategories[0];
     getCatByMainCat();
     //countries = await countryService.retrieve();
     cities = await cityService.retrieve();
-    city = cities.isNotEmpty?cities[0].name:"";
+    city!.text = cities.isNotEmpty?cities[0].name:"";
     floors = await floorService.retrieve();
     departments = await departmentService.retrieve();
     areas = await areaService.retrieve();
@@ -386,9 +389,33 @@ class _AssetsVerificationState extends State<AssetsVerification> {
     });
   }
 
+  List<MainCategory> getMainCategoriesSuggestion(String query) {
+    return mainCategories.where((e) {
+      final nameLower = e.name.toLowerCase();
+      final queryLower = query.toLowerCase();
+      return nameLower.contains(queryLower);
+    }).toList();
+  }
+
+  List<Category> getCategoriesSuggestion(String query) {
+    return categories.where((e) {
+      final nameLower = e.name.toLowerCase();
+      final queryLower = query.toLowerCase();
+      return nameLower.contains(queryLower);
+    }).toList();
+  }
+
+  List<City> getCitiesSuggestion(String query) {
+    return cities.where((e) {
+      final nameLower = e.name.toLowerCase();
+      final queryLower = query.toLowerCase();
+      return nameLower.contains(queryLower);
+    }).toList();
+  }
+
   getCatByMainCat()async{
     await categoryService.retrieve().then((values) => categories = (values.where((e) => _main!.id == e.mainCategoryId).toList()));
-    category = categories[0].name;
+    category!.text = categories[0].name;
     setState((){
     });
   }
