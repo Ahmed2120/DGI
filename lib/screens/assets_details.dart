@@ -22,9 +22,8 @@ import '../Services/SectionTypeService.dart';
 import '../Utility/CustomWidgetBuilder.dart';
 
 class AssetsDetails extends StatefulWidget {
-  Category category;
 
-  AssetsDetails({Key? key, required this.category}) : super(key: key);
+  AssetsDetails({Key? key}) : super(key: key);
 
   @override
   State<AssetsDetails> createState() => _AssetsDetailsState();
@@ -145,7 +144,7 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                           Text(
                             'REMAIN : ' +
                                 allAssets
-                                    .where((element) => element.isVerified == 0)
+                                    .where((element) => element.isVerified == 0||element.isVerified == null)
                                     .toList()
                                     .length
                                     .toString(),
@@ -489,7 +488,7 @@ class _AssetsDetailsState extends State<AssetsDetails> {
     List<TableRow> listings = <TableRow>[];
     int i = 0;
     listings.add(
-      CustomWidgetBuilder.buildRow(['No', 'ASSETS', 'DESC', 'PHOTO'],
+      CustomWidgetBuilder.buildRow(['No', 'DESC', 'PHOTO'],
           isHeader: true),
     );
     for (i = 0; i < assets.length; i++) {
@@ -497,7 +496,6 @@ class _AssetsDetailsState extends State<AssetsDetails> {
         CustomWidgetBuilder.buildRow(
           [
             i + 1,
-            widget.category.name,
             assets[i].description,
             Image.memory(
               base64Decode(assets[i].image),

@@ -31,8 +31,6 @@ class AssetsVerification extends StatefulWidget {
 }
 
 class _AssetsVerificationState extends State<AssetsVerification> {
-  List<Category> categories = [];
-  List<MainCategory> mainCategories = [];
   //List<Country> countries = [];
   List<City> cities = [];
   List<Floor> floors = [];
@@ -100,97 +98,6 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                                   color: Color(0xFF0F6671),
                                   fontWeight: FontWeight.bold),
                             ),
-                          ),
-                          Row(
-                            children: [
-                              CustomWidgetBuilder.buildText('Main CATEGORY', dSize),
-                              const Spacer(),
-                              Container(
-                                decoration: const BoxDecoration(
-                                    border: Border(
-                                        bottom: BorderSide(
-                                            color: Color(0xFF00B0BD), width: 2))),
-                                width: dSize.width * 0.5,
-                                child: TypeAheadField<MainCategory>(
-                                  textFieldConfiguration: TextFieldConfiguration(
-                                      style: TextStyle(fontSize: dSize.height <= 500 ? 10 : dSize.height * 0.02),
-                                      controller: this.mainCategory,
-                                      decoration: InputDecoration(
-                                        constraints: BoxConstraints(minHeight: 2, maxHeight: 30),
-                                          suffixIcon: const Icon(
-                                            Icons.arrow_drop_down,
-                                            color: Color(0xFF00B0BD),
-                                            size: 20,
-                                          ),
-                                        contentPadding: EdgeInsets.all(
-                                            dSize.height <= 600
-                                                ? dSize.height * 0.015
-                                                : 4),
-                                        isDense: true,
-                                        border: InputBorder.none,
-                                      )
-                                  ),
-                                  suggestionsCallback: getMainCategoriesSuggestion,
-                                  itemBuilder: (context, suggestion) {
-                                    return ListTile(
-                                      title: Text(suggestion.name, style: const TextStyle(
-                                          color: Color(0xFF0F6671),
-                                          fontSize: 15),),
-                                    );
-                                  },
-                                  onSuggestionSelected: (suggestion){
-                                    mainCategory?.text = suggestion.name;
-                                    _main = suggestion;
-                                    getCatByMainCat();
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: dSize.height * 0.01,),
-                          Row(
-                            children: [
-                              CustomWidgetBuilder.buildText('CATEGORY', dSize),
-                              const Spacer(),
-                              Container(
-                                decoration: const BoxDecoration(
-                                    border: Border(
-                                        bottom: BorderSide(
-                                            color: Color(0xFF00B0BD), width: 2))),
-                                width: dSize.width * 0.5,
-                                child: TypeAheadField<Category>(
-                                  textFieldConfiguration: TextFieldConfiguration(
-                                      style: TextStyle(fontSize: dSize.height <= 500 ? 10 : dSize.height * 0.02),
-                                      controller: this.category,
-                                      decoration: InputDecoration(
-                                        constraints: BoxConstraints(minHeight: 2, maxHeight: 30),
-                                        suffixIcon: const Icon(
-                                          Icons.arrow_drop_down,
-                                          color: Color(0xFF00B0BD),
-                                          size: 20,
-                                        ),
-                                        contentPadding: EdgeInsets.all(
-                                            dSize.height <= 600
-                                                ? dSize.height * 0.015
-                                                : 4),
-                                        isDense: true,
-                                        border: InputBorder.none,
-                                      )
-                                  ),
-                                  suggestionsCallback: getCategoriesSuggestion,
-                                  itemBuilder: (context, suggestion) {
-                                    return ListTile(
-                                      title: Text(suggestion.name, style: const TextStyle(
-                                          color: Color(0xFF0F6671),
-                                          fontSize: 15),),
-                                    );
-                                  },
-                                  onSuggestionSelected: (suggestion){
-                                    category!.text = suggestion.name;
-                                  },
-                                ),
-                              ),
-                            ],
                           ),
                           SizedBox(
                             height: dSize.height * 0.01,
@@ -349,7 +256,7 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                         dSize,
                         const Icon(Icons.arrow_forward_ios),
                         () => Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => AssetsDetails(category: categories.where((element) => element.name==category!.text).first,)))),
+                            builder: (context) => AssetsDetails()))),
                   ],
                 ),
               ),
@@ -362,13 +269,6 @@ class _AssetsVerificationState extends State<AssetsVerification> {
   }
 
   initData() async{
-    // categories = await categoryService.retrieve();
-    // category = categories[0].name;
-    mainCategories = await mainCategoryService.retrieve();
-    mainCategory?.text = mainCategories[0].name;
-    _main = mainCategories[0];
-    getCatByMainCat();
-    //countries = await countryService.retrieve();
     cities = await cityService.retrieve();
     city!.text = cities.isNotEmpty?cities[0].name:"";
     floors = await floorService.retrieve();
@@ -388,22 +288,7 @@ class _AssetsVerificationState extends State<AssetsVerification> {
 
     });
   }
-
-  List<MainCategory> getMainCategoriesSuggestion(String query) {
-    return mainCategories.where((e) {
-      final nameLower = e.name.toLowerCase();
-      final queryLower = query.toLowerCase();
-      return nameLower.contains(queryLower);
-    }).toList();
-  }
-
-  List<Category> getCategoriesSuggestion(String query) {
-    return categories.where((e) {
-      final nameLower = e.name.toLowerCase();
-      final queryLower = query.toLowerCase();
-      return nameLower.contains(queryLower);
-    }).toList();
-  }
+  
 
   List<City> getCitiesSuggestion(String query) {
     return cities.where((e) {
@@ -413,10 +298,4 @@ class _AssetsVerificationState extends State<AssetsVerification> {
     }).toList();
   }
 
-  getCatByMainCat()async{
-    await categoryService.retrieve().then((values) => categories = (values.where((e) => _main!.id == e.mainCategoryId).toList()));
-    category!.text = categories[0].name;
-    setState((){
-    });
-  }
 }
