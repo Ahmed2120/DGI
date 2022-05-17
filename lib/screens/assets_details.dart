@@ -22,9 +22,9 @@ import '../Services/SectionTypeService.dart';
 import '../Utility/CustomWidgetBuilder.dart';
 
 class AssetsDetails extends StatefulWidget {
-  Category category;
+  //Category category;
 
-  AssetsDetails({Key? key, required this.category}) : super(key: key);
+  AssetsDetails({Key? key}) : super(key: key);
 
   @override
   State<AssetsDetails> createState() => _AssetsDetailsState();
@@ -145,7 +145,7 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                           Text(
                             'REMAIN : ' +
                                 allAssets
-                                    .where((element) => element.isVerified == 0)
+                                    .where((element) => element.isVerified == 2 || element.isVerified == null)
                                     .toList()
                                     .length
                                     .toString(),
@@ -406,19 +406,6 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                             ),
                           ],
                         ),
-                        // Row(
-                        //   mainAxisAlignment: MainAxisAlignment.start,
-                        //   children: [
-                        //     ElevatedButton(
-                        //       child: const Text('UPDATE'),
-                        //       onPressed: () => editAsset(),
-                        //       style: ElevatedButton.styleFrom(
-                        //         primary: const Color(0xFF00B0BD),
-                        //           minimumSize: const Size(5, 30)
-                        //       ),
-                        //     ),
-                        //   ],
-                        // ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -497,7 +484,7 @@ class _AssetsDetailsState extends State<AssetsDetails> {
     List<TableRow> listings = <TableRow>[];
     int i = 0;
     listings.add(
-      CustomWidgetBuilder.buildRow(['No', 'ASSETS', 'DESC', 'PHOTO'],
+      CustomWidgetBuilder.buildRow(['No', 'DESC', 'PHOTO'],
           isHeader: true),
     );
     for (i = 0; i < assets.length; i++) {
@@ -505,7 +492,7 @@ class _AssetsDetailsState extends State<AssetsDetails> {
         CustomWidgetBuilder.buildRow(
           [
             i + 1,
-            widget.category.name,
+            //widget.category.name,
             assets[i].description,
             Image.memory(
               base64Decode(assets[i].image),
@@ -562,6 +549,9 @@ class _AssetsDetailsState extends State<AssetsDetails> {
               .firstWhere((element) => element.id == asset?.floorId)
               .name;
         }
+        if(asset != null && asset?.serialnumber != null){
+          serialController.text = asset!.serialnumber==null?'': asset!.serialnumber!;
+        }
       } else {
         error = true;
       }
@@ -574,11 +564,12 @@ class _AssetsDetailsState extends State<AssetsDetails> {
     setState(() {});
   }
 
-  updateItem() {
+  updateItem() async{
     if (asset != null) {
       asset!.isVerified = 1;
-      assetService.update(asset!);
+      await assetService.update(asset!);
       asset = null;
+      serialController.text="";
       getItems();
     }
   }

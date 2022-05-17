@@ -20,7 +20,9 @@ import 'package:dgi/model/AssetVerificationResponse.dart';
 import 'package:dgi/model/CaptuerDeatailsList.dart';
 import 'package:dgi/model/CaptureDetails.dart';
 import 'package:dgi/model/CaptureDetailsRequest.dart';
+import 'package:dgi/model/asset.dart';
 import 'package:dgi/model/assetLocation.dart';
+import 'package:dgi/model/assetVerificationRequest.dart';
 import 'package:dgi/model/category.dart';
 import 'package:dgi/model/department.dart';
 import 'package:dgi/model/floor.dart';
@@ -332,16 +334,16 @@ class ServerService{
     await dataHandler.clearData();
   }
 
-  uploadAssetVerification()async{
-    List<CaptureDetailsRequest> captureDetailsList = captureDetails.map((e) =>
-        CaptureDetailsRequest(quantity: e.quantity,image: e.image,description: e.description,id: e.id,
-            departmentId: e.departmentId,floorId: e.floorId,sectionId: e.sectionId,serialNumber: e.serialNumber,
-            assetLocationId: e.assetLocationId,itemId: e.itemId,transactionId: transaction.id,color: e.color,
-            height: e.height,length: e.length,width: e.width)).toList();
-    CaptureDetailsList request = CaptureDetailsList(captureDetailsList: captureDetailsList);
+  partialUploadAssetVerification(List<Asset> assets,int transactionId)async{
+    List<Asset> assetList = assets.map((e) =>
+        Asset(image: e.image,description: e.description,id: e.id,
+            departmentId: e.departmentId,floorId: e.floorId,sectionId: e.sectionId,color: e.color,
+            height: e.height,length: e.length,width: e.width,isVerified: e.isVerified,
+            barcode: e.barcode,serialnumber: e.serialnumber,transactionId: transactionId)).toList();
+    AssetVerificationRequest request = AssetVerificationRequest(id: transactionId,verifications: assetList);
     print('====' + jsonEncode(request));
     final response = await http.post(
-        Uri.parse('${MyConfig.SERVER}${MyConfig.UPLOAD_API}'),
+        Uri.parse('${MyConfig.SERVER}${MyConfig.ASSET_VERFICATION_UPLOAD}'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -354,6 +356,31 @@ class ServerService{
       throw Exception(responseJson["Message"]);
     }else{
       _handleStatusCode(response.statusCode);
+    }
+  }
+
+  uploadAssetVerification()async{
+    final assetService = AssetService();
+    final transactionService = TransactionService();
+    List<TransactionLookUp> transactions = await transactionService.retrieve();
+    if(MyConfig.SERVER == ''){
+      await setServerIPAddress();
+    }
+    try{
+      while(true){
+        List<Asset> assetList = await assetService.retrieveTopElement();
+        if(assetList.isEmpty) {
+          break;
+        }
+        await partialUploadAssetVerification(assetList, transactions[0].id);
+        await assetService.upload(assetList);
+      }
+    }on SocketException{
+      throw Exception('Failed to connect to server make sure you connect to the internet');
+    }on FormatException{
+      throw Exception("Bad response");
+    }catch(e){
+      rethrow;
     }
   }
 

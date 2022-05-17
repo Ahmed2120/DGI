@@ -237,7 +237,11 @@ class _HomePageState extends State<HomePage> {
       loader = true;
     });
     try {
-      await serverService.uploadData();
+      if(transactionType == TransactionType.verification){
+        await serverService.uploadAssetVerification();
+      }else{
+        await serverService.uploadData();
+      }
       await serverService.clearData();
       List<Setting> settings = await settingService.retrieve();
       String pdaNo = "";

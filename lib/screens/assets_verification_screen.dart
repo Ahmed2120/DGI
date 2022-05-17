@@ -30,8 +30,8 @@ class AssetsVerification extends StatefulWidget {
 }
 
 class _AssetsVerificationState extends State<AssetsVerification> {
-  List<Category> categories = [];
-  List<MainCategory> mainCategories = [];
+  //List<Category> categories = [];
+  //List<MainCategory> mainCategories = [];
   //List<Country> countries = [];
   List<City> cities = [];
   List<Floor> floors = [];
@@ -99,95 +99,6 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                                   color: Color(0xFF0F6671),
                                   fontWeight: FontWeight.bold),
                             ),
-                          ),
-                          Row(
-                            children: [
-                              CustomWidgetBuilder.buildText('Main CATEGORY', dSize),
-                              const Spacer(),
-                              Container(
-                                decoration: const BoxDecoration(
-                                    border: Border(
-                                        bottom: BorderSide(
-                                            color: Color(0xFF00B0BD), width: 2))),
-                                width: dSize.width * 0.5,
-                                child: DropdownButtonHideUnderline(
-                                  child: DropdownButton<String>(
-                                    value: mainCategory,
-                                    iconSize: 20,
-                                    icon: const Icon(
-                                      Icons.arrow_drop_down,
-                                      color: Color(0xFF00B0BD),
-                                    ),
-                                    isDense: true,
-                                    isExpanded: true,
-                                    items:
-                                    mainCategories.map((e) => e.name).map((String item) {
-                                      return DropdownMenuItem<String>(
-                                        value: item,
-                                        child: Text(
-                                          item,
-                                          style: const TextStyle(
-                                              color: Color(0xFF0F6671), fontSize: 15),
-                                        ),
-                                      );
-                                    }).toList(),
-                                    onChanged: (val) {
-                                      setState(() {
-                                        mainCategory = val;
-                                        _main = mainCategories.firstWhere((e) => val == e.name);
-                                        getCatByMainCat();
-                                      });
-                                      print(val);
-                                    },
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: dSize.height * 0.01,),
-                          Row(
-                            children: [
-                              CustomWidgetBuilder.buildText('CATEGORY', dSize),
-                              const Spacer(),
-                              Container(
-                                decoration: const BoxDecoration(
-                                    border: Border(
-                                        bottom: BorderSide(
-                                            color: Color(0xFF00B0BD), width: 2))),
-                                width: dSize.width * 0.5,
-                                child: DropdownButtonHideUnderline(
-                                  child: DropdownButton<String>(
-                                    value: category,
-                                    iconSize: 20,
-                                    icon: const Icon(
-                                      Icons.arrow_drop_down,
-                                      color: Color(0xFF00B0BD),
-                                    ),
-                                    isDense: true,
-                                    isExpanded: true,
-                                    items: categories
-                                        .map((e) => e.name)
-                                        .map((String item) {
-                                      return DropdownMenuItem<String>(
-                                        value: item,
-                                        child: Text(
-                                          item,
-                                          style: const TextStyle(
-                                              color: Color(0xFF0F6671),
-                                              fontSize: 15),
-                                        ),
-                                      );
-                                    }).toList(),
-                                    onChanged: (val) {
-                                      setState(() {
-                                        category = val!;
-                                      });
-                                      print(val);
-                                    },
-                                  ),
-                                ),
-                              ),
-                            ],
                           ),
                           SizedBox(
                             height: dSize.height * 0.01,
@@ -346,7 +257,7 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                         dSize,
                         const Icon(Icons.arrow_forward_ios),
                         () => Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => AssetsDetails(category: categories.where((element) => element.name==category).first,)))),
+                            builder: (context) => AssetsDetails()))),
                   ],
                 ),
               ),
@@ -361,10 +272,10 @@ class _AssetsVerificationState extends State<AssetsVerification> {
   initData() async{
     // categories = await categoryService.retrieve();
     // category = categories[0].name;
-    mainCategories = await mainCategoryService.retrieve();
+/*    mainCategories = await mainCategoryService.retrieve();
     mainCategory = mainCategories[0].name;
     _main = mainCategories[0];
-    getCatByMainCat();
+    getCatByMainCat();*/
     //countries = await countryService.retrieve();
     cities = await cityService.retrieve();
     city = cities.isNotEmpty?cities[0].name:"";
@@ -386,10 +297,10 @@ class _AssetsVerificationState extends State<AssetsVerification> {
     });
   }
 
-  getCatByMainCat()async{
+/*  getCatByMainCat()async{
     await categoryService.retrieve().then((values) => categories = (values.where((e) => _main!.id == e.mainCategoryId).toList()));
     category = categories[0].name;
     setState((){
     });
-  }
+  }*/
 }

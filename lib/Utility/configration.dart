@@ -10,8 +10,9 @@ class MyConfig {
   static String SECTION_API = '/LocationLocup/GetAllSections';
   static String FLOOR_API = '/LocationLocup/GetAllFloors';
   static String ASSET_VERFICATION = '/Verification/GetAssetsByTransactionId';
+  static String ASSET_VERFICATION_UPLOAD = '/Verification/UploadVerification';
   static const String BUILDING = "Building";
   static const String OFFICE = "Office";
   static const String STORE = "Store";
-  static const int PAGE_SIZE = 20;
+  static const int PAGE_SIZE = 5;
 }

@@ -51,4 +51,24 @@ class AssetRepository{
       whereArgs: [id],
     );
   }
+  Future<List<Asset>> retrieveTopElement(int size) async {
+    try{
+      final Database db = await databaseHandler.initializeDB();
+      final List<Map<String, Object?>> queryResult = await db.query(TABLE_NAME,where: "isUploaded = ?",whereArgs: [0],limit: size);
+      return queryResult.map((e) => Asset.fromMap(e)).toList();
+    }catch(e){
+      rethrow;
+    }
+  }
+  void upload(List<Asset> assets)async{
+    try{
+      final Database db = await databaseHandler.initializeDB();
+      for(Asset item in assets){
+        item.isUploaded = 1;
+        db.update(TABLE_NAME, item.toMap(),where: "Id = ?",whereArgs: [item.id]);
+      }
+    }catch(e){
+      throw Exception(e);
+    }
+  }
 }
