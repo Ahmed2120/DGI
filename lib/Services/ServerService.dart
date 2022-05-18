@@ -110,12 +110,18 @@ class ServerService{
     }
   }
 
-  Future<List<SectionType>> getAllSections() async{
+  Future<List<SectionType>> getAllSections(int transactionId) async{
     if(MyConfig.SERVER == ''){
       await setServerIPAddress();
     }
+    final queryParameters = {
+      'TransactionId': transactionId.toString(),
+    };
+    String queryString = Uri(queryParameters: queryParameters).query;
+    print('-----$queryString');
+
     final response = await http
-        .get(Uri.parse('${MyConfig.SERVER}${MyConfig.SECTION_API}'));
+        .get(Uri.parse('${MyConfig.SERVER}${MyConfig.SECTION_API}?$queryString'));
     if (response.statusCode == 200) {
       final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
       return parsed.map<SectionType>((json) => SectionType.fromMap(json)).toList();
@@ -124,12 +130,18 @@ class ServerService{
     }
   }
 
-  Future<List<Floor>> getAllFloors() async{
+  Future<List<Floor>> getAllFloors(int transactionId) async{
     if(MyConfig.SERVER == ''){
       await setServerIPAddress();
     }
+
+    final queryParameters = {
+      'TransactionId': transactionId.toString(),
+    };
+    String queryString = Uri(queryParameters: queryParameters).query;
+
     final response = await http
-        .get(Uri.parse("${MyConfig.SERVER}${MyConfig.FLOOR_API}"));
+        .get(Uri.parse("${MyConfig.SERVER}${MyConfig.FLOOR_API}?$queryString"));
     if (response.statusCode == 200) {
       final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
       return parsed.map<Floor>((json) => Floor.fromMap(json)).toList();
@@ -192,8 +204,8 @@ class ServerService{
       List<MainCategory> mainCategories = await getAllMainCategories();
       List<Item> items = await getAllItems();
       List<Department> departments = await getAllDepartments();
-      List<SectionType> sections = await getAllSections();
-      List<Floor> floors = await getAllFloors();
+      List<SectionType> sections = await getAllSections(response.id);
+      List<Floor> floors = await getAllFloors(response.id);
       await assetLocationService.insert(AssetLocation(
           id: response.assetLocation.id,
           name: response.assetLocation.name,

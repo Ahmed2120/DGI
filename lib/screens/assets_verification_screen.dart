@@ -210,7 +210,7 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                           SizedBox(
                             height: dSize.height * 0.01,
                           ),
-                          if (location == 'Office' || location == 'Building')
+                          // if (location == 'Office' || location == 'Building')
                             CustomWidgetBuilder.buildTextFormField(
                                 dSize,
                                 'FLOOR NO',
@@ -218,7 +218,7 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                           SizedBox(
                             height: dSize.height * 0.01,
                           ),
-                          if (location == 'Office' || location == 'Building')
+                          // if (location == 'Office' || location == 'Building')
                             CustomWidgetBuilder.buildTextFormField(
                                 dSize,
                                 'SECTION NO',
@@ -226,7 +226,7 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                           SizedBox(
                             height: dSize.height * 0.01,
                           ),
-                          if (location == 'Office' || location == 'Store')
+                          // if (location == 'Office' || location == 'Store')
                             CustomWidgetBuilder.buildTextFormField(
                                 dSize,
                                 'DEPARTMENT',
