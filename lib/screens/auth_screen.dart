@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:crypto/crypto.dart';
 import 'package:dgi/Services/ServerService.dart';
 import 'package:dgi/Services/SettingService.dart';
@@ -11,6 +12,7 @@ import 'package:dgi/model/settings.dart';
 import 'package:dgi/model/transaction.dart';
 import 'package:dgi/screens/home_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class AuthScreen extends StatefulWidget {
   String pdaNo;
@@ -304,7 +306,12 @@ class _AuthScreenState extends State<AuthScreen>
               ),
               ElevatedButton(
                 child: const Text('Close'),
-                onPressed: () {Navigator.pop(context);},
+                onPressed: () {
+                  if (Platform.isAndroid)
+                    {SystemNavigator.pop();}
+                  else if (Platform.isIOS)
+                    {exit(0);}
+                },
                 style: ElevatedButton.styleFrom(
                     primary: Color(0xFF0F6671),
                     textStyle: TextStyle(fontSize: 20),

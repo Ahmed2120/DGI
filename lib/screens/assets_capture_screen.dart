@@ -18,6 +18,7 @@ import 'package:dgi/screens/home_page.dart';
 import 'package:dgi/screens/take_picture_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import '../Utility/CustomWidgetBuilder.dart';
 
 class AssetsCapture extends StatefulWidget {
@@ -41,7 +42,7 @@ class AssetsCapture extends StatefulWidget {
 class _AssetsCaptureState extends State<AssetsCapture> {
   String? category;
   String? mainCategory;
-  String? item;
+  TextEditingController? item = TextEditingController();
   String? imagePath;
   bool isChangeColor = false;
 
@@ -88,7 +89,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
       items = allItems
           .where((element) => element.categoryId == selected.id)
           .toList();
-      item = null;
+      item!.text = '';
     });
   }
 
@@ -101,13 +102,13 @@ class _AssetsCaptureState extends State<AssetsCapture> {
           .where((element) => element.mainCategoryId == selected.id)
           .toList();
       category = null;
-      item = null;
+      item!.text = '';
     });
   }
 
   changeItem(value) {
     setState(() {
-      item = value;
+      item!.text = value;
     });
   }
 
@@ -205,15 +206,53 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                               changeCategory,
                               category),
                         if (category != null)
-                          dropdownMenu(
-                              'ITEM',
-                              dSize,
-                              items.map((e) => e.name).toSet().toList(),
-                              changeItem,
-                              item),
                         Row(
                           children: [
-                            CustomWidgetBuilder.buildText('ITEM DESC', dSize),
+                            CustomWidgetBuilder.buildText('DESCRIPTION', dSize),
+                            Spacer(),
+                            Container(
+                              decoration: const BoxDecoration(
+                                  border: Border(
+                                      bottom: BorderSide(
+                                          color: Color(0xFF00B0BD), width: 2))),
+                              width: dSize.width * 0.5,
+                              child: TypeAheadField<Item>(
+                                textFieldConfiguration: TextFieldConfiguration(
+                                    style: TextStyle(fontSize: dSize.height <= 500 ? 10 : dSize.height * 0.02),
+                                    controller: this.item,
+                                    decoration: InputDecoration(
+                                      constraints: BoxConstraints(minHeight: 2, maxHeight: 30),
+                                      suffixIcon: const Icon(
+                                        Icons.arrow_drop_down,
+                                        color: Color(0xFF00B0BD),
+                                        size: 20,
+                                      ),
+                                      contentPadding: EdgeInsets.all(
+                                          dSize.height <= 600
+                                              ? dSize.height * 0.015
+                                              : 4),
+                                      isDense: true,
+                                      border: InputBorder.none,
+                                    )
+                                ),
+                                suggestionsCallback: getItemsSuggestion,
+                                itemBuilder: (context, suggestion) {
+                                  return ListTile(
+                                    title: Text(suggestion.name, style: const TextStyle(
+                                        color: Color(0xFF0F6671),
+                                        fontSize: 15),),
+                                  );
+                                },
+                                onSuggestionSelected: (suggestion){
+                                  changeItem(suggestion.name);
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            CustomWidgetBuilder.buildText('NOTES', dSize),
                             Spacer(),
                             Container(
                               width: dSize.width * 0.5,
@@ -624,7 +663,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
       String base64Image = base64Encode(bytes);
       String description = descriptionController.text;
       String? serialNumber;
-      int? itemId = items.firstWhere((element) => element.name == item).id;
+      int? itemId = items.firstWhere((element) => element.name == item?.text).id;
       final captureDetails = CaptureDetails(
         color: pickerColor.value.toString(),
         height: double.parse(heightController.text),
@@ -665,7 +704,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
     List<TableRow> listings = <TableRow>[];
     int i = 0;
     listings.add(
-      CustomWidgetBuilder.buildRow(['No', 'TYPE', 'DESC', 'QNT', 'PHOTO'],
+      CustomWidgetBuilder.buildRow(['No', 'TYPE', 'NOTES', 'QNT', 'PHOTO'],
           isHeader: true),
     );
     for (i = 0; i < captureDetails.length; i++) {
@@ -782,5 +821,13 @@ class _AssetsCaptureState extends State<AssetsCapture> {
         ],
       ),
     );
+  }
+
+  List<Item> getItemsSuggestion(String query) {
+    return items.where((e) {
+      final nameLower = e.name.toLowerCase();
+      final queryLower = query.toLowerCase();
+      return nameLower.contains(queryLower);
+    }).toList();
   }
 }

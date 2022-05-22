@@ -22,7 +22,6 @@ import '../Services/SectionTypeService.dart';
 import '../Utility/CustomWidgetBuilder.dart';
 
 class AssetsDetails extends StatefulWidget {
-
   AssetsDetails({Key? key}) : super(key: key);
 
   @override
@@ -144,7 +143,9 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                           Text(
                             'REMAIN : ' +
                                 allAssets
-                                    .where((element) => element.isVerified == 0||element.isVerified == null)
+                                    .where((element) =>
+                                        element.isVerified == 0 ||
+                                        element.isVerified == null)
                                     .toList()
                                     .length
                                     .toString(),
@@ -159,9 +160,10 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                 ),
               ),
               Container(
-                padding:
-                EdgeInsets.symmetric(horizontal: dSize.height * 0.016),
-                height: dSize.height < 600 ? dSize.height * 0.55 : dSize.height * 0.49,
+                padding: EdgeInsets.symmetric(horizontal: dSize.height * 0.016),
+                height: dSize.height < 600
+                    ? dSize.height * 0.55
+                    : dSize.height * 0.49,
                 child: Form(
                   key: _formKey,
                   child: Column(
@@ -179,8 +181,7 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                               width: dSize.width * 0.5,
                               decoration: BoxDecoration(
                                 border: Border.all(
-                                    color: const Color(0xFF00B0BD),
-                                    width: 2.0),
+                                    color: const Color(0xFF00B0BD), width: 2.0),
                               ),
                               child: const Text(
                                 'Tap to scan barcode',
@@ -214,8 +215,7 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                               width: 200,
                               decoration: BoxDecoration(
                                 border: Border.all(
-                                    color: const Color(0xFF00B0BD),
-                                    width: 2.0),
+                                    color: const Color(0xFF00B0BD), width: 2.0),
                               ),
                               height: 100,
                               child: asset == null
@@ -431,7 +431,6 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                           ),
                         ],
                       ),
-
                     ],
                   ),
                 ),
@@ -440,8 +439,7 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                 child: Column(
                   children: [
                     Container(
-                      padding:
-                      const EdgeInsets.symmetric(horizontal: 15),
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
                       height: dSize.height < 600
                           ? dSize.height * 0.2
                           : dSize.height * 0.21,
@@ -451,8 +449,7 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                           children: [
                             Table(
                                 border: TableBorder(
-                                    borderRadius:
-                                    BorderRadius.circular(10)),
+                                    borderRadius: BorderRadius.circular(10)),
                                 children: _getListings()),
                           ],
                         ),
@@ -461,7 +458,6 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                   ],
                 ),
               ),
-
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 1),
@@ -488,8 +484,7 @@ class _AssetsDetailsState extends State<AssetsDetails> {
     List<TableRow> listings = <TableRow>[];
     int i = 0;
     listings.add(
-      CustomWidgetBuilder.buildRow(['No', 'DESC', 'PHOTO'],
-          isHeader: true),
+      CustomWidgetBuilder.buildRow(['No', 'DESC', 'PHOTO'], isHeader: true),
     );
     for (i = 0; i < assets.length; i++) {
       listings.add(
@@ -536,24 +531,28 @@ class _AssetsDetailsState extends State<AssetsDetails> {
         error = false;
         asset = assets[0];
         imagePath = asset?.image;
-
-        if (asset?.sectionId != null) {
-          _section = allSections
-              .firstWhere((element) => element.id == asset?.sectionId)
-              .name;
-        }
-        if (asset?.departmentId != null) {
-          _department = allDepartments
-              .firstWhere((element) => element.id == asset?.departmentId)
-              .name;
-        }
-        if (allAssets[0].floorId != null) {
-          _floor = allFloors
-              .firstWhere((element) => element.id == asset?.floorId)
-              .name;
+        try {
+          if (asset?.sectionId != null) {
+            _section = allSections
+                .firstWhere((element) => element.id == asset?.sectionId)
+                .name;
+          }
+          if (asset?.departmentId != null) {
+            _department = allDepartments
+                .firstWhere((element) => element.id == asset?.departmentId)
+                .name;
+          }
+          if (allAssets[0].floorId != null) {
+            _floor = allFloors
+                .firstWhere((element) => element.id == asset?.floorId)
+                .name;
+          }
+        } catch (e) {
+          print(e);
         }
       } else {
         error = true;
+        asset = null;
       }
     });
   }
@@ -594,7 +593,8 @@ class _AssetsDetailsState extends State<AssetsDetails> {
           allFloors.firstWhere((element) => element.name == _floor).id;
     }
     ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Updated")));
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text("Updated")));
     assetService.update(asset!);
   }
 
