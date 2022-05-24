@@ -37,6 +37,7 @@ class _AssetsDetailsState extends State<AssetsDetails> {
   List<Asset> assets = [];
   List<Asset> allAssets = [];
   List<SectionType> allSections = [];
+  List<SectionType> sectionsPerFloor = [];
   List<Department> allDepartments = [];
   List<Floor> allFloors = [];
   String? _section;
@@ -270,94 +271,6 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                       ),
                       Row(
                         children: [
-                          CustomWidgetBuilder.buildText('SECTION', dSize),
-                          const Spacer(),
-                          Container(
-                            decoration: const BoxDecoration(
-                                border: Border(
-                                    bottom: BorderSide(
-                                        color: Color(0xFF00B0BD), width: 2))),
-                            width: dSize.width * 0.5,
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton<String>(
-                                value: _section,
-                                iconSize: 20,
-                                icon: const Icon(
-                                  Icons.arrow_drop_down,
-                                  color: Color(0xFF00B0BD),
-                                ),
-                                isDense: true,
-                                isExpanded: true,
-                                items: allSections
-                                    .map((e) => e.name)
-                                    .map((String item) {
-                                  return DropdownMenuItem<String>(
-                                    value: item,
-                                    child: Text(
-                                      item,
-                                      style: const TextStyle(
-                                          color: Color(0xFF0F6671),
-                                          fontSize: 15),
-                                    ),
-                                  );
-                                }).toList(),
-                                onChanged: (val) {
-                                  setState(() {
-                                    _section = val;
-                                  });
-                                  print(val);
-                                },
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          CustomWidgetBuilder.buildText('DEPARTMENT', dSize),
-                          const Spacer(),
-                          Container(
-                            decoration: const BoxDecoration(
-                                border: Border(
-                                    bottom: BorderSide(
-                                        color: Color(0xFF00B0BD), width: 2))),
-                            width: dSize.width * 0.5,
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton<String>(
-                                value: _department,
-                                iconSize: 20,
-                                icon: const Icon(
-                                  Icons.arrow_drop_down,
-                                  color: Color(0xFF00B0BD),
-                                ),
-                                isDense: true,
-                                isExpanded: true,
-                                items: allDepartments
-                                    .map((e) => e.name)
-                                    .map((String item) {
-                                  return DropdownMenuItem<String>(
-                                    value: item,
-                                    child: Text(
-                                      item,
-                                      style: const TextStyle(
-                                          color: Color(0xFF0F6671),
-                                          fontSize: 15),
-                                    ),
-                                  );
-                                }).toList(),
-                                onChanged: (val) {
-                                  setState(() {
-                                    _department = val;
-                                  });
-                                  print(val);
-                                },
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
                           CustomWidgetBuilder.buildText('FLOOR', dSize),
                           const Spacer(),
                           Container(
@@ -393,25 +306,57 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                                   setState(() {
                                     _floor = val;
                                   });
+                                  getSectionsByFloor();
                                 },
                               ),
                             ),
                           ),
                         ],
                       ),
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.start,
-                      //   children: [
-                      //     ElevatedButton(
-                      //       child: const Text('UPDATE'),
-                      //       onPressed: () => editAsset(),
-                      //       style: ElevatedButton.styleFrom(
-                      //         primary: const Color(0xFF00B0BD),
-                      //           minimumSize: const Size(5, 30)
-                      //       ),
-                      //     ),
-                      //   ],
-                      // ),
+                      Row(
+                        children: [
+                          CustomWidgetBuilder.buildText('SECTION', dSize),
+                          const Spacer(),
+                          Container(
+                            decoration: const BoxDecoration(
+                                border: Border(
+                                    bottom: BorderSide(
+                                        color: Color(0xFF00B0BD), width: 2))),
+                            width: dSize.width * 0.5,
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                value: _section,
+                                iconSize: 20,
+                                icon: const Icon(
+                                  Icons.arrow_drop_down,
+                                  color: Color(0xFF00B0BD),
+                                ),
+                                isDense: true,
+                                isExpanded: true,
+                                items: sectionsPerFloor
+                                    .map((e) => e.name)
+                                    .map((String item) {
+                                  return DropdownMenuItem<String>(
+                                    value: item,
+                                    child: Text(
+                                      item,
+                                      style: const TextStyle(
+                                          color: Color(0xFF0F6671),
+                                          fontSize: 15),
+                                    ),
+                                  );
+                                }).toList(),
+                                onChanged: (val) {
+                                  setState(() {
+                                    _section = val;
+                                  });
+                                  print(val);
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -554,6 +499,15 @@ class _AssetsDetailsState extends State<AssetsDetails> {
         error = true;
         asset = null;
       }
+    });
+  }
+
+  getSectionsByFloor(){
+    setState(() {
+      final floorId = allFloors
+          .firstWhere((element) => element.name == _floor)
+          .id;
+      sectionsPerFloor = allSections.where((sec) => sec.floorId == floorId).toList();
     });
   }
 
