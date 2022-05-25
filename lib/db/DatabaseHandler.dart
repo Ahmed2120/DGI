@@ -11,7 +11,7 @@ class DatabaseHandler {
         batch.execute("CREATE TABLE setting(id INTEGER PRIMARY KEY AUTOINCREMENT,pdaNo TEXT,ipAddress TEXT)");
         batch.execute("CREATE TABLE category(Id INTEGER, Name TEXT, MainCategoryId INTEGER)");
         batch.execute("CREATE TABLE locationType(Id INTEGER PRIMARY KEY, Name TEXT)");
-        batch.execute("CREATE TABLE sectionType(Id INTEGER PRIMARY KEY , Name TEXT ,floorId INTEGER)");
+        batch.execute("CREATE TABLE sectionType(Id INTEGER PRIMARY KEY , Name TEXT ,FloorId INTEGER)");
         batch.execute("CREATE TABLE area(Id INTEGER PRIMARY KEY , Name TEXT)");
         batch.execute("CREATE TABLE transactionTable(Id INTEGER PRIMARY KEY ,TransactionType INTEGER,TransActionTypeName TEXT)");
         batch.execute("CREATE TABLE mainCategory(Id INTEGER PRIMARY KEY , Name TEXT NOT NULL)");

@@ -54,7 +54,7 @@ class AssetRepository{
   Future<List<Asset>> retrieveTopElement(int size) async {
     try{
       final Database db = await databaseHandler.initializeDB();
-      final List<Map<String, Object?>> queryResult = await db.query(TABLE_NAME,where: "isUploaded = ?",whereArgs: [0],limit: size);
+      final List<Map<String, Object?>> queryResult = await db.query(TABLE_NAME,where: "isUploaded = ? and IsVerified = ?",whereArgs: [0, 1],limit: size);
       return queryResult.map((e) => Asset.fromMap(e)).toList();
     }catch(e){
       rethrow;

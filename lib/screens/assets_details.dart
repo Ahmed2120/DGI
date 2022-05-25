@@ -176,7 +176,7 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                           const Spacer(),
                           InkWell(
                             onTap: () => scanBarcodeNormal(),
-                            // onTap: ()=>getItemData('00502100231007'),
+                            // onTap: ()=>getItemData('00501600181001'),
                             child: Container(
                               padding: EdgeInsets.all(dSize.height * 0.007),
                               width: dSize.width * 0.5,
@@ -358,18 +358,18 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                         ],
                       ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          ElevatedButton(
-                            child: const Text('UPDATE'),
-                            onPressed: asset == null ? null : () => editAsset(),
-                            style: ElevatedButton.styleFrom(
-                                primary: const Color(0xFF00B0BD),
-                                minimumSize: const Size(5, 30)),
-                          ),
+                          // ElevatedButton(
+                          //   child: const Text('UPDATE'),
+                          //   onPressed: (asset == null || _floor == null || _section == null) ? null : () => editAsset(),
+                          //   style: ElevatedButton.styleFrom(
+                          //       primary: const Color(0xFF00B0BD),
+                          //       minimumSize: const Size(5, 30)),
+                          // ),
                           ElevatedButton(
                             child: const Text('DONE'),
-                            onPressed: () => updateItem(),
+                            onPressed: (asset == null || _floor == null || _section == null) ? null : () =>  updateItem(),
                             style: ElevatedButton.styleFrom(
                                 primary: const Color(0xFF00B0BD),
                                 minimumSize: const Size(5, 30)),
@@ -476,12 +476,8 @@ class _AssetsDetailsState extends State<AssetsDetails> {
         error = false;
         asset = assets[0];
         imagePath = asset?.image;
+        _section = null;
         try {
-          if (asset?.sectionId != null) {
-            _section = allSections
-                .firstWhere((element) => element.id == asset?.sectionId)
-                .name;
-          }
           if (asset?.departmentId != null) {
             _department = allDepartments
                 .firstWhere((element) => element.id == asset?.departmentId)
@@ -491,23 +487,31 @@ class _AssetsDetailsState extends State<AssetsDetails> {
             _floor = allFloors
                 .firstWhere((element) => element.id == asset?.floorId)
                 .name;
+            getSectionsByFloor();
           }
         } catch (e) {
           print(e);
         }
       } else {
         error = true;
-        asset = null;
+        resetForm();
       }
     });
   }
 
   getSectionsByFloor(){
     setState(() {
+      _section = null;
       final floorId = allFloors
           .firstWhere((element) => element.name == _floor)
           .id;
+
       sectionsPerFloor = allSections.where((sec) => sec.floorId == floorId).toList();
+      if(sectionsPerFloor.isNotEmpty) {
+        _section = sectionsPerFloor
+            .firstWhere((element) => element.id == asset?.sectionId)
+            .name;
+      }
     });
   }
 
@@ -519,6 +523,7 @@ class _AssetsDetailsState extends State<AssetsDetails> {
 
   updateItem() {
     if (asset != null) {
+      editAsset();
       asset!.isVerified = 1;
       assetService.update(asset!);
       asset = null;
@@ -545,6 +550,7 @@ class _AssetsDetailsState extends State<AssetsDetails> {
     if (_floor != null) {
       asset?.floorId =
           allFloors.firstWhere((element) => element.name == _floor).id;
+      getSectionsByFloor();
     }
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context)
@@ -564,6 +570,16 @@ class _AssetsDetailsState extends State<AssetsDetails> {
       final Uint8List bytes = file.readAsBytesSync();
       String base64Image = base64Encode(bytes);
       imagePath = base64Image;
+    });
+  }
+
+  resetForm(){
+    setState(() {
+      asset = null;
+      _section = null;
+      _floor = null;
+      sectionsPerFloor = [];
+      allFloors = [];
     });
   }
 }

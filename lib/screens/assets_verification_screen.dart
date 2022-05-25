@@ -37,6 +37,8 @@ class _AssetsVerificationState extends State<AssetsVerification> {
   List<Department> departments=[];
   List<Area> areas =[];
   List<SectionType> sections =[];
+  String? _section;
+  String? _floor;
   AssetLocation assetLocation = AssetLocation(id:1, name: '', buildingAddress: '', buildingName: '', buildingNo: '',
       businessUnit: '', areaId: 1, departmentId: 1, floorId: 1,sectionId: 10,locationTypeName: 'Building',locationType: 1);
   final countryService = CountryService();
@@ -214,7 +216,7 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                             CustomWidgetBuilder.buildTextFormField(
                                 dSize,
                                 'FLOOR NO',
-                                floors.isNotEmpty ? floors[0].name : '0',false),
+                                floors.isNotEmpty ? _floor : '0',false),
                           SizedBox(
                             height: dSize.height * 0.01,
                           ),
@@ -222,15 +224,15 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                             CustomWidgetBuilder.buildTextFormField(
                                 dSize,
                                 'SECTION NO',
-                                sections.isNotEmpty ? sections[0].name : '0',false),
+                                sections.isNotEmpty ? _section : '0',false),
                           SizedBox(
                             height: dSize.height * 0.01,
                           ),
                           // if (location == 'Office' || location == 'Store')
-                            CustomWidgetBuilder.buildTextFormField(
-                                dSize,
-                                'DEPARTMENT',
-                                departments.isNotEmpty ? departments[0].name : '0',false),
+                          //   CustomWidgetBuilder.buildTextFormField(
+                          //       dSize,
+                          //       'DEPARTMENT',
+                          //       departments.isNotEmpty ? departments[0].name : '0',false),
                           SizedBox(
                             height: dSize.height * 0.01,
                           ),
@@ -281,6 +283,8 @@ class _AssetsVerificationState extends State<AssetsVerification> {
           assetLocation = value[0];
           locations = [assetLocation.locationTypeName];
           location = assetLocation.locationTypeName;
+          _section = sections.firstWhere((sec) => sec.id == assetLocation.sectionId).name;
+          _floor = floors.firstWhere((flr) => flr.id == assetLocation.floorId).name;
         }
       });
     });
