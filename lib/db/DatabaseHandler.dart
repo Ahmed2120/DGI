@@ -22,8 +22,9 @@ class DatabaseHandler {
         batch.execute("CREATE TABLE item(Id INTEGER PRIMARY KEY , Name TEXT NOT NULL,CategoryId INTEGER)");
         batch.execute("CREATE TABLE users(Id INTEGER PRIMARY KEY , Name TEXT,UserName TEXT NOT NULL, HashedPassword TEXT NOT NULL, EmailAddress TEXT,Address TEXT)",);
         batch.execute("CREATE TABLE assetLocation(Id INTEGER PRIMARY KEY , Name TEXT,BuildingAddress TEXT,BuildingName TEXT,BuildingNo TEXT,FloorId INTEGER,DepartmentId INTEGER,AreaId INTEGER NOT NULL,BusinessUnit TEXT ,SectionId INTEGER,LocationType INTEGER,LocationTypeName TEXT)",);
-        batch.execute("CREATE TABLE captureDetails(Id INTEGER PRIMARY KEY AUTOINCREMENT , Name TEXT,Image BLOB NOT NULL,ItemId  INTEGER NOT NULL,AssetLocationId INTEGER NOT NULL,Description TEXT NOT NULL,Quantity INTEGER NOT NULL,FloorId INTEGER,DepartmentId INTEGER,SectionId INTEGER,SerialNumber TEXT,isUploaded BOOLEAN DEFAULT false,Color TEXT,Width INTEGER,Height INTEGER,Length INTEGER)");
-        batch.execute("CREATE TABLE asset(Id INTEGER PRIMARY KEY ,ItemId INTEGER,Barcode TEXT,SerialNumber TEXT,AssetImageInBase64 BLOB,AssetLocationId INTEGER ,Description TEXT ,isCounted BOOLEAN DEFAULT false,IsVerified INTEGER DEFAULT 2,Color TEXT,Width INTEGER,Height INTEGER,Length INTEGER,FloorId INTEGER,DepartmentId INTEGER,SectionId INTEGER,isUploaded BOOLEAN DEFAULT false)",);
+        batch.execute("CREATE TABLE captureDetails(Id INTEGER PRIMARY KEY AUTOINCREMENT , Name TEXT,Image BLOB NOT NULL,ItemId  INTEGER NOT NULL,AssetLocationId INTEGER NOT NULL,Description TEXT NOT NULL,Quantity INTEGER NOT NULL,FloorId INTEGER,DepartmentId INTEGER,SectionId INTEGER,BrandId INTEGER,SerialNumber TEXT,isUploaded BOOLEAN DEFAULT false,Color TEXT,Width INTEGER,Height INTEGER,Length INTEGER)");
+        batch.execute("CREATE TABLE asset(Id INTEGER PRIMARY KEY ,ItemId INTEGER,Barcode TEXT,SerialNumber TEXT,AssetImageInBase64 BLOB,AssetLocationId INTEGER ,Description TEXT ,isCounted BOOLEAN DEFAULT false,IsVerified INTEGER DEFAULT 2,Color TEXT,Width INTEGER,Height INTEGER,Length INTEGER,FloorId INTEGER,DepartmentId INTEGER,SectionId INTEGER,BrandId INTEGER,isUploaded BOOLEAN DEFAULT false)",);
+        batch.execute("CREATE TABLE brand(Id INTEGER PRIMARY KEY, Name TEXT)");
         await batch.commit();
       },
       version: 1,

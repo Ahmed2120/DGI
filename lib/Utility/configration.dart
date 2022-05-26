@@ -9,6 +9,7 @@ class MyConfig {
   static String DEPARTMENT_API = '/LocationLocup/GetAllDepartments';
   static String SECTION_API = '/LocationLocup/GetAllSectionsByTransacionId';
   static String FLOOR_API = '/LocationLocup/GetAllFloorsByTransactionId';
+  static String BRAND_API = '/LocationLocup/GetAllBrands';
   static String ASSET_VERFICATION = '/Verification/GetAssetsByTransactionId';
   static String ASSET_VERFICATION_UPLOAD = '/Verification/UploadVerification';
   static const String BUILDING = "Building";

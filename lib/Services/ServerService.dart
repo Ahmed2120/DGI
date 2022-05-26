@@ -36,6 +36,9 @@ import 'package:http/http.dart' as http;
 import 'package:dgi/Utility/configration.dart';
 import 'package:dgi/model/country.dart';
 
+import '../model/brand.dart';
+import 'BrandService.dart';
+
 class ServerService{
 
   SettingService settingService = SettingService();
@@ -150,6 +153,20 @@ class ServerService{
     }
   }
 
+  Future<List<Brand>> getAllBrands() async{
+    if(MyConfig.SERVER == ''){
+      await setServerIPAddress();
+    }
+    final response = await http
+        .get(Uri.parse('${MyConfig.SERVER}${MyConfig.BRAND_API}'));
+    if (response.statusCode == 200) {
+      final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
+      return parsed.map<Brand>((json) => Brand.fromMap(json)).toList();
+    } else {
+      throw Exception('Failed to load brand');
+    }
+  }
+
   Future<TransactionResponse?> getTransaction(String pdaNo) async{
     if(MyConfig.SERVER == ''){
       await setServerIPAddress();
@@ -196,6 +213,7 @@ class ServerService{
     final mainCategoryService = MainCategoryService();
     final cityService = CityService();
     final sectionService = SectionTypeService();
+    final brandService = BrandService();
     TransactionResponse? response = await getTransaction(pdaNo);
     if(response == null){
       return "Error in Synchronization please try again later";
@@ -206,6 +224,7 @@ class ServerService{
       List<Department> departments = await getAllDepartments();
       List<SectionType> sections = await getAllSections(response.id);
       List<Floor> floors = await getAllFloors(response.id);
+      List<Brand> brands = await getAllBrands();
       await assetLocationService.insert(AssetLocation(
           id: response.assetLocation.id,
           name: response.assetLocation.name,
@@ -233,6 +252,7 @@ class ServerService{
       await departmentService.batch(departments);
       await sectionService.batch(sections);
       await floorService.batch(floors);
+      await brandService.batch(brands);
       if(response.transactionType == 2){
         await downloadAssets(response.id);
       }
@@ -318,7 +338,7 @@ class ServerService{
   uploadToServer(List<CaptureDetails> captureDetails,TransactionLookUp transaction) async {
     List<CaptureDetailsRequest> captureDetailsList = captureDetails.map((e) =>
         CaptureDetailsRequest(quantity: e.quantity,image: e.image,description: e.description,id: e.id,
-            departmentId: e.departmentId,floorId: e.floorId,sectionId: e.sectionId,serialNumber: e.serialNumber,
+            departmentId: e.departmentId,floorId: e.floorId,sectionId: e.sectionId,brandId: e.brandId,serialNumber: e.serialNumber,
             assetLocationId: e.assetLocationId,itemId: e.itemId,transactionId: transaction.id,color: e.color,
             height: e.height,length: e.length,width: e.width)).toList();
     CaptureDetailsList request = CaptureDetailsList(captureDetailsList: captureDetailsList);
@@ -348,7 +368,7 @@ class ServerService{
   partialUploadAssetVerification(List<Asset> assets,int transactionId)async{
     List<Asset> assetList = assets.map((e) =>
         Asset(image: e.image,description: e.description,id: e.id,
-            departmentId: e.departmentId,floorId: e.floorId,sectionId: e.sectionId,color: e.color,
+            departmentId: e.departmentId,floorId: e.floorId,sectionId: e.sectionId,brandId: e.brandId,color: e.color,
             height: e.height,length: e.length,width: e.width,isVerified: e.isVerified,
             barcode: e.barcode,serialnumber: e.serialnumber,transactionId: transactionId)).toList();
     AssetVerificationRequest request = AssetVerificationRequest(id: transactionId,verifications: assetList);

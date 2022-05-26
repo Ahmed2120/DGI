@@ -17,9 +17,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
+import '../Services/BrandService.dart';
 import '../Services/FloorService.dart';
 import '../Services/SectionTypeService.dart';
 import '../Utility/CustomWidgetBuilder.dart';
+import '../model/brand.dart';
 
 class AssetsDetails extends StatefulWidget {
   AssetsDetails({Key? key}) : super(key: key);
@@ -34,15 +36,18 @@ class _AssetsDetailsState extends State<AssetsDetails> {
   final sectionTypeService = SectionTypeService();
   final departmentService = DepartmentService();
   final floorService = FloorService();
+  final brandService = BrandService();
   List<Asset> assets = [];
   List<Asset> allAssets = [];
   List<SectionType> allSections = [];
   List<SectionType> sectionsPerFloor = [];
   List<Department> allDepartments = [];
   List<Floor> allFloors = [];
+  List<Brand> allBrands = [];
   String? _section;
   String? _department;
   String? _floor;
+  String? _brand;
 
   TextEditingController serialController = TextEditingController();
   String? imagePath;
@@ -271,6 +276,49 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                       ),
                       Row(
                         children: [
+                          CustomWidgetBuilder.buildText('Brand', dSize),
+                          const Spacer(),
+                          Container(
+                            decoration: const BoxDecoration(
+                                border: Border(
+                                    bottom: BorderSide(
+                                        color: Color(0xFF00B0BD), width: 2))),
+                            width: dSize.width * 0.5,
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                value: _brand,
+                                iconSize: 20,
+                                icon: const Icon(
+                                  Icons.arrow_drop_down,
+                                  color: Color(0xFF00B0BD),
+                                ),
+                                isDense: true,
+                                isExpanded: true,
+                                items: allBrands
+                                    .map((e) => e.name)
+                                    .map((String item) {
+                                  return DropdownMenuItem<String>(
+                                    value: item,
+                                    child: Text(
+                                      item,
+                                      style: const TextStyle(
+                                          color: Color(0xFF0F6671),
+                                          fontSize: 15),
+                                    ),
+                                  );
+                                }).toList(),
+                                onChanged: (val) {
+                                  setState(() {
+                                    _brand = val;
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
                           CustomWidgetBuilder.buildText('FLOOR', dSize),
                           const Spacer(),
                           Container(
@@ -471,6 +519,7 @@ class _AssetsDetailsState extends State<AssetsDetails> {
     allSections = await sectionTypeService.retrieve();
     allDepartments = await departmentService.retrieve();
     allFloors = await floorService.retrieve();
+    allBrands = await brandService.retrieve();
     setState(() {
       if (assets.isNotEmpty) {
         error = false;
@@ -488,6 +537,11 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                 .firstWhere((element) => element.id == asset?.floorId)
                 .name;
             getSectionsByFloor();
+          }
+          if (asset?.brandId != null) {
+            _brand = allBrands
+                .firstWhere((element) => element.id == asset?.brandId)
+                .name;
           }
         } catch (e) {
           print(e);
@@ -552,9 +606,13 @@ class _AssetsDetailsState extends State<AssetsDetails> {
           allFloors.firstWhere((element) => element.name == _floor).id;
       getSectionsByFloor();
     }
+    if (_brand != null) {
+      asset?.brandId =
+          allBrands.firstWhere((element) => element.name == _brand).id;
+    }
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text("Updated")));
+        .showSnackBar(SnackBar(content: Text("Updated"), duration: Duration(milliseconds: 1000),));
     assetService.update(asset!);
   }
 

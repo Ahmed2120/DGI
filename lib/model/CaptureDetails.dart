@@ -9,6 +9,7 @@ class CaptureDetails {
   final int? floorId;
   final int? departmentId;
   final int? sectionId;
+  final int? brandId;
   final String? serialNumber;
   int? isUploaded;
   final double height;
@@ -27,6 +28,7 @@ class CaptureDetails {
       required this.departmentId,
       required this.floorId,
       required this.sectionId,
+      required this.brandId,
       required this.serialNumber,
       this.isUploaded = 0,
       required this.length,
@@ -45,6 +47,7 @@ class CaptureDetails {
         floorId = res['FloorId'],
         departmentId = res['DepartmentId'],
         sectionId = res['SectionId'],
+        brandId = res['BrandId'],
         serialNumber = res['SerialNumber'],
         isUploaded = res["isUploaded"],
         color = res['Color'],
@@ -63,6 +66,7 @@ class CaptureDetails {
       'FloorId': floorId,
       'DepartmentId': departmentId,
       'SectionId': sectionId,
+      'BrandId': brandId,
       'SerialNumber': serialNumber,
       'isUploaded': isUploaded,
       'Color': color,

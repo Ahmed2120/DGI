@@ -10,6 +10,7 @@ import 'package:dgi/Services/ServerService.dart';
 import 'package:dgi/Utility/footer.dart';
 import 'package:dgi/Utility/utilityService.dart';
 import 'package:dgi/model/assetLocation.dart';
+import 'package:dgi/model/brand.dart';
 import 'package:dgi/model/category.dart';
 import 'package:dgi/model/CaptureDetails.dart';
 import 'package:dgi/model/item.dart';
@@ -19,6 +20,7 @@ import 'package:dgi/screens/take_picture_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import '../Services/BrandService.dart';
 import '../Utility/CustomWidgetBuilder.dart';
 
 class AssetsCapture extends StatefulWidget {
@@ -42,6 +44,7 @@ class AssetsCapture extends StatefulWidget {
 class _AssetsCaptureState extends State<AssetsCapture> {
   String? category;
   String? mainCategory;
+  String? brand;
   TextEditingController? item = TextEditingController();
   String? imagePath;
   bool isChangeColor = false;
@@ -49,6 +52,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   List<Category> categories = [];
   List<MainCategory> mainCategories = [];
   List<Item> items = [];
+  List<Brand> brands = [];
   List<Category> allCategories = [];
   List<Item> allItems = [];
 
@@ -59,6 +63,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   final widthController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey();
   final categoryService = CategoryService();
+  final brandService = BrandService();
   final captureDetailsService = CaptureDetailsService();
   final mainCategoryService = MainCategoryService();
   final serverService = ServerService();
@@ -109,6 +114,12 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   changeItem(value) {
     setState(() {
       item!.text = value;
+    });
+  }
+
+  changeBrand(value) {
+    setState(() {
+      brand = value;
     });
   }
 
@@ -184,7 +195,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                   ),
                 ),
                 Container(
-                  height: dSize.height < 600 ? dSize.height * 0.55 : dSize.height * 0.48,
+                  height: dSize.height < 600 ? dSize.height * 0.55 : dSize.height * 0.5,
                   padding:
                       EdgeInsets.symmetric(horizontal: dSize.height * 0.016),
                   child: Form(
@@ -250,6 +261,12 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                             ),
                           ],
                         ),
+                        dropdownMenu(
+                            'BRAND',
+                            dSize,
+                            brands.map((e) => e.name).toSet().toList(),
+                            changeBrand,
+                            brand),
                         Row(
                           children: [
                             CustomWidgetBuilder.buildText('NOTES', dSize),
@@ -504,7 +521,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                         padding: const EdgeInsets.symmetric(horizontal: 15),
                         height: dSize.height < 600
                             ? dSize.height * 0.2
-                            : dSize.height * 0.255,
+                            : dSize.height * 0.23,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(12),
                           child: ListView(
@@ -664,6 +681,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
       String description = descriptionController.text;
       String? serialNumber;
       int? itemId = items.firstWhere((element) => element.name == item?.text).id;
+      int? brandId = brands.firstWhere((element) => element.name == brand).id;
       final captureDetails = CaptureDetails(
         color: pickerColor.value.toString(),
         height: double.parse(heightController.text),
@@ -673,6 +691,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
         sectionId: widget.sectionId,
         floorId: widget.floorId,
         departmentId: widget.departmentId,
+        brandId: brandId,
         assetLocationId: widget.assetLocation.id,
         itemId: itemId,
         description: description,
@@ -794,6 +813,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
     mainCategories = await mainCategoryService.retrieve();
     allCategories = await categoryService.retrieve();
     allItems = await itemService.retrieve();
+    brands = await brandService.retrieve();
     getItems();
     setState(() {});
   }

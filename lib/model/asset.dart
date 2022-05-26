@@ -11,6 +11,7 @@ class Asset {
   final String? color;
   int? floorId;
   int? sectionId;
+  int? brandId;
   int? departmentId;
   int? isCounted;
   int? isVerified;
@@ -27,6 +28,7 @@ class Asset {
       this.color,
       this.floorId,
       this.sectionId,
+      this.brandId,
       this.departmentId,
       required this.image,
       this.isUploaded = 0,
@@ -44,6 +46,7 @@ class Asset {
         departmentId = res["DepartmentId"],
         floorId = res["FloorId"],
         sectionId = res["SectionId"],
+        brandId = res["BrandId"],
         isCounted = res["isCounted"],
         color = res['Color'],
         width = res["Width"]?.toDouble(),
@@ -58,6 +61,7 @@ class Asset {
       'DepartmentId': departmentId,
       'FloorId': floorId,
       'SectionId': sectionId,
+      'BrandId': brandId,
       'SerialNumber': serialnumber,
       'Description': description,
       'AssetImageInBase64': image,
@@ -79,6 +83,7 @@ class Asset {
       'DepartmentId': departmentId,
       'FloorId': floorId,
       'SectionId': sectionId,
+      'BrandId': brandId,
       'SerialNumber': serialnumber,
       'AssetImage': image,
       'IsVerified': isVerified,
