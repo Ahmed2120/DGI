@@ -283,8 +283,8 @@ class _AssetsVerificationState extends State<AssetsVerification> {
           assetLocation = value[0];
           locations = [assetLocation.locationTypeName];
           location = assetLocation.locationTypeName;
-          _section = sections.firstWhere((sec) => sec.id == assetLocation.sectionId).name;
-          _floor = floors.firstWhere((flr) => flr.id == assetLocation.floorId).name;
+          _section = sections.firstWhere((sec) => sec.id == assetLocation.sectionId, orElse: ()=> SectionType(name: '')).name;
+          _floor = floors.firstWhere((flr) => flr.id == assetLocation.floorId, orElse: ()=> Floor(name: '')).name;
         }
       });
     });

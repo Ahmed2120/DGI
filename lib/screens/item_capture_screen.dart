@@ -33,6 +33,7 @@ class _ItemCaptureState extends State<ItemCapture> {
   List<Department> departments = [];
   List<Area> areas = [];
   List<SectionType> sections = [];
+  List<SectionType> sectionsPerFloor = [];
   String? floor;
   String? department;
   String? section;
@@ -297,6 +298,7 @@ class _ItemCaptureState extends State<ItemCapture> {
                                       setState(() {
                                         floor = val;
                                       });
+                                      getSectionsByFloor();
                                     },
                                   ),
                                 ),
@@ -459,12 +461,13 @@ class _ItemCaptureState extends State<ItemCapture> {
           if (location == MyConfig.BUILDING &&
               assetLocation.sectionId != null &&
               assetLocation.floorId != null) {
-            section = sections
-                .firstWhere((element) => element.id == assetLocation.sectionId)
-                .name;
+            // section = sections
+            //     .firstWhere((element) => element.id == assetLocation.sectionId)
+            //     .name;
             floor = floors
                 .firstWhere((element) => element.id == assetLocation.floorId)
                 .name;
+            getSectionsByFloor();
           } else if (location == MyConfig.STORE &&
               assetLocation.sectionId != null) {
             section = sections
@@ -524,5 +527,21 @@ class _ItemCaptureState extends State<ItemCapture> {
             section != null) ||
         (location == MyConfig.STORE && section != null) ||
         (location == MyConfig.BUILDING && floor != null && section != null);
+  }
+
+  getSectionsByFloor(){
+    setState(() {
+      section = null;
+      final floorId = floors
+          .firstWhere((element) => element.name == floor)
+          .id;
+
+      sectionsPerFloor = sections.where((sec) => sec.floorId == floorId).toList();
+      if(sectionsPerFloor.isNotEmpty) {
+        section = sectionsPerFloor
+            .firstWhere((element) => element.id == assetLocation.sectionId)
+            .name;
+      }
+    });
   }
 }
