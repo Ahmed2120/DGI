@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dgi/db/DatabaseHandler.dart';
 import 'package:dgi/model/asset.dart';
 import 'package:sqflite/sqflite.dart';
@@ -14,12 +16,13 @@ class AssetRepository{
   Future<List<Asset>> select(String barcode) async {
     final Database db = await databaseHandler.initializeDB();
     final List<Map<String, Object?>> queryResult = await db.query(TABLE_NAME,where: "Barcode = ?",whereArgs: [barcode]);
-    return queryResult.map((e) => Asset.fromMap(e)).toList();
+    log('$queryResult');
+    return queryResult.map((e) => Asset.fromJson(e)).toList();
   }
   Future<List<Asset>> getAllVerifiedItems() async {
     final Database db = await databaseHandler.initializeDB();
     final List<Map<String, Object?>> queryResult = await db.query(TABLE_NAME,where: "IsVerified = ?",whereArgs: [1]);
-    return queryResult.map((e) => Asset.fromMap(e)).toList();
+    return queryResult.map((e) => Asset.fromJson(e)).toList();
   }
   Future<List<Asset>> getAllCountedItems() async {
     final Database db = await databaseHandler.initializeDB();
@@ -29,7 +32,7 @@ class AssetRepository{
   Future<List<Asset>> retrieve() async {
     final Database db = await databaseHandler.initializeDB();
     final List<Map<String, Object?>> queryResult = await db.query(TABLE_NAME);
-    return queryResult.map((e) => Asset.fromMap(e)).toList();
+    return queryResult.map((e) => Asset.fromJson(e)).toList();
   }
   Future<int> update(Asset asset) async{
     final Database db = await databaseHandler.initializeDB();
@@ -55,7 +58,7 @@ class AssetRepository{
     try{
       final Database db = await databaseHandler.initializeDB();
       final List<Map<String, Object?>> queryResult = await db.query(TABLE_NAME,where: "isUploaded = ? and IsVerified = ?",whereArgs: [0, 1],limit: size);
-      return queryResult.map((e) => Asset.fromMap(e)).toList();
+      return queryResult.map((e) => Asset.fromJson(e)).toList();
     }catch(e){
       rethrow;
     }

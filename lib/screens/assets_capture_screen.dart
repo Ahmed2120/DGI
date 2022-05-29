@@ -136,7 +136,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
               children: [
                 Container(
                   width: double.infinity,
-                  height: dSize.height * 0.122,
+                  height: dSize.height * 0.132,
                   padding: EdgeInsets.symmetric(vertical: dSize.height * 0.007),
                   decoration: const BoxDecoration(
                       gradient: LinearGradient(
@@ -520,8 +520,8 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 15),
                         height: dSize.height < 600
-                            ? dSize.height * 0.2
-                            : dSize.height * 0.23,
+                            ? dSize.height * 0.18
+                            : dSize.height * 0.22,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(12),
                           child: ListView(

@@ -181,7 +181,7 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                           const Spacer(),
                           InkWell(
                             onTap: () => scanBarcodeNormal(),
-                            // onTap: ()=>getItemData('00501600181001'),
+                            // onTap: ()=>getItemData('00501700190004'),
                             child: Container(
                               padding: EdgeInsets.all(dSize.height * 0.007),
                               width: dSize.width * 0.5,
@@ -238,6 +238,12 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                                         height: 100,
                                       ),
                                     )),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CustomWidgetBuilder.buildText(asset?.itemName?? "", dSize),
                         ],
                       ),
                       Row(
@@ -524,7 +530,8 @@ class _AssetsDetailsState extends State<AssetsDetails> {
       if (assets.isNotEmpty) {
         error = false;
         asset = assets[0];
-        imagePath = asset?.image;
+        imagePath = asset?.itemImage ?? asset?.image;
+        print(asset?.itemImage);
         _section = null;
         try {
           if (asset?.departmentId != null) {

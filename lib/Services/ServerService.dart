@@ -121,8 +121,6 @@ class ServerService{
       'TransactionId': transactionId.toString(),
     };
     String queryString = Uri(queryParameters: queryParameters).query;
-    print('-----$queryString');
-
     final response = await http
         .get(Uri.parse('${MyConfig.SERVER}${MyConfig.SECTION_API}?$queryString'));
     if (response.statusCode == 200) {
@@ -303,7 +301,7 @@ class ServerService{
       throw Exception(
           'Failed to connect to server make sure you connect to the internet');
     } on FormatException{
-        throw Exception("Bad response");
+      throw Exception("Bad response");
     } catch(e){
       throw Exception(e);
     }
