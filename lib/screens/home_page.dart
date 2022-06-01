@@ -202,7 +202,7 @@ class _HomePageState extends State<HomePage> {
                                   onTap: () => uploadData()),
                               InkWell(
                                   child: buildColumn('Excel', dsize, 'excel'),
-                                  onTap: () => excelService.exportExcel()),
+                                  onTap: () => exportExel()),
                             ],
                             crossAxisCount: 2,
                             childAspectRatio: (dsize.width * 0.009) /
@@ -252,6 +252,27 @@ class _HomePageState extends State<HomePage> {
         loader = false;
       });
       showSuccessDialog(pdaNo);
+    } catch (e) {
+      setState(() {
+        loader = false;
+      });
+      CustomWidgetBuilder.showMessageDialog(context, e.toString(), true);
+    }
+  }
+
+  exportExel() async {
+    setState(() {
+      loader = true;
+    });
+    try {
+      if(transactionType == TransactionType.verification){
+        await excelService.exportExcelForVerification();
+      }else{
+        await excelService.exportExcel();
+      }
+      setState(() {
+        loader = false;
+      });
     } catch (e) {
       setState(() {
         loader = false;
