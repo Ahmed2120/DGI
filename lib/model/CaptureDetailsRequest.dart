@@ -10,6 +10,7 @@ class CaptureDetailsRequest {
   final int? departmentId;
   final int? sectionId;
   final int? brandId;
+  final int? descriptionId;
   final String? serialNumber;
   final double height;
   final double width;
@@ -28,6 +29,7 @@ class CaptureDetailsRequest {
       required this.floorId,
       required this.sectionId,
       required this.brandId,
+      required this.descriptionId,
       required this.serialNumber,
       required this.length,
       required this.height,
@@ -45,6 +47,7 @@ class CaptureDetailsRequest {
         departmentId = res['DepartmentId'],
         sectionId = res['SectionId'],
         brandId = res['BrandId'],
+        descriptionId = res['DescriptionId'],
         transactionId = res['TransactionId'],
         serialNumber = res['SerialNumber'],
         color = res['Color'],
@@ -59,6 +62,7 @@ class CaptureDetailsRequest {
       'ItemId': itemId,
       'SectionId': sectionId,
       'BrandId': brandId,
+      'DescriptionId': descriptionId,
       'Description': description,
       'Quantity': quantity,
       'TransactionId': transactionId,

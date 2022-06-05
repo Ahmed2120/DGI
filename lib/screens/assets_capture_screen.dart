@@ -55,12 +55,13 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   List<Category> categories = [];
   List<MainCategory> mainCategories = [];
   List<Item> items = [];
+  List<Description> allDescriptions = [];
   List<Description> descriptions = [];
   List<Brand> brands = [];
   List<Category> allCategories = [];
   List<Item> allItems = [];
 
-  final descriptionController = TextEditingController();
+  final noteController = TextEditingController();
   final serialNoController = TextEditingController();
   final heightController = TextEditingController();
   final lengthController = TextEditingController();
@@ -119,6 +120,12 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   changeItem(value) {
     setState(() {
       item!.text = value;
+      Item selected =
+      items.firstWhere((element) => element.name == value);
+      descriptions = allDescriptions
+          .where((element) => element.itemId == selected.id)
+          .toList();
+      description = null;
     });
   }
 
@@ -272,10 +279,11 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                             ),
                           ],
                         ),
+                        if (item!.text.isNotEmpty)
                         dropdownMenu(
                             'DESCRIPTION',
                             dSize,
-                            descriptions.map((e) => e.name).toSet().toList(),
+                            descriptions.map((e) => e.description).toSet().toList(),
                             changeDescription,
                             description),
                         dropdownMenu(
@@ -291,7 +299,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                             Container(
                               width: dSize.width * 0.5,
                               child: TextFormField(
-                                controller: descriptionController,
+                                controller: noteController,
                                 style: TextStyle(fontSize: dSize.height <= 500 ? 10 : dSize.height * 0.02),
                                 decoration: InputDecoration(
                                   enabledBorder: OutlineInputBorder(
@@ -678,9 +686,11 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   }
 
   void saveItem() async {
-    if (descriptionController.text.isEmpty ||
+    if (noteController.text.isEmpty ||
         imagePath == null ||
-        item == null) {
+        item == null||
+        description == null||
+        brand == null) {
       CustomWidgetBuilder.showMessageDialog(
           context, 'Fill in the empty fields', true);
     } else if (!UtilityService.isNumeric(heightController.text) ||
@@ -695,10 +705,11 @@ class _AssetsCaptureState extends State<AssetsCapture> {
       File file = File(imagePath!);
       final Uint8List bytes = file.readAsBytesSync();
       String base64Image = base64Encode(bytes);
-      String description = descriptionController.text;
+      String note = noteController.text;
       String? serialNumber;
       int? itemId = items.firstWhere((element) => element.name == item?.text).id;
       int? brandId = brands.firstWhere((element) => element.name == brand).id;
+      int? descriptionId = descriptions.firstWhere((element) => element.description == description).id;
       final captureDetails = CaptureDetails(
         color: pickerColor.value.toString(),
         height: double.parse(heightController.text),
@@ -709,9 +720,10 @@ class _AssetsCaptureState extends State<AssetsCapture> {
         floorId: widget.floorId,
         departmentId: widget.departmentId,
         brandId: brandId,
+        descriptionId: descriptionId,
         assetLocationId: widget.assetLocation.id,
         itemId: itemId,
-        description: description,
+        description: note,
         image: base64Image,
         quantity: quantity,
       );
@@ -816,7 +828,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   void resetForm() {
     quantity = 1;
     imagePath = null;
-    descriptionController.text = "";
+    noteController.text = "";
     serialNoController.text = "";
     isChangeColor = false;
     widthController.text="";
@@ -830,7 +842,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
     mainCategories = await mainCategoryService.retrieve();
     allCategories = await categoryService.retrieve();
     allItems = await itemService.retrieve();
-    descriptions = await descriptionService.retrieve();
+    allDescriptions = await descriptionService.retrieve();
     brands = await brandService.retrieve();
     getItems();
     setState(() {});

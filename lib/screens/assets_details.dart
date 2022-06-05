@@ -306,7 +306,7 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                                 isDense: true,
                                 isExpanded: true,
                                 items: allDescriptions
-                                    .map((e) => e.name)
+                                    .map((e) => e.description)
                                     .map((String item) {
                                   return DropdownMenuItem<String>(
                                     value: item,

@@ -1,19 +1,19 @@
 class Description{
   final int id;
-  final String name;
+  final String description;
   final int? itemId;
 
   Description(
       {required this.id,
-        required this.name,
+        required this.description,
         this.itemId});
 
   Description.fromMap(Map<String, dynamic> res)
       : id = res["Id"],
-        name = res["Name"],
+        description = res["Description"],
         itemId=res["ItemId"];
 
   Map<String, Object?> toMap() {
-    return {'Id':id,'Name': name,'ItemId':itemId};
+    return {'Id':id,'Description': description,'ItemId':itemId};
   }
 }
