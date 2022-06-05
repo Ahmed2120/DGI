@@ -21,7 +21,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import '../Services/BrandService.dart';
+import '../Services/DescriptionService.dart';
 import '../Utility/CustomWidgetBuilder.dart';
+import '../model/description.dart';
 
 class AssetsCapture extends StatefulWidget {
   final AssetLocation assetLocation;
@@ -45,6 +47,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   String? category;
   String? mainCategory;
   String? brand;
+  String? description;
   TextEditingController? item = TextEditingController();
   String? imagePath;
   bool isChangeColor = false;
@@ -52,6 +55,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   List<Category> categories = [];
   List<MainCategory> mainCategories = [];
   List<Item> items = [];
+  List<Description> descriptions = [];
   List<Brand> brands = [];
   List<Category> allCategories = [];
   List<Item> allItems = [];
@@ -68,6 +72,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   final mainCategoryService = MainCategoryService();
   final serverService = ServerService();
   final itemService = ItemService();
+  final descriptionService = DescriptionService();
   int quantity = 1;
   List<CaptureDetails> captureDetails = [];
   // create some values
@@ -120,6 +125,12 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   changeBrand(value) {
     setState(() {
       brand = value;
+    });
+  }
+
+  changeDescription(value) {
+    setState(() {
+      description = value;
     });
   }
 
@@ -195,7 +206,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                   ),
                 ),
                 Container(
-                  height: dSize.height < 600 ? dSize.height * 0.55 : dSize.height * 0.5,
+                  height: dSize.height < 600 ? dSize.height * 0.55 : dSize.height * 0.54,
                   padding:
                       EdgeInsets.symmetric(horizontal: dSize.height * 0.016),
                   child: Form(
@@ -219,7 +230,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                         if (category != null)
                         Row(
                           children: [
-                            CustomWidgetBuilder.buildText('DESCRIPTION', dSize),
+                            CustomWidgetBuilder.buildText('ITEMS', dSize),
                             Spacer(),
                             Container(
                               decoration: const BoxDecoration(
@@ -232,7 +243,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                                     style: TextStyle(fontSize: dSize.height <= 500 ? 10 : dSize.height * 0.02),
                                     controller: this.item,
                                     decoration: InputDecoration(
-                                      constraints: BoxConstraints(minHeight: 2, maxHeight: 30),
+                                      constraints: const BoxConstraints(minHeight: 2, maxHeight: 30),
                                       suffixIcon: const Icon(
                                         Icons.arrow_drop_down,
                                         color: Color(0xFF00B0BD),
@@ -261,6 +272,12 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                             ),
                           ],
                         ),
+                        dropdownMenu(
+                            'DESCRIPTION',
+                            dSize,
+                            descriptions.map((e) => e.name).toSet().toList(),
+                            changeDescription,
+                            description),
                         dropdownMenu(
                             'BRAND',
                             dSize,
@@ -521,7 +538,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                         padding: const EdgeInsets.symmetric(horizontal: 15),
                         height: dSize.height < 600
                             ? dSize.height * 0.18
-                            : dSize.height * 0.22,
+                            : dSize.height * 0.18,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(12),
                           child: ListView(
@@ -813,6 +830,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
     mainCategories = await mainCategoryService.retrieve();
     allCategories = await categoryService.retrieve();
     allItems = await itemService.retrieve();
+    descriptions = await descriptionService.retrieve();
     brands = await brandService.retrieve();
     getItems();
     setState(() {});

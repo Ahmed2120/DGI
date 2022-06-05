@@ -18,10 +18,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 import '../Services/BrandService.dart';
+import '../Services/DescriptionService.dart';
 import '../Services/FloorService.dart';
 import '../Services/SectionTypeService.dart';
 import '../Utility/CustomWidgetBuilder.dart';
 import '../model/brand.dart';
+import '../model/description.dart';
 
 class AssetsDetails extends StatefulWidget {
   AssetsDetails({Key? key}) : super(key: key);
@@ -37,17 +39,20 @@ class _AssetsDetailsState extends State<AssetsDetails> {
   final departmentService = DepartmentService();
   final floorService = FloorService();
   final brandService = BrandService();
+  final descriptionService = DescriptionService();
   List<Asset> assets = [];
   List<Asset> allAssets = [];
   List<SectionType> allSections = [];
   List<SectionType> sectionsPerFloor = [];
   List<Department> allDepartments = [];
   List<Floor> allFloors = [];
+  List<Description> allDescriptions = [];
   List<Brand> allBrands = [];
   String? _section;
   String? _department;
   String? _floor;
   String? _brand;
+  String? _description;
 
   TextEditingController serialController = TextEditingController();
   String? imagePath;
@@ -275,6 +280,49 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                                         : 6),
                                 isDense: true,
                                 border: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          CustomWidgetBuilder.buildText('DESCRIPTION', dSize),
+                          const Spacer(),
+                          Container(
+                            decoration: const BoxDecoration(
+                                border: Border(
+                                    bottom: BorderSide(
+                                        color: Color(0xFF00B0BD), width: 2))),
+                            width: dSize.width * 0.5,
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                value: _description,
+                                iconSize: 20,
+                                icon: const Icon(
+                                  Icons.arrow_drop_down,
+                                  color: Color(0xFF00B0BD),
+                                ),
+                                isDense: true,
+                                isExpanded: true,
+                                items: allDescriptions
+                                    .map((e) => e.name)
+                                    .map((String item) {
+                                  return DropdownMenuItem<String>(
+                                    value: item,
+                                    child: Text(
+                                      item,
+                                      style: const TextStyle(
+                                          color: Color(0xFF0F6671),
+                                          fontSize: 15),
+                                    ),
+                                  );
+                                }).toList(),
+                                onChanged: (val) {
+                                  setState(() {
+                                    _description = val;
+                                  });
+                                },
                               ),
                             ),
                           ),
@@ -526,12 +574,12 @@ class _AssetsDetailsState extends State<AssetsDetails> {
     allDepartments = await departmentService.retrieve();
     allFloors = await floorService.retrieve();
     allBrands = await brandService.retrieve();
+    allDescriptions = await descriptionService.retrieve();
     setState(() {
       if (assets.isNotEmpty) {
         error = false;
         asset = assets[0];
         imagePath = asset?.itemImage ?? asset?.image;
-        print(asset?.itemImage);
         _section = null;
         try {
           if (asset?.departmentId != null) {

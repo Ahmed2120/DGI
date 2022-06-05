@@ -458,35 +458,36 @@ class _ItemCaptureState extends State<ItemCapture> {
           assetLocation = value[0];
           locations = [assetLocation.locationTypeName];
           location = assetLocation.locationTypeName;
-          if (location == MyConfig.BUILDING &&
-              assetLocation.sectionId != null &&
-              assetLocation.floorId != null) {
-            // section = sections
-            //     .firstWhere((element) => element.id == assetLocation.sectionId)
-            //     .name;
+          if (location == MyConfig.BUILDING ) {
+            if(assetLocation.sectionId != null){
+            section = sections
+                .firstWhere((element) => element.id == assetLocation.sectionId)
+                .name;}
+            if(assetLocation.floorId != null){
             floor = floors
                 .firstWhere((element) => element.id == assetLocation.floorId)
                 .name;
-            getSectionsByFloor();
+            getSectionsByFloor();}
           } else if (location == MyConfig.STORE &&
               assetLocation.sectionId != null) {
             section = sections
                 .firstWhere((element) => element.id == assetLocation.sectionId)
                 .name;
-          } else if (location == MyConfig.OFFICE &&
-              assetLocation.sectionId != null &&
-              assetLocation.floorId != null &&
-              assetLocation.departmentId != null) {
-            section = sections
-                .firstWhere((element) => element.id == assetLocation.sectionId)
-                .name;
-            floor = floors
-                .firstWhere((element) => element.id == assetLocation.floorId)
-                .name;
+          } else if (location == MyConfig.OFFICE ) {
+            if(assetLocation.sectionId != null){
+              section = sections
+                  .firstWhere((element) => element.id == assetLocation.sectionId)
+                  .name;}
+            if(assetLocation.floorId != null){
+              floor = floors
+                  .firstWhere((element) => element.id == assetLocation.floorId)
+                  .name;
+              getSectionsByFloor();}
+            if(assetLocation.departmentId != null){
             department = departments
                 .firstWhere(
                     (element) => element.id == assetLocation.departmentId)
-                .name;
+                .name;}
           }
         }
       });

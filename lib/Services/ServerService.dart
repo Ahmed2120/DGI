@@ -25,6 +25,7 @@ import 'package:dgi/model/assetLocation.dart';
 import 'package:dgi/model/assetVerificationRequest.dart';
 import 'package:dgi/model/category.dart';
 import 'package:dgi/model/department.dart';
+import 'package:dgi/model/description.dart';
 import 'package:dgi/model/floor.dart';
 import 'package:dgi/model/item.dart';
 import 'package:dgi/model/mainCategory.dart';
@@ -38,6 +39,7 @@ import 'package:dgi/model/country.dart';
 
 import '../model/brand.dart';
 import 'BrandService.dart';
+import 'DescriptionService.dart';
 
 class ServerService{
 
@@ -165,6 +167,20 @@ class ServerService{
     }
   }
 
+  Future<List<Description>> getAllDescriptions() async{
+    if(MyConfig.SERVER == ''){
+      await setServerIPAddress();
+    }
+    final response = await http
+        .get(Uri.parse('${MyConfig.SERVER}${MyConfig.DESCRIPTION_API}'));
+    if (response.statusCode == 200) {
+      final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
+      return parsed.map<Description>((json) => Description.fromMap(json)).toList();
+    } else {
+      throw Exception('Failed to load items');
+    }
+  }
+
   Future<TransactionResponse?> getTransaction(String pdaNo) async{
     if(MyConfig.SERVER == ''){
       await setServerIPAddress();
@@ -208,6 +224,7 @@ class ServerService{
     final countryService = CountryService();
     final categoryService = CategoryService();
     final itemService = ItemService();
+    final descriptionService = DescriptionService();
     final mainCategoryService = MainCategoryService();
     final cityService = CityService();
     final sectionService = SectionTypeService();
@@ -219,6 +236,7 @@ class ServerService{
       List<Category> categories = await getAllCategories();
       List<MainCategory> mainCategories = await getAllMainCategories();
       List<Item> items = await getAllItems();
+      List<Description> descriptions = await getAllDescriptions();
       List<Department> departments = await getAllDepartments();
       List<SectionType> sections = await getAllSections(response.id);
       List<Floor> floors = await getAllFloors(response.id);
@@ -246,6 +264,7 @@ class ServerService{
       await cityService.insert(response.assetLocation.city);
       await mainCategoryService.batch(mainCategories);
       await itemService.batch(items);
+      await descriptionService.batch(descriptions);
       await categoryService.batch(categories);
       await departmentService.batch(departments);
       await sectionService.batch(sections);
