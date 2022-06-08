@@ -19,6 +19,8 @@ import 'package:dgi/model/city.dart';
 import 'package:dgi/model/department.dart';
 import 'package:dgi/model/floor.dart';
 
+import '../language.dart';
+
 class ItemCapture extends StatefulWidget {
   const ItemCapture({Key? key}) : super(key: key);
 
@@ -62,6 +64,8 @@ class _ItemCaptureState extends State<ItemCapture> {
   String? location;
   List<String> locations = [];
 
+  final lang = Language();
+
   @override
   void initState() {
     super.initState();
@@ -72,208 +76,52 @@ class _ItemCaptureState extends State<ItemCapture> {
   Widget build(BuildContext context) {
     final dSize = MediaQuery.of(context).size;
     final bottomPadding = MediaQuery.of(context).padding.top;
-    return Scaffold(
-        body: SafeArea(
-      child: SingleChildScrollView(
-        child: SizedBox(
-          height: dSize.height - bottomPadding,
-          child: Column(
-            children: [
-              const Header(
-                title: 'ITEM',
-                subTitle: 'Capture',
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-                child: SizedBox(
-                  height: dSize.height * 0.58,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          padding: const EdgeInsets.only(bottom: 5),
-                          child: const Text(
-                            'ASSET LOCATION INFORMATION',
-                            style: TextStyle(
-                                fontSize: 13,
-                                color: Color(0xFF0F6671),
-                                fontWeight: FontWeight.bold),
+    return Directionality(
+      textDirection: Language.isEn ? TextDirection.ltr : TextDirection.rtl,
+      child: Scaffold(
+          body: SafeArea(
+        child: SingleChildScrollView(
+          child: SizedBox(
+            height: dSize.height - bottomPadding,
+            child: Column(
+              children: [
+                Header(
+                  title: Language.isEn ? lang.textEn['capture_header_title']! : lang.textAr['capture_header_title']!,
+                  subTitle: Language.isEn ? lang.textEn['capture_header_subTitle']! : lang.textAr['capture_header_subTitle']!,
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+                  child: SizedBox(
+                    height: dSize.height * 0.58,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            padding: const EdgeInsets.only(bottom: 5),
+                            child: Text(
+                              lang.getTxt('asset_information_title'),
+                              style: TextStyle(
+                                  fontSize: 13,
+                                  color: Color(0xFF0F6671),
+                                  fontWeight: FontWeight.bold),
+                            ),
                           ),
-                        ),
-                        Row(
-                          children: [
-                            CustomWidgetBuilder.buildText('COUNTRY', dSize),
-                            Spacer(),
-                            Container(
-                              decoration: const BoxDecoration(
-                                  border: Border(
-                                      bottom: BorderSide(
-                                          color: Color(0xFF00B0BD), width: 2))),
-                              width: dSize.width * 0.5,
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton<String>(
-                                  value: country,
-                                  iconSize: 20,
-                                  icon: const Icon(
-                                    Icons.arrow_drop_down,
-                                    color: Color(0xFF00B0BD),
-                                  ),
-                                  isDense: true,
-                                  isExpanded: true,
-                                  items: countries
-                                      .map((e) => e.name)
-                                      .map((String item) {
-                                    return DropdownMenuItem<String>(
-                                      value: item,
-                                      child: Text(
-                                        item,
-                                        style: const TextStyle(
-                                            color: Color(0xFF0F6671),
-                                            fontSize: 15),
-                                      ),
-                                    );
-                                  }).toList(),
-                                  onChanged: (val) {
-                                    setState(() {
-                                      country = val;
-                                    });
-                                    print(val);
-                                  },
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: dSize.height * 0.01,
-                        ),
-                        Row(
-                          children: [
-                            CustomWidgetBuilder.buildText('CITY', dSize),
-                            Spacer(),
-                            Container(
-                              decoration: const BoxDecoration(
-                                  border: Border(
-                                      bottom: BorderSide(
-                                          color: Color(0xFF00B0BD), width: 2))),
-                              width: dSize.width * 0.5,
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton<String>(
-                                  value: city,
-                                  iconSize: 20,
-                                  icon: const Icon(
-                                    Icons.arrow_drop_down,
-                                    color: Color(0xFF00B0BD),
-                                  ),
-                                  isDense: true,
-                                  isExpanded: true,
-                                  items: cities
-                                      .map((e) => e.name)
-                                      .map((String item) {
-                                    return DropdownMenuItem<String>(
-                                      value: item,
-                                      child: Text(
-                                        item,
-                                        style: const TextStyle(
-                                            color: Color(0xFF0F6671),
-                                            fontSize: 15),
-                                      ),
-                                    );
-                                  }).toList(),
-                                  onChanged: (val) {
-                                    setState(() {
-                                      city = val;
-                                    });
-                                    print(val);
-                                  },
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: dSize.height * 0.01,
-                        ),
-                        CustomWidgetBuilder.buildTextFormField(dSize, 'AREA',
-                            areas.isNotEmpty ? areas[0].name : 'area', false),
-                        SizedBox(
-                          height: dSize.height * 0.01,
-                        ),
-                        Row(
-                          children: [
-                            CustomWidgetBuilder.buildText(
-                                'LOCATION TYPE', dSize),
-                            Spacer(),
-                            Container(
-                              decoration: const BoxDecoration(
-                                  border: Border(
-                                      bottom: BorderSide(
-                                          color: Color(0xFF00B0BD), width: 2))),
-                              width: dSize.width * 0.5,
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton<String>(
-                                  value: location,
-                                  iconSize: 20,
-                                  icon: const Icon(
-                                    Icons.arrow_drop_down,
-                                    color: Color(0xFF00B0BD),
-                                  ),
-                                  style: const TextStyle(
-                                      color: Colors.white, fontSize: 15),
-                                  selectedItemBuilder: (BuildContext context) {
-                                    return locations.map((String value) {
-                                      return Text(
-                                        value,
-                                        style: const TextStyle(
-                                            color: Color(0xFF0F6671)),
-                                      );
-                                    }).toList();
-                                  },
-                                  dropdownColor: Color(0xFF00B0BD),
-                                  isDense: true,
-                                  isExpanded: true,
-                                  items: locations.map((String item) {
-                                    return DropdownMenuItem<String>(
-                                      value: item,
-                                      child: Text(
-                                        item,
-                                        // style: const TextStyle(
-                                        //     color: Color(0xFF0F6671), fontSize: 20),
-                                      ),
-                                    );
-                                  }).toList(),
-                                  onChanged: (val) {
-                                    setState(() {
-                                      location = val;
-                                    });
-                                  },
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: dSize.height * 0.015,
-                        ),
-                        if (location == MyConfig.OFFICE ||
-                            location == MyConfig.BUILDING)
                           Row(
                             children: [
-                              CustomWidgetBuilder.buildText('FLOOR NO', dSize),
+                              CustomWidgetBuilder.buildText(lang.getTxt('country'), dSize),
                               Spacer(),
                               Container(
                                 decoration: const BoxDecoration(
                                     border: Border(
                                         bottom: BorderSide(
-                                            color: Color(0xFF00B0BD),
-                                            width: 2))),
+                                            color: Color(0xFF00B0BD), width: 2))),
                                 width: dSize.width * 0.5,
                                 child: DropdownButtonHideUnderline(
                                   child: DropdownButton<String>(
-                                    value: floor,
+                                    value: country,
                                     iconSize: 20,
                                     icon: const Icon(
                                       Icons.arrow_drop_down,
@@ -281,109 +129,7 @@ class _ItemCaptureState extends State<ItemCapture> {
                                     ),
                                     isDense: true,
                                     isExpanded: true,
-                                    items: floors
-                                        .map((e) => e.name).toSet().toList()
-                                        .map((String item) {
-                                      return DropdownMenuItem<String>(
-                                        value: item,
-                                        child: Text(
-                                          item,
-                                          style: const TextStyle(
-                                              color: Color(0xFF0F6671),
-                                              fontSize: 15),
-                                        ),
-                                      );
-                                    }).toList(),
-                                    onChanged: (val) {
-                                      setState(() {
-                                        floor = val;
-                                      });
-                                      getSectionsByFloor();
-                                      print('-----${sectionsPerFloor.length}------');
-                                    },
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        SizedBox(
-                          height: dSize.height * 0.01,
-                        ),
-                        if (location == MyConfig.OFFICE ||
-                            location == MyConfig.BUILDING ||
-                            location == MyConfig.STORE)
-                          Row(
-                            children: [
-                              CustomWidgetBuilder.buildText(
-                                  'SECTION NO', dSize),
-                              Spacer(),
-                              Container(
-                                decoration: const BoxDecoration(
-                                    border: Border(
-                                        bottom: BorderSide(
-                                            color: Color(0xFF00B0BD),
-                                            width: 2))),
-                                width: dSize.width * 0.5,
-                                child: DropdownButtonHideUnderline(
-                                  child: DropdownButton<String>(
-                                    value: section,
-                                    iconSize: 20,
-                                    icon: const Icon(
-                                      Icons.arrow_drop_down,
-                                      color: Color(0xFF00B0BD),
-                                    ),
-                                    isDense: true,
-                                    isExpanded: true,
-                                    items: sectionsPerFloor
-                                        .map((e) => e.name).toSet().toList()
-                                        .map((String item) {
-                                      return DropdownMenuItem<String>(
-                                        value: item,
-                                        child: Text(
-                                          item,
-                                          style: const TextStyle(
-                                              color: Color(0xFF0F6671),
-                                              fontSize: 15),
-                                        ),
-                                      );
-                                    }).toList(),
-                                    onChanged: (val) {
-                                      setState(() {
-                                        section = val;
-                                      });
-                                    },
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        SizedBox(
-                          height: dSize.height * 0.01,
-                        ),
-                        if (location == MyConfig.OFFICE)
-                          Row(
-                            children: [
-                              CustomWidgetBuilder.buildText(
-                                  'DEPARTMENT', dSize),
-                              Spacer(),
-                              Container(
-                                decoration: const BoxDecoration(
-                                    border: Border(
-                                        bottom: BorderSide(
-                                            color: Color(0xFF00B0BD),
-                                            width: 2))),
-                                width: dSize.width * 0.5,
-                                child: DropdownButtonHideUnderline(
-                                  child: DropdownButton<String>(
-                                    value: department,
-                                    iconSize: 20,
-                                    icon: const Icon(
-                                      Icons.arrow_drop_down,
-                                      color: Color(0xFF00B0BD),
-                                    ),
-                                    isDense: true,
-                                    isExpanded: true,
-                                    items: departments.toSet().toList()
+                                    items: countries
                                         .map((e) => e.name)
                                         .map((String item) {
                                       return DropdownMenuItem<String>(
@@ -398,7 +144,116 @@ class _ItemCaptureState extends State<ItemCapture> {
                                     }).toList(),
                                     onChanged: (val) {
                                       setState(() {
-                                        department = val;
+                                        country = val;
+                                      });
+                                      print(val);
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: dSize.height * 0.01,
+                          ),
+                          Row(
+                            children: [
+                              CustomWidgetBuilder.buildText(lang.getTxt('city'), dSize),
+                              Spacer(),
+                              Container(
+                                decoration: const BoxDecoration(
+                                    border: Border(
+                                        bottom: BorderSide(
+                                            color: Color(0xFF00B0BD), width: 2))),
+                                width: dSize.width * 0.5,
+                                child: DropdownButtonHideUnderline(
+                                  child: DropdownButton<String>(
+                                    value: city,
+                                    iconSize: 20,
+                                    icon: const Icon(
+                                      Icons.arrow_drop_down,
+                                      color: Color(0xFF00B0BD),
+                                    ),
+                                    isDense: true,
+                                    isExpanded: true,
+                                    items: cities
+                                        .map((e) => e.name)
+                                        .map((String item) {
+                                      return DropdownMenuItem<String>(
+                                        value: item,
+                                        child: Text(
+                                          item,
+                                          style: const TextStyle(
+                                              color: Color(0xFF0F6671),
+                                              fontSize: 15),
+                                        ),
+                                      );
+                                    }).toList(),
+                                    onChanged: (val) {
+                                      setState(() {
+                                        city = val;
+                                      });
+                                      print(val);
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: dSize.height * 0.01,
+                          ),
+                          CustomWidgetBuilder.buildTextFormField(dSize, lang.getTxt('area'),
+                              areas.isNotEmpty ? areas[0].name : 'area', false),
+                          SizedBox(
+                            height: dSize.height * 0.01,
+                          ),
+                          Row(
+                            children: [
+                              CustomWidgetBuilder.buildText(
+                                  lang.getTxt('location_type'), dSize),
+                              Spacer(),
+                              Container(
+                                decoration: const BoxDecoration(
+                                    border: Border(
+                                        bottom: BorderSide(
+                                            color: Color(0xFF00B0BD), width: 2))),
+                                width: dSize.width * 0.5,
+                                child: DropdownButtonHideUnderline(
+                                  child: DropdownButton<String>(
+                                    value: location,
+                                    iconSize: 20,
+                                    icon: const Icon(
+                                      Icons.arrow_drop_down,
+                                      color: Color(0xFF00B0BD),
+                                    ),
+                                    style: const TextStyle(
+                                        color: Colors.white, fontSize: 15),
+                                    selectedItemBuilder: (BuildContext context) {
+                                      return locations.map((String value) {
+                                        return Text(
+                                          value,
+                                          style: const TextStyle(
+                                              color: Color(0xFF0F6671)),
+                                        );
+                                      }).toList();
+                                    },
+                                    dropdownColor: Color(0xFF00B0BD),
+                                    isDense: true,
+                                    isExpanded: true,
+                                    items: locations.map((String item) {
+                                      return DropdownMenuItem<String>(
+                                        value: item,
+                                        child: Text(
+                                          item,
+                                          // style: const TextStyle(
+                                          //     color: Color(0xFF0F6671), fontSize: 20),
+                                        ),
+                                      );
+                                    }).toList(),
+                                    onChanged: (val) {
+                                      setState(() {
+                                        location = val;
                                       });
                                     },
                                   ),
@@ -406,39 +261,191 @@ class _ItemCaptureState extends State<ItemCapture> {
                               ),
                             ],
                           ),
-                        SizedBox(
-                          height: dSize.height * 0.01,
-                        ),
-                      ],
+                          SizedBox(
+                            height: dSize.height * 0.015,
+                          ),
+                          if (location == MyConfig.OFFICE ||
+                              location == MyConfig.BUILDING)
+                            Row(
+                              children: [
+                                CustomWidgetBuilder.buildText(lang.getTxt('floor'), dSize),
+                                Spacer(),
+                                Container(
+                                  decoration: const BoxDecoration(
+                                      border: Border(
+                                          bottom: BorderSide(
+                                              color: Color(0xFF00B0BD),
+                                              width: 2))),
+                                  width: dSize.width * 0.5,
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButton<String>(
+                                      value: floor,
+                                      iconSize: 20,
+                                      icon: const Icon(
+                                        Icons.arrow_drop_down,
+                                        color: Color(0xFF00B0BD),
+                                      ),
+                                      isDense: true,
+                                      isExpanded: true,
+                                      items: floors
+                                          .map((e) => e.name).toSet().toList()
+                                          .map((String item) {
+                                        return DropdownMenuItem<String>(
+                                          value: item,
+                                          child: Text(
+                                            item,
+                                            style: const TextStyle(
+                                                color: Color(0xFF0F6671),
+                                                fontSize: 15),
+                                          ),
+                                        );
+                                      }).toList(),
+                                      onChanged: (val) {
+                                        setState(() {
+                                          floor = val;
+                                        });
+                                        getSectionsByFloor();
+                                        print('-----${sectionsPerFloor.length}------');
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          SizedBox(
+                            height: dSize.height * 0.01,
+                          ),
+                          if (location == MyConfig.OFFICE ||
+                              location == MyConfig.BUILDING ||
+                              location == MyConfig.STORE)
+                            Row(
+                              children: [
+                                CustomWidgetBuilder.buildText(
+                                    lang.getTxt('section'), dSize),
+                                Spacer(),
+                                Container(
+                                  decoration: const BoxDecoration(
+                                      border: Border(
+                                          bottom: BorderSide(
+                                              color: Color(0xFF00B0BD),
+                                              width: 2))),
+                                  width: dSize.width * 0.5,
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButton<String>(
+                                      value: section,
+                                      iconSize: 20,
+                                      icon: const Icon(
+                                        Icons.arrow_drop_down,
+                                        color: Color(0xFF00B0BD),
+                                      ),
+                                      isDense: true,
+                                      isExpanded: true,
+                                      items: sectionsPerFloor
+                                          .map((e) => e.name).toSet().toList()
+                                          .map((String item) {
+                                        return DropdownMenuItem<String>(
+                                          value: item,
+                                          child: Text(
+                                            item,
+                                            style: const TextStyle(
+                                                color: Color(0xFF0F6671),
+                                                fontSize: 15),
+                                          ),
+                                        );
+                                      }).toList(),
+                                      onChanged: (val) {
+                                        setState(() {
+                                          section = val;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          SizedBox(
+                            height: dSize.height * 0.01,
+                          ),
+                          if (location == MyConfig.OFFICE)
+                            Row(
+                              children: [
+                                CustomWidgetBuilder.buildText(
+                                    lang.getTxt('department'), dSize),
+                                Spacer(),
+                                Container(
+                                  decoration: const BoxDecoration(
+                                      border: Border(
+                                          bottom: BorderSide(
+                                              color: Color(0xFF00B0BD),
+                                              width: 2))),
+                                  width: dSize.width * 0.5,
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButton<String>(
+                                      value: department,
+                                      iconSize: 20,
+                                      icon: const Icon(
+                                        Icons.arrow_drop_down,
+                                        color: Color(0xFF00B0BD),
+                                      ),
+                                      isDense: true,
+                                      isExpanded: true,
+                                      items: departments.toSet().toList()
+                                          .map((e) => e.name)
+                                          .map((String item) {
+                                        return DropdownMenuItem<String>(
+                                          value: item,
+                                          child: Text(
+                                            item,
+                                            style: const TextStyle(
+                                                color: Color(0xFF0F6671),
+                                                fontSize: 15),
+                                          ),
+                                        );
+                                      }).toList(),
+                                      onChanged: (val) {
+                                        setState(() {
+                                          department = val;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          SizedBox(
+                            height: dSize.height * 0.01,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const Spacer(),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    CustomWidgetBuilder.buildArrow(
-                        context,
-                        dSize,
-                        Icon(Icons.arrow_back_ios_rounded),
-                        () => Navigator.of(context).pop()),
-                    CustomWidgetBuilder.buildArrow(
-                        context,
-                        dSize,
-                        Icon(Icons.arrow_forward_ios),
-                        () => moveToAssetsCapture()),
-                  ],
+                const Spacer(),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CustomWidgetBuilder.buildArrow(
+                          context,
+                          dSize,
+                          Icon(Icons.arrow_back_ios_rounded),
+                          () => Navigator.of(context).pop()),
+                      CustomWidgetBuilder.buildArrow(
+                          context,
+                          dSize,
+                          Icon(Icons.arrow_forward_ios),
+                          () => moveToAssetsCapture()),
+                    ],
+                  ),
                 ),
-              ),
-              const Footer()
-            ],
+                const Footer()
+              ],
+            ),
           ),
         ),
-      ),
-    ));
+      )),
+    );
   }
 
   initData() async {
@@ -498,7 +505,7 @@ class _ItemCaptureState extends State<ItemCapture> {
 
   moveToAssetsCapture() {
     if (!validateData()) {
-      CustomWidgetBuilder.showMessageDialog(context, 'Fill in the empty fields',true);
+      CustomWidgetBuilder.showMessageDialog(context, lang.getTxt('validation'),true);
     } else {
       int? departmentId ;
       int?sectionId;

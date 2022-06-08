@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 import '../Utility/CustomWidgetBuilder.dart';
+import '../language.dart';
 
 class AssetsCheck extends StatefulWidget {
   Category category;
@@ -25,6 +26,9 @@ class _AssetsCheckState extends State<AssetsCheck> {
   List<Asset> assets = [];
   List<Asset> allAssets = [];
   final GlobalKey<FormState> _formKey = GlobalKey();
+
+  final lang = Language();
+
   @override
   void initState() {
     // TODO: implement initState
@@ -36,261 +40,263 @@ class _AssetsCheckState extends State<AssetsCheck> {
   Widget build(BuildContext context) {
     final dSize = MediaQuery.of(context).size;
     print('dffd: ${dSize.height * 0.033}');
-    return Scaffold(
-        body: SafeArea(
-      child: SingleChildScrollView(
-        child: Container(
-          height: dSize.height,
-          child: Column(
-            children: [
-              Container(
-                width: double.infinity,
-                height: dSize.height * 0.172,
-                padding: EdgeInsets.symmetric(vertical: dSize.height * 0.007),
-                decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                        colors: [
-                          Color(0xFF26BB9B),
-                          Color(0xFF00B0BD),
-                        ],
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                        stops: [0, 1])),
-                child: Column(
-                  children: [
-                    const Text(
-                      'DGI ASSETS TRACKING',
-                      style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.white,
-                          fontFamily: 'Montserrat'),
-                    ),
-                    SizedBox(
-                      height: dSize.height * 0.035,
-                    ),
-                    Row(
-                      children: [
-                        Container(
-                            alignment: Alignment.centerLeft,
-                            padding: EdgeInsets.symmetric(
-                                vertical: dSize.height * 0.004, horizontal: 25),
-                            decoration: const BoxDecoration(
-                              color: Color(0xFFFFA227),
-                              borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(12),
-                                  bottomRight: Radius.circular(12)),
-                            ),
-                            child: Text.rich(
-                              TextSpan(
-                                  style: TextStyle(
-                                    fontSize: dSize.height * 0.028,
-                                    color: Colors.white,
-                                  ),
-                                  children: const <InlineSpan>[
-                                    TextSpan(
-                                      text: 'ASSETS ',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    TextSpan(
-                                      text: 'Counter',
-                                    ),
-                                  ]),
-                            )),
-                      ],
-                    ),
-                    SizedBox(
-                      height: dSize.height * 0.011,
-                    ),
-                    Container(
-                      padding: EdgeInsets.symmetric(vertical: dSize.height * 0.007),
-                      width: double.infinity,
-                      decoration: BoxDecoration(color: Colors.white),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+    return Directionality(
+      textDirection: Language.isEn ? TextDirection.ltr : TextDirection.rtl,
+      child: Scaffold(
+          body: SafeArea(
+        child: SingleChildScrollView(
+          child: Container(
+            height: dSize.height,
+            child: Column(
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: dSize.height * 0.172,
+                  padding: EdgeInsets.symmetric(vertical: dSize.height * 0.007),
+                  decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                          colors: [
+                            Color(0xFF26BB9B),
+                            Color(0xFF00B0BD),
+                          ],
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                          stops: [0, 1])),
+                  child: Column(
+                    children: [
+                      const Text(
+                        'DGI ASSETS TRACKING',
+                        style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.white,),
+                      ),
+                      SizedBox(
+                        height: dSize.height * 0.035,
+                      ),
+                      Row(
                         children: [
-                          Text(
-                            'ASSETS TOTAL : '+allAssets.length.toString(),
-                            style: TextStyle(
-                                color: Color(0xFF0F6671),
-                                fontSize: dSize.width * 0.031),
+                          Container(
+                              alignment: Alignment.centerLeft,
+                              padding: EdgeInsets.symmetric(
+                                  vertical: dSize.height * 0.004, horizontal: 25),
+                              decoration: const BoxDecoration(
+                                color: Color(0xFFFFA227),
+                                borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(12),
+                                    bottomRight: Radius.circular(12)),
+                              ),
+                              child: Text.rich(
+                                TextSpan(
+                                    style: TextStyle(
+                                      fontSize: dSize.height * 0.028,
+                                      color: Colors.white,
+                                    ),
+                                    children: <InlineSpan>[
+                                      TextSpan(
+                                        text: lang.getTxt('counter_header_title'),
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      TextSpan(
+                                        text: lang.getTxt('counter_header_subTitle'),
+                                      ),
+                                    ]),
+                              )),
+                        ],
+                      ),
+                      SizedBox(
+                        height: dSize.height * 0.011,
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(vertical: dSize.height * 0.007),
+                        width: double.infinity,
+                        decoration: BoxDecoration(color: Colors.white),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Text(
+                              '${lang.getTxt('assets_total')} : '+allAssets.length.toString(),
+                              style: TextStyle(
+                                  color: Color(0xFF0F6671),
+                                  fontSize: dSize.width * 0.031),
+                            ),
+                            Text(
+                              '${lang.getTxt('remain')} : '+allAssets.where((element) => element.isVerified==2).toList().length.toString(),
+                              style: TextStyle(
+                                  color: Color(0xFF0F6671),
+                                  fontSize: dSize.width * 0.037),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+                  child: SizedBox(
+                    height: dSize.height * 0.67,
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              buildText(lang.getTxt('barcode'), dSize),
+                              const Spacer(),
+                              InkWell(
+                                      onTap: () => scanBarcodeNormal(),
+                                      child: Container(
+                                        padding: EdgeInsets.all(7),
+                                        width: dSize.width * 0.5,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: const Color(0xFF00B0BD),
+                                              width: 2.0),
+                                        ),
+                                        child: Text(lang.getTxt('tab_barcode'), textAlign: TextAlign.center,),
+                                      ),
+                                    ),
+                              SizedBox(
+                                width: dSize.width * 0.03,
+                              ),
+                              Column(
+                                children: [
+                                  InkWell(
+                                      onTap: () => updateItem(false),
+                                      child: checkContainer(dSize, false)),
+                                  SizedBox(
+                                    height: dSize.height * 0.01,
+                                  ),
+                                  InkWell(
+                                      onTap: () => updateItem(true),
+                                      child: checkContainer(dSize, true)),
+                                ],
+                              ),
+                            ],
                           ),
-                          Text(
-                            'REMAIN : '+allAssets.where((element) => element.isVerified==2).toList().length.toString(),
-                            style: TextStyle(
-                                color: Color(0xFF0F6671),
-                                fontSize: dSize.width * 0.037),
+                          SizedBox(
+                            height: dSize.height * 0.01,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Container(
+                                width: dSize.width * 0.577,
+                                  // alignment: Alignment.centerRight,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: const Color(0xFF00B0BD),
+                                        width: 2.0),
+                                  ),
+                                  height: 100,
+                                  child: asset == null
+                                      ? Image.asset(
+                                          'assets/icons/img.png',
+                                          fit: BoxFit.cover,
+                                          width: dSize.width * 0.577,
+                                        )
+                                      : Image.memory(
+                                          base64Decode(asset!.image),
+                                    width: 300,
+                                    height: 100,
+                                        )),
+                            ],
+                          ),
+                          SizedBox(
+                            height: dSize.height * 0.01,
+                          ),
+                          CustomWidgetBuilder.buildTextFormField(
+                              dSize,
+                              lang.getTxt('asset_desc'),
+                              asset == null && asset?.description!=null ? "" : asset!.description,true),
+                          SizedBox(
+                            height: dSize.height * 0.01,
+                          ),
+                          Expanded(
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  height: dSize.height * 0.26,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(12),
+                                    child: ListView(
+                                      children: [
+                                        Table(
+                                          border: TableBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10)),
+                                          children: _getListings(dSize),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.all(dSize.height * 0.007),
+                                  child: Text(
+                                    'CLICK THE ASSETS FOR MORE DETAILS',
+                                    style: TextStyle(
+                                        color: Color(0xFF00B0BD),
+                                        fontSize: dSize.width * 0.03),
+                                  ),
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    Column(
+                                      children: [
+                                        buildText(allAssets.length.toString(), dSize),
+                                        buildText(lang.getTxt('assets_total'), dSize),
+                                      ],
+                                    ),
+                                    Column(
+                                      children: [
+                                        buildText(allAssets.where((element) => element.isVerified==1).toList().length.toString(), dSize),
+                                        checkContainer(dSize, true),
+                                      ],
+                                    ),
+                                    Column(
+                                      children: [
+                                        buildText(allAssets.where((element) => element.isVerified==0).toList().length.toString(), dSize),
+                                        checkContainer(dSize, false),
+                                      ],
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
                           ),
                         ],
                       ),
-                    )
-                  ],
-                ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-                child: SizedBox(
-                  height: dSize.height * 0.67,
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            buildText('BARCODE', dSize),
-                            const Spacer(),
-                            InkWell(
-                                    onTap: () => scanBarcodeNormal(),
-                                    child: Container(
-                                      padding: EdgeInsets.all(7),
-                                      width: dSize.width * 0.5,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                            color: const Color(0xFF00B0BD),
-                                            width: 2.0),
-                                      ),
-                                      child: Text('Tab to scan barcode', textAlign: TextAlign.center,),
-                                    ),
-                                  ),
-                            SizedBox(
-                              width: dSize.width * 0.03,
-                            ),
-                            Column(
-                              children: [
-                                InkWell(
-                                    onTap: () => updateItem(false),
-                                    child: checkContainer(dSize, false)),
-                                SizedBox(
-                                  height: dSize.height * 0.01,
-                                ),
-                                InkWell(
-                                    onTap: () => updateItem(true),
-                                    child: checkContainer(dSize, true)),
-                              ],
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: dSize.height * 0.01,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Container(
-                              width: dSize.width * 0.577,
-                                // alignment: Alignment.centerRight,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: const Color(0xFF00B0BD),
-                                      width: 2.0),
-                                ),
-                                height: 100,
-                                child: asset == null
-                                    ? Image.asset(
-                                        'assets/icons/img.png',
-                                        fit: BoxFit.cover,
-                                        width: dSize.width * 0.577,
-                                      )
-                                    : Image.memory(
-                                        base64Decode(asset!.image),
-                                  width: 300,
-                                  height: 100,
-                                      )),
-                          ],
-                        ),
-                        SizedBox(
-                          height: dSize.height * 0.01,
-                        ),
-                        CustomWidgetBuilder.buildTextFormField(
-                            dSize,
-                            'ASSET DESC',
-                            asset == null && asset?.description!=null ? "" : asset!.description,true),
-                        SizedBox(
-                          height: dSize.height * 0.01,
-                        ),
-                        Expanded(
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                height: dSize.height * 0.26,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(12),
-                                  child: ListView(
-                                    children: [
-                                      Table(
-                                        border: TableBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                        children: _getListings(dSize),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.all(dSize.height * 0.007),
-                                child: Text(
-                                  'CLICK THE ASSETS FOR MORE DETAILS',
-                                  style: TextStyle(
-                                      color: Color(0xFF00B0BD),
-                                      fontSize: dSize.width * 0.03),
-                                ),
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Column(
-                                    children: [
-                                      buildText(allAssets.length.toString(), dSize),
-                                      buildText('TOTAL ASSETS', dSize),
-                                    ],
-                                  ),
-                                  Column(
-                                    children: [
-                                      buildText(allAssets.where((element) => element.isVerified==1).toList().length.toString(), dSize),
-                                      checkContainer(dSize, true),
-                                    ],
-                                  ),
-                                  Column(
-                                    children: [
-                                      buildText(allAssets.where((element) => element.isVerified==0).toList().length.toString(), dSize),
-                                      checkContainer(dSize, false),
-                                    ],
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
                     ),
                   ),
                 ),
-              ),
-              const Spacer(),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    CustomWidgetBuilder.buildArrow(
-                        context,
-                        dSize,
-                        Icon(Icons.arrow_back_ios_rounded),
-                        () => Navigator.of(context).pop()),
-                  ],
+                const Spacer(),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CustomWidgetBuilder.buildArrow(
+                          context,
+                          dSize,
+                          Icon(Icons.arrow_back_ios_rounded),
+                          () => Navigator.of(context).pop()),
+                    ],
+                  ),
                 ),
-              ),
-              const Footer()
-            ],
+                const Footer()
+              ],
+            ),
           ),
         ),
-      ),
-    ));
+      )),
+    );
   }
 
   Container checkContainer(Size dSize, bool isCorrect) {

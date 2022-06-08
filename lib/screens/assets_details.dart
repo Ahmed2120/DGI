@@ -22,6 +22,7 @@ import '../Services/DescriptionService.dart';
 import '../Services/FloorService.dart';
 import '../Services/SectionTypeService.dart';
 import '../Utility/CustomWidgetBuilder.dart';
+import '../language.dart';
 import '../model/brand.dart';
 import '../model/description.dart';
 import 'home_page.dart';
@@ -61,6 +62,8 @@ class _AssetsDetailsState extends State<AssetsDetails> {
 
   final GlobalKey<FormState> _formKey = GlobalKey();
 
+  final lang = Language();
+
   @override
   void initState() {
     // TODO: implement initState
@@ -72,419 +75,421 @@ class _AssetsDetailsState extends State<AssetsDetails> {
   Widget build(BuildContext context) {
     final dSize = MediaQuery.of(context).size;
     final bottomPadding = MediaQuery.of(context).padding.top;
-    return Scaffold(
-        body: SafeArea(
-      child: SingleChildScrollView(
-        child: SizedBox(
-          height: dSize.height - bottomPadding,
-          child: Column(
-            children: [
-              Container(
-                width: double.infinity,
-                height: dSize.height * 0.172,
-                padding: EdgeInsets.symmetric(vertical: dSize.height * 0.007),
-                decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                        colors: [
-                          Color(0xFF26BB9B),
-                          Color(0xFF00B0BD),
+    return Directionality(
+      textDirection: Language.isEn ? TextDirection.ltr : TextDirection.rtl,
+      child: Scaffold(
+          body: SafeArea(
+        child: SingleChildScrollView(
+          child: SizedBox(
+            height: dSize.height - bottomPadding,
+            child: Column(
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: dSize.height * 0.172,
+                  padding: EdgeInsets.symmetric(vertical: dSize.height * 0.007),
+                  decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                          colors: [
+                            Color(0xFF26BB9B),
+                            Color(0xFF00B0BD),
+                          ],
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                          stops: [0, 1])),
+                  child: Column(
+                    children: [
+                      const Text(
+                        'DGI ASSETS TRACKING',
+                        style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.white,),
+                      ),
+                      SizedBox(
+                        height: dSize.height * 0.035,
+                      ),
+                      Row(
+                        children: [
+                          Container(
+                              alignment: Alignment.centerLeft,
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 2, horizontal: 25),
+                              decoration: const BoxDecoration(
+                                color: Color(0xFFFFA227),
+                                borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(12),
+                                    bottomRight: Radius.circular(12)),
+                              ),
+                              child: Text.rich(
+                                TextSpan(
+                                    style: TextStyle(
+                                      fontSize: dSize.height * 0.028,
+                                      color: Colors.white,
+                                    ),
+                                    children: <InlineSpan>[
+                                      TextSpan(
+                                        text: lang.getTxt('verification_header_title'),
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      TextSpan(
+                                        text: lang.getTxt('verification_header_subTitle'),
+                                      ),
+                                    ]),
+                              )),
                         ],
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                        stops: [0, 1])),
-                child: Column(
-                  children: [
-                    const Text(
-                      'DGI ASSETS TRACKING',
-                      style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.white,
-                          fontFamily: 'Montserrat'),
-                    ),
-                    SizedBox(
-                      height: dSize.height * 0.035,
-                    ),
-                    Row(
-                      children: [
-                        Container(
-                            alignment: Alignment.centerLeft,
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 2, horizontal: 25),
-                            decoration: const BoxDecoration(
-                              color: Color(0xFFFFA227),
-                              borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(12),
-                                  bottomRight: Radius.circular(12)),
+                      ),
+                      SizedBox(
+                        height: dSize.height * 0.011,
+                      ),
+                      Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: dSize.height * 0.007),
+                        width: double.infinity,
+                        decoration: const BoxDecoration(color: Colors.white),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Text(
+                              '${lang.getTxt('assets_total')} : ' + allAssets.length.toString(),
+                              style: TextStyle(
+                                  color: const Color(0xFF0F6671),
+                                  fontSize: dSize.width * 0.031),
                             ),
-                            child: Text.rich(
-                              TextSpan(
-                                  style: TextStyle(
-                                    fontSize: dSize.height * 0.028,
-                                    color: Colors.white,
+                            Text(
+                              '${lang.getTxt('remain')} : ' +
+                                  allAssets
+                                      .where((element) =>
+                                          element.isVerified == 0 ||
+                                          element.isVerified == null)
+                                      .toList()
+                                      .length
+                                      .toString(),
+                              style: TextStyle(
+                                  color: const Color(0xFF0F6671),
+                                  fontSize: dSize.width * 0.037),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: dSize.height * 0.016),
+                  height: dSize.height < 600
+                      ? dSize.height * 0.55
+                      : dSize.height * 0.49,
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            CustomWidgetBuilder.buildText(lang.getTxt('barcode'), dSize),
+                            const Spacer(),
+                            InkWell(
+                              onTap: () => scanBarcodeNormal(),
+                              // onTap: ()=>getItemData('00501700190004'),
+                              child: Container(
+                                padding: EdgeInsets.all(dSize.height * 0.007),
+                                width: dSize.width * 0.5,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: const Color(0xFF00B0BD), width: 2.0),
+                                ),
+                                child: Text(
+                                  lang.getTxt('tab_barcode'),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        if (error)
+                          Padding(
+                            padding: EdgeInsets.all(2.0),
+                            child: Text(
+                              lang.getTxt('no_item_found'),
+                              style: TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                CustomWidgetBuilder.buildText(
+                                    lang.getTxt('asset_details'), dSize),
+                              ],
+                            ),
+                            Container(
+                                width: 200,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: const Color(0xFF00B0BD), width: 2.0),
+                                ),
+                                height: 100,
+                                child: asset == null
+                                    ? Image.asset(
+                                        'assets/icons/img.png',
+                                        fit: BoxFit.cover,
+                                        width: 300,
+                                      )
+                                    : InkWell(
+                                        onTap: () => _showCamera(),
+                                        child: Image.memory(
+                                          base64Decode(imagePath!),
+                                          width: 300,
+                                          height: 100,
+                                        ),
+                                      )),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CustomWidgetBuilder.buildText(asset?.itemName?? "", dSize),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            CustomWidgetBuilder.buildText(lang.getTxt('serial'), dSize),
+                            const Spacer(),
+                            Container(
+                              width: dSize.width * 0.5,
+                              child: TextFormField(
+                                controller: serialController,
+                                style: TextStyle(
+                                    fontSize: dSize.height <= 500
+                                        ? 10
+                                        : dSize.height * 0.02),
+                                enabled: asset != null ? true : false,
+                                decoration: InputDecoration(
+                                  focusedBorder: const OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Color(0xFF00B0BD), width: 2)),
+                                  enabledBorder: const OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Color(0xFF00B0BD), width: 2)),
+                                  disabledBorder: const OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Color(0xFF00B0BD), width: 2)),
+                                  contentPadding: EdgeInsets.all(
+                                      dSize.height <= 600
+                                          ? dSize.height * 0.015
+                                          : 6),
+                                  isDense: true,
+                                  border: InputBorder.none,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            CustomWidgetBuilder.buildText(lang.getTxt('brand'), dSize),
+                            const Spacer(),
+                            Container(
+                              decoration: const BoxDecoration(
+                                  border: Border(
+                                      bottom: BorderSide(
+                                          color: Color(0xFF00B0BD), width: 2))),
+                              width: dSize.width * 0.5,
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton<String>(
+                                  value: _brand,
+                                  iconSize: 20,
+                                  icon: const Icon(
+                                    Icons.arrow_drop_down,
+                                    color: Color(0xFF00B0BD),
                                   ),
-                                  children: const <InlineSpan>[
-                                    TextSpan(
-                                      text: 'ASSETS ',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    TextSpan(
-                                      text: 'VERIFICATION',
-                                    ),
-                                  ]),
-                            )),
+                                  isDense: true,
+                                  isExpanded: true,
+                                  items: allBrands
+                                      .map((e) => e.name)
+                                      .map((String item) {
+                                    return DropdownMenuItem<String>(
+                                      value: item,
+                                      child: Text(
+                                        item,
+                                        style: const TextStyle(
+                                            color: Color(0xFF0F6671),
+                                            fontSize: 15),
+                                      ),
+                                    );
+                                  }).toList(),
+                                  onChanged: (val) {
+                                    setState(() {
+                                      _brand = val;
+                                    });
+                                  },
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            CustomWidgetBuilder.buildText(lang.getTxt('floor'), dSize),
+                            const Spacer(),
+                            Container(
+                              decoration: const BoxDecoration(
+                                  border: Border(
+                                      bottom: BorderSide(
+                                          color: Color(0xFF00B0BD), width: 2))),
+                              width: dSize.width * 0.5,
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton<String>(
+                                  value: _floor,
+                                  iconSize: 20,
+                                  icon: const Icon(
+                                    Icons.arrow_drop_down,
+                                    color: Color(0xFF00B0BD),
+                                  ),
+                                  isDense: true,
+                                  isExpanded: true,
+                                  items: allFloors
+                                      .map((e) => e.name)
+                                      .map((String item) {
+                                    return DropdownMenuItem<String>(
+                                      value: item,
+                                      child: Text(
+                                        item,
+                                        style: const TextStyle(
+                                            color: Color(0xFF0F6671),
+                                            fontSize: 15),
+                                      ),
+                                    );
+                                  }).toList(),
+                                  onChanged: (val) {
+                                    setState(() {
+                                      _floor = val;
+                                    });
+                                    getSectionsByFloor();
+                                  },
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            CustomWidgetBuilder.buildText(lang.getTxt('section'), dSize),
+                            const Spacer(),
+                            Container(
+                              decoration: const BoxDecoration(
+                                  border: Border(
+                                      bottom: BorderSide(
+                                          color: Color(0xFF00B0BD), width: 2))),
+                              width: dSize.width * 0.5,
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton<String>(
+                                  value: _section,
+                                  iconSize: 20,
+                                  icon: const Icon(
+                                    Icons.arrow_drop_down,
+                                    color: Color(0xFF00B0BD),
+                                  ),
+                                  isDense: true,
+                                  isExpanded: true,
+                                  items: sectionsPerFloor
+                                      .map((e) => e.name)
+                                      .map((String item) {
+                                    return DropdownMenuItem<String>(
+                                      value: item,
+                                      child: Text(
+                                        item,
+                                        style: const TextStyle(
+                                            color: Color(0xFF0F6671),
+                                            fontSize: 15),
+                                      ),
+                                    );
+                                  }).toList(),
+                                  onChanged: (val) {
+                                    setState(() {
+                                      _section = val;
+                                    });
+                                    print(val);
+                                  },
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            ElevatedButton(
+                              child: Text(lang.getTxt('done'),),
+                              onPressed: (asset == null || _floor == null || _section == null) ? null : () =>  updateItem(),
+                              style: ElevatedButton.styleFrom(
+                                  primary: const Color(0xFF00B0BD),
+                                  minimumSize: const Size(5, 30)),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
-                    SizedBox(
-                      height: dSize.height * 0.011,
-                    ),
-                    Container(
-                      padding:
-                          EdgeInsets.symmetric(vertical: dSize.height * 0.007),
-                      width: double.infinity,
-                      decoration: const BoxDecoration(color: Colors.white),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text(
-                            'ASSETS TOTAL : ' + allAssets.length.toString(),
-                            style: TextStyle(
-                                color: const Color(0xFF0F6671),
-                                fontSize: dSize.width * 0.031),
-                          ),
-                          Text(
-                            'REMAIN : ' +
-                                allAssets
-                                    .where((element) =>
-                                        element.isVerified == 0 ||
-                                        element.isVerified == null)
-                                    .toList()
-                                    .length
-                                    .toString(),
-                            style: TextStyle(
-                                color: const Color(0xFF0F6671),
-                                fontSize: dSize.width * 0.037),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
+                  ),
                 ),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: dSize.height * 0.016),
-                height: dSize.height < 600
-                    ? dSize.height * 0.55
-                    : dSize.height * 0.49,
-                child: Form(
-                  key: _formKey,
+                Expanded(
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        children: [
-                          CustomWidgetBuilder.buildText('BARCODE', dSize),
-                          const Spacer(),
-                          InkWell(
-                            onTap: () => scanBarcodeNormal(),
-                            // onTap: ()=>getItemData('00501700190004'),
-                            child: Container(
-                              padding: EdgeInsets.all(dSize.height * 0.007),
-                              width: dSize.width * 0.5,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: const Color(0xFF00B0BD), width: 2.0),
-                              ),
-                              child: const Text(
-                                'Tap to scan barcode',
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      if (error)
-                        const Padding(
-                          padding: EdgeInsets.all(2.0),
-                          child: Text(
-                            "There is no item found with this barcode",
-                            style: TextStyle(
-                                color: Colors.red,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        height: dSize.height < 600
+                            ? dSize.height * 0.2
+                            : dSize.height * 0.21,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: ListView(
                             children: [
-                              CustomWidgetBuilder.buildText(
-                                  'ASSET DETAILS', dSize),
+                              Table(
+                                  border: TableBorder(
+                                      borderRadius: BorderRadius.circular(10)),
+                                  children: _getListings()),
                             ],
                           ),
-                          Container(
-                              width: 200,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: const Color(0xFF00B0BD), width: 2.0),
-                              ),
-                              height: 100,
-                              child: asset == null
-                                  ? Image.asset(
-                                      'assets/icons/img.png',
-                                      fit: BoxFit.cover,
-                                      width: 300,
-                                    )
-                                  : InkWell(
-                                      onTap: () => _showCamera(),
-                                      child: Image.memory(
-                                        base64Decode(imagePath!),
-                                        width: 300,
-                                        height: 100,
-                                      ),
-                                    )),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          CustomWidgetBuilder.buildText(asset?.itemName?? "", dSize),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          CustomWidgetBuilder.buildText('SERIAL NO', dSize),
-                          const Spacer(),
-                          Container(
-                            width: dSize.width * 0.5,
-                            child: TextFormField(
-                              controller: serialController,
-                              style: TextStyle(
-                                  fontSize: dSize.height <= 500
-                                      ? 10
-                                      : dSize.height * 0.02),
-                              enabled: asset != null ? true : false,
-                              decoration: InputDecoration(
-                                focusedBorder: const OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Color(0xFF00B0BD), width: 2)),
-                                enabledBorder: const OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Color(0xFF00B0BD), width: 2)),
-                                disabledBorder: const OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Color(0xFF00B0BD), width: 2)),
-                                contentPadding: EdgeInsets.all(
-                                    dSize.height <= 600
-                                        ? dSize.height * 0.015
-                                        : 6),
-                                isDense: true,
-                                border: InputBorder.none,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          CustomWidgetBuilder.buildText('Brand', dSize),
-                          const Spacer(),
-                          Container(
-                            decoration: const BoxDecoration(
-                                border: Border(
-                                    bottom: BorderSide(
-                                        color: Color(0xFF00B0BD), width: 2))),
-                            width: dSize.width * 0.5,
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton<String>(
-                                value: _brand,
-                                iconSize: 20,
-                                icon: const Icon(
-                                  Icons.arrow_drop_down,
-                                  color: Color(0xFF00B0BD),
-                                ),
-                                isDense: true,
-                                isExpanded: true,
-                                items: allBrands
-                                    .map((e) => e.name)
-                                    .map((String item) {
-                                  return DropdownMenuItem<String>(
-                                    value: item,
-                                    child: Text(
-                                      item,
-                                      style: const TextStyle(
-                                          color: Color(0xFF0F6671),
-                                          fontSize: 15),
-                                    ),
-                                  );
-                                }).toList(),
-                                onChanged: (val) {
-                                  setState(() {
-                                    _brand = val;
-                                  });
-                                },
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          CustomWidgetBuilder.buildText('FLOOR', dSize),
-                          const Spacer(),
-                          Container(
-                            decoration: const BoxDecoration(
-                                border: Border(
-                                    bottom: BorderSide(
-                                        color: Color(0xFF00B0BD), width: 2))),
-                            width: dSize.width * 0.5,
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton<String>(
-                                value: _floor,
-                                iconSize: 20,
-                                icon: const Icon(
-                                  Icons.arrow_drop_down,
-                                  color: Color(0xFF00B0BD),
-                                ),
-                                isDense: true,
-                                isExpanded: true,
-                                items: allFloors
-                                    .map((e) => e.name)
-                                    .map((String item) {
-                                  return DropdownMenuItem<String>(
-                                    value: item,
-                                    child: Text(
-                                      item,
-                                      style: const TextStyle(
-                                          color: Color(0xFF0F6671),
-                                          fontSize: 15),
-                                    ),
-                                  );
-                                }).toList(),
-                                onChanged: (val) {
-                                  setState(() {
-                                    _floor = val;
-                                  });
-                                  getSectionsByFloor();
-                                },
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          CustomWidgetBuilder.buildText('SECTION', dSize),
-                          const Spacer(),
-                          Container(
-                            decoration: const BoxDecoration(
-                                border: Border(
-                                    bottom: BorderSide(
-                                        color: Color(0xFF00B0BD), width: 2))),
-                            width: dSize.width * 0.5,
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton<String>(
-                                value: _section,
-                                iconSize: 20,
-                                icon: const Icon(
-                                  Icons.arrow_drop_down,
-                                  color: Color(0xFF00B0BD),
-                                ),
-                                isDense: true,
-                                isExpanded: true,
-                                items: sectionsPerFloor
-                                    .map((e) => e.name)
-                                    .map((String item) {
-                                  return DropdownMenuItem<String>(
-                                    value: item,
-                                    child: Text(
-                                      item,
-                                      style: const TextStyle(
-                                          color: Color(0xFF0F6671),
-                                          fontSize: 15),
-                                    ),
-                                  );
-                                }).toList(),
-                                onChanged: (val) {
-                                  setState(() {
-                                    _section = val;
-                                  });
-                                  print(val);
-                                },
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          ElevatedButton(
-                            child: const Text('DONE'),
-                            onPressed: (asset == null || _floor == null || _section == null) ? null : () =>  updateItem(),
-                            style: ElevatedButton.styleFrom(
-                                primary: const Color(0xFF00B0BD),
-                                minimumSize: const Size(5, 30)),
-                          ),
-                        ],
+                        ),
                       ),
                     ],
                   ),
                 ),
-              ),
-              Expanded(
-                child: Column(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      height: dSize.height < 600
-                          ? dSize.height * 0.2
-                          : dSize.height * 0.21,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: ListView(
-                          children: [
-                            Table(
-                                border: TableBorder(
-                                    borderRadius: BorderRadius.circular(10)),
-                                children: _getListings()),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 1),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CustomWidgetBuilder.buildArrow(
+                          context,
+                          dSize,
+                          const Icon(Icons.arrow_back_ios_rounded),
+                          () => Navigator.of(context).pop()),
+                    ],
+                  ),
                 ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 1),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    CustomWidgetBuilder.buildArrow(
-                        context,
-                        dSize,
-                        const Icon(Icons.arrow_back_ios_rounded),
-                        () => Navigator.of(context).pop()),
-                  ],
-                ),
-              ),
-              const Footer()
-            ],
+                const Footer()
+              ],
+            ),
           ),
         ),
       ),
-    ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => HomePage()));
-        },
-        backgroundColor: Colors.orangeAccent,
-        child: Icon(
-          Icons.home,
-          color: Colors.white,
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => HomePage()));
+          },
+          backgroundColor: Colors.orangeAccent,
+          child: Icon(
+            Icons.home,
+            color: Colors.white,
+          ),
         ),
       ),
     );
@@ -630,7 +635,7 @@ class _AssetsDetailsState extends State<AssetsDetails> {
     }
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text("Updated"), duration: Duration(milliseconds: 1000),));
+        .showSnackBar(SnackBar(content: Text(lang.getTxt('update_asset')), duration: Duration(milliseconds: 1000),));
     assetService.update(asset!);
   }
 

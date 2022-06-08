@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
+import '../language.dart';
+
 class CustomWidgetBuilder{
 
   static buildTextFormField(Size dSize,String title,String ?text,bool enabled){
@@ -33,20 +35,24 @@ class CustomWidgetBuilder{
   }
   static void showMessageDialog(BuildContext context,String message,bool dismissible,
       {String title = 'An error Occurred'}) {
+    final lang = Language();
     showDialog(
         context: context,
         barrierDismissible: dismissible,
-        builder: (ctx) => AlertDialog(
-          title: Text(title),
-          content: Text(message),
-          actions: [
-            TextButton(
-              child: const Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            )
-          ],
+        builder: (ctx) => Directionality(
+          textDirection: Language.isEn ? TextDirection.ltr : TextDirection.rtl,
+          child: AlertDialog(
+            title: Text(lang.getTxt('error_occurred'),),
+            content: Text(message),
+            actions: [
+              TextButton(
+                child: Text(lang.getTxt('ok'),),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          ),
         ));
   }
 
