@@ -24,6 +24,7 @@ import '../Services/SectionTypeService.dart';
 import '../Utility/CustomWidgetBuilder.dart';
 import '../model/brand.dart';
 import '../model/description.dart';
+import 'home_page.dart';
 
 class AssetsDetails extends StatefulWidget {
   AssetsDetails({Key? key}) : super(key: key);
@@ -287,49 +288,6 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                       ),
                       Row(
                         children: [
-                          CustomWidgetBuilder.buildText('DESCRIPTION', dSize),
-                          const Spacer(),
-                          Container(
-                            decoration: const BoxDecoration(
-                                border: Border(
-                                    bottom: BorderSide(
-                                        color: Color(0xFF00B0BD), width: 2))),
-                            width: dSize.width * 0.5,
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton<String>(
-                                value: _description,
-                                iconSize: 20,
-                                icon: const Icon(
-                                  Icons.arrow_drop_down,
-                                  color: Color(0xFF00B0BD),
-                                ),
-                                isDense: true,
-                                isExpanded: true,
-                                items: allDescriptions
-                                    .map((e) => e.description)
-                                    .map((String item) {
-                                  return DropdownMenuItem<String>(
-                                    value: item,
-                                    child: Text(
-                                      item,
-                                      style: const TextStyle(
-                                          color: Color(0xFF0F6671),
-                                          fontSize: 15),
-                                    ),
-                                  );
-                                }).toList(),
-                                onChanged: (val) {
-                                  setState(() {
-                                    _description = val;
-                                  });
-                                },
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
                           CustomWidgetBuilder.buildText('Brand', dSize),
                           const Spacer(),
                           Container(
@@ -462,13 +420,6 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          // ElevatedButton(
-                          //   child: const Text('UPDATE'),
-                          //   onPressed: (asset == null || _floor == null || _section == null) ? null : () => editAsset(),
-                          //   style: ElevatedButton.styleFrom(
-                          //       primary: const Color(0xFF00B0BD),
-                          //       minimumSize: const Size(5, 30)),
-                          // ),
                           ElevatedButton(
                             child: const Text('DONE'),
                             onPressed: (asset == null || _floor == null || _section == null) ? null : () =>  updateItem(),
@@ -524,7 +475,19 @@ class _AssetsDetailsState extends State<AssetsDetails> {
           ),
         ),
       ),
-    ));
+    ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => HomePage()));
+        },
+        backgroundColor: Colors.orangeAccent,
+        child: Icon(
+          Icons.home,
+          color: Colors.white,
+        ),
+      ),
+    );
   }
 
   List<TableRow> _getListings() {

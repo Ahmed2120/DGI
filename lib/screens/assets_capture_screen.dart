@@ -689,8 +689,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
     if (noteController.text.isEmpty ||
         imagePath == null ||
         item == null||
-        description == null||
-        brand == null) {
+        description == null) {
       CustomWidgetBuilder.showMessageDialog(
           context, 'Fill in the empty fields', true);
     } else if (!UtilityService.isNumeric(heightController.text) ||

@@ -27,7 +27,7 @@ class AssetRepository{
   Future<List<Asset>> getAllCountedItems() async {
     final Database db = await databaseHandler.initializeDB();
     final List<Map<String, Object?>> queryResult = await db.query(TABLE_NAME,where: "isCounted = ?",whereArgs: [1]);
-    return queryResult.map((e) => Asset.fromMap(e)).toList();
+    return queryResult.map((e) => Asset.fromJson(e)).toList();
   }
   Future<List<Asset>> retrieve() async {
     final Database db = await databaseHandler.initializeDB();

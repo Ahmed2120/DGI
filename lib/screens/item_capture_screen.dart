@@ -299,6 +299,7 @@ class _ItemCaptureState extends State<ItemCapture> {
                                         floor = val;
                                       });
                                       getSectionsByFloor();
+                                      print('-----${sectionsPerFloor.length}------');
                                     },
                                   ),
                                 ),
@@ -333,7 +334,7 @@ class _ItemCaptureState extends State<ItemCapture> {
                                     ),
                                     isDense: true,
                                     isExpanded: true,
-                                    items: sections
+                                    items: sectionsPerFloor
                                         .map((e) => e.name).toSet().toList()
                                         .map((String item) {
                                       return DropdownMenuItem<String>(
