@@ -37,13 +37,14 @@ class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     final dSize = MediaQuery.of(context).size;
+    final bottomPadding = MediaQuery.of(context).padding.top;
     return Directionality(
       textDirection: Language.isEn ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
           body: SafeArea(
         child: SingleChildScrollView(
           child: SizedBox(
-            height: dSize.height,
+            height: dSize.height - bottomPadding,
             child: Column(
               children: [
                 Container(
@@ -69,7 +70,7 @@ class _SettingsState extends State<Settings> {
                             fontFamily: 'Montserrat'),
                       ),
                       SizedBox(
-                        height: dSize.height * 0.035,
+                        height: Language.isEn ? dSize.height * 0.03 : dSize.height * 0.012,
                       ),
                       Row(
                         children: [
@@ -77,25 +78,27 @@ class _SettingsState extends State<Settings> {
                               alignment: Alignment.centerLeft,
                               padding: const EdgeInsets.symmetric(
                                   vertical: 5, horizontal: 25),
-                              decoration: const BoxDecoration(
+                              decoration: BoxDecoration(
                                 color: Color(0xFFFFA227),
-                                borderRadius: BorderRadius.only(
+                                borderRadius: Language.isEn ? const BorderRadius.only(
                                     topRight: Radius.circular(12),
-                                    bottomRight: Radius.circular(12)),
+                                    bottomRight: Radius.circular(12)) : const BorderRadius.only(
+                                    topLeft: Radius.circular(12),
+                                    bottomLeft: Radius.circular(12)),
                               ),
                               child: Text.rich(
                                 TextSpan(
                                     style: TextStyle(
                                         fontSize: dSize.height * 0.028,
                                         color: Colors.white,),
-                                    children: const <InlineSpan>[
+                                    children: <InlineSpan>[
                                       TextSpan(
-                                        text: 'ASSETS ',
+                                        text: lang.getTxt('setting_header_title'),
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold),
                                       ),
                                       TextSpan(
-                                        text: 'SETTINGS',
+                                        text: lang.getTxt('setting_header_subTitle'),
                                       ),
                                     ]),
                               )),
@@ -412,7 +415,7 @@ class _SettingsState extends State<Settings> {
                     ],
                   ),
                 ),
-                const Footer()
+                Footer()
               ],
             ),
           ),

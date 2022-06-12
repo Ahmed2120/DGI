@@ -268,7 +268,7 @@ class _AssetsVerificationState extends State<AssetsVerification> {
                     ],
                   ),
                 ),
-                const Footer()
+                Footer()
               ],
             ),
           ),

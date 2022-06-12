@@ -439,7 +439,7 @@ class _ItemCaptureState extends State<ItemCapture> {
                     ],
                   ),
                 ),
-                const Footer()
+                Footer()
               ],
             ),
           ),

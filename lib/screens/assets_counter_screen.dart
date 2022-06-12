@@ -308,11 +308,11 @@ class _AssetsCounterState extends State<AssetsCounter> {
                           CustomWidgetBuilder.buildArrow(context,dSize,Icon(Icons.arrow_back_ios_rounded), ()=>Navigator.of(context).pop()),
                           CustomWidgetBuilder.buildArrow(context,dSize,Icon(Icons.arrow_forward_ios), ()=> Navigator.of(context).push(
                               MaterialPageRoute(
-                                  builder: (context) => AssetsCheck(category: categories.where((element) => element.name==category).first,))))
+                                  builder: (context) => AssetsCheck())))
                         ],
                       ),
                     ),
-                    const Footer()
+                    Footer()
                   ],
                 ),
               ),

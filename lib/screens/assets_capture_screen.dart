@@ -179,7 +179,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                               color: Colors.white,),
                         ),
                         SizedBox(
-                          height: dSize.height * 0.03,
+                          height: Language.isEn ? dSize.height * 0.03 : dSize.height * 0.012,
                         ),
                         Row(
                           children: [
@@ -188,11 +188,13 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                                 padding: EdgeInsets.symmetric(
                                     vertical: dSize.height * 0.004,
                                     horizontal: 25),
-                                decoration: const BoxDecoration(
-                                  color: Color(0xFFFFA227),
-                                  borderRadius: BorderRadius.only(
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFFFA227),
+                                  borderRadius: Language.isEn ? const BorderRadius.only(
                                       topRight: Radius.circular(12),
-                                      bottomRight: Radius.circular(12)),
+                                      bottomRight: Radius.circular(12)) : const BorderRadius.only(
+                                      topLeft: Radius.circular(12),
+                                      bottomLeft: Radius.circular(12)),
                                 ),
                                 child: Text.rich(
                                   TextSpan(
@@ -201,7 +203,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                                           color: Colors.white,),
                                       children: <InlineSpan>[
                                         TextSpan(
-                                          text: lang.getTxt('counter_header_title'),
+                                          text: lang.getTxt('capture_header_title'),
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold),
                                         ),
@@ -567,7 +569,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                           child: Text(
                             '${lang.getTxt('item_total')}     ${captureDetails.length}',
                             style: TextStyle(
-                                fontSize: dSize.height <= 500 ? 10 : dSize.height * 0.015,
+                                fontSize: dSize.height <= 500 ? 10 : dSize.height * 0.014,
                                 color: Color(0xFF0F6671),
                                 fontWeight: FontWeight.bold),
                           ),
@@ -755,7 +757,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
     List<TableRow> listings = <TableRow>[];
     int i = 0;
     listings.add(
-      CustomWidgetBuilder.buildRow(['No', 'TYPE', 'NOTES', 'QNT', 'PHOTO'],
+      CustomWidgetBuilder.buildRow([lang.getTxt('no'), lang.getTxt('type'), lang.getTxt('note'), lang.getTxt('qnt_table'), lang.getTxt('photo')],
           isHeader: true),
     );
     for (i = 0; i < captureDetails.length; i++) {

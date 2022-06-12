@@ -13,8 +13,7 @@ import '../Utility/CustomWidgetBuilder.dart';
 import '../language.dart';
 
 class AssetsCheck extends StatefulWidget {
-  Category category;
-  AssetsCheck({Key? key,required this.category}) : super(key: key);
+  AssetsCheck({Key? key}) : super(key: key);
 
   @override
   State<AssetsCheck> createState() => _AssetsCheckState();
@@ -39,6 +38,7 @@ class _AssetsCheckState extends State<AssetsCheck> {
   @override
   Widget build(BuildContext context) {
     final dSize = MediaQuery.of(context).size;
+    final bottomPadding = MediaQuery.of(context).padding.top;
     print('dffd: ${dSize.height * 0.033}');
     return Directionality(
       textDirection: Language.isEn ? TextDirection.ltr : TextDirection.rtl,
@@ -46,7 +46,7 @@ class _AssetsCheckState extends State<AssetsCheck> {
           body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
-            height: dSize.height,
+            height: dSize.height - bottomPadding,
             child: Column(
               children: [
                 Container(
@@ -71,7 +71,7 @@ class _AssetsCheckState extends State<AssetsCheck> {
                             color: Colors.white,),
                       ),
                       SizedBox(
-                        height: dSize.height * 0.035,
+                        height: Language.isEn ? dSize.height * 0.03 : dSize.height * 0.012,
                       ),
                       Row(
                         children: [
@@ -79,11 +79,13 @@ class _AssetsCheckState extends State<AssetsCheck> {
                               alignment: Alignment.centerLeft,
                               padding: EdgeInsets.symmetric(
                                   vertical: dSize.height * 0.004, horizontal: 25),
-                              decoration: const BoxDecoration(
+                              decoration: BoxDecoration(
                                 color: Color(0xFFFFA227),
-                                borderRadius: BorderRadius.only(
+                                borderRadius: Language.isEn ? const BorderRadius.only(
                                     topRight: Radius.circular(12),
-                                    bottomRight: Radius.circular(12)),
+                                    bottomRight: Radius.circular(12)) : const BorderRadius.only(
+                                    topLeft: Radius.circular(12),
+                                    bottomLeft: Radius.circular(12)),
                               ),
                               child: Text.rich(
                                 TextSpan(
@@ -121,7 +123,7 @@ class _AssetsCheckState extends State<AssetsCheck> {
                                   fontSize: dSize.width * 0.031),
                             ),
                             Text(
-                              '${lang.getTxt('remain')} : '+allAssets.where((element) => element.isVerified==2).toList().length.toString(),
+                              '${lang.getTxt('remain')} : '+allAssets.where((element) => element.isCounted==0 || element.isCounted==null).toList().length.toString(),
                               style: TextStyle(
                                   color: Color(0xFF0F6671),
                                   fontSize: dSize.width * 0.037),
@@ -212,7 +214,7 @@ class _AssetsCheckState extends State<AssetsCheck> {
                           CustomWidgetBuilder.buildTextFormField(
                               dSize,
                               lang.getTxt('asset_desc'),
-                              asset == null && asset?.description!=null ? "" : asset!.description,true),
+                              asset?.itemName?? "",true),
                           SizedBox(
                             height: dSize.height * 0.01,
                           ),
@@ -290,7 +292,7 @@ class _AssetsCheckState extends State<AssetsCheck> {
                     ],
                   ),
                 ),
-                const Footer()
+                Footer()
               ],
             ),
           ),
@@ -380,15 +382,14 @@ class _AssetsCheckState extends State<AssetsCheck> {
     List<TableRow> listings = <TableRow>[];
     int i = 0;
       listings.add(
-        CustomWidgetBuilder.buildRow(['No', 'ASSETS', 'DESC', 'CHECK'], isHeader: true),
+        CustomWidgetBuilder.buildRow([lang.getTxt('no'), lang.getTxt('desc_table'),lang.getTxt('check_table')], isHeader: true),
       );
     for (i = 0; i < assets.length; i++) {
       listings.add(
         CustomWidgetBuilder.buildRow(
           [
             i + 1,
-            widget.category.name,
-            assets[i].description,
+            assets[i].itemName,
             checkContainer(dSize, assets[i].isVerified==1?true:false),
           ],
         ),

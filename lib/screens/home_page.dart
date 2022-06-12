@@ -194,7 +194,7 @@ class _HomePageState extends State<HomePage> {
                                   child: buildColumn(lang.getTxt('about'), dsize, '0-19'),
                                   onTap: () => Navigator.of(context).push(
                                       MaterialPageRoute(
-                                          builder: (context) => const AboutUs())),
+                                          builder: (context) => AboutUs())),
                                 ),
                                 InkWell(
                                   child: buildColumn(lang.getTxt('settings'), dsize, '0-20'),

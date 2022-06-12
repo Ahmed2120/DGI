@@ -270,7 +270,7 @@ class ServerService{
       await sectionService.batch(sections);
       await floorService.batch(floors);
       await brandService.batch(brands);
-      if(response.transactionType == 2){
+      if(response.transactionType == 2 || response.transactionType == 3){
         await downloadAssets(response.id);
       }
       return "Success";

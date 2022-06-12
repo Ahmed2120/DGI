@@ -106,7 +106,7 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                             color: Colors.white,),
                       ),
                       SizedBox(
-                        height: dSize.height * 0.035,
+                        height: Language.isEn ? dSize.height * 0.03 : dSize.height * 0.012,
                       ),
                       Row(
                         children: [
@@ -114,11 +114,13 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                               alignment: Alignment.centerLeft,
                               padding: const EdgeInsets.symmetric(
                                   vertical: 2, horizontal: 25),
-                              decoration: const BoxDecoration(
-                                color: Color(0xFFFFA227),
-                                borderRadius: BorderRadius.only(
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFFFA227),
+                                borderRadius: Language.isEn ? const BorderRadius.only(
                                     topRight: Radius.circular(12),
-                                    bottomRight: Radius.circular(12)),
+                                    bottomRight: Radius.circular(12)) : const BorderRadius.only(
+                                    topLeft: Radius.circular(12),
+                                    bottomLeft: Radius.circular(12)),
                               ),
                               child: Text.rich(
                                 TextSpan(
@@ -474,7 +476,7 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                     ],
                   ),
                 ),
-                const Footer()
+                Footer()
               ],
             ),
           ),
@@ -499,7 +501,7 @@ class _AssetsDetailsState extends State<AssetsDetails> {
     List<TableRow> listings = <TableRow>[];
     int i = 0;
     listings.add(
-      CustomWidgetBuilder.buildRow(['No', 'DESC', 'PHOTO'], isHeader: true),
+      CustomWidgetBuilder.buildRow([lang.getTxt('no'), lang.getTxt('desc_table'), lang.getTxt('photo')], isHeader: true),
     );
     for (i = 0; i < assets.length; i++) {
       listings.add(

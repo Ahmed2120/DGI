@@ -40,8 +40,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         fontFamily: 'Montserrat'
       ),
-      // home: SplashScreen(pdaNo: pdaNo,),
-      home: HomePage(),
+      home: SplashScreen(pdaNo: pdaNo,),
     );
   }
 }

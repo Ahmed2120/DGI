@@ -3,14 +3,18 @@ import 'package:flutter/material.dart';
 import '../language.dart';
 
 class Header extends StatelessWidget {
-  const Header({Key? key, required this.title, required this.subTitle}) : super(key: key);
+  Header({Key? key, required this.title, required this.subTitle}) : super(key: key);
   final String title, subTitle;
+
+  final lang = Language();
 
   @override
   Widget build(BuildContext context) {
     final dSize = MediaQuery.of(context).size;
     print('head ${dSize.height * 0.004}');
     print('hffhh ${dSize.width * 0.03}');
+
+    final date = DateTime.now();
     return Directionality(
       textDirection: Language.isEn ? TextDirection.ltr : TextDirection.rtl,
       child: Container(
@@ -35,7 +39,7 @@ class Header extends StatelessWidget {
                   color: Colors.white,),
             ),
             SizedBox(
-              height: dSize.height * 0.03,
+              height: Language.isEn ? dSize.height * 0.03 : dSize.height * 0.017,
             ),
             Row(
               children: [
@@ -43,11 +47,13 @@ class Header extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     padding: EdgeInsets.symmetric(
                         vertical: dSize.height * 0.004, horizontal: 25),
-                    decoration: const BoxDecoration(
-                      color: Color(0xFFFFA227),
-                      borderRadius: BorderRadius.only(
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFFA227),
+                      borderRadius: Language.isEn ? const BorderRadius.only(
                           topRight: Radius.circular(12),
-                          bottomRight: Radius.circular(12)),
+                          bottomRight: Radius.circular(12)) : const BorderRadius.only(
+                          topLeft: Radius.circular(12),
+                          bottomLeft: Radius.circular(12)),
                     ),
                     child: Text.rich(
                       TextSpan(
@@ -56,7 +62,7 @@ class Header extends StatelessWidget {
                               color: Colors.white,),
                           children: <InlineSpan>[
                             TextSpan(
-                              text: '$title ',
+                              text: title,
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold),
                             ),
@@ -79,17 +85,17 @@ class Header extends StatelessWidget {
                 children: [
                   FittedBox(
                     child: Text(
-                      'DATE : 14-03-2022',
+                      '${lang.getTxt('date')} : ${date.day}-${date.month}-${date.year}',
                       style: TextStyle(
                           color: Color(0xFF0F6671),
-                          fontSize: dSize.height * 0.02),
+                          fontSize: Language.isEn ? dSize.height * 0.02 : dSize.height * 0.015),
                     ),
                   ),
                   Text(
-                    'TIME : 24,00',
+                    '${lang.getTxt('time')} : ${date.hour},${date.minute}',
                     style: TextStyle(
                         color: Color(0xFF0F6671),
-                        fontSize: dSize.height * 0.02),
+                        fontSize: Language.isEn ? dSize.height * 0.02 : dSize.height * 0.015),
                   ),
                   Text(
                     'NO. : 01223997',
