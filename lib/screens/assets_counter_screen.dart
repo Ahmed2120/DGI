@@ -101,93 +101,6 @@ class _AssetsCounterState extends State<AssetsCounter> {
                               ),
                               Row(
                                 children: [
-                                  CustomWidgetBuilder.buildText(lang.getTxt('main_category'), dSize),
-                                  const Spacer(),
-                                  Container(
-                                    decoration: const BoxDecoration(
-                                        border: Border(
-                                            bottom: BorderSide(
-                                                color: Color(0xFF00B0BD), width: 2))),
-                                    width: dSize.width * 0.5,
-                                    child: DropdownButtonHideUnderline(
-                                      child: DropdownButton<String>(
-                                        value: mainCategory,
-                                        iconSize: 20,
-                                        icon: const Icon(
-                                          Icons.arrow_drop_down,
-                                          color: Color(0xFF00B0BD),
-                                        ),
-                                        isDense: true,
-                                        isExpanded: true,
-                                        items:
-                                        mainCategories.map((e) => e.name).map((String item) {
-                                          return DropdownMenuItem<String>(
-                                            value: item,
-                                            child: Text(
-                                              item,
-                                              style: const TextStyle(
-                                                  color: Color(0xFF0F6671), fontSize: 15),
-                                            ),
-                                          );
-                                        }).toList(),
-                                        onChanged: (val) {
-                                          setState(() {
-                                            mainCategory = val;
-                                            _main = mainCategories.firstWhere((e) => val == e.name);
-                                            getCatByMainCat();
-                                          });
-                                          print(val);
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: dSize.height * 0.01,),
-                              Row(
-                                children: [
-                                  CustomWidgetBuilder.buildText(lang.getTxt('category'), dSize),
-                                  const Spacer(),
-                                  Container(
-                                    decoration: const BoxDecoration(
-                                        border: Border(
-                                            bottom: BorderSide(
-                                                color: Color(0xFF00B0BD), width: 2))),
-                                    width: dSize.width * 0.5,
-                                    child: DropdownButtonHideUnderline(
-                                      child: DropdownButton<String>(
-                                        value: category,
-                                        iconSize: 20,
-                                        icon: const Icon(
-                                          Icons.arrow_drop_down,
-                                          color: Color(0xFF00B0BD),
-                                        ),
-                                        isDense: true,
-                                        isExpanded: true,
-                                        items:
-                                        categories.map((e) => e.name).map((String item) {
-                                          return DropdownMenuItem<String>(
-                                            value: item,
-                                            child: Text(
-                                              item,
-                                              style: const TextStyle(
-                                                  color: Color(0xFF0F6671), fontSize: 15),
-                                            ),
-                                          );
-                                        }).toList(),
-                                        onChanged: (val) {
-                                          setState(() {
-                                            category = val;
-                                          });
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: dSize.height * 0.01,),
-                              Row(
-                                children: [
                                   CustomWidgetBuilder.buildText(lang.getTxt('city'), dSize),
                                   Spacer(),
                                   Container(
@@ -326,7 +239,6 @@ class _AssetsCounterState extends State<AssetsCounter> {
     mainCategories = await mainCategoryService.retrieve();
     mainCategory = mainCategories[0].name;
     _main = mainCategories[0];
-    getCatByMainCat();
     //countries = await countryService.retrieve();
     cities = await cityService.retrieve();
     city = cities.isNotEmpty?cities[0].name:"";
@@ -348,11 +260,6 @@ class _AssetsCounterState extends State<AssetsCounter> {
     });
   }
 
-  getCatByMainCat()async{
-    await categoryService.retrieve().then((values) => categories = (values.where((e) => _main!.id == e.mainCategoryId).toList()));
-    category = categories[0].name;
-    setState((){
-    });
-  }
+
 
 }

@@ -37,6 +37,7 @@ import 'package:http/http.dart' as http;
 import 'package:dgi/Utility/configration.dart';
 import 'package:dgi/model/country.dart';
 
+import '../model/assetCounterRequest.dart';
 import '../model/brand.dart';
 import 'BrandService.dart';
 import 'DescriptionService.dart';
@@ -429,6 +430,48 @@ class ServerService{
       throw Exception("Bad response");
     }catch(e){
       rethrow;
+    }
+  }
+
+  partialUploadAssetInventory(List<Asset> assets,int transactionId)async{
+    List<Asset> assetList = assets.map((e) =>
+        Asset(image: e.image,description: e.description,id: e.id,
+            departmentId: e.departmentId,floorId: e.floorId,sectionId: e.sectionId,brandId: e.brandId,color: e.color,
+            height: e.height,length: e.length,width: e.width,isVerified: e.isVerified,
+            barcode: e.barcode,serialnumber: e.serialnumber,transactionId: transactionId)).toList();
+    AssetCounterRequest request = AssetCounterRequest(id: transactionId,inventories: assetList);
+    print('====' + jsonEncode(request.id));
+    final response = await http.post(
+        Uri.parse('${MyConfig.SERVER}${MyConfig.ASSET_INVENTORY_UPLOAD}'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(request)
+    );
+    final responseJson = jsonDecode(response.body);
+    if(response.statusCode == 200 && responseJson["Succeeded"]) {
+      return true;
+    }else if(responseJson != null && responseJson["Message"] != null){
+      throw Exception(responseJson["Message"]);
+    }else{
+      _handleStatusCode(response.statusCode);
+    }
+  }
+
+  uploadAssetInventory() async{
+    final assetService = AssetService();
+    final transactionService = TransactionService();
+    final transactions = await transactionService.retrieve();
+    if(MyConfig.SERVER == ''){
+      await setServerIPAddress();
+    }
+    while(true) {
+      final List<Asset> assets = await assetService.retrieveTopElement();
+      if(assets.isEmpty){
+        break;
+      }
+      await partialUploadAssetInventory(assets, transactions[0].id);
+      await assetService.upload(assets);
     }
   }
 

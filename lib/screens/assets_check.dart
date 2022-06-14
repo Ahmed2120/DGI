@@ -11,6 +11,7 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 import '../Utility/CustomWidgetBuilder.dart';
 import '../language.dart';
+import 'home_page.dart';
 
 class AssetsCheck extends StatefulWidget {
   AssetsCheck({Key? key}) : super(key: key);
@@ -25,6 +26,8 @@ class _AssetsCheckState extends State<AssetsCheck> {
   List<Asset> assets = [];
   List<Asset> allAssets = [];
   final GlobalKey<FormState> _formKey = GlobalKey();
+
+  bool error = false;
 
   final lang = Language();
 
@@ -180,6 +183,17 @@ class _AssetsCheckState extends State<AssetsCheck> {
                               ),
                             ],
                           ),
+                          if (error)
+                            Padding(
+                              padding: const EdgeInsets.all(2.0),
+                              child: Text(
+                                lang.getTxt('no_item_found'),
+                                style: const TextStyle(
+                                    color: Colors.red,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
                           SizedBox(
                             height: dSize.height * 0.01,
                           ),
@@ -297,7 +311,18 @@ class _AssetsCheckState extends State<AssetsCheck> {
             ),
           ),
         ),
-      )),
+      ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => const HomePage()));
+          },
+          backgroundColor: Colors.orangeAccent,
+          child: const Icon(
+            Icons.home,
+            color: Colors.white,
+          ),
+        ),),
     );
   }
 
@@ -349,7 +374,10 @@ class _AssetsCheckState extends State<AssetsCheck> {
     List<Asset> assets = await assetService.select(barcodeScanRes);
     setState(() {
       if (assets.isNotEmpty) {
+        error = false;
         asset = assets[0];
+      }else {
+        error = true;
       }
     });
   }

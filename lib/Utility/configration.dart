@@ -13,6 +13,7 @@ class MyConfig {
   static String DESCRIPTION_API = '/LocationLocup/GetAllDescriptions';
   static String ASSET_VERFICATION = '/Verification/GetAssetsByTransactionId';
   static String ASSET_VERFICATION_UPLOAD = '/Verification/UploadVerification';
+  static String ASSET_INVENTORY_UPLOAD = '/UploadCounter';
   static const String BUILDING = "Building";
   static const String OFFICE = "Office";
   static const String STORE = "Store";

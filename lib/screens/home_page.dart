@@ -77,7 +77,7 @@ class _HomePageState extends State<HomePage> {
                         children: [
                           Text(
                             lang.getTxt('home'),
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 25,
                                 color: Colors.white,
                                 fontFamily: 'Montserrat',
@@ -89,7 +89,7 @@ class _HomePageState extends State<HomePage> {
                                 bottom: dsize.height * 0.013),
                             width: double.infinity,
                             decoration: BoxDecoration(
-                                color: Color(0xFFFFA227),
+                                color: const Color(0xFFFFA227),
                                 borderRadius: BorderRadius.circular(10)),
                             child: Column(
                               children: [
@@ -145,11 +145,11 @@ class _HomePageState extends State<HomePage> {
                                       Navigator.of(context).push(
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  ItemCapture()));
+                                                  const ItemCapture()));
                                     } else {
                                       CustomWidgetBuilder.showMessageDialog(
                                           context,
-                                          Language.isEn ? lang.textEn['open_page_error']! : lang.textAr['open_page_error']!,
+                                          lang.getTxt('open_page_error'),
                                           true);
                                     }
                                   },
@@ -167,7 +167,7 @@ class _HomePageState extends State<HomePage> {
                                     } else {
                                       CustomWidgetBuilder.showMessageDialog(
                                           context,
-                                          Language.isEn ? lang.textEn['open_page_error']! : lang.textAr['open_page_error']!,
+                                          lang.getTxt('open_page_error'),
                                           true);
                                     }
                                   },
@@ -181,11 +181,11 @@ class _HomePageState extends State<HomePage> {
                                       Navigator.of(context).push(
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  AssetsCounter()));
+                                                  const AssetsCounter()));
                                     } else {
                                       CustomWidgetBuilder.showMessageDialog(
                                           context,
-                                          Language.isEn ? lang.textEn['open_page_error']! : lang.textAr['open_page_error']!,
+                                          lang.getTxt('open_page_error'),
                                           true);
                                     }
                                   },
@@ -200,7 +200,7 @@ class _HomePageState extends State<HomePage> {
                                   child: buildColumn(lang.getTxt('settings'), dsize, '0-20'),
                                   onTap: () => Navigator.of(context).push(
                                       MaterialPageRoute(
-                                          builder: (context) => Settings())).then((value) => setState(() {})),
+                                          builder: (context) => const Settings())).then((value) => setState(() {})),
                                 ),
                                 InkWell(
                                     child: buildColumn(lang.getTxt('upload'), dsize, ''),
@@ -244,8 +244,10 @@ class _HomePageState extends State<HomePage> {
     try {
       if(transactionType == TransactionType.verification){
         await serverService.uploadAssetVerification();
-      }else{
+      }else if(transactionType == TransactionType.capture){
         await serverService.uploadData();
+      }else {
+        await serverService.uploadAssetInventory();
       }
       await serverService.clearData();
       List<Setting> settings = await settingService.retrieve();
