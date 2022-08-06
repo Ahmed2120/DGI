@@ -11,11 +11,34 @@ class CaptureDetailsRequest {
   final int? sectionId;
   final int? brandId;
   final int? descriptionId;
+  final int? colorId;
   final String? serialNumber;
   final double height;
   final double width;
   final double length;
-  final String color;
+  final String? code;
+  final String? ajehzaTamolkNumber;
+  final String? cost;
+  final String? serviceDate;
+  final int? productionAge;
+  final String? accumulatedConsumption;
+
+  final String? transRefNumber;
+
+  final String? supplierName;
+
+  final String? transBoardNumber;
+
+  final String? transCreationDate;
+
+  final String? transType;
+
+  final String? transHiekelNumbe;
+
+  final String? transMamsha;
+
+  final String? assetBookValue;
+
 
   CaptureDetailsRequest(
       {this.id,
@@ -30,11 +53,25 @@ class CaptureDetailsRequest {
       required this.sectionId,
       required this.brandId,
       required this.descriptionId,
+        required this.colorId,
       required this.serialNumber,
       required this.length,
       required this.height,
-      required this.color,
-      required this.width});
+      required this.width,
+        this.code,
+        this.ajehzaTamolkNumber,
+        this.cost,
+        this.serviceDate,
+        this.productionAge,
+        this.accumulatedConsumption,
+        this.transRefNumber,
+        this.supplierName,
+        this.transBoardNumber,
+        this.transCreationDate,
+        this.transType,
+        this.transHiekelNumbe,
+        this.transMamsha,
+        this.assetBookValue,});
 
   CaptureDetailsRequest.fromJson(Map<String, dynamic> res)
       : id = res["Id"],
@@ -48,12 +85,26 @@ class CaptureDetailsRequest {
         sectionId = res['SectionId'],
         brandId = res['BrandId'],
         descriptionId = res['DescriptionId'],
+        colorId = res['ColorId'],
         transactionId = res['TransactionId'],
         serialNumber = res['SerialNumber'],
-        color = res['Color'],
         width = res["Width"],
         height = res["Height"],
-        length = res["Length"];
+        length = res["Length"],
+        code = res['Code'],
+        ajehzaTamolkNumber = res['AjehzaTamolkNumber'],
+        cost = res['Cost'],
+        serviceDate = res['ServiceDate'],
+        productionAge = res['productionAge'],
+        accumulatedConsumption = res['AccumulatedConsumption'],
+        transRefNumber = res['TransRefNumber'],
+        supplierName = res['SupplierName'],
+        transBoardNumber = res["TransBoardNumber"],
+        transCreationDate = res["TransCreationDate"],
+        transType = res["TransType"],
+        transHiekelNumbe = res["TransHiekelNumbe"],
+        transMamsha = res["TransMamsha"],
+        assetBookValue = res["AssetBookValue"];
 
   Map<String, Object?> toJson() {
     return {
@@ -68,12 +119,26 @@ class CaptureDetailsRequest {
       'TransactionId': transactionId,
       'FloorId': floorId,
       'DepartmentId': departmentId,
+      'ColorId': colorId,
       'SerialNumber': serialNumber,
-      'Color': color,
       'Width': width,
       'Height': height,
       'Length': length,
       'ItemImage': image,
+      'Code' : code,
+      'AjehzaTamolkNumber' : ajehzaTamolkNumber,
+      'Cost' : cost,
+      'ServiceDate' : serviceDate,
+      'productionAge' : productionAge,
+      'AccumulatedConsumption' : accumulatedConsumption,
+      'TransRefNumber' : transRefNumber,
+      'SupplierName' : supplierName,
+      'TransBoardNumber' : transBoardNumber,
+      'TransCreationDate' : transCreationDate,
+      'TransType' : transType,
+      'TransHiekelNumbe' : transHiekelNumbe,
+      'TransMamsha' : transMamsha,
+      'AssetBookValue' : assetBookValue
     };
   }
 }

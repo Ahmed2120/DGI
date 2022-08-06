@@ -21,7 +21,7 @@ class ExcelService{
     List<CaptureDetails> captureDetails = await captureService.retrieve();
     final List<String> firstRow = ['Id', 'Quantity', 'Image', 'Description',
       'DepartmentId', 'FloorId', 'SectionId', 'SerialNumber',
-      'AssetLocationId' ,'ItemId' , 'TransactionId', 'Color',
+      'AssetLocationId' ,'ItemId' , 'TransactionId', 'ColorId',
       'Height' ,'Length' ,'Width'];
     sheet.importList(firstRow, 1, 1, false);
     for(int i = 0; i< captureDetails.length; i++){
@@ -37,7 +37,7 @@ class ExcelService{
         captureDetails[i].assetLocationId,
         captureDetails[i].itemId,
         transactions[0].id,
-        captureDetails[i].color,
+        captureDetails[i].colorId,
         captureDetails[i].height,
         captureDetails[i].length,
         captureDetails[i].width,
@@ -69,7 +69,7 @@ class ExcelService{
     for(int i = 0; i< assets.length; i++){
       final List<Object?> list = [
         assets[i].id,
-        assets[i].description,
+        assets[i].itemName,
         assets[i].itemImage?? assets[i].itemImage,
         assets[i].departmentId,
         assets[i].floorId,
@@ -91,6 +91,48 @@ class ExcelService{
 
     final path = (await getApplicationSupportDirectory()).path;
     final filename = '$path/DgiVerified.xlsx';
+    final file = File(filename);
+    await file.writeAsBytes(bytes, flush: true);
+    OpenFile.open(filename);
+  }
+
+  exportExcelForInventory()async{
+    final assetService = AssetService();
+    final transactionService = TransactionService();
+    List<TransactionLookUp> transactions = await transactionService.retrieve();
+
+    final woe = Workbook();
+    final Worksheet sheet = woe.worksheets[0];
+    List<Asset> assets = await assetService.retrieve();
+    final List<String> firstRow = ['Id', 'Description', 'Image',
+      'DepartmentId', 'FloorId', 'SectionId', 'BrandId', 'SerialNumber', 'Barcode' , 'TransactionId', 'Color',
+      'Height' ,'Length' ,'Width', 'IsVerified'];
+    sheet.importList(firstRow, 1, 1, false);
+    for(int i = 0; i< assets.length; i++){
+      final List<Object?> list = [
+        assets[i].id,
+        assets[i].itemName,
+        assets[i].itemImage?? assets[i].itemImage,
+        assets[i].departmentId,
+        assets[i].floorId,
+        assets[i].sectionId,
+        assets[i].brandId,
+        assets[i].serialnumber,
+        assets[i].barcode,
+        transactions[0].id,
+        assets[i].color,
+        assets[i].height,
+        assets[i].length,
+        assets[i].width,
+        assets[i].isVerified,
+      ];
+
+      sheet.importList(list, i+2, 1, false);}
+    final bytes = woe.saveAsStream();
+    woe.dispose();
+
+    final path = (await getApplicationSupportDirectory()).path;
+    final filename = '$path/DgiInventory.xlsx';
     final file = File(filename);
     await file.writeAsBytes(bytes, flush: true);
     OpenFile.open(filename);

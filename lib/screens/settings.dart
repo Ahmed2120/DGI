@@ -1,5 +1,5 @@
 import 'package:dgi/Services/CategoryService.dart';
-import 'package:dgi/Utility/DropDownMenu.dart';
+import 'package:dgi/Utility/dropDownMenuRow.dart';
 import 'package:dgi/Utility/footer.dart';
 import 'package:dgi/language.dart';
 import 'package:dgi/model/category.dart';

@@ -8,8 +8,11 @@ class MyConfig {
   static String UPLOAD_API = '/Api/Cupture/UploadCupture';
   static String DEPARTMENT_API = '/LocationLocup/GetAllDepartments';
   static String SECTION_API = '/LocationLocup/GetAllSectionsByTransacionId';
+  static String LEVEL_API = '/LocationLocup/GetAllLevels';
+  static String ACCOUNTGROUP_API = '/LocationLocup/GetAllAccountGroups';
   static String FLOOR_API = '/LocationLocup/GetAllFloorsByTransactionId';
   static String BRAND_API = '/LocationLocup/GetAllBrands';
+  static String COLOR_API = '/LocationLocup/GetAllGetColors';
   static String DESCRIPTION_API = '/LocationLocup/GetAllDescriptions';
   static String ASSET_VERFICATION = '/Verification/GetAssetsByTransactionId';
   static String ASSET_VERFICATION_UPLOAD = '/Verification/UploadVerification';

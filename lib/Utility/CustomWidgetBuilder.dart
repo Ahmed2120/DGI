@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import '../language.dart';
+import '../screens/home_page.dart';
 
 class CustomWidgetBuilder{
 
@@ -123,4 +124,46 @@ class CustomWidgetBuilder{
       ),
     );
   }
+
+  static Row nextAndBack( {required Function nextFunction, required Function backFunction,} ) {
+    return Row(
+      children: [
+        TextButton(
+          onPressed: ()=> backFunction(),
+          child: Text('<- Back'),
+          style: TextButton.styleFrom(
+              padding: const EdgeInsets.all(5),
+              tapTargetSize:
+              MaterialTapTargetSize.shrinkWrap,
+              minimumSize: const Size(5, 2)),
+        ),
+        TextButton(
+          onPressed: ()=> nextFunction(),
+          child: Text('Next ->'),
+          style: TextButton.styleFrom(
+              tapTargetSize:
+              MaterialTapTargetSize.shrinkWrap,
+              minimumSize: const Size(5, 2)),
+        ),
+      ],
+    );
+  }
+
+  static Align floatingActionButton(BuildContext context) {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: FloatingActionButton(
+        onPressed: () {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => const HomePage()));
+        },
+        backgroundColor: Colors.orangeAccent,
+        child: const Icon(
+          Icons.home,
+          color: Colors.white,
+        ),
+      ),
+    );
+  }
+
 }
