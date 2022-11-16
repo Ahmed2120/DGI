@@ -10,11 +10,13 @@ class MyConfig {
   static String SECTION_API = '/LocationLocup/GetAllSectionsByTransacionId';
   static String LEVEL_API = '/LocationLocup/GetAllLevels';
   static String ACCOUNTGROUP_API = '/LocationLocup/GetAllAccountGroups';
+  static String SUPPLIER_API = '/LocationLocup/GetAllSuppliers';
   static String FLOOR_API = '/LocationLocup/GetAllFloorsByTransactionId';
   static String BRAND_API = '/LocationLocup/GetAllBrands';
   static String COLOR_API = '/LocationLocup/GetAllGetColors';
   static String DESCRIPTION_API = '/LocationLocup/GetAllDescriptions';
   static String ASSET_VERFICATION = '/Verification/GetAssetsByTransactionId';
+  static String ASSET_INVENTORY = '/GetAssetsByTransactionId';
   static String ASSET_VERFICATION_UPLOAD = '/Verification/UploadVerification';
   static String ASSET_INVENTORY_UPLOAD = '/UploadCounter';
   static const String BUILDING = "Building";

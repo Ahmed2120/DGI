@@ -3,20 +3,20 @@ class Item {
   final String name;
   final int? accountGroupId;
   final int? itemType;
-  bool hasMark;
-  bool hasWidth;
-  bool hasHeight;
-  bool hasLength;
+  int hasMark;
+  int hasWidth;
+  int hasHeight;
+  int hasLength;
 
   Item({
     required this.id,
     required this.name,
     this.accountGroupId,
     this.itemType,
-    this.hasMark = false,
-    this.hasWidth = false,
-    this.hasHeight = false,
-    this.hasLength = false,
+    this.hasMark = 0,
+    this.hasWidth = 0,
+    this.hasHeight = 0,
+    this.hasLength = 0,
   });
 
   Item.fromMap(Map<String, dynamic> res)
@@ -24,10 +24,10 @@ class Item {
         name = res["Name"],
         accountGroupId = res["AccountGroupId"],
         itemType = res["ItemType"],
-        hasMark = res["HasMark"] == 0 ? false : true,
-        hasWidth = res["HasWidth"] == 0 ? false : true,
-        hasHeight = res["HasHeight"] == 0 ? false : true,
-        hasLength = res["HasLength"] == 0 ? false : true;
+        hasMark = res["HasMark"] == false || res["HasMark"] == 0 ? 0 : 1,
+        hasWidth = res["HasWidth"] == false || res["HasWidth"] == 0 ? 0 : 1,
+        hasHeight = res["HasHeight"] == false || res["HasHeight"] == 0 ? 0 : 1,
+        hasLength = res["HasLength"] == false || res["HasLength"] == 0  ? 0 : 1;
 
   Map<String, Object?> toMap() {
     return {

@@ -13,6 +13,7 @@ import 'package:dgi/Services/ItemService.dart';
 import 'package:dgi/Services/MainCategoryService.dart';
 import 'package:dgi/Services/SectionTypeService.dart';
 import 'package:dgi/Services/SettingService.dart';
+import 'package:dgi/Services/SupplierService.dart';
 import 'package:dgi/Services/TransactionService.dart';
 import 'package:dgi/Services/UserService.dart';
 import 'package:dgi/db/DatabaseHandler.dart';
@@ -32,6 +33,7 @@ import 'package:dgi/model/level.dart';
 import 'package:dgi/model/mainCategory.dart';
 import 'package:dgi/model/sectionType.dart';
 import 'package:dgi/model/settings.dart';
+import 'package:dgi/model/supplier.dart';
 import 'package:dgi/model/transaction.dart';
 import 'package:dgi/model/transcationResponse.dart';
 import 'package:http/http.dart' as http;
@@ -123,6 +125,22 @@ class ServerService {
           .toList();
     } else {
       throw Exception('Failed to load levels');
+    }
+  }
+
+  Future<List<Supplier>> getAllSuppliers() async {
+    if (MyConfig.SERVER == '') {
+      await setServerIPAddress();
+    }
+    final response = await http
+        .get(Uri.parse('${MyConfig.SERVER}${MyConfig.SUPPLIER_API}'));
+    if (response.statusCode == 200) {
+      final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
+      return parsed
+          .map<Supplier>((json) => Supplier.fromMap(json))
+          .toList();
+    } else {
+      throw Exception('Failed to load Suppliers');
     }
   }
 
@@ -288,6 +306,7 @@ class ServerService {
     final categoryService = CategoryService();
     final levelService = LevelService();
     final accountGroupService = AccountGroupService();
+    final supplierService = SupplierService();
     final itemService = ItemService();
     final descriptionService = DescriptionService();
     final mainCategoryService = MainCategoryService();
@@ -303,6 +322,7 @@ class ServerService {
       List<MainCategory> mainCategories = await getAllMainCategories();
       List<Level> levels = await getAllLevels();
       List<AccountGroup> accountGroups = await getAllAccountGroups();
+      List<Supplier> suppliers = await getAllSuppliers();
       List<Item> items = await getAllItems();
       List<Description> descriptions = await getAllDescriptions();
       List<Department> departments = await getAllDepartments();
@@ -337,29 +357,30 @@ class ServerService {
       await categoryService.batch(categories);
       await levelService.batch(levels);
       await accountGroupService.batch(accountGroups);
+      await supplierService.batch(suppliers);
       await departmentService.batch(departments);
       await sectionService.batch(sections);
       await floorService.batch(floors);
       await brandService.batch(brands);
       await colorService.batch(colors);
       if (response.transactionType == 2 || response.transactionType == 3) {
-        await downloadAssets(response.id);
+        await downloadAssets(response.id, response.transactionType);
       }
       return "Success";
     }
   }
 
-  downloadAssets(int transactionId) async {
+  downloadAssets(int transactionId, int transactionType) async {
     AssetService assetService = AssetService();
     try {
       AssetVerificationResponse? assetVerificationResponse =
-          await getAssets(1, transactionId);
+          await getAssets(1, transactionId, transactionType);
       if (assetVerificationResponse == null) {
         throw Exception("there is no data");
       } else {
         await assetService.batch(assetVerificationResponse.assets);
         for (int i = 2; i <= assetVerificationResponse!.totalPages; i++) {
-          assetVerificationResponse = await getAssets(i, transactionId);
+          assetVerificationResponse = await getAssets(i, transactionId, transactionType);
           await assetService.batch(assetVerificationResponse!.assets);
         }
       }
@@ -369,10 +390,11 @@ class ServerService {
     }
   }
 
-  getAssets(int pageNumber, int transactionId) async {
+  getAssets(int pageNumber, int transactionId, int transactionType) async {
     if (MyConfig.SERVER == '') {
       await setServerIPAddress();
     }
+    final myConfig = transactionType == 2 ? MyConfig.ASSET_VERFICATION : MyConfig.ASSET_INVENTORY;
     final queryParameters = {
       'pageNumber': pageNumber.toString(),
       'pageSize': MyConfig.PAGE_SIZE.toString(),
@@ -380,7 +402,7 @@ class ServerService {
     };
     String queryString = Uri(queryParameters: queryParameters).query;
     final uri =
-        '${MyConfig.SERVER}${MyConfig.ASSET_VERFICATION}' + '?' + queryString;
+        '${MyConfig.SERVER}${myConfig}' + '?' + queryString;
     try {
       final response = await http.get(Uri.parse(uri));
       if (response.statusCode == 200) {
@@ -463,7 +485,10 @@ class ServerService {
             transType: e.transType,
             supplierName: e.supplierName,
             assetBookValue: e.assetBookValue,
-            ajehzaTamolkNumber: e.ajehzaTamolkNumber))
+            ajehzaTamolkNumber: e.ajehzaTamolkNumber,
+    file: e.file,
+    fileName: e.fileName,
+    contentType: e.contentType))
         .toList();
     CaptureDetailsList request =
         CaptureDetailsList(captureDetailsList: captureDetailsList);

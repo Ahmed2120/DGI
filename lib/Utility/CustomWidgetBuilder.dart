@@ -125,12 +125,12 @@ class CustomWidgetBuilder{
     );
   }
 
-  static Row nextAndBack( {required Function nextFunction, required Function backFunction,} ) {
+  static Row nextAndBack( {required String next, required String back, required Function nextFunction, required Function backFunction,} ) {
     return Row(
       children: [
         TextButton(
           onPressed: ()=> backFunction(),
-          child: Text('<- Back'),
+          child: Text(back, style: TextStyle(fontSize: 13),),
           style: TextButton.styleFrom(
               padding: const EdgeInsets.all(5),
               tapTargetSize:
@@ -139,7 +139,7 @@ class CustomWidgetBuilder{
         ),
         TextButton(
           onPressed: ()=> nextFunction(),
-          child: Text('Next ->'),
+          child: Text(next, style: TextStyle(fontSize: 13),),
           style: TextButton.styleFrom(
               tapTargetSize:
               MaterialTapTargetSize.shrinkWrap,

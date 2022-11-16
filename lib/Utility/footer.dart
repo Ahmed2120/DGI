@@ -32,7 +32,7 @@ class _FooterState extends State<Footer> {
       textDirection: Language.isEn ? TextDirection.ltr : TextDirection.rtl,
       child: Container(
           width: double.infinity,
-          height: dSize.height * 0.04,
+          height: Language.isEn ? dSize.height * 0.04 : dSize.height * 0.03,
           padding:
           EdgeInsets.symmetric(vertical: dSize.height * 0.002, horizontal: 20),
           decoration: const BoxDecoration(
@@ -53,7 +53,7 @@ class _FooterState extends State<Footer> {
                     color: Colors.white, fontSize: dSize.width <= 551 ? dSize.width * 0.03 : 15.36),
               ),
               Text(
-                'PDA NO : $pdaNo',
+                '${lang.getTxt('pda')} : $pdaNo',
                 style: TextStyle(
                     color: Colors.white, fontSize: dSize.width <= 551 ? dSize.width * 0.03 : 15.36),
               ),

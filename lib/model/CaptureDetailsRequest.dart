@@ -13,15 +13,15 @@ class CaptureDetailsRequest {
   final int? descriptionId;
   final int? colorId;
   final String? serialNumber;
-  final double height;
-  final double width;
-  final double length;
+  final double? height;
+  final double? width;
+  final double? length;
   final String? code;
   final String? ajehzaTamolkNumber;
   final String? cost;
   final String? serviceDate;
   final int? productionAge;
-  final String? accumulatedConsumption;
+  final int? accumulatedConsumption;
 
   final String? transRefNumber;
 
@@ -38,40 +38,46 @@ class CaptureDetailsRequest {
   final String? transMamsha;
 
   final String? assetBookValue;
+  final String? file;
+  final String? fileName;
+  final String? contentType;
 
-
-  CaptureDetailsRequest(
-      {this.id,
-      required this.image,
-      required this.assetLocationId,
-      required this.description,
-      required this.quantity,
-      required this.itemId,
-      required this.transactionId,
-      required this.departmentId,
-      required this.floorId,
-      required this.sectionId,
-      required this.brandId,
-      required this.descriptionId,
-        required this.colorId,
-      required this.serialNumber,
-      required this.length,
-      required this.height,
-      required this.width,
-        this.code,
-        this.ajehzaTamolkNumber,
-        this.cost,
-        this.serviceDate,
-        this.productionAge,
-        this.accumulatedConsumption,
-        this.transRefNumber,
-        this.supplierName,
-        this.transBoardNumber,
-        this.transCreationDate,
-        this.transType,
-        this.transHiekelNumbe,
-        this.transMamsha,
-        this.assetBookValue,});
+  CaptureDetailsRequest({
+    this.id,
+    required this.image,
+    required this.assetLocationId,
+    required this.description,
+    required this.quantity,
+    required this.itemId,
+    required this.transactionId,
+    required this.departmentId,
+    required this.floorId,
+    required this.sectionId,
+    required this.brandId,
+    required this.descriptionId,
+    required this.colorId,
+    required this.serialNumber,
+    required this.length,
+    required this.height,
+    required this.width,
+    this.code,
+    this.ajehzaTamolkNumber,
+    this.cost,
+    this.serviceDate,
+    this.productionAge,
+    this.accumulatedConsumption,
+    this.transRefNumber,
+    this.supplierName,
+    this.transBoardNumber,
+    this.transCreationDate,
+    this.transType,
+    this.transHiekelNumbe,
+    this.transMamsha,
+    this.assetBookValue,
+    this.file,
+    this.fileName,
+    this.contentType,
+  });
 
   CaptureDetailsRequest.fromJson(Map<String, dynamic> res)
       : id = res["Id"],
@@ -104,7 +110,10 @@ class CaptureDetailsRequest {
         transType = res["TransType"],
         transHiekelNumbe = res["TransHiekelNumbe"],
         transMamsha = res["TransMamsha"],
-        assetBookValue = res["AssetBookValue"];
+        assetBookValue = res["AssetBookValue"],
+        file = res["File"],
+        fileName = res["FileName"],
+        contentType = res["ContentType"];
 
   Map<String, Object?> toJson() {
     return {
@@ -125,20 +134,20 @@ class CaptureDetailsRequest {
       'Height': height,
       'Length': length,
       'ItemImage': image,
-      'Code' : code,
-      'AjehzaTamolkNumber' : ajehzaTamolkNumber,
-      'Cost' : cost,
-      'ServiceDate' : serviceDate,
-      'productionAge' : productionAge,
-      'AccumulatedConsumption' : accumulatedConsumption,
-      'TransRefNumber' : transRefNumber,
-      'SupplierName' : supplierName,
-      'TransBoardNumber' : transBoardNumber,
-      'TransCreationDate' : transCreationDate,
-      'TransType' : transType,
-      'TransHiekelNumbe' : transHiekelNumbe,
-      'TransMamsha' : transMamsha,
-      'AssetBookValue' : assetBookValue
+      'Code': code,
+      'AjehzaTamolkNumber': ajehzaTamolkNumber,
+      'Cost': cost,
+      'ServiceDate': serviceDate,
+      'productionAge': productionAge,
+      'AccumulatedConsumption': accumulatedConsumption,
+      'TransRefNumber': transRefNumber,
+      'SupplierName': supplierName,
+      'TransBoardNumber': transBoardNumber,
+      'TransCreationDate': transCreationDate,
+      'TransType': transType,
+      'TransHiekelNumbe': transHiekelNumbe,
+      'TransMamsha': transMamsha,
+      'AssetBookValue': assetBookValue
     };
   }
 }

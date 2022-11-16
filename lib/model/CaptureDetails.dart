@@ -14,15 +14,15 @@ class CaptureDetails {
   final int? colorId;
   final String? serialNumber;
   int? isUploaded;
-  final double height;
-  final double width;
-  final double length;
+  final double? height;
+  final double? width;
+  final double? length;
   final String? code;
   final String? ajehzaTamolkNumber;
   final String? cost;
   final String? serviceDate;
   final int? productionAge;
-  final String? accumulatedConsumption;
+  final int? accumulatedConsumption;
 
   final String? transRefNumber;
 
@@ -39,6 +39,9 @@ class CaptureDetails {
   final String? transMamsha;
 
   final String? assetBookValue;
+  final String? file;
+  final String? fileName;
+  final String? contentType;
 
   CaptureDetails({
     this.id,
@@ -73,6 +76,9 @@ class CaptureDetails {
     this.transHiekelNumbe,
     this.transMamsha,
     this.assetBookValue,
+    this.file,
+    this.fileName,
+    this.contentType,
   });
 
   CaptureDetails.fromMap(Map<String, dynamic> res)
@@ -91,9 +97,9 @@ class CaptureDetails {
         colorId = res['ColorId'],
         serialNumber = res['SerialNumber'],
         isUploaded = res["isUploaded"],
-        width = res["Width"].toDouble(),
-        height = res["Height"].toDouble(),
-        length = res["Length"].toDouble(),
+        width = res["Width"] == null ? res["Width"] : res["Width"].toDouble(),
+        height = res["height"] == null ? res["height"] : res["height"].toDouble(),
+        length = res["length"] == null ? res["length"] : res["length"].toDouble(),
         code = res['Code'],
         ajehzaTamolkNumber = res['AjehzaTamolkNumber'],
         cost = res['Cost'],
@@ -107,7 +113,10 @@ class CaptureDetails {
         transType = res["TransType"],
         transHiekelNumbe = res["TransHiekelNumbe"],
         transMamsha = res["TransMamsha"],
-        assetBookValue = res["AssetBookValue"];
+        assetBookValue = res["AssetBookValue"],
+        file = res["File"],
+        fileName = res["FileName"],
+        contentType = res["ContentType"];
 
   Map<String, Object?> toMap() {
     return {
@@ -142,7 +151,10 @@ class CaptureDetails {
       'TransType' : transType,
       'TransHiekelNumbe' : transHiekelNumbe,
       'TransMamsha' : transMamsha,
-      'AssetBookValue' : assetBookValue
+      'AssetBookValue' : assetBookValue,
+      'File' : file,
+      'FileName' : fileName,
+      'ContentType' : contentType,
     };
   }
 }

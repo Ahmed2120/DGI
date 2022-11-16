@@ -20,6 +20,7 @@ import 'package:dgi/model/level.dart';
 import 'package:dgi/model/mainCategory.dart';
 import 'package:dgi/screens/home_page.dart';
 import 'package:dgi/screens/take_picture_page.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
@@ -27,12 +28,19 @@ import '../Services/AccountGroupService.dart';
 import '../Services/BrandService.dart';
 import '../Services/DescriptionService.dart';
 import '../Services/LevelService.dart';
+import '../Services/SupplierService.dart';
 import '../Utility/CustomWidgetBuilder.dart';
+import '../Utility/dateRow.dart';
 import '../Utility/dropDownMenuRow.dart';
 import '../Utility/inputRow.dart';
+import '../Utility/nextPageHeader.dart';
+import '../Utility/quantityRow.dart';
+import '../Utility/takeFileRow.dart';
+import '../Utility/takePhotoRow.dart';
 import '../language.dart';
 import '../model/accountGroup.dart';
 import '../model/description.dart';
+import '../model/supplier.dart';
 
 class AssetsCapture extends StatefulWidget {
   final AssetLocation assetLocation;
@@ -57,6 +65,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   String? mainCategory;
   String? level;
   String? accountGroup;
+  String? supplier;
   String? brand;
   String? description;
   String? color;
@@ -65,11 +74,13 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   bool isChangeColor = false;
   bool isNext = false;
   Item? selectedItem;
+  PlatformFile? selectedFile;
 
   List<Category> categories = [];
   List<MainCategory> mainCategories = [];
   List<Level> levels = [];
   List<AccountGroup> accountGroups = [];
+  List<Supplier> suppliers = [];
   List<Item> items = [];
   List<Description> allDescriptions = [];
   List<Description> descriptions = [];
@@ -102,6 +113,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   final categoryService = CategoryService();
   final levelService = LevelService();
   final accountGroupService = AccountGroupService();
+  final supplierService = SupplierService();
   final brandService = BrandService();
   final colorService = ColorService();
   final captureDetailsService = CaptureDetailsService();
@@ -110,20 +122,12 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   final itemService = ItemService();
   final descriptionService = DescriptionService();
   int quantity = 1;
-  DateTime acquisitionDate = DateTime.now();
+  DateTime ownDate = DateTime.now();
   DateTime serviceDate = DateTime.now();
+  DateTime creationDate = DateTime.now();
   List<CaptureDetails> captureDetails = [];
 
-  // create some values
-  Color pickerColor = Color(0xff443a49);
-  Color currentColor = Color(0xff443a49);
-
   final lang = Language();
-
-  // void changeColor(Color color) {
-  //   isChangeColor = true;
-  //   setState(() => pickerColor = color);
-  // }
 
   @override
   void initState() {
@@ -140,6 +144,8 @@ class _AssetsCaptureState extends State<AssetsCapture> {
           .where((element) => element.categoryId == selected.id)
           .toList();
       accountGroup = null;
+      item!.text = '';
+      description = null;
     });
   }
 
@@ -152,7 +158,9 @@ class _AssetsCaptureState extends State<AssetsCapture> {
           .where((element) => element.mainCategoryId == selected.id)
           .toList();
       category = null;
+      accountGroup = null;
       item!.text = '';
+      description = null;
     });
   }
 
@@ -164,6 +172,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
           .where((element) => element.levelId == selected.id)
           .toList();
       mainCategory = null;
+      category = null;
       accountGroup = null;
       item!.text = '';
     });
@@ -178,6 +187,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
           .where((element) => element.accountGroupId == selected.id)
           .toList();
       item!.text = '';
+      description = null;
     });
   }
 
@@ -186,6 +196,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
       item!.text = value;
       Item selected = items.firstWhere((element) => element.name == value);
       selectedItem = selected;
+      print('selectedItem?.hasLength ${selectedItem?.hasHeight}');
       descriptions = allDescriptions
           .where((element) => element.itemId == selected.id)
           .toList();
@@ -211,6 +222,12 @@ class _AssetsCaptureState extends State<AssetsCapture> {
     });
   }
 
+  changeSupplier(value) {
+    setState(() {
+      supplier = value;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final dSize = MediaQuery.of(context).size;
@@ -223,34 +240,95 @@ class _AssetsCaptureState extends State<AssetsCapture> {
 
     List<Widget> itemType1 = [
       InputRow(
-          title: 'AJEZATAMALOKNUMBER',
+          title: lang.getTxt('ajheza_num'), dSize: dSize, controller: ajhezaController),
+      TakeFileRow(
+          title: lang.getTxt('file'),
           dSize: dSize,
-          controller: ajhezaController),
-      InputRow(
-          title: 'TRANSBORDNUMBER', dSize: dSize, controller: transBordController),
+          selectedFile: selectedFile,
+          function: _takeFile),
     ];
 
     List<Widget> itemType2 = [
       InputRow(
-          title: 'TRANSREFNUMBER', dSize: dSize, controller: transRefController),
+          title: lang.getTxt('trans_ref_num'),
+          dSize: dSize,
+          controller: transRefController),
       InputRow(
-          title: 'TRANSBORDNUMBER', dSize: dSize, controller: transBordController),
+          title: lang.getTxt('trans_bord_num'),
+          dSize: dSize,
+          controller: transBordController),
+      DateRow(
+        title: lang.getTxt('creation_date'),
+        dSize: dSize,
+        date: creationDate,
+        function: () {
+          showDatePicker(
+                  context: context,
+                  initialDate: creationDate,
+                  firstDate: DateTime(DateTime.now().year - 5),
+                  lastDate: DateTime(DateTime.now().year + 5))
+              .then((date) {
+            setState(() {
+              creationDate = date!;
+            });
+          });
+        },
+      ),
       InputRow(
-          title: 'CREATIONNUMBER', dSize: dSize, controller: transCreationController),
-      InputRow(title: 'TRANSTYPE', dSize: dSize, controller: transTypeController),
+          title: lang.getTxt('trans_type'), dSize: dSize, controller: transTypeController),
       InputRow(
-          title: 'TRANSHIKELNUMBER', dSize: dSize, controller: transHiekelController),
-      InputRow(title: 'TRANSMAMSHA', dSize: dSize, controller: transMamshaController),
+          title: lang.getTxt('trans_hikel_num'),
+          dSize: dSize,
+          controller: transHiekelController),
+      InputRow(
+          title: lang.getTxt('trans_mamsha'),
+          dSize: dSize,
+          controller: transMamshaController),
     ];
 
     List<Widget> itemType3 = [
       InputRow(
-          title: 'ASSET BOOK VALUE', dSize: dSize, controller: assetBvalueController),
+          title: lang.getTxt('asset_book_val'),
+          dSize: dSize,
+          controller: assetBvalueController),
+    ];
+
+    List<Widget> dimensions = [
+      if (selectedItem != null) ...[
+        if (selectedItem!.hasWidth == 1)
+          InputRow(
+            title: lang.getTxt('width'),
+            dSize: dSize,
+            controller: widthController,
+            textType: TextInputType.number,
+            hintText: lang.getTxt('hint_cm_label'),
+          ),
+        if (selectedItem!.hasHeight == 1)
+          InputRow(
+            title: lang.getTxt('height'),
+            dSize: dSize,
+            controller: heightController,
+            textType: TextInputType.number,
+            hintText: lang.getTxt('hint_cm_label'),
+          ),
+        if (selectedItem!.hasLength == 1)
+          InputRow(
+            title: lang.getTxt('length'),
+            dSize: dSize,
+            controller: lengthController,
+            textType: TextInputType.number,
+            hintText: lang.getTxt('hint_cm_label'),
+          ),
+      ]
     ];
 
     List<Widget> firstPage = [
-      DropDownMenuRow(title: 'level', dSize: dSize, values: levels.map((e) => e.name).toSet().toList(),
-          onChange: changeLevel, value: level),
+      DropDownMenuRow(
+          title: lang.getTxt('level'),
+          dSize: dSize,
+          values: levels.map((e) => e.name).toSet().toList(),
+          onChange: changeLevel,
+          value: level),
       if (level != null)
         DropDownMenuRow(
             title: lang.getTxt('main_category'),
@@ -267,270 +345,163 @@ class _AssetsCaptureState extends State<AssetsCapture> {
             value: category),
       if (category != null)
         DropDownMenuRow(
-            title: 'account group',
+            title: lang.getTxt('account_group'),
             dSize: dSize,
             values: accountGroups.map((e) => e.name).toSet().toList(),
             onChange: changeAccountGroup,
             value: accountGroup),
-      Row(
-        children: [
-          CustomWidgetBuilder.buildText('ITEMS', dSize),
-          Spacer(),
-          Container(
-            decoration: const BoxDecoration(
-                border: Border(
-                    bottom: BorderSide(color: Color(0xFF00B0BD), width: 2))),
-            width: dSize.width * 0.5,
-            child: TypeAheadField<Item>(
-              textFieldConfiguration: TextFieldConfiguration(
-                  style: TextStyle(
-                      fontSize: dSize.height <= 500 ? 10 : dSize.height * 0.02),
-                  controller: this.item,
-                  decoration: InputDecoration(
-                    constraints:
-                        const BoxConstraints(minHeight: 2, maxHeight: 30),
-                    suffixIcon: const Icon(
-                      Icons.arrow_drop_down,
-                      color: Color(0xFF00B0BD),
-                      size: 20,
+      if (accountGroup != null)
+        Row(
+          children: [
+            CustomWidgetBuilder.buildText('ITEMS', dSize),
+            Spacer(),
+            Container(
+              decoration: const BoxDecoration(
+                  border: Border(
+                      bottom: BorderSide(color: Color(0xFF00B0BD), width: 2))),
+              width: dSize.width * 0.5,
+              child: TypeAheadField<Item>(
+                textFieldConfiguration: TextFieldConfiguration(
+                    style: TextStyle(
+                        fontSize:
+                            dSize.height <= 500 ? 10 : dSize.height * 0.02),
+                    controller: this.item,
+                    decoration: InputDecoration(
+                      constraints:
+                          const BoxConstraints(minHeight: 2, maxHeight: 30),
+                      suffixIcon: const Icon(
+                        Icons.arrow_drop_down,
+                        color: Color(0xFF00B0BD),
+                        size: 20,
+                      ),
+                      contentPadding: EdgeInsets.all(
+                          dSize.height <= 600 ? dSize.height * 0.015 : 4),
+                      isDense: true,
+                      border: InputBorder.none,
+                    )),
+                suggestionsCallback: getItemsSuggestion,
+                itemBuilder: (context, suggestion) {
+                  return ListTile(
+                    title: Text(
+                      suggestion.name,
+                      style: const TextStyle(
+                          color: Color(0xFF0F6671), fontSize: 15),
                     ),
-                    contentPadding: EdgeInsets.all(
-                        dSize.height <= 600 ? dSize.height * 0.015 : 4),
-                    isDense: true,
-                    border: InputBorder.none,
-                  )),
-              suggestionsCallback: getItemsSuggestion,
-              itemBuilder: (context, suggestion) {
-                return ListTile(
-                  title: Text(
-                    suggestion.name,
-                    style:
-                        const TextStyle(color: Color(0xFF0F6671), fontSize: 15),
-                  ),
-                );
-              },
-              onSuggestionSelected: (suggestion) {
-                changeItem(suggestion.name);
-              },
+                  );
+                },
+                onSuggestionSelected: (suggestion) {
+                  changeItem(suggestion.name);
+                },
+              ),
             ),
-          ),
-        ],
-      ),
-      // if (item!.text.isNotEmpty)
+          ],
+        ),
+      if (item!.text.isNotEmpty)
+        DropDownMenuRow(
+            title: lang.getTxt('description'),
+            dSize: dSize,
+            values: descriptions.map((e) => e.description).toSet().toList(),
+            onChange: changeDescription,
+            value: description),
       DropDownMenuRow(
-          title: lang.getTxt('description'),
+          title: lang.getTxt('brand'),
           dSize: dSize,
-          values: descriptions.map((e) => e.description).toSet().toList(),
-          onChange: changeDescription,
-          value: description),
-      DropDownMenuRow(title: lang.getTxt('brand'), dSize: dSize,
-          values: brands.map((e) => e.name).toSet().toList(), onChange: changeBrand, value: brand),
-      DropDownMenuRow(title: lang.getTxt('color'), dSize: dSize,
-          values: colors.map((e) => e.name).toSet().toList(), onChange: changeColor, value: color),
+          values: brands.map((e) => e.name).toSet().toList(),
+          onChange: changeBrand,
+          value: brand),
+      DropDownMenuRow(
+          title: lang.getTxt('color'),
+          dSize: dSize,
+          values: colors.map((e) => e.name).toSet().toList(),
+          onChange: changeColor,
+          value: color),
       InputRow(
           title: lang.getTxt('note'), dSize: dSize, controller: noteController),
       InputRow(
           title: lang.getTxt('code'), dSize: dSize, controller: codeController),
-      InputRow(
-        title: lang.getTxt('width'),
+      ...dimensions,
+      DateRow(
+        title: lang.getTxt('own_date'),
         dSize: dSize,
-        controller: widthController,
-        textType: TextInputType.number,
-        hintText: lang.getTxt('hint_cm_label'),
+        date: ownDate,
+        function: () {
+          showDatePicker(
+                  context: context,
+                  initialDate: ownDate,
+                  firstDate: DateTime(DateTime.now().year - 5),
+                  lastDate: DateTime(DateTime.now().year + 5))
+              .then((date) {
+            setState(() {
+              ownDate = date!;
+            });
+          });
+        },
       ),
-      InputRow(
-        title: lang.getTxt('height'),
+      DateRow(
+        title: lang.getTxt('service_date'),
         dSize: dSize,
-        controller: heightController,
-        textType: TextInputType.number,
-        hintText: lang.getTxt('hint_cm_label'),
+        date: serviceDate,
+        function: () {
+          showDatePicker(
+                  context: context,
+                  initialDate: serviceDate,
+                  firstDate: DateTime(DateTime.now().year - 5),
+                  lastDate: DateTime(DateTime.now().year + 5))
+              .then((date) {
+            setState(() {
+              serviceDate = date!;
+            });
+          });
+        },
       ),
-      InputRow(
-        title: lang.getTxt('length'),
+      QuantityRow(
+        title: lang.getTxt('quantity'),
         dSize: dSize,
-        controller: lengthController,
-        textType: TextInputType.number,
-        hintText: lang.getTxt('hint_cm_label'),
+        quantity: quantity,
+        decreaseMethod: () {
+          if (quantity > 1) {
+            setState(() {
+              quantity--;
+            });
+          }
+        },
+        increaseMethod: () {
+          setState(() {
+            quantity++;
+          });
+        },
       ),
-      Row(
-        children: [
-          CustomWidgetBuilder.buildText(lang.getTxt('Acquisition_date'), dSize),
-          Spacer(),
-          SizedBox(
-            width: dSize.width * 0.5,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                IconButton(
-                    padding: EdgeInsets.zero,
-                    constraints: BoxConstraints(),
-                    onPressed: () {
-                      showDatePicker(
-                              context: context,
-                              initialDate: acquisitionDate,
-                              firstDate: DateTime(DateTime.now().year - 5),
-                              lastDate: DateTime(DateTime.now().year + 5))
-                          .then((date) {
-                        setState(() {
-                          acquisitionDate = date!;
-                        });
-                      });
-                    },
-                    icon: const Icon(
-                      Icons.date_range,
-                      color: Color(0xFF00B0BD),
-                    )),
-                CustomWidgetBuilder.buildText(
-                    '${acquisitionDate.year} / ${acquisitionDate.month} / ${acquisitionDate.day}',
-                    dSize),
-              ],
-            ),
-          )
-        ],
-      ),
-      Row(
-        children: [
-          CustomWidgetBuilder.buildText('SERVICE DATE', dSize),
-          Spacer(),
-          SizedBox(
-            width: dSize.width * 0.5,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                IconButton(
-                    padding: EdgeInsets.zero,
-                    constraints: BoxConstraints(),
-                    onPressed: () {
-                      showDatePicker(
-                              context: context,
-                              initialDate: serviceDate,
-                              firstDate: DateTime(DateTime.now().year - 5),
-                              lastDate: DateTime(DateTime.now().year + 5))
-                          .then((date) {
-                        setState(() {
-                          serviceDate = date!;
-                        });
-                      });
-                    },
-                    icon: const Icon(
-                      Icons.date_range,
-                      color: Color(0xFF00B0BD),
-                    )),
-                CustomWidgetBuilder.buildText(
-                    '${serviceDate.year} / ${serviceDate.month} / ${serviceDate.day}',
-                    dSize),
-              ],
-            ),
-          )
-        ],
-      ),
-      Row(
-        children: [
-          CustomWidgetBuilder.buildText(lang.getTxt('quantity'), dSize),
-          Spacer(),
-          SizedBox(
-            width: dSize.width * 0.5,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                InkWell(
-                  onTap: () {
-                    if (quantity > 1) {
-                      setState(() {
-                        quantity--;
-                      });
-                    }
-                  },
-                  child: const CircleAvatar(
-                    backgroundColor: Color(0xFFFFA227),
-                    foregroundColor: Colors.white,
-                    radius: 10,
-                    child: Icon(
-                      Icons.remove,
-                      size: 20,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: dSize.width * 0.0159,
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(
-                      vertical: dSize.height * 0.001, horizontal: 22.919),
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                          color: const Color(0xFF00B0BD),
-                          width: dSize.height >= 430 ? 1.5 : 0.5),
-                      borderRadius: BorderRadius.circular(15)),
-                  child: Text(
-                    quantity.toString(),
-                    style: const TextStyle(
-                        color: Color(0xFF0F6671),
-                        fontSize: 15.28,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-                SizedBox(
-                  width: dSize.width * 0.0159,
-                ),
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      quantity++;
-                    });
-                  },
-                  child: const CircleAvatar(
-                    backgroundColor: Color(0xFF00B0BD),
-                    foregroundColor: Colors.white,
-                    radius: 10,
-                    child: Icon(Icons.add, size: 20),
-                  ),
-                ),
-              ],
-            ),
-          )
-        ],
-      ),
-      Row(
-        children: [
-          CustomWidgetBuilder.buildText(lang.getTxt('photo'), dSize),
-          const Spacer(),
-          SizedBox(
-            width: dSize.width * 0.5,
-            child: Row(
-              children: [
-                InkWell(
-                  onTap: () async {
-                    _showCamera();
-                  },
-                  child: imagePath == null
-                      ? Image.asset(
-                          'assets/icons/0-16.jpg',
-                          height: dSize.height * 0.055,
-                          alignment: Alignment.centerLeft,
-                        )
-                      : Image.file(
-                          File(imagePath!),
-                          height: dSize.height * 0.055,
-                          alignment: Alignment.bottomLeft,
-                        ),
-                ),
-              ],
-            ),
-          ),
-        ],
+      TakePhotoRow(
+        title: lang.getTxt('photo'),
+        dSize: dSize,
+        imagePath: imagePath,
+        function: _showCamera,
       ),
       // buildColorButton(),
     ];
 
     List<Widget> secondPage = [
-      InputRow(title: 'COST', dSize: dSize, controller: costController),
-      InputRow(title: 'CONSUMPTION', dSize: dSize, controller: consumptionController),
+      InputRow(title: lang.getTxt('cost'), dSize: dSize, controller: costController),
       InputRow(
-          title: 'PRODUCTION AGE', dSize: dSize, controller: productionAgeController),
-      InputRow(title: 'SPLIER NAME', dSize: dSize, controller: splierNameController),
+        title: lang.getTxt('accumulated_consumption'),
+        dSize: dSize,
+        controller: consumptionController,
+        textType: TextInputType.number,
+      ),
+      InputRow(
+        title: lang.getTxt('production_age'),
+        dSize: dSize,
+        controller: productionAgeController,
+        textType: TextInputType.number,
+      ),
+      DropDownMenuRow(
+          title: lang.getTxt('supplier_name'),
+          dSize: dSize,
+          values: suppliers.map((e) => e.name).toSet().toList(),
+          onChange: changeSupplier,
+          value: supplier),
       if (selectedItem?.itemType == 1) ...itemType1,
-      if (selectedItem?.itemType == null) ...itemType2,
+      if (selectedItem?.itemType == 2) ...itemType2,
       if (selectedItem?.itemType == 3) ...itemType3,
       buildAddButton(),
     ];
@@ -544,74 +515,10 @@ class _AssetsCaptureState extends State<AssetsCapture> {
               height: dSize.height - bottomPadding,
               child: Column(
                 children: [
-                  Container(
-                    width: double.infinity,
-                    height: dSize.height * 0.132,
-                    padding:
-                        EdgeInsets.symmetric(vertical: dSize.height * 0.007),
-                    decoration: const BoxDecoration(
-                        gradient: LinearGradient(
-                            colors: [
-                              Color(0xFF26BB9B),
-                              Color(0xFF00B0BD),
-                            ],
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                            stops: [0, 1])),
-                    child: Column(
-                      children: [
-                        Text(
-                          'DGI ASSETS TRACKING',
-                          style: TextStyle(
-                            fontSize: dSize.height * 0.027,
-                            color: Colors.white,
-                          ),
-                        ),
-                        SizedBox(
-                          height: Language.isEn
-                              ? dSize.height * 0.03
-                              : dSize.height * 0.012,
-                        ),
-                        Row(
-                          children: [
-                            Container(
-                                alignment: Alignment.centerLeft,
-                                padding: EdgeInsets.symmetric(
-                                    vertical: dSize.height * 0.004,
-                                    horizontal: 25),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFFFA227),
-                                  borderRadius: Language.isEn
-                                      ? const BorderRadius.only(
-                                          topRight: Radius.circular(12),
-                                          bottomRight: Radius.circular(12))
-                                      : const BorderRadius.only(
-                                          topLeft: Radius.circular(12),
-                                          bottomLeft: Radius.circular(12)),
-                                ),
-                                child: Text.rich(
-                                  TextSpan(
-                                      style: TextStyle(
-                                        fontSize: dSize.height * 0.028,
-                                        color: Colors.white,
-                                      ),
-                                      children: <InlineSpan>[
-                                        TextSpan(
-                                          text: lang
-                                              .getTxt('capture_header_title'),
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        TextSpan(
-                                            text: lang.getTxt(
-                                                'capture_header_subTitle')),
-                                      ]),
-                                )),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
+                  NextPageHeader(
+                      dSize: dSize,
+                      title: lang.getTxt('capture_header_title'),
+                      subTitle: lang.getTxt('capture_header_subTitle')),
                   Container(
                     height: isNext ? secondPageHeight : firstPageHeight,
                     padding:
@@ -675,6 +582,8 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                             Icon(Icons.arrow_back_ios_rounded),
                             () => Navigator.of(context).pop()),
                         CustomWidgetBuilder.nextAndBack(
+                          next: lang.getTxt('next'),
+                            back: lang.getTxt('back'),
                             nextFunction: () => setState(() {
                                   isNext = true;
                                 }),
@@ -704,6 +613,14 @@ class _AssetsCaptureState extends State<AssetsCapture> {
             builder: (context) => TakePicturePage(camera: camera)));
     setState(() {
       imagePath = result;
+    });
+  }
+
+  _takeFile() async {
+    final result = await FilePicker.platform.pickFiles();
+    if (result == null) return;
+    setState(() {
+      selectedFile = result.files.first;
     });
   }
 
@@ -747,18 +664,26 @@ class _AssetsCaptureState extends State<AssetsCapture> {
         description == null) {
       CustomWidgetBuilder.showMessageDialog(
           context, lang.getTxt('validation'), true);
-    } else if (!UtilityService.isNumeric(heightController.text) ||
-        !UtilityService.isNumeric(widthController.text) ||
-        !UtilityService.isNumeric(lengthController.text)) {
-      CustomWidgetBuilder.showMessageDialog(
-          context, lang.getTxt('validate_numbers'), true);
-    } else if (!isChangeColor) {
-      CustomWidgetBuilder.showMessageDialog(
-          context, lang.getTxt('validate_color'), true);
-    } else {
+    }
+    // else if (!UtilityService.isNumeric(heightController.text) ||
+    //     !UtilityService.isNumeric(widthController.text) ||
+    //     !UtilityService.isNumeric(lengthController.text)) {
+    //   CustomWidgetBuilder.showMessageDialog(
+    //       context, lang.getTxt('validate_numbers'), true);
+    // }
+    else {
+      try {
       File file = File(imagePath!);
       final Uint8List bytes = file.readAsBytesSync();
       String base64Image = base64Encode(bytes);
+
+      String? base64File;
+      if (selectedFile != null) {
+        File file2 = File(selectedFile!.path!);
+        final Uint8List? bytes2 = file2.readAsBytesSync();
+        base64File = base64Encode(bytes2!);
+      }
+
       String note = noteController.text;
       String? serialNumber;
       int? itemId =
@@ -767,40 +692,44 @@ class _AssetsCaptureState extends State<AssetsCapture> {
       int? descriptionId = descriptions
           .firstWhere((element) => element.description == description)
           .id;
-      int? colorId = colors
-          .firstWhere((element) => element.name == color)
-          .id;
+      int? colorId = colors.firstWhere((element) => element.name == color).id;
       final captureDetails = CaptureDetails(
-        colorId: colorId,
-        height: double.parse(heightController.text),
-        width: double.parse(widthController.text),
-        length: double.parse(lengthController.text),
-        serialNumber: serialNumber,
-        sectionId: widget.sectionId,
-        floorId: widget.floorId,
-        departmentId: widget.departmentId,
-        brandId: brandId,
-        descriptionId: descriptionId,
-        assetLocationId: widget.assetLocation.id,
-        itemId: itemId,
-        description: note,
-        image: base64Image,
-        quantity: quantity,
-        code: codeController.text,
-        ajehzaTamolkNumber: ajhezaController.text,
-        cost: costController.text,
-        productionAge: int.parse(productionAgeController.text),
-        accumulatedConsumption: consumptionController.text,
-        transRefNumber: transRefController.text,
-        transBoardNumber: transBordController.text,
-        transHiekelNumbe: transHiekelController.text,
-        transCreationDate: transCreationController.text,
-        transMamsha: transMamshaController.text,
-        transType: transTypeController.text,
-        supplierName: splierNameController.text,
-        assetBookValue: assetBvalueController.text,
-      );
-      print(captureDetails.toMap());
+          colorId: colorId,
+          height: heightController.text == "" ? null : double.parse(heightController.text),
+          width: widthController.text == "" ? null : double.parse(widthController.text),
+          length: lengthController.text == "" ? null : double.parse(lengthController.text),
+          serialNumber: serialNumber,
+          sectionId: widget.sectionId,
+          floorId: widget.floorId,
+          departmentId: widget.departmentId,
+          brandId: brandId,
+          descriptionId: descriptionId,
+          assetLocationId: widget.assetLocation.id,
+          itemId: itemId,
+          description: note,
+          image: base64Image,
+          quantity: quantity,
+          code: codeController.text,
+          ajehzaTamolkNumber: ajhezaController.text,
+          cost: costController.text,
+          productionAge: productionAgeController.text == ''
+              ? null
+              : int.parse(productionAgeController.text),
+          accumulatedConsumption: consumptionController.text == ''
+              ? null
+              : int.parse(consumptionController.text),
+          transRefNumber: transRefController.text,
+          transBoardNumber: transBordController.text,
+          transHiekelNumbe: transHiekelController.text,
+          transCreationDate: creationDate.toString(),
+          transMamsha: transMamshaController.text,
+          transType: transTypeController.text,
+          supplierName: supplier,
+          assetBookValue: assetBvalueController.text,
+          serviceDate: serviceDate.toString(),
+          file: base64File,
+          fileName: selectedFile?.name,
+          contentType: selectedFile?.extension);
       captureDetailsService.insert(captureDetails);
       getItems();
       resetForm();
@@ -809,6 +738,9 @@ class _AssetsCaptureState extends State<AssetsCapture> {
         file.deleteSync();
       } catch (ex) {
         print(ex);
+      }
+      } catch (error) {
+        CustomWidgetBuilder.showMessageDialog(context, error.toString(), true);
       }
     }
   }
@@ -860,17 +792,15 @@ class _AssetsCaptureState extends State<AssetsCapture> {
     imagePath = null;
     noteController.text = "";
     serialNoController.text = "";
-    isChangeColor = false;
     widthController.text = "";
     heightController.text = "";
     lengthController.text = "";
-    pickerColor = Color(0xff443a49);
-    currentColor = Color(0xff443a49);
   }
 
   void initData() async {
     levels = await levelService.retrieve();
     allAccountGroups = await accountGroupService.retrieve();
+    suppliers = await supplierService.retrieve();
     allMainCategories = await mainCategoryService.retrieve();
     allCategories = await categoryService.retrieve();
     allItems = await itemService.retrieve();
