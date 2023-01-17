@@ -42,8 +42,23 @@ class _AssetsCounterState extends State<AssetsCounter> {
   List<Department> departments=[];
   List<Area> areas =[];
   List<SectionType> sections =[];
-  AssetLocation assetLocation = AssetLocation(id:1, name: '', buildingAddress: '', buildingName: '', buildingNo: '', businessUnit: '',
-      areaId: 1, departmentId: 1, floorId: 1,sectionId: 10,locationTypeName: 'Building',locationType: 1);
+  AssetLocation assetLocation = AssetLocation(
+      id: 1,
+      name: '',
+      buildingAddress: '',
+      buildingName: '',
+      buildingNo: '',
+      businessUnit: '',
+      areaId: 1,
+      departmentId: 1,
+      floorId: 1,
+      sectionId: 10,
+      locationTypeName: 'Building',
+      country: '',
+      compound: '',
+      city: '',
+      governorate: '',
+      locationType: 1);
   final countryService = CountryService();
   final cityService = CityService();
   final floorService = FloorService();

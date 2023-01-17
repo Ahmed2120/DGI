@@ -342,7 +342,12 @@ class ServerService {
           floorId: response.assetLocation.floorId,
           sectionId: response.assetLocation.sectionId,
           locationType: response.assetLocation.locationType,
-          locationTypeName: response.assetLocation.locationTypeName));
+          locationTypeName: response.assetLocation.locationTypeName,
+        compound: response.assetLocation.compoundName,
+          city: response.assetLocation.compoundName,
+          governorate: response.assetLocation.governorateName,
+          country: response.assetLocation.countryName,
+      ));
       await userService.insert(response.user);
       await areaService.insert(response.assetLocation.area);
       await transactionService.insert(TransactionLookUp(

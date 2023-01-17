@@ -239,58 +239,58 @@ class _AssetsCaptureState extends State<AssetsCapture> {
         dSize.height < 600 ? dSize.height * 0.40 : dSize.height * 0.51;
 
     List<Widget> itemType1 = [
-      InputRow(
-          title: lang.getTxt('ajheza_num'), dSize: dSize, controller: ajhezaController),
-      TakeFileRow(
-          title: lang.getTxt('file'),
-          dSize: dSize,
-          selectedFile: selectedFile,
-          function: _takeFile),
+      // InputRow(
+      //     title: lang.getTxt('ajheza_num'), dSize: dSize, controller: ajhezaController),
+      // TakeFileRow(
+      //     title: lang.getTxt('file'),
+      //     dSize: dSize,
+      //     selectedFile: selectedFile,
+      //     function: _takeFile),
     ];
 
     List<Widget> itemType2 = [
-      InputRow(
-          title: lang.getTxt('trans_ref_num'),
-          dSize: dSize,
-          controller: transRefController),
-      InputRow(
-          title: lang.getTxt('trans_bord_num'),
-          dSize: dSize,
-          controller: transBordController),
-      DateRow(
-        title: lang.getTxt('creation_date'),
-        dSize: dSize,
-        date: creationDate,
-        function: () {
-          showDatePicker(
-                  context: context,
-                  initialDate: creationDate,
-                  firstDate: DateTime(DateTime.now().year - 5),
-                  lastDate: DateTime(DateTime.now().year + 5))
-              .then((date) {
-            setState(() {
-              creationDate = date!;
-            });
-          });
-        },
-      ),
-      InputRow(
-          title: lang.getTxt('trans_type'), dSize: dSize, controller: transTypeController),
-      InputRow(
-          title: lang.getTxt('trans_hikel_num'),
-          dSize: dSize,
-          controller: transHiekelController),
-      InputRow(
-          title: lang.getTxt('trans_mamsha'),
-          dSize: dSize,
-          controller: transMamshaController),
+      // InputRow(
+      //     title: lang.getTxt('trans_ref_num'),
+      //     dSize: dSize,
+      //     controller: transRefController),
+      // InputRow(
+      //     title: lang.getTxt('trans_bord_num'),
+      //     dSize: dSize,
+      //     controller: transBordController),
+      // DateRow(
+      //   title: lang.getTxt('creation_date'),
+      //   dSize: dSize,
+      //   date: creationDate,
+      //   function: () {
+      //     showDatePicker(
+      //             context: context,
+      //             initialDate: creationDate,
+      //             firstDate: DateTime(DateTime.now().year - 5),
+      //             lastDate: DateTime(DateTime.now().year + 5))
+      //         .then((date) {
+      //       setState(() {
+      //         creationDate = date!;
+      //       });
+      //     });
+      //   },
+      // ),
+      // InputRow(
+      //     title: lang.getTxt('trans_type'), dSize: dSize, controller: transTypeController),
+      // InputRow(
+      //     title: lang.getTxt('trans_hikel_num'),
+      //     dSize: dSize,
+      //     controller: transHiekelController),
+      // InputRow(
+      //     title: lang.getTxt('trans_mamsha'),
+      //     dSize: dSize,
+      //     controller: transMamshaController),
     ];
 
     List<Widget> itemType3 = [
-      InputRow(
-          title: lang.getTxt('asset_book_val'),
-          dSize: dSize,
-          controller: assetBvalueController),
+      // InputRow(
+      //     title: lang.getTxt('asset_book_val'),
+      //     dSize: dSize,
+      //     controller: assetBvalueController),
     ];
 
     List<Widget> dimensions = [
@@ -481,28 +481,28 @@ class _AssetsCaptureState extends State<AssetsCapture> {
     ];
 
     List<Widget> secondPage = [
-      InputRow(title: lang.getTxt('cost'), dSize: dSize, controller: costController),
-      InputRow(
-        title: lang.getTxt('accumulated_consumption'),
-        dSize: dSize,
-        controller: consumptionController,
-        textType: TextInputType.number,
-      ),
-      InputRow(
-        title: lang.getTxt('production_age'),
-        dSize: dSize,
-        controller: productionAgeController,
-        textType: TextInputType.number,
-      ),
-      DropDownMenuRow(
-          title: lang.getTxt('supplier_name'),
-          dSize: dSize,
-          values: suppliers.map((e) => e.name).toSet().toList(),
-          onChange: changeSupplier,
-          value: supplier),
-      if (selectedItem?.itemType == 1) ...itemType1,
-      if (selectedItem?.itemType == 2) ...itemType2,
-      if (selectedItem?.itemType == 3) ...itemType3,
+      // InputRow(title: lang.getTxt('cost'), dSize: dSize, controller: costController),
+      // InputRow(
+      //   title: lang.getTxt('accumulated_consumption'),
+      //   dSize: dSize,
+      //   controller: consumptionController,
+      //   textType: TextInputType.number,
+      // ),
+      // InputRow(
+      //   title: lang.getTxt('production_age'),
+      //   dSize: dSize,
+      //   controller: productionAgeController,
+      //   textType: TextInputType.number,
+      // ),
+      // DropDownMenuRow(
+      //     title: lang.getTxt('supplier_name'),
+      //     dSize: dSize,
+      //     values: suppliers.map((e) => e.name).toSet().toList(),
+      //     onChange: changeSupplier,
+      //     value: supplier),
+      // if (selectedItem?.itemType == 1) ...itemType1,
+      // if (selectedItem?.itemType == 2) ...itemType2,
+      // if (selectedItem?.itemType == 3) ...itemType3,
       buildAddButton(),
     ];
 
@@ -520,7 +520,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                       title: lang.getTxt('capture_header_title'),
                       subTitle: lang.getTxt('capture_header_subTitle')),
                   Container(
-                    height: isNext ? secondPageHeight : firstPageHeight,
+                    height: isNext ? null : firstPageHeight, // secondPageHeight
                     padding:
                         EdgeInsets.symmetric(horizontal: dSize.height * 0.016),
                     child: Form(
@@ -540,8 +540,8 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 15),
                           height: dSize.height < 600
-                              ? dSize.height * 0.18
-                              : dSize.height * 0.21,
+                              ? dSize.height * 0.48 // dSize.height * 0.18
+                              : dSize.height * 0.51, // dSize.height * 0.51
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(12),
                             child: ListView(

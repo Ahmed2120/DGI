@@ -51,6 +51,10 @@ class _ItemCaptureState extends State<ItemCapture> {
       floorId: 1,
       sectionId: 10,
       locationTypeName: 'Building',
+      country: '',
+      compound: '',
+      city: '',
+      governorate: '',
       locationType: 1);
   final countryService = CountryService();
   final cityService = CityService();
@@ -156,6 +160,11 @@ class _ItemCaptureState extends State<ItemCapture> {
                           SizedBox(
                             height: dSize.height * 0.01,
                           ),
+                          CustomWidgetBuilder.buildTextFormField(dSize, lang.getTxt('governorate'),
+                              assetLocation.governorate, false),
+                          SizedBox(
+                            height: dSize.height * 0.01,
+                          ),
                           Row(
                             children: [
                               CustomWidgetBuilder.buildText(lang.getTxt('city'), dSize),
@@ -203,8 +212,18 @@ class _ItemCaptureState extends State<ItemCapture> {
                           SizedBox(
                             height: dSize.height * 0.01,
                           ),
+                          CustomWidgetBuilder.buildTextFormField(dSize, lang.getTxt('compound'),
+                              assetLocation.compound, false),
+                          SizedBox(
+                            height: dSize.height * 0.01,
+                          ),
                           CustomWidgetBuilder.buildTextFormField(dSize, lang.getTxt('area'),
                               areas.isNotEmpty ? areas[0].name : 'area', false),
+                          SizedBox(
+                            height: dSize.height * 0.01,
+                          ),
+                          CustomWidgetBuilder.buildTextFormField(dSize, lang.getTxt('building'),
+                              assetLocation.buildingName, false),
                           SizedBox(
                             height: dSize.height * 0.01,
                           ),

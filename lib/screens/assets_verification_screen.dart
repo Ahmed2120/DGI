@@ -40,8 +40,23 @@ class _AssetsVerificationState extends State<AssetsVerification> {
   List<SectionType> sections =[];
   String? _section;
   String? _floor;
-  AssetLocation assetLocation = AssetLocation(id:1, name: '', buildingAddress: '', buildingName: '', buildingNo: '',
-      businessUnit: '', areaId: 1, departmentId: 1, floorId: 1,sectionId: 10,locationTypeName: 'Building',locationType: 1);
+  AssetLocation assetLocation = AssetLocation(
+      id: 1,
+      name: '',
+      buildingAddress: '',
+      buildingName: '',
+      buildingNo: '',
+      businessUnit: '',
+      areaId: 1,
+      departmentId: 1,
+      floorId: 1,
+      sectionId: 10,
+      locationTypeName: 'Building',
+      country: '',
+      compound: '',
+      city: '',
+      governorate: '',
+      locationType: 1);
   final countryService = CountryService();
   final cityService = CityService();
   final floorService = FloorService();
