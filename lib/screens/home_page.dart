@@ -7,6 +7,7 @@ import 'package:dgi/language.dart';
 import 'package:dgi/model/settings.dart';
 import 'package:dgi/model/transaction.dart';
 import 'package:dgi/screens/about.dart';
+import 'package:dgi/screens/administrator_screen.dart';
 import 'package:dgi/screens/assets_verification_screen.dart';
 import 'package:dgi/screens/item_capture_screen.dart';
 import 'package:dgi/screens/settings.dart';
@@ -300,8 +301,7 @@ class _HomePageState extends State<HomePage> {
                 TextButton(
                   child: Text(lang.getTxt('ok')),
                   onPressed: () {
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, "/login", (Route<dynamic> route) => false);
+                    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> Administrator()), (route) => false);
                   },
                 )
               ],

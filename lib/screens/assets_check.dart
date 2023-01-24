@@ -209,14 +209,14 @@ class _AssetsCheckState extends State<AssetsCheck> {
                                         width: 2.0),
                                   ),
                                   height: 100,
-                                  child: asset == null
+                                  child: asset == null || asset!.image! == null
                                       ? Image.asset(
                                           'assets/icons/img.png',
                                           fit: BoxFit.cover,
                                           width: dSize.width * 0.577,
                                         )
                                       : Image.memory(
-                                          base64Decode(asset!.image),
+                                          base64Decode(asset!.image!),
                                     width: 300,
                                     height: 100,
                                         )),

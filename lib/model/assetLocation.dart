@@ -11,10 +11,10 @@ class AssetLocation {
   final int? sectionId;
   final int locationType;
   final String locationTypeName;
-  final String compound;
-  final String city;
-  final String governorate;
-  final String country;
+  final String? compound;
+  final String? city;
+  final String? governorate;
+  final String? country;
 
   AssetLocation(
       {required this.id,

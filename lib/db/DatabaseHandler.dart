@@ -39,21 +39,30 @@ class DatabaseHandler {
   Future<List<Object?>> clearData() async {
     final Database db = await initializeDB();
     Batch batch = db.batch();
+    batch.execute("delete from setting");
     batch.execute("delete from category");
     batch.execute("delete from locationType");
     batch.execute("delete from sectionType");
     batch.execute("delete from area");
     batch.execute("delete from transactionTable");
     batch.execute("delete from mainCategory");
+    batch.execute("delete from level");
+    batch.execute("delete from accountGroup");
+    batch.execute("delete from supplier");
     batch.execute("delete from city");
     batch.execute("delete from department");
+    batch.execute("delete from country");
     batch.execute("delete from floor");
     batch.execute("delete from item");
+    batch.execute("delete from description");
     batch.execute("delete from users");
     batch.execute("delete from assetLocation");
+    batch.execute("delete from users");
     batch.execute("delete from captureDetails");
     batch.execute("delete from asset");
-    batch.execute("delete from country");
+    batch.execute("delete from brand");
+    batch.execute("delete from color");
+    String path = await getDatabasesPath();
     return await batch.commit();
   }
 

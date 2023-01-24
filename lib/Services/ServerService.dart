@@ -349,13 +349,19 @@ class ServerService {
           country: response.assetLocation.countryName,
       ));
       await userService.insert(response.user);
-      await areaService.insert(response.assetLocation.area);
+      if(response.assetLocation.area != null) {
+        await areaService.insert(response.assetLocation.area!);
+      }
       await transactionService.insert(TransactionLookUp(
           id: response.id,
           transactionType: response.transactionType,
           transActionTypeName: response.transActionTypeName));
-      await countryService.insert(response.assetLocation.country);
-      await cityService.insert(response.assetLocation.city);
+      if(response.assetLocation.country != null) {
+        await countryService.insert(response.assetLocation.country!);
+      }
+      if(response.assetLocation.city != null) {
+        await cityService.insert(response.assetLocation.city!);
+      }
       await mainCategoryService.batch(mainCategories);
       await itemService.batch(items);
       await descriptionService.batch(descriptions);

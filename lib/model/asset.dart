@@ -4,7 +4,7 @@ class Asset {
   String? serialnumber;
   final String? description;
   int? transactionId;
-  String image;
+  String? image;
   String? itemImage;
   String? itemName;
   final double? height;

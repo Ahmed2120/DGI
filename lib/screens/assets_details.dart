@@ -509,9 +509,16 @@ class _AssetsDetailsState extends State<AssetsDetails> {
           [
             i + 1,
             assets[i].description,
-            Image.memory(
-              base64Decode(assets[i].image),
-              height: 30,
+            assets[i] == null || assets[i]!.image == null
+                ? Image.asset(
+              'assets/icons/img.png',
+              fit: BoxFit.cover,
+              width: 300,
+            )
+                : Image.memory(
+              base64Decode(assets[i].image!),
+              width: 300,
+              height: 100,
             )
           ],
         ),
@@ -570,6 +577,7 @@ class _AssetsDetailsState extends State<AssetsDetails> {
           }
         } catch (e) {
           print(e);
+          CustomWidgetBuilder.showMessageDialog(context, e.toString(), false);
         }
       } else {
         error = true;
@@ -586,11 +594,16 @@ class _AssetsDetailsState extends State<AssetsDetails> {
           .id;
 
       sectionsPerFloor = allSections.where((sec) => sec.floorId == floorId).toList();
-      if(sectionsPerFloor.isNotEmpty) {
-        _section = sectionsPerFloor
-            .firstWhere((element) => element.id == asset?.sectionId)
-            .name;
+      if(sectionsPerFloor.isEmpty) return;
+      for(int i = 0; i<sectionsPerFloor.length; i++) {
+        if(sectionsPerFloor[i].id == asset?.sectionId) {
+          _section = sectionsPerFloor[i].name;
+        }
+        else{
+          _section = null;
+        }
       }
+
     });
   }
 

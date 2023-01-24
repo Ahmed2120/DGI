@@ -3,8 +3,11 @@ import 'package:dgi/Services/SettingService.dart';
 import 'package:dgi/Utility/configration.dart';
 import 'package:dgi/model/settings.dart';
 import 'package:flutter/material.dart';
+import '../Services/lightCapture_service.dart';
 import '../Utility/CustomWidgetBuilder.dart';
+import '../model/assetLocation.dart';
 import 'auth_screen.dart';
+import 'light_capture_screen.dart';
 
 class Administrator extends StatefulWidget {
   const Administrator({Key? key}) : super(key: key);
@@ -20,6 +23,7 @@ class _AdministratorState extends State<Administrator> {
   TextEditingController ipAddressController = TextEditingController();
   final settingService = SettingService();
   final serverService = ServerService();
+  final lightCaptureService = LightCaptureService();
 
   bool _isLoading = false;
 
@@ -153,23 +157,46 @@ class _AdministratorState extends State<Administrator> {
                               SizedBox(
                                 height: dSize.height * 0.035,
                               ),
-                              ElevatedButton(
-                                child: Text(
-                                  'DONE',
-                                  style: TextStyle(
-                                      fontSize: dSize.height <= 500
-                                          ? dSize.height * 0.027
-                                          : 13.75),
-                                ),
-                                onPressed: () => {_submit()},
-                                style: ElevatedButton.styleFrom(
-                                    primary: const Color(0xFFFFA227),
-                                    textStyle: const TextStyle(fontSize: 20),
-                                    padding: const EdgeInsets.all(15),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(50)),
-                                    minimumSize: Size(dSize.width * 0.4, 34)),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  ElevatedButton(
+                                    child: Text(
+                                      'DONE',
+                                      style: TextStyle(
+                                          fontSize: dSize.height <= 500
+                                              ? dSize.height * 0.027
+                                              : 13.75),
+                                    ),
+                                    onPressed: () => {_submit()},
+                                    style: ElevatedButton.styleFrom(
+                                        primary: const Color(0xFFFFA227),
+                                        textStyle: const TextStyle(fontSize: 20),
+                                        padding: const EdgeInsets.all(15),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(50)),
+                                        minimumSize: Size(dSize.width * 0.4, 34)),
+                                  ),
+                                  ElevatedButton(
+                                    child: Text(
+                                      'Light Capture',
+                                      style: TextStyle(
+                                          fontSize: dSize.height <= 500
+                                              ? dSize.height * 0.027
+                                              : 13.75),
+                                    ),
+                                    onPressed: () => {_lightCapture()},
+                                    style: ElevatedButton.styleFrom(
+                                        primary: const Color(0xFF0F6671),
+                                        textStyle: const TextStyle(fontSize: 20),
+                                        padding: const EdgeInsets.all(15),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(50)),
+                                        minimumSize: Size(dSize.width * 0.4, 34)),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
@@ -307,5 +334,34 @@ class _AdministratorState extends State<Administrator> {
                 )
               ],
             ));
+  }
+
+  Future _lightCapture() async {
+    // if (!_formKey.currentState!.validate()) {
+    //   return;
+    // }
+    FocusScope.of(context).unfocus();
+    _formKey.currentState!.save();
+    try {
+      setState(() {
+        _isLoading = true;
+      });
+      MyConfig.SERVER = ipAddressController.text;
+      String response = await lightCaptureService.getAllFloors();
+      await lightCaptureService.getAllItems();
+      if(response == "Success"){
+
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> LightCaptureScreen()));
+        // showSuccessDialog(noController.text);
+      }else {
+        _showErrorDialog(response);
+      }
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      _showErrorDialog(e.toString().replaceAll("Exception: ", ""));
+    }
+
   }
 }

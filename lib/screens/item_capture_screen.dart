@@ -565,10 +565,14 @@ class _ItemCaptureState extends State<ItemCapture> {
           .id;
 
       sectionsPerFloor = sections.where((sec) => sec.floorId == floorId).toList();
-      if(sectionsPerFloor.isNotEmpty) {
-        section = sectionsPerFloor
-            .firstWhere((element) => element.id == assetLocation.sectionId)
-            .name;
+      if(sectionsPerFloor.isEmpty) return;
+      for(int i = 0; i<sectionsPerFloor.length; i++) {
+          if(sectionsPerFloor[i].id == assetLocation.sectionId) {
+            section = sectionsPerFloor[i].name;
+          }
+          else{
+            section = null;
+          }
       }
     });
   }
