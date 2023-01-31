@@ -209,6 +209,9 @@ class _HomePageState extends State<HomePage> {
                                 InkWell(
                                     child: buildColumn(lang.getTxt('exel'), dsize, 'excel'),
                                     onTap: () => exportExel()),
+                                InkWell(
+                                    child: buildColumn('Clear Data', dsize, 'clear-data'),
+                                    onTap: () => clearData()),
                               ],
                               crossAxisCount: 2,
                               childAspectRatio: (dsize.width * 0.009) /
@@ -259,7 +262,27 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         loader = false;
       });
-      showSuccessDialog(pdaNo);
+      showSuccessDialog(lang.getTxt('successful_upload'), content: lang.getTxt('login_again'));
+    } catch (e) {
+      setState(() {
+        loader = false;
+      });
+      CustomWidgetBuilder.showMessageDialog(context, e.toString(), true);
+    }
+  }
+
+  clearData() async {
+    setState(() {
+      loader = true;
+    });
+    try {
+
+      await serverService.clearData();
+
+      setState(() {
+        loader = false;
+      });
+      showSuccessDialog('Clear Data Done successfully');
     } catch (e) {
       setState(() {
         loader = false;
@@ -289,14 +312,14 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void showSuccessDialog(String pdaNo) {
+  void showSuccessDialog(String title, {String? content}) {
     showDialog(
         context: context,
         barrierDismissible: false,
         builder: (ctx) => AlertDialog(
-              title: Text(lang.getTxt('successful_upload')),
-              content:
-                  Text(lang.getTxt('login_again')),
+              title: Text(title),
+              content: content != null ?
+                  Text(content) : null,
               actions: [
                 TextButton(
                   child: Text(lang.getTxt('ok')),

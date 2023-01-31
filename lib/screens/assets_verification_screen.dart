@@ -307,6 +307,7 @@ class _AssetsVerificationState extends State<AssetsVerification> {
           location = assetLocation.locationTypeName;
           _section = sections.firstWhere((sec) => sec.id == assetLocation.sectionId, orElse: ()=> SectionType(name: '')).name;
           _floor = floors.firstWhere((flr) => flr.id == assetLocation.floorId, orElse: ()=> Floor(name: '')).name;
+        print('_section $_section , _floor ${assetLocation.floorId} ');
         }
       });
     });

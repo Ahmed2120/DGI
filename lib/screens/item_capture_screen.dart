@@ -570,9 +570,6 @@ class _ItemCaptureState extends State<ItemCapture> {
           if(sectionsPerFloor[i].id == assetLocation.sectionId) {
             section = sectionsPerFloor[i].name;
           }
-          else{
-            section = null;
-          }
       }
     });
   }

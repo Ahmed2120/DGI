@@ -20,6 +20,7 @@ import 'package:dgi/model/level.dart';
 import 'package:dgi/model/mainCategory.dart';
 import 'package:dgi/screens/home_page.dart';
 import 'package:dgi/screens/take_picture_page.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
@@ -63,16 +64,16 @@ class _LightCaptureScreenState extends State<LightCaptureScreen> {
   String? accountGroup;
   String? supplier;
   String? brand;
-  String? description;
   String? color;
-  TextEditingController? item = TextEditingController();
+  String? item;
+  String? floor;
+  String? section;
+  String? description;
   String? imagePath;
   bool isChangeColor = false;
   bool isNext = false;
   Item? selectedItem;
   PlatformFile? selectedFile;
-  String? section;
-  String? floor;
 
   List<SectionType> sections = [];
   List<SectionType> sectionsPerFloor = [];
@@ -146,7 +147,7 @@ class _LightCaptureScreenState extends State<LightCaptureScreen> {
           .where((element) => element.categoryId == selected.id)
           .toList();
       accountGroup = null;
-      item!.text = '';
+      item = null;
       description = null;
     });
   }
@@ -161,7 +162,7 @@ class _LightCaptureScreenState extends State<LightCaptureScreen> {
           .toList();
       category = null;
       accountGroup = null;
-      item!.text = '';
+      item = null;
       description = null;
     });
   }
@@ -176,7 +177,7 @@ class _LightCaptureScreenState extends State<LightCaptureScreen> {
       mainCategory = null;
       category = null;
       accountGroup = null;
-      item!.text = '';
+      item = null;
     });
   }
 
@@ -188,18 +189,31 @@ class _LightCaptureScreenState extends State<LightCaptureScreen> {
       items = allItems
           .where((element) => element.accountGroupId == selected.id)
           .toList();
-      item!.text = '';
+      item = null;
       description = null;
     });
   }
 
   changeItem(value) async {
-    item!.text = value;
+    item = value;
     Item selected = items.firstWhere((element) => element.name == value);
     selectedItem = selected;
     print('selectedItem?.hasLength ${selectedItem?.hasHeight}');
     descriptions = await lightCaptureService.getAllDescriptions(selected.id);
     description = null;
+    setState(() {});
+  }
+
+  changeFloor(value) async {
+    floor = value;
+    Floor selected = floors.firstWhere((element) => element.name == value);
+    sectionsPerFloor = await lightCaptureService.getAllSections(selected.id!);
+    section = null;
+    setState(() {});
+  }
+
+  changeSection(value) async {
+    section = value;
     setState(() {});
   }
 
@@ -240,88 +254,52 @@ class _LightCaptureScreenState extends State<LightCaptureScreen> {
     List<Widget> firstPage = [
       Row(
         children: [
-          CustomWidgetBuilder.buildText(lang.getTxt('floor'), dSize),
-          Spacer(),
+          CustomWidgetBuilder.buildText('FLOOR NO', dSize),
+          const Spacer(),
           Container(
             decoration: const BoxDecoration(
                 border: Border(
                     bottom: BorderSide(color: Color(0xFF00B0BD), width: 2))),
             width: dSize.width * 0.5,
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton<String>(
-                value: floor,
-                iconSize: 20,
-                icon: const Icon(
-                  Icons.arrow_drop_down,
-                  color: Color(0xFF00B0BD),
-                ),
-                isDense: true,
-                isExpanded: true,
-                items: floors
-                    .map((e) => e.name)
-                    .toSet()
-                    .toList()
-                    .map((String item) {
-                  return DropdownMenuItem<String>(
-                    value: item,
-                    child: Text(
-                      item,
-                      style: const TextStyle(
-                          color: Color(0xFF0F6671), fontSize: 15),
-                    ),
-                  );
-                }).toList(),
-                onChanged: (val) {
-                  setState(() {
-                    floor = val;
-                  });
-                  getSectionsByFloor();
-                  print('-----${sectionsPerFloor.length}------');
-                },
+            child: DropdownSearch<String>(
+              popupProps: const PopupProps.menu(
+                  showSelectedItems: true,
+                  showSearchBox: true
               ),
+              items: floors.map((e) => e.name).toSet().toList(),
+              dropdownDecoratorProps: const DropDownDecoratorProps(
+                dropdownSearchDecoration: InputDecoration(
+                    suffixIconColor: Color(0xFF00B0BD)
+                ),
+              ),
+              onChanged: changeFloor,
+              selectedItem: floor,
             ),
           ),
         ],
       ),
       Row(
         children: [
-          CustomWidgetBuilder.buildText(lang.getTxt('section'), dSize),
-          Spacer(),
+          CustomWidgetBuilder.buildText('SECTION NO', dSize),
+          const Spacer(),
           Container(
             decoration: const BoxDecoration(
                 border: Border(
                     bottom: BorderSide(color: Color(0xFF00B0BD), width: 2))),
             width: dSize.width * 0.5,
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton<String>(
-                value: section,
-                iconSize: 20,
-                icon: const Icon(
-                  Icons.arrow_drop_down,
-                  color: Color(0xFF00B0BD),
-                ),
-                isDense: true,
-                isExpanded: true,
-                items: sectionsPerFloor
-                    .map((e) => e.name)
-                    .toSet()
-                    .toList()
-                    .map((String item) {
-                  return DropdownMenuItem<String>(
-                    value: item,
-                    child: Text(
-                      item,
-                      style: const TextStyle(
-                          color: Color(0xFF0F6671), fontSize: 15),
-                    ),
-                  );
-                }).toList(),
-                onChanged: (val) {
-                  setState(() {
-                    section = val;
-                  });
-                },
+            child: DropdownSearch<String>(
+              popupProps: const PopupProps.menu(
+                  showSelectedItems: true,
+                  showSearchBox: true
               ),
+              items: sectionsPerFloor.map((e) => e.name).toSet().toList(),
+              dropdownDecoratorProps: const DropDownDecoratorProps(
+                dropdownSearchDecoration: InputDecoration(
+                    suffixIconColor: Color(0xFF00B0BD)
+                ),
+              ),
+              onChanged: changeSection,
+              selectedItem: section,
             ),
           ),
         ],
@@ -329,105 +307,56 @@ class _LightCaptureScreenState extends State<LightCaptureScreen> {
       Row(
         children: [
           CustomWidgetBuilder.buildText('ITEMS', dSize),
-          Spacer(),
+          const Spacer(),
           Container(
             decoration: const BoxDecoration(
                 border: Border(
                     bottom: BorderSide(color: Color(0xFF00B0BD), width: 2))),
             width: dSize.width * 0.5,
-            child: TypeAheadField<Item>(
-              textFieldConfiguration: TextFieldConfiguration(
-                  style: TextStyle(
-                      fontSize: dSize.height <= 500 ? 10 : dSize.height * 0.02),
-                  controller: this.item,
-                  decoration: InputDecoration(
-                    constraints:
-                        const BoxConstraints(minHeight: 2, maxHeight: 30),
-                    suffixIcon: const Icon(
-                      Icons.arrow_drop_down,
-                      color: Color(0xFF00B0BD),
-                      size: 20,
-                    ),
-                    contentPadding: EdgeInsets.all(
-                        dSize.height <= 600 ? dSize.height * 0.015 : 4),
-                    isDense: true,
-                    border: InputBorder.none,
-                  )),
-              suggestionsCallback: getItemsSuggestion,
-              itemBuilder: (context, suggestion) {
-                return ListTile(
-                  title: Text(
-                    suggestion.name,
-                    style:
-                        const TextStyle(color: Color(0xFF0F6671), fontSize: 15),
-                  ),
-                );
-              },
-              onSuggestionSelected: (suggestion) {
-                changeItem(suggestion.name);
-              },
+            child: DropdownSearch<String>(
+              popupProps: const PopupProps.menu(
+                  showSelectedItems: true,
+                  showSearchBox: true
+              ),
+              items: items.map((e) => e.name).toSet().toList(),
+              dropdownDecoratorProps: const DropDownDecoratorProps(
+                dropdownSearchDecoration: InputDecoration(
+                    suffixIconColor: Color(0xFF00B0BD)
+                ),
+              ),
+              onChanged: changeItem,
+              selectedItem: item,
             ),
           ),
         ],
       ),
-      // if (item!.text.isNotEmpty)
-      DropDownMenuRow(
-          title: lang.getTxt('description'),
-          dSize: dSize,
-          values: descriptions.map((e) => e.description).toSet().toList(),
-          onChange: changeDescription,
-          value: description),
-      // DropDownMenuRow(
-      //     title: lang.getTxt('brand'),
-      //     dSize: dSize,
-      //     values: brands.map((e) => e.name).toSet().toList(),
-      //     onChange: changeBrand,
-      //     value: brand),
-      // DropDownMenuRow(
-      //     title: lang.getTxt('color'),
-      //     dSize: dSize,
-      //     values: colors.map((e) => e.name).toSet().toList(),
-      //     onChange: changeColor,
-      //     value: color),
-      // InputRow(
-      //     title: lang.getTxt('note'), dSize: dSize, controller: noteController),
-      // InputRow(
-      //     title: lang.getTxt('code'), dSize: dSize, controller: codeController),
+      Row(
+        children: [
+          CustomWidgetBuilder.buildText('DESCRIPTION', dSize),
+          const Spacer(),
+          Container(
+            decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: Color(0xFF00B0BD), width: 2))),
+            width: dSize.width * 0.5,
+            child: DropdownSearch<String>(
+              popupProps: const PopupProps.menu(
+                  showSelectedItems: true,
+                  showSearchBox: true
+              ),
+              items: descriptions.map((e) => e.description).toSet().toList(),
+              dropdownDecoratorProps: const DropDownDecoratorProps(
+                dropdownSearchDecoration: InputDecoration(
+                    suffixIconColor: Color(0xFF00B0BD)
+                ),
+              ),
+              onChanged: changeDescription,
+              selectedItem: description,
+            ),
+          ),
+        ],
+      ),
 
-      // DateRow(
-      //   title: lang.getTxt('own_date'),
-      //   dSize: dSize,
-      //   date: ownDate,
-      //   function: () {
-      //     showDatePicker(
-      //         context: context,
-      //         initialDate: ownDate,
-      //         firstDate: DateTime(DateTime.now().year - 5),
-      //         lastDate: DateTime(DateTime.now().year + 5))
-      //         .then((date) {
-      //       setState(() {
-      //         ownDate = date!;
-      //       });
-      //     });
-      //   },
-      // ),
-      // DateRow(
-      //   title: lang.getTxt('service_date'),
-      //   dSize: dSize,
-      //   date: serviceDate,
-      //   function: () {
-      //     showDatePicker(
-      //         context: context,
-      //         initialDate: serviceDate,
-      //         firstDate: DateTime(DateTime.now().year - 5),
-      //         lastDate: DateTime(DateTime.now().year + 5))
-      //         .then((date) {
-      //       setState(() {
-      //         serviceDate = date!;
-      //       });
-      //     });
-      //   },
-      // ),
       QuantityRow(
         title: lang.getTxt('quantity'),
         dSize: dSize,
@@ -477,7 +406,7 @@ class _LightCaptureScreenState extends State<LightCaptureScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           ...firstPage,
-                          isLoading ? CircularProgressIndicator() : ElevatedButton(
+                          isLoading ? const CircularProgressIndicator() : ElevatedButton(
                             child: Text(
                               'Save',
                               style: TextStyle(
@@ -559,7 +488,7 @@ class _LightCaptureScreenState extends State<LightCaptureScreen> {
         String note = noteController.text;
         String? serialNumber;
         int? itemId =
-            items.firstWhere((element) => element.name == item?.text).id;
+            items.firstWhere((element) => element.name == item).id;
         int? brandId = brands.firstWhere((element) => element.name == brand).id;
         int? descriptionId = descriptions
             .firstWhere((element) => element.description == description)
@@ -643,6 +572,30 @@ class _LightCaptureScreenState extends State<LightCaptureScreen> {
     }).toList();
   }
 
+  List<Floor> getFloorsSuggestion(String query) {
+    return floors.where((e) {
+      final nameLower = e.name.toLowerCase();
+      final queryLower = query.toLowerCase();
+      return nameLower.contains(queryLower);
+    }).toList();
+  }
+
+  List<SectionType> getSectionsSuggestion(String query) {
+    return sectionsPerFloor.where((e) {
+      final nameLower = e.name.toLowerCase();
+      final queryLower = query.toLowerCase();
+      return nameLower.contains(queryLower);
+    }).toList();
+  }
+
+  List<DescriptionLight> getDescriptionsSuggestion(String query) {
+    return descriptions.where((e) {
+      final nameLower = e.description.toLowerCase();
+      final queryLower = query.toLowerCase();
+      return nameLower.contains(queryLower);
+    }).toList();
+  }
+
   getSectionsByFloor() async {
     section = null;
     final floorId = floors.firstWhere((element) => element.name == floor).id;
@@ -662,7 +615,7 @@ class _LightCaptureScreenState extends State<LightCaptureScreen> {
           context, lang.getTxt('validation'), true);
     } else {
       int? itemId =
-          items.firstWhere((element) => element.name == item?.text).id;
+          items.firstWhere((element) => element.name == item).id;
       int? floorId = floors.firstWhere((element) => element.name == floor).id;
       int? sectionId =
           sectionsPerFloor.firstWhere((element) => element.name == section).id;
@@ -717,7 +670,7 @@ class _LightCaptureScreenState extends State<LightCaptureScreen> {
 
   void resetData(){
     description = null;
-    item?.text = '';
+    item = null;
     quantity = 1;
     imagePath = null;
     descriptions = [];

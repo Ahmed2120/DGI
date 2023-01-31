@@ -193,7 +193,7 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                             const Spacer(),
                             InkWell(
                               onTap: () => scanBarcodeNormal(),
-                              // onTap: ()=>getItemData('00501700190004'),
+                              // onTap: ()=>getItemData('090104010100038'),
                               child: Container(
                                 padding: EdgeInsets.all(dSize.height * 0.007),
                                 width: dSize.width * 0.5,
@@ -557,7 +557,6 @@ class _AssetsDetailsState extends State<AssetsDetails> {
         error = false;
         asset = assets[0];
         imagePath = asset?.itemImage ?? asset?.image;
-        _section = null;
         try {
           if (asset?.departmentId != null) {
             _department = allDepartments
@@ -565,9 +564,7 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                 .name;
           }
           if (allAssets[0].floorId != null) {
-            _floor = allFloors
-                .firstWhere((element) => element.id == asset?.floorId)
-                .name;
+            _floor = 'الدور الثاني';
             getSectionsByFloor();
           }
           if (asset?.brandId != null) {
@@ -587,24 +584,20 @@ class _AssetsDetailsState extends State<AssetsDetails> {
   }
 
   getSectionsByFloor(){
-    setState(() {
-      _section = null;
       final floorId = allFloors
           .firstWhere((element) => element.name == _floor)
           .id;
-
+print('floorId ${floorId}');
       sectionsPerFloor = allSections.where((sec) => sec.floorId == floorId).toList();
       if(sectionsPerFloor.isEmpty) return;
       for(int i = 0; i<sectionsPerFloor.length; i++) {
         if(sectionsPerFloor[i].id == asset?.sectionId) {
-          _section = sectionsPerFloor[i].name;
-        }
-        else{
-          _section = null;
+          setState(() {
+            _section = sectionsPerFloor[i].name;
+          });
         }
       }
-
-    });
+      setState(() {});
   }
 
   getItems() async {

@@ -354,7 +354,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
         Row(
           children: [
             CustomWidgetBuilder.buildText('ITEMS', dSize),
-            Spacer(),
+            const Spacer(),
             Container(
               decoration: const BoxDecoration(
                   border: Border(
@@ -503,7 +503,6 @@ class _AssetsCaptureState extends State<AssetsCapture> {
       // if (selectedItem?.itemType == 1) ...itemType1,
       // if (selectedItem?.itemType == 2) ...itemType2,
       // if (selectedItem?.itemType == 3) ...itemType3,
-      buildAddButton(),
     ];
 
     return Directionality(
@@ -537,6 +536,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                   if (isNext)
                     Column(
                       children: [
+                        const SizedBox(height: 10,),
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 15),
                           height: dSize.height < 600
@@ -555,41 +555,47 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                             ),
                           ),
                         ),
-                        Container(
-                          padding: EdgeInsets.only(left: 15),
-                          child: Text(
-                            '${lang.getTxt('item_total')}     ${captureDetails.length}',
-                            style: TextStyle(
-                                fontSize: dSize.height <= 500
-                                    ? 10
-                                    : dSize.height * 0.014,
-                                color: Color(0xFF0F6671),
-                                fontWeight: FontWeight.bold),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                '${lang.getTxt('item_total')}     ${captureDetails.length}',
+                                style: TextStyle(
+                                    fontSize: dSize.height <= 500
+                                        ? 10
+                                        : dSize.height * 0.014,
+                                    color: const Color(0xFF0F6671),
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              CustomWidgetBuilder.buildAddButton(saveItem)
+                            ],
                           ),
-                          alignment: Alignment.centerLeft,
                         ),
                       ],
                     ),
-                  Spacer(),
+                  const Spacer(),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 1),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         CustomWidgetBuilder.buildArrow(
                             context,
                             dSize,
-                            Icon(Icons.arrow_back_ios_rounded),
-                            () => Navigator.of(context).pop()),
-                        CustomWidgetBuilder.nextAndBack(
-                          next: lang.getTxt('next'),
-                            back: lang.getTxt('back'),
-                            nextFunction: () => setState(() {
-                                  isNext = true;
-                                }),
-                            backFunction: () => setState(() {
-                                  isNext = false;
-                                })),
+                            const Icon(Icons.arrow_back_ios_rounded),
+                            isNext ? () => setState(() {
+                              isNext = false;
+                            }) : () => Navigator.of(context).pop()),
+                        if(!isNext)
+                        CustomWidgetBuilder.buildArrow(
+                            context,
+                            dSize,
+                            Icon(Icons.arrow_forward_ios),
+                              () => setState(() {
+                            isNext = true;
+                          }),),
                       ],
                     ),
                   ),

@@ -62,8 +62,8 @@ class AssetLocationResponse {
         buildingNo = res["BuildingNo"],
         areaId = res["AreaId"],
         departmentId = res["DepartmentId"],
-        floorId = res["FloorId"],
-        sectionId = res["SectionId"],
+        floorId = res["Section"]?["Floor"]?["Id"],
+        sectionId = res["Section"]?["Id"],
         locationType = res["LocationType"],
         locationTypeName = res["LocationTypeName"],
         floor = res["Floor"] != null

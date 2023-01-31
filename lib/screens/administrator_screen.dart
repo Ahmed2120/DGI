@@ -20,7 +20,7 @@ class _AdministratorState extends State<Administrator> {
   final GlobalKey<FormState> _formKey = GlobalKey();
   //TextEditingController nameController = TextEditingController();
   TextEditingController noController = TextEditingController();
-  TextEditingController ipAddressController = TextEditingController();
+  TextEditingController ipAddressController = TextEditingController(text: 'http://85.93.89.54:');
   final settingService = SettingService();
   final serverService = ServerService();
   final lightCaptureService = LightCaptureService();
@@ -157,8 +157,10 @@ class _AdministratorState extends State<Administrator> {
                               SizedBox(
                                 height: dSize.height * 0.035,
                               ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              Wrap(
+                                alignment: WrapAlignment.center,
+                                spacing: 20,
+                                runSpacing: 20,
                                 children: [
                                   ElevatedButton(
                                     child: Text(
@@ -189,6 +191,24 @@ class _AdministratorState extends State<Administrator> {
                                     onPressed: () => {_lightCapture()},
                                     style: ElevatedButton.styleFrom(
                                         primary: const Color(0xFF0F6671),
+                                        textStyle: const TextStyle(fontSize: 20),
+                                        padding: const EdgeInsets.all(15),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(50)),
+                                        minimumSize: Size(dSize.width * 0.4, 34)),
+                                  ),
+                                  ElevatedButton(
+                                    child: Text(
+                                      'Clear Data',
+                                      style: TextStyle(
+                                          fontSize: dSize.height <= 500
+                                              ? dSize.height * 0.027
+                                              : 13.75),
+                                    ),
+                                    onPressed: () => {clearData()},
+                                    style: ElevatedButton.styleFrom(
+                                        primary: Colors.red,
                                         textStyle: const TextStyle(fontSize: 20),
                                         padding: const EdgeInsets.all(15),
                                         shape: RoundedRectangleBorder(
@@ -288,6 +308,26 @@ class _AdministratorState extends State<Administrator> {
     }
   }
 
+  clearData() async {
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+
+      await serverService.clearData();
+
+      setState(() {
+        _isLoading = false;
+      });
+      successClearDataDialog();
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      CustomWidgetBuilder.showMessageDialog(context, e.toString(), true);
+    }
+  }
+
   void showSuccessDialog(String pdaNo) {
     showDialog(
         context: context,
@@ -301,6 +341,23 @@ class _AdministratorState extends State<Administrator> {
               onPressed: () {
                 Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) => AuthScreen(pdaNo: pdaNo)));
+              },
+            )
+          ],
+        ));
+  }
+
+  void successClearDataDialog() {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (ctx) => AlertDialog(
+          title: const Text("Clear Data Done successfully"),
+          actions: [
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
               },
             )
           ],

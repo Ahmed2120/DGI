@@ -19,9 +19,9 @@ class CustomWidgetBuilder{
             style: TextStyle(fontSize: dSize.height <= 500 ? 10 : dSize.height * 0.02),
             decoration: InputDecoration(
               enabled: enabled,
-              focusedBorder: OutlineInputBorder( borderSide: BorderSide(color: Color(0xFF00B0BD), width: 2)),
-              enabledBorder: OutlineInputBorder( borderSide: BorderSide(color: Color(0xFF00B0BD), width: 2)),
-              disabledBorder: OutlineInputBorder( borderSide: BorderSide(color: Color(0xFF00B0BD), width: 2)) ,
+              focusedBorder: const OutlineInputBorder( borderSide: BorderSide(color: Color(0xFF00B0BD), width: 2)),
+              enabledBorder: const OutlineInputBorder( borderSide: BorderSide(color: Color(0xFF00B0BD), width: 2)),
+              disabledBorder: const OutlineInputBorder( borderSide: BorderSide(color: Color(0xFF00B0BD), width: 2)) ,
               contentPadding: EdgeInsets.all(
                   dSize.height <= 600
                       ? dSize.height * 0.015
@@ -61,7 +61,7 @@ class CustomWidgetBuilder{
     return Text(
       title,
       style:
-      TextStyle(fontSize: dSize.height <= 500 ? 10 : dSize.height * 0.02, color: Color(0xFF0F6671), fontWeight: FontWeight.bold),
+      TextStyle(fontSize: dSize.height <= 500 ? 10 : dSize.height * 0.02, color: const Color(0xFF0F6671), fontWeight: FontWeight.bold),
     );
   }
 
@@ -70,7 +70,7 @@ class CustomWidgetBuilder{
       padding: EdgeInsets.all(dSize.height <= 500 ? dSize.height * 0.006 : 3.312),
       // alignment: Alignment.center,
       decoration: BoxDecoration(
-          color: Color(0xFF00B0BD),
+          color: const Color(0xFF00B0BD),
           borderRadius: BorderRadius.circular(5)),
       child: InkWell(
         onTap: () => function(),
@@ -89,7 +89,7 @@ class CustomWidgetBuilder{
   static TableRow buildRow(List<dynamic> cells, {bool isHeader = false}) => TableRow(
     decoration: BoxDecoration(
         color: isHeader
-            ? Color(0xFFFFA227)
+            ? const Color(0xFFFFA227)
             : cells[0] % 2 == 0
             ? Colors.grey[200]
             : Colors.grey[300],
@@ -98,14 +98,14 @@ class CustomWidgetBuilder{
             : BorderRadius.circular(0)),
     children: cells
         .map((cell) => Padding(
-      padding: EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8.0),
       child: cell.runtimeType == String || cell.runtimeType == int
           ? Text(
         '$cell',
         style: TextStyle(
             fontSize: 10,
             color:
-            isHeader ? Colors.white : Color(0xFF0F6671),
+            isHeader ? Colors.white : const Color(0xFF0F6671),
             fontWeight: isHeader
                 ? FontWeight.bold
                 : FontWeight.normal),
@@ -130,7 +130,7 @@ class CustomWidgetBuilder{
       children: [
         TextButton(
           onPressed: ()=> backFunction(),
-          child: Text(back, style: TextStyle(fontSize: 13),),
+          child: Text(back, style: const TextStyle(fontSize: 13),),
           style: TextButton.styleFrom(
               padding: const EdgeInsets.all(5),
               tapTargetSize:
@@ -139,7 +139,7 @@ class CustomWidgetBuilder{
         ),
         TextButton(
           onPressed: ()=> nextFunction(),
-          child: Text(next, style: TextStyle(fontSize: 13),),
+          child: Text(next, style: const TextStyle(fontSize: 13),),
           style: TextButton.styleFrom(
               tapTargetSize:
               MaterialTapTargetSize.shrinkWrap,
@@ -163,6 +163,19 @@ class CustomWidgetBuilder{
           color: Colors.white,
         ),
       ),
+    );
+  }
+
+  static Widget buildAddButton(Function function){
+    return InkWell(
+      onTap: ()=> function(),
+      child: Container(
+        padding: EdgeInsets.all(7),
+        decoration: BoxDecoration(
+          color: Color(0xFF0F6671),
+          borderRadius: BorderRadius.circular(10)
+        ),
+          child: const Icon(Icons.add, color: Colors.white,)),
     );
   }
 

@@ -62,7 +62,6 @@ class DatabaseHandler {
     batch.execute("delete from asset");
     batch.execute("delete from brand");
     batch.execute("delete from color");
-    String path = await getDatabasesPath();
     return await batch.commit();
   }
 
