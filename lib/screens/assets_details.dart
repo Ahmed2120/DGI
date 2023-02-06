@@ -564,7 +564,9 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                 .name;
           }
           if (allAssets[0].floorId != null) {
-            _floor = 'الدور الثاني';
+            _floor = allFloors
+                .firstWhere((element) => element.id == asset?.floorId)
+                .name;
             getSectionsByFloor();
           }
           if (asset?.brandId != null) {

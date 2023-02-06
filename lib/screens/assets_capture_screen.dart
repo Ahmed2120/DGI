@@ -121,11 +121,12 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   final serverService = ServerService();
   final itemService = ItemService();
   final descriptionService = DescriptionService();
-  int quantity = 1;
   DateTime ownDate = DateTime.now();
   DateTime serviceDate = DateTime.now();
   DateTime creationDate = DateTime.now();
   List<CaptureDetails> captureDetails = [];
+
+  TextEditingController quantityController = TextEditingController(text: "1");
 
   final lang = Language();
 
@@ -457,19 +458,20 @@ class _AssetsCaptureState extends State<AssetsCapture> {
       QuantityRow(
         title: lang.getTxt('quantity'),
         dSize: dSize,
-        quantity: quantity,
+        quantity: int.parse(quantityController.text),
         decreaseMethod: () {
-          if (quantity > 1) {
+          if (int.parse(quantityController.text) > 1) {
             setState(() {
-              quantity--;
+              quantityController.text = (int.parse(quantityController.text)-1).toString();
             });
           }
         },
         increaseMethod: () {
           setState(() {
-            quantity++;
+            quantityController.text = (int.parse(quantityController.text)+1).toString();
           });
         },
+        controller: quantityController,
       ),
       TakePhotoRow(
         title: lang.getTxt('photo'),
@@ -714,7 +716,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
           itemId: itemId,
           description: note,
           image: base64Image,
-          quantity: quantity,
+          quantity: int.parse(quantityController.text),
           code: codeController.text,
           ajehzaTamolkNumber: ajhezaController.text,
           cost: costController.text,
@@ -794,7 +796,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
   }
 
   void resetForm() {
-    quantity = 1;
+    quantityController.text = "1";
     imagePath = null;
     noteController.text = "";
     serialNoController.text = "";

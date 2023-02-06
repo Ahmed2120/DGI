@@ -124,11 +124,12 @@ class _LightCaptureScreenState extends State<LightCaptureScreen> {
   final itemService = ItemService();
   final descriptionService = DescriptionService();
   final lightCaptureService = LightCaptureService();
-  int quantity = 1;
   DateTime ownDate = DateTime.now();
   DateTime serviceDate = DateTime.now();
   DateTime creationDate = DateTime.now();
   List<CaptureDetails> captureDetails = [];
+
+  TextEditingController quantityController = TextEditingController(text: "1");
 
   final lang = Language();
 
@@ -252,6 +253,32 @@ class _LightCaptureScreenState extends State<LightCaptureScreen> {
         dSize.height < 600 ? dSize.height * 0.40 : dSize.height * 0.51;
 
     List<Widget> firstPage = [
+      // Row(
+      //   children: [
+      //     CustomWidgetBuilder.buildText('BUILDING NO', dSize),
+      //     const Spacer(),
+      //     Container(
+      //       decoration: const BoxDecoration(
+      //           border: Border(
+      //               bottom: BorderSide(color: Color(0xFF00B0BD), width: 2))),
+      //       width: dSize.width * 0.5,
+      //       child: DropdownSearch<String>(
+      //         popupProps: const PopupProps.menu(
+      //             showSelectedItems: true,
+      //             showSearchBox: true
+      //         ),
+      //         items: floors.map((e) => e.name).toSet().toList(),
+      //         dropdownDecoratorProps: const DropDownDecoratorProps(
+      //           dropdownSearchDecoration: InputDecoration(
+      //               suffixIconColor: Color(0xFF00B0BD)
+      //           ),
+      //         ),
+      //         onChanged: changeFloor,
+      //         selectedItem: floor,
+      //       ),
+      //     ),
+      //   ],
+      // ),
       Row(
         children: [
           CustomWidgetBuilder.buildText('FLOOR NO', dSize),
@@ -360,19 +387,20 @@ class _LightCaptureScreenState extends State<LightCaptureScreen> {
       QuantityRow(
         title: lang.getTxt('quantity'),
         dSize: dSize,
-        quantity: quantity,
+        quantity: int.parse(quantityController.text),
         decreaseMethod: () {
-          if (quantity > 1) {
+          if (int.parse(quantityController.text) > 1) {
             setState(() {
-              quantity--;
+              quantityController.text = (int.parse(quantityController.text)-1).toString();
             });
           }
         },
         increaseMethod: () {
           setState(() {
-            quantity++;
+            quantityController.text = (int.parse(quantityController.text)+1).toString();
           });
         },
+        controller: quantityController,
       ),
       TakePhotoRow(
         title: lang.getTxt('photo'),
@@ -447,14 +475,6 @@ class _LightCaptureScreenState extends State<LightCaptureScreen> {
             builder: (context) => TakePicturePage(camera: camera)));
     setState(() {
       imagePath = result;
-    });
-  }
-
-  _takeFile() async {
-    final result = await FilePicker.platform.pickFiles();
-    if (result == null) return;
-    setState(() {
-      selectedFile = result.files.first;
     });
   }
 
@@ -635,7 +655,7 @@ class _LightCaptureScreenState extends State<LightCaptureScreen> {
             itemId: itemId,
             floorId: floorId,
             image: base64Image,
-            quantity: quantity,
+            quantity: int.parse(quantityController.text),
             description: description!,
             sectionId: sectionId,
             descriptionId: descriptionId,
@@ -671,7 +691,7 @@ class _LightCaptureScreenState extends State<LightCaptureScreen> {
   void resetData(){
     description = null;
     item = null;
-    quantity = 1;
+    quantityController.text = "1";
     imagePath = null;
     descriptions = [];
   }
