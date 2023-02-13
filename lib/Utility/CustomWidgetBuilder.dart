@@ -65,7 +65,7 @@ class CustomWidgetBuilder{
     );
   }
 
- static Container buildArrow(BuildContext context, Size dSize, Icon icon, Function function) {
+ static Container buildArrow(BuildContext context, Size dSize, Icon icon, Function? function) {
     return Container(
       padding: EdgeInsets.all(dSize.height <= 500 ? dSize.height * 0.006 : 3.312),
       // alignment: Alignment.center,
@@ -73,7 +73,7 @@ class CustomWidgetBuilder{
           color: const Color(0xFF00B0BD),
           borderRadius: BorderRadius.circular(5)),
       child: InkWell(
-        onTap: () => function(),
+        onTap: function != null ? () => function() : null,
         child: Container(
           alignment: Alignment.center,
           child: Icon(
@@ -92,6 +92,33 @@ class CustomWidgetBuilder{
             ? const Color(0xFFFFA227)
             : cells[0] % 2 == 0
             ? Colors.grey[200]
+            : Colors.grey[300],
+        borderRadius: isHeader
+            ? BorderRadius.circular(10)
+            : BorderRadius.circular(0)),
+    children: cells
+        .map((cell) => Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: cell.runtimeType == String || cell.runtimeType == int
+          ? Text(
+        '$cell',
+        style: TextStyle(
+            fontSize: 10,
+            color:
+            isHeader ? Colors.white : const Color(0xFF0F6671),
+            fontWeight: isHeader
+                ? FontWeight.bold
+                : FontWeight.normal),
+      )
+          : cell,
+    ))
+        .toList(),
+  );
+
+  static TableRow lightVerificationTable(List<dynamic> cells, {bool isHeader = false}) => TableRow(
+    decoration: BoxDecoration(
+        color: isHeader
+            ? const Color(0xFFFFA227)
             : Colors.grey[300],
         borderRadius: isHeader
             ? BorderRadius.circular(10)

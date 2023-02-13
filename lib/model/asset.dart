@@ -44,7 +44,7 @@ class Asset {
       : id = res["Id"],
         barcode = res["Barcode"],
         serialnumber = res["SerialNumber"],
-        description = res["Description"],
+        description = res["capture"]?["Description"],
         image = res["AssetImageInBase64"],
   itemImage = res['capture']['ItemDescription']['ImageInBase64'],
   itemName= res['capture']['ItemDescription']['Description'],

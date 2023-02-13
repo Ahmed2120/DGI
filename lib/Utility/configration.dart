@@ -10,6 +10,7 @@ class MyConfig {
   static String DEPARTMENT_API = '/LocationLocup/GetAllDepartments';
   static String SECTION_API = '/LocationLocup/GetAllSectionsByTransacionId';
   static String SECTION_ByFloorId = '/LocationLocup/GetAllSectionsByFloorId';
+  static String ALL_SECTION = '/LocationLocup/GetAllSections';
   static String LEVEL_API = '/LocationLocup/GetAllLevels';
   static String ACCOUNTGROUP_API = '/LocationLocup/GetAllAccountGroups';
   static String SUPPLIER_API = '/LocationLocup/GetAllSuppliers';
@@ -20,11 +21,12 @@ class MyConfig {
   static String DESCRIPTION_API = '/LocationLocup/GetAllDescriptions';
   static String DESCRIPTION_BYITEMID = '/LocationLocup/GetAllDescriptionsByItemId';
   static String ASSET_VERFICATION = '/Verification/GetAssetsByTransactionId';
+  static String ASSET_LightVERFICATION = '/Verification/GetAssetsBySectionId';
   static String ASSET_INVENTORY = '/GetAssetsByTransactionId';
   static String ASSET_VERFICATION_UPLOAD = '/Verification/UploadVerification';
   static String ASSET_INVENTORY_UPLOAD = '/UploadCounter';
   static const String BUILDING = "Building";
   static const String OFFICE = "Office";
   static const String STORE = "Store";
-  static const int PAGE_SIZE = 5;
+  static const int PAGE_SIZE = 20;
 }
