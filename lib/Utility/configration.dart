@@ -7,6 +7,7 @@ class MyConfig {
   static String TRANSACTION_API = '/Transaction/GetTrasnaction';
   static String UPLOAD_API = '/Api/Cupture/UploadCupture';
   static String UPLOAD_CaptureLight = '/Api/Cupture/UploadLightCupture';
+  static String UPLOAD_VerificationLight = '/Verification/CreateByAssetsIds';
   static String DEPARTMENT_API = '/LocationLocup/GetAllDepartments';
   static String SECTION_API = '/LocationLocup/GetAllSectionsByTransacionId';
   static String SECTION_ByFloorId = '/LocationLocup/GetAllSectionsByFloorId';

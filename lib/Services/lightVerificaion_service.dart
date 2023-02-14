@@ -22,6 +22,7 @@ class LightVerificationService{
   static List<Item> severItems = [];
   static List<Asset> assets = [];
   static int totalPages = 1;
+  static int totalRecords = 0;
 
   downloadAssets(int pageNum, int sectionId) async {
     print(sectionId);
@@ -34,6 +35,7 @@ class LightVerificationService{
       } else {
         assets = assetVerificationResponse.assets;
         totalPages = assetVerificationResponse.totalPages;
+        totalRecords = assetVerificationResponse.totalRecords;
       }
     } catch (e) {
       await clearData();
@@ -101,17 +103,18 @@ class LightVerificationService{
     }
   }
 
-  uploadToServer(CaptureLight captureLight,) async {
-    print(captureLight.image);
+  uploadToServer(List<int> assetIDs,) async {
 
+    final request = {"AssetIDs" : assetIDs};
     final response =
-    await http.post(Uri.parse('${MyConfig.SERVER}${MyConfig.UPLOAD_CaptureLight}'),
+    await http.post(Uri.parse('${MyConfig.SERVER}${MyConfig.UPLOAD_VerificationLight}'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
-        body: json.encode(captureLight.toMap()));
+        body: json.encode(request));
     final responseJson = jsonDecode(response.body);
     print(responseJson);
+
     if (response.statusCode == 200 && responseJson["Succeeded"]) {
       return true;
     } else if (responseJson != null && responseJson["Message"] != null) {

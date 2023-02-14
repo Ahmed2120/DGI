@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         fontFamily: 'Montserrat'
       ),
-      home: LightEventsScreen(),
+      home: SplashScreen(pdaNo: pdaNo,),
     );
   }
 }

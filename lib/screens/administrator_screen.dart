@@ -8,6 +8,7 @@ import '../Utility/CustomWidgetBuilder.dart';
 import '../model/assetLocation.dart';
 import 'auth_screen.dart';
 import 'light_capture_screen.dart';
+import 'light_events_screen.dart';
 
 class Administrator extends StatefulWidget {
   const Administrator({Key? key}) : super(key: key);
@@ -182,13 +183,13 @@ class _AdministratorState extends State<Administrator> {
                                   ),
                                   ElevatedButton(
                                     child: Text(
-                                      'Light Capture',
+                                      'Light Transaction',
                                       style: TextStyle(
                                           fontSize: dSize.height <= 500
                                               ? dSize.height * 0.027
                                               : 13.75),
                                     ),
-                                    onPressed: () => {_lightCapture()},
+                                    onPressed: () => {Navigator.push(context, MaterialPageRoute(builder: (context)=> const LightEventsScreen()))},
                                     style: ElevatedButton.styleFrom(
                                         primary: const Color(0xFF0F6671),
                                         textStyle: const TextStyle(fontSize: 20),

@@ -130,7 +130,7 @@ class CustomWidgetBuilder{
           ? Text(
         '$cell',
         style: TextStyle(
-            fontSize: 10,
+            fontSize: 15,
             color:
             isHeader ? Colors.white : const Color(0xFF0F6671),
             fontWeight: isHeader
