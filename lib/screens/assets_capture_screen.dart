@@ -596,8 +596,17 @@ class _AssetsCaptureState extends State<AssetsCapture> {
                             dSize,
                             Icon(Icons.arrow_forward_ios),
                               () => setState(() {
-                            isNext = true;
-                          }),),
+                                if (noteController.text.isEmpty ||
+                                    imagePath == null ||
+                                    item == null ||
+                                    description == null) {
+                                  CustomWidgetBuilder.showMessageDialog(
+                                      context, lang.getTxt('validation'), true);
+                                }
+                                else{
+                                isNext = true;
+                              }
+                            }),),
                       ],
                     ),
                   ),
@@ -784,7 +793,7 @@ class _AssetsCaptureState extends State<AssetsCapture> {
             captureDetails[i].description,
             captureDetails[i].quantity.toString(),
             Image.memory(
-              base64Decode(captureDetails[i].image),
+              base64Decode(captureDetails[i].image!),
               height: 40,
               fit: BoxFit.fill,
             )

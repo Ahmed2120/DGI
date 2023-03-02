@@ -8,6 +8,7 @@ class MyConfig {
   static String UPLOAD_API = '/Api/Cupture/UploadCupture';
   static String UPLOAD_CaptureLight = '/Api/Cupture/UploadLightCupture';
   static String UPLOAD_VerificationLight = '/Verification/CreateByAssetsIds';
+  static String UPDATE_ASSET_IMAGE = '/Api/Cupture/UpdateAssetImage';
   static String DEPARTMENT_API = '/LocationLocup/GetAllDepartments';
   static String SECTION_API = '/LocationLocup/GetAllSectionsByTransacionId';
   static String SECTION_ByFloorId = '/LocationLocup/GetAllSectionsByFloorId';
@@ -16,13 +17,15 @@ class MyConfig {
   static String ACCOUNTGROUP_API = '/LocationLocup/GetAllAccountGroups';
   static String SUPPLIER_API = '/LocationLocup/GetAllSuppliers';
   static String FLOOR_API = '/LocationLocup/GetAllFloorsByTransactionId';
-  static String FLOOR_WithoutId = '//LocationLocup/GetAllFloors';
+  static String BUILDING_API = '/LocationLocup/GetAllBuildings';
+  static String FLOOR_ByBuildingId = '/LocationLocup/GetAllFloorsByBuildingId';
   static String BRAND_API = '/LocationLocup/GetAllBrands';
   static String COLOR_API = '/LocationLocup/GetAllGetColors';
   static String DESCRIPTION_API = '/LocationLocup/GetAllDescriptions';
   static String DESCRIPTION_BYITEMID = '/LocationLocup/GetAllDescriptionsByItemId';
   static String ASSET_VERFICATION = '/Verification/GetAssetsByTransactionId';
   static String ASSET_LightVERFICATION = '/Verification/GetAssetsBySectionId';
+  static String ASSET_LightINVENTORY = '/Verification/GetAssetsBySectionShortCode';
   static String ASSET_INVENTORY = '/GetAssetsByTransactionId';
   static String ASSET_VERFICATION_UPLOAD = '/Verification/UploadVerification';
   static String ASSET_INVENTORY_UPLOAD = '/UploadCounter';

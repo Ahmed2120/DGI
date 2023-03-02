@@ -74,9 +74,59 @@ class LightVerificationService{
     }
   }
 
+  downloadAssetsByShortCode(int pageNum, String shortCode) async {
+    print(shortCode);
+    AssetService assetService = AssetService();
+    try {
+      AssetVerificationResponse? assetVerificationResponse =
+      await getAssetsByShortCode(pageNum, shortCode);
+      if (assetVerificationResponse == null) {
+        throw Exception("there is no data");
+      } else {
+        assets = assetVerificationResponse.assets;
+        totalPages = assetVerificationResponse.totalPages;
+        totalRecords = assetVerificationResponse.totalRecords;
+      }
+    } catch (e) {
+      await clearData();
+      rethrow;
+    }
+  }
+
+  getAssetsByShortCode(int pageNumber, String shortCode) async {
+    final myConfig = MyConfig.ASSET_LightINVENTORY;
+    final queryParameters = {
+      'pageNumber': pageNumber.toString(),
+      'pageSize': '5',
+      'shortCode': shortCode
+    };
+    String queryString = Uri(queryParameters: queryParameters).query;
+    final uri =
+        '${MyConfig.SERVER}${myConfig}' + '?' + queryString;
+    try {
+      final response = await http.get(Uri.parse(uri));
+      if (response.statusCode == 200) {
+        final responseJson = json.decode(response.body);
+        if (responseJson == null) {
+          throw Exception('This is no asset data assign to transaction');
+        }
+        return AssetVerificationResponse.fromMap(json.decode(response.body));
+      } else {
+        _handleStatusCode(response.statusCode);
+      }
+    } on SocketException {
+      throw Exception(
+          'Failed to connect to server make sure you connect to the internet');
+    } on FormatException {
+      throw Exception("Bad response");
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
   Future<String> getAllFloors() async  {
     final response = await http
-        .get(Uri.parse("${MyConfig.SERVER}${MyConfig.FLOOR_WithoutId}"));
+        .get(Uri.parse("${MyConfig.SERVER}${MyConfig.FLOOR_ByBuildingId}"));
     print(response.body);
     if (response.statusCode == 200) {
       final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
@@ -116,6 +166,31 @@ class LightVerificationService{
     print(responseJson);
 
     if (response.statusCode == 200 && responseJson["Succeeded"]) {
+      return true;
+    } else if (responseJson != null && responseJson["Message"] != null) {
+      throw Exception(responseJson["Message"]);
+    } else {
+      _handleStatusCode(response.statusCode);
+    }
+  }
+
+  updateAssetImage(Asset asset) async {
+
+    final request = {
+      "assetId": '${asset.id}',
+      "Image": '${asset.image}'
+    };
+    final response =
+    await http.post(Uri.parse('${MyConfig.SERVER}${MyConfig.UPDATE_ASSET_IMAGE}'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: json.encode(request));
+    final responseJson = jsonDecode(response.body);
+    print('kk: $responseJson');
+
+    if (response.statusCode == 200 && responseJson["Succeeded"]) {
+      print('khjjhk: $responseJson');
       return true;
     } else if (responseJson != null && responseJson["Message"] != null) {
       throw Exception(responseJson["Message"]);

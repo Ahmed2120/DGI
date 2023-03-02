@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import '../Utility/configration.dart';
 import '../db/captureLight.dart';
+import '../model/building.dart';
 import '../model/description.dart';
 import '../model/floor.dart';
 import '../model/item.dart';
@@ -12,7 +13,7 @@ class LightCaptureService{
 
   static List<DescriptionLight> severDescriptions = [];
   static List<SectionType> severSections = [];
-  static List<Floor> severFloors = [];
+  static List<Building> severBuildings = [];
   static List<Item> severItems = [];
 
   Future<List<DescriptionLight>> getAllDescriptions(int itemId) async {
@@ -36,14 +37,31 @@ class LightCaptureService{
     }
   }
 
-  Future<String> getAllFloors() async  {
+  Future<String> getAllBuildings() async  {
     final response = await http
-        .get(Uri.parse("${MyConfig.SERVER}${MyConfig.FLOOR_WithoutId}"));
+        .get(Uri.parse("${MyConfig.SERVER}${MyConfig.BUILDING_API}"));
     print(response.body);
     if (response.statusCode == 200) {
       final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
-      severFloors = parsed.map<Floor>((json) => Floor.fromMap(json)).toList();
+      severBuildings = parsed.map<Building>((json) => Building.fromMap(json)).toList();
       return "Success";
+    } else {
+      throw Exception('Failed to load Buildings');
+    }
+  }
+
+  Future<List<Floor>> getAllFloors(int buildingId) async  {
+    final queryParameters = {
+      'buildingId': buildingId.toString(),
+    };
+    String queryString = Uri(queryParameters: queryParameters).query;
+    final response = await http
+        .get(Uri.parse("${MyConfig.SERVER}${MyConfig.FLOOR_ByBuildingId}?$queryString"));
+    print(response.body);
+    if (response.statusCode == 200) {
+      final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
+      // severFloors = parsed.map<Floor>((json) => Floor.fromMap(json)).toList();
+      return parsed.map<Floor>((json) => Floor.fromMap(json)).toList();
     } else {
       throw Exception('Failed to load floors');
     }

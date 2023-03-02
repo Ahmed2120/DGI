@@ -42,6 +42,7 @@ import '../Utility/takePhotoRow.dart';
 import '../db/captureLight.dart';
 import '../language.dart';
 import '../model/accountGroup.dart';
+import '../model/building.dart';
 import '../model/description.dart';
 import '../model/floor.dart';
 import '../model/sectionType.dart';
@@ -67,6 +68,7 @@ class _LightCaptureScreenState extends State<LightCaptureScreen> {
   String? color;
   String? item;
   String? floor;
+  String? building;
   String? section;
   String? description;
   String? imagePath;
@@ -78,6 +80,7 @@ class _LightCaptureScreenState extends State<LightCaptureScreen> {
   List<SectionType> sections = [];
   List<SectionType> sectionsPerFloor = [];
   List<Floor> floors = [];
+  List<Building> buildings = [];
   List<Category> categories = [];
   List<MainCategory> mainCategories = [];
   List<Level> levels = [];
@@ -205,6 +208,15 @@ class _LightCaptureScreenState extends State<LightCaptureScreen> {
     setState(() {});
   }
 
+  changeBuilding(value) async {
+    building = value;
+    Building selected = buildings.firstWhere((element) => element.name == value);
+    floors = await lightCaptureService.getAllFloors(selected.id!);
+    floor = null;
+    section = null;
+    setState(() {});
+  }
+
   changeFloor(value) async {
     floor = value;
     Floor selected = floors.firstWhere((element) => element.name == value);
@@ -279,6 +291,32 @@ class _LightCaptureScreenState extends State<LightCaptureScreen> {
       //     ),
       //   ],
       // ),
+      Row(
+        children: [
+          CustomWidgetBuilder.buildText('Building NO', dSize),
+          const Spacer(),
+          Container(
+            decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: Color(0xFF00B0BD), width: 2))),
+            width: dSize.width * 0.5,
+            child: DropdownSearch<String>(
+              popupProps: const PopupProps.menu(
+                  showSelectedItems: true,
+                  showSearchBox: true
+              ),
+              items: buildings.map((e) => e.name).toSet().toList(),
+              dropdownDecoratorProps: const DropDownDecoratorProps(
+                dropdownSearchDecoration: InputDecoration(
+                    suffixIconColor: Color(0xFF00B0BD)
+                ),
+              ),
+              onChanged: changeBuilding,
+              selectedItem: building,
+            ),
+          ),
+        ],
+      ),
       Row(
         children: [
           CustomWidgetBuilder.buildText('FLOOR NO', dSize),
@@ -558,7 +596,7 @@ class _LightCaptureScreenState extends State<LightCaptureScreen> {
             captureDetails[i].description,
             captureDetails[i].quantity.toString(),
             Image.memory(
-              base64Decode(captureDetails[i].image),
+              base64Decode(captureDetails[i].image!),
               height: 40,
               fit: BoxFit.fill,
             )
@@ -575,7 +613,7 @@ class _LightCaptureScreenState extends State<LightCaptureScreen> {
     suppliers = await supplierService.retrieve();
     allMainCategories = await mainCategoryService.retrieve();
     allCategories = await categoryService.retrieve();
-    floors = LightCaptureService.severFloors;
+    buildings = LightCaptureService.severBuildings;
     items = LightCaptureService.severItems;
     allDescriptions = await descriptionService.retrieve();
     brands = await brandService.retrieve();
@@ -628,6 +666,7 @@ class _LightCaptureScreenState extends State<LightCaptureScreen> {
 
   upload() async {
     if (section == null ||
+        imagePath == null ||
         floor == null ||
         item == null ||
         description == null) {

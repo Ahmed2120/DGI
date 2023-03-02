@@ -21,7 +21,7 @@ class _AdministratorState extends State<Administrator> {
   final GlobalKey<FormState> _formKey = GlobalKey();
   //TextEditingController nameController = TextEditingController();
   TextEditingController noController = TextEditingController();
-  TextEditingController ipAddressController = TextEditingController(text: 'http://85.93.89.54:');
+  TextEditingController ipAddressController = TextEditingController();
   final settingService = SettingService();
   final serverService = ServerService();
   final lightCaptureService = LightCaptureService();
@@ -405,7 +405,7 @@ class _AdministratorState extends State<Administrator> {
         _isLoading = true;
       });
       MyConfig.SERVER = ipAddressController.text;
-      String response = await lightCaptureService.getAllFloors();
+      String response = await lightCaptureService.getAllBuildings();
       await lightCaptureService.getAllItems();
       if(response == "Success"){
 

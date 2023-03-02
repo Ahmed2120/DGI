@@ -3,7 +3,7 @@ class CaptureDetails {
   final String? name;
   final int quantity;
   final String description;
-  final String image;
+  final String? image;
   final int assetLocationId;
   final int itemId;
   final int? floorId;

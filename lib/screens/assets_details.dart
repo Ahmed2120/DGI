@@ -55,6 +55,7 @@ class _AssetsDetailsState extends State<AssetsDetails> {
   String? _floor;
   String? _brand;
   String? _description;
+  String? defaultImage;
 
   TextEditingController serialController = TextEditingController();
   String? imagePath;
@@ -236,7 +237,7 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                                       color: const Color(0xFF00B0BD), width: 2.0),
                                 ),
                                 height: 100,
-                                child: asset == null
+                                child: asset == null || asset!.image == null
                                     ? Image.asset(
                                         'assets/icons/img.png',
                                         fit: BoxFit.cover,
@@ -605,6 +606,10 @@ print('floorId ${floorId}');
   getItems() async {
     assets = await assetService.getAllVerifiedItems();
     allAssets = await assetService.retrieve();
+    rootBundle.load('assets/icons/img.png').then((value) {
+      defaultImage = base64.encode(Uint8List.view(value.buffer));
+    });
+    print(defaultImage);
     setState(() {});
   }
 
@@ -618,9 +623,12 @@ print('floorId ${floorId}');
     }
   }
 
-  editAsset() {
+  editAsset() async{
     if (imagePath != null) {
       asset?.image = imagePath!;
+    } else if(imagePath == null){
+asset?.image = defaultImage;
+      print('asset3: $asset');
     }
     if (serialController.text.isNotEmpty) {
       asset?.serialnumber = serialController.text;
@@ -646,6 +654,7 @@ print('floorId ${floorId}');
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text(lang.getTxt('update_asset')), duration: Duration(milliseconds: 1000),));
+    print(asset);
     assetService.update(asset!);
   }
 
@@ -672,5 +681,12 @@ print('floorId ${floorId}');
       sectionsPerFloor = [];
       allFloors = [];
     });
+  }
+
+  getDefultImage() async{
+    print('asset1: $asset');
+    print('asset1: $asset');
+    print('asset2: $asset');
+
   }
 }

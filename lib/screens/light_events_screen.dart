@@ -6,6 +6,7 @@ import '../Services/lightVerificaion_service.dart';
 import '../Utility/CustomWidgetBuilder.dart';
 import '../Utility/configration.dart';
 import 'light_capture_screen.dart';
+import 'light_inventory_screen.dart';
 import 'light_verification_screen.dart';
 
 class LightEventsScreen extends StatefulWidget {
@@ -18,7 +19,7 @@ class LightEventsScreen extends StatefulWidget {
 class _LightEventsScreenState extends State<LightEventsScreen> {
 
   final GlobalKey<FormState> _formKey = GlobalKey();
-  TextEditingController ipAddressController = TextEditingController(text: 'http://85.93.89.54:');
+  TextEditingController ipAddressController = TextEditingController();
 
   final serverService = ServerService();
   final lightCaptureService = LightCaptureService();
@@ -180,6 +181,24 @@ class _LightEventsScreenState extends State<LightEventsScreen> {
                             ),
                             ElevatedButton(
                               child: Text(
+                                'Light Inventory',
+                                style: TextStyle(
+                                    fontSize: dSize.height <= 500
+                                        ? dSize.height * 0.027
+                                        : 13.75),
+                              ),
+                              onPressed: () => {_lightInventory()},
+                              style: ElevatedButton.styleFrom(
+                                  primary: const Color(0xFF0F6671),
+                                  textStyle: const TextStyle(fontSize: 20),
+                                  padding: const EdgeInsets.all(15),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                      BorderRadius.circular(50)),
+                                  minimumSize: Size(dSize.width * 0.4, 34)),
+                            ),
+                            ElevatedButton(
+                              child: Text(
                                 'Clear Data',
                                 style: TextStyle(
                                     fontSize: dSize.height <= 500
@@ -284,11 +303,11 @@ class _LightEventsScreenState extends State<LightEventsScreen> {
         _isLoading = true;
       });
       MyConfig.SERVER = ipAddressController.text;
-      String response = await lightCaptureService.getAllFloors();
+      String response = await lightCaptureService.getAllBuildings();
       await lightCaptureService.getAllItems();
       if(response == "Success"){
 
-        Navigator.push(context, MaterialPageRoute(builder: (context)=> LightCaptureScreen()));
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> LightCaptureScreen()));
         // showSuccessDialog(noController.text);
       }else {
         _showErrorDialog(response);
@@ -317,7 +336,35 @@ class _LightEventsScreenState extends State<LightEventsScreen> {
       // await lightCaptureService.getAllItems();
       if(response == "Success"){
 
-        Navigator.push(context, MaterialPageRoute(builder: (context)=> LightVerificationScreen()));
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> LightVerificationScreen()));
+        // showSuccessDialog(noController.text);
+      }else {
+        _showErrorDialog(response);
+      }
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      _showErrorDialog(e.toString().replaceAll("Exception: ", ""));
+    }
+
+  }
+
+  Future _lightInventory() async {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+    FocusScope.of(context).unfocus();
+    _formKey.currentState!.save();
+    try {
+      setState(() {
+        _isLoading = true;
+      });
+      MyConfig.SERVER = ipAddressController.text;
+      String response = await lightCaptureService.getAllBuildings();
+      if(response == "Success"){
+
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> LightInventoryScreen()));
         // showSuccessDialog(noController.text);
       }else {
         _showErrorDialog(response);
