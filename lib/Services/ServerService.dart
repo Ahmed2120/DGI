@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'package:dgi/Services/AreaService.dart';
 import 'package:dgi/Services/AssetLocationService.dart';
@@ -49,6 +50,7 @@ import 'BrandService.dart';
 import 'ColorService.dart';
 import 'DescriptionService.dart';
 import 'LevelService.dart';
+import 'SectionGroup_service.dart';
 
 class ServerService {
   SettingService settingService = SettingService();
@@ -314,6 +316,7 @@ class ServerService {
     final sectionService = SectionTypeService();
     final brandService = BrandService();
     final colorService = ColorService();
+    final sectionGroupService = SectionGroupService();
     TransactionResponse? response = await getTransaction(pdaNo);
     if (response == null) {
       return "Error in Synchronization please try again later";
@@ -330,38 +333,38 @@ class ServerService {
       List<Floor> floors = await getAllFloors(response.id);
       List<Brand> brands = await getAllBrands();
       List<ItemColor> colors = await getAllColors();
-      await assetLocationService.insert(AssetLocation(
-          id: response.assetLocation.id,
-          name: response.assetLocation.name,
-          buildingAddress: response.assetLocation.buildingAddress,
-          buildingName: response.assetLocation.buildingName,
-          buildingNo: response.assetLocation.buildingNo,
-          businessUnit: response.assetLocation.businessUnit,
-          areaId: response.assetLocation.areaId,
-          departmentId: response.assetLocation.departmentId,
-          floorId: response.assetLocation.floorId,
-          sectionId: response.assetLocation.sectionId,
-          locationType: response.assetLocation.locationType,
-          locationTypeName: response.assetLocation.locationTypeName,
-        compound: response.assetLocation.compoundName,
-          city: response.assetLocation.compoundName,
-          governorate: response.assetLocation.governorateName,
-          country: response.assetLocation.countryName,
-      ));
+      // await assetLocationService.insert(AssetLocation(
+      //     id: response.assetLocation.id,
+      //     name: response.assetLocation.name,
+      //     buildingAddress: response.assetLocation.buildingAddress,
+      //     buildingName: response.assetLocation.buildingName,
+      //     buildingNo: response.assetLocation.buildingNo,
+      //     businessUnit: response.assetLocation.businessUnit,
+      //     areaId: response.assetLocation.areaId,
+      //     departmentId: response.assetLocation.departmentId,
+      //     floorId: response.assetLocation.floorId,
+      //     sectionId: response.assetLocation.sectionId,
+      //     locationType: response.assetLocation.locationType,
+      //     locationTypeName: response.assetLocation.locationTypeName,
+      //   compound: response.assetLocation.compoundName,
+      //     city: response.assetLocation.compoundName,
+      //     governorate: response.assetLocation.governorateName,
+      //     country: response.assetLocation.countryName,
+      // ));
       await userService.insert(response.user);
-      if(response.assetLocation.area != null) {
-        await areaService.insert(response.assetLocation.area!);
-      }
+      // if(response.assetLocation.area != null) {
+      //   await areaService.insert(response.assetLocation.area!);
+      // }
       await transactionService.insert(TransactionLookUp(
           id: response.id,
           transactionType: response.transactionType,
           transActionTypeName: response.transActionTypeName));
-      if(response.assetLocation.country != null) {
-        await countryService.insert(response.assetLocation.country!);
-      }
-      if(response.assetLocation.city != null) {
-        await cityService.insert(response.assetLocation.city!);
-      }
+      // if(response.assetLocation.country != null) {
+      //   await countryService.insert(response.assetLocation.country!);
+      // }
+      // if(response.assetLocation.city != null) {
+      //   await cityService.insert(response.assetLocation.city!);
+      // }
       await mainCategoryService.batch(mainCategories);
       await itemService.batch(items);
       await descriptionService.batch(descriptions);
@@ -374,6 +377,9 @@ class ServerService {
       await floorService.batch(floors);
       await brandService.batch(brands);
       await colorService.batch(colors);
+      if(response.sectionGroups != null) {
+        await sectionGroupService.batch(response.sectionGroups!);
+      }
       if (response.transactionType == 2 || response.transactionType == 3) {
         await downloadAssets(response.id, response.transactionType);
       }
@@ -470,7 +476,7 @@ class ServerService {
             image: e.image,
             description: e.description,
             id: e.id,
-            departmentId: e.departmentId,
+            departmentId: null,
             floorId: e.floorId,
             sectionId: e.sectionId,
             brandId: e.brandId,
@@ -510,6 +516,7 @@ class ServerService {
               'Content-Type': 'application/json; charset=UTF-8',
             },
             body: jsonEncode(request));
+    log('kkkk');
     final responseJson = jsonDecode(response.body);
     if (response.statusCode == 200 && responseJson["Succeeded"]) {
       return true;

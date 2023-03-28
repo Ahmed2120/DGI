@@ -705,11 +705,17 @@ class _AssetsCaptureState extends State<AssetsCapture> {
       String? serialNumber;
       int? itemId =
           items.firstWhere((element) => element.name == item?.text).id;
-      int? brandId = brands.firstWhere((element) => element.name == brand).id;
+      int? brandId;
+      if(brands.isNotEmpty){
+        brandId = brands.firstWhere((element) => element.name == brand).id;
+      }
       int? descriptionId = descriptions
           .firstWhere((element) => element.description == description)
           .id;
-      int? colorId = colors.firstWhere((element) => element.name == color).id;
+      int? colorId;
+      if(colors.isNotEmpty){
+        colorId = colors.firstWhere((element) => element.name == color).id;
+      }
       final captureDetails = CaptureDetails(
           colorId: colorId,
           height: heightController.text == "" ? null : double.parse(heightController.text),

@@ -24,6 +24,7 @@ class MyConfig {
   static String DESCRIPTION_API = '/LocationLocup/GetAllDescriptions';
   static String DESCRIPTION_BYITEMID = '/LocationLocup/GetAllDescriptionsByItemId';
   static String ASSET_VERFICATION = '/Verification/GetAssetsByTransactionId';
+  static String ASSET_BARCODE = '/Verification/GetAssetByBarcode';
   static String ASSET_LightVERFICATION = '/Verification/GetAssetsBySectionId';
   static String ASSET_LightINVENTORY = '/Verification/GetAssetsBySectionShortCode';
   static String ASSET_INVENTORY = '/GetAssetsByTransactionId';

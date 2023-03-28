@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'model/assetLocation.dart';
+import 'screens/item_verification_newPage.dart';
 import 'screens/light_events_screen.dart';
 
 Future<void> main() async {

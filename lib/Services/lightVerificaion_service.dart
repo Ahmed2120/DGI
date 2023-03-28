@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dgi/model/assetBarcode.dart';
+
 import '../Utility/configration.dart';
 import '../db/DatabaseHandler.dart';
 import '../db/captureLight.dart';
@@ -211,8 +213,37 @@ class LightVerificationService{
     }
   }
 
+  Future<AssetBarcode> getAssetByBarcode(String barcode) async {
+    final queryParameters = {
+      'barcode': barcode,
+    };
+    String queryString = Uri(queryParameters: queryParameters).query;
+    final uri = '${MyConfig.SERVER}${MyConfig.ASSET_BARCODE}' +
+        '?' +
+        queryString;
+    try {
+      var response = await http.get(Uri.parse(uri));
+      print('res: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final jsonResponse = json.decode(response.body);
+        if (jsonResponse == null) {
+          throw 'no ASSET has this barcode';
+        }
+        return AssetBarcode.fromMap(jsonResponse);
+      } else {
+        print(response.reasonPhrase);
+        throw Exception(response.reasonPhrase);
+      }
+    } catch (e) {
+      print(e);
+      rethrow;
+    }
+  }
+
   clearData() async {
     final dataHandler = DatabaseHandler();
     await dataHandler.clearData();
   }
+
 }

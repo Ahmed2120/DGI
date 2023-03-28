@@ -5,6 +5,7 @@ import '../Services/lightCapture_service.dart';
 import '../Services/lightVerificaion_service.dart';
 import '../Utility/CustomWidgetBuilder.dart';
 import '../Utility/configration.dart';
+import 'light_asset_details.dart';
 import 'light_capture_screen.dart';
 import 'light_inventory_screen.dart';
 import 'light_verification_screen.dart';
@@ -104,7 +105,7 @@ class _LightEventsScreenState extends State<LightEventsScreen> {
                             child: CustomWidgetBuilder.buildText(
                                 'PLEASE ENTER', dSize)),
                         SizedBox(
-                          height: dSize.height * 0.035,
+                          height: dSize.height * 0.01,
                         ),
                         Row(
                           children: [
@@ -136,12 +137,12 @@ class _LightEventsScreenState extends State<LightEventsScreen> {
                           ],
                         ),
                         SizedBox(
-                          height: dSize.height * 0.035,
+                          height: dSize.height * 0.01,
                         ),
                         Wrap(
                           alignment: WrapAlignment.center,
                           spacing: 20,
-                          runSpacing: 20,
+                          runSpacing: 15,
                           children: [
                             ElevatedButton(
                               child: Text(
@@ -188,6 +189,32 @@ class _LightEventsScreenState extends State<LightEventsScreen> {
                                         : 13.75),
                               ),
                               onPressed: () => {_lightInventory()},
+                              style: ElevatedButton.styleFrom(
+                                  primary: const Color(0xFF0F6671),
+                                  textStyle: const TextStyle(fontSize: 20),
+                                  padding: const EdgeInsets.all(15),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                      BorderRadius.circular(50)),
+                                  minimumSize: Size(dSize.width * 0.4, 34)),
+                            ),
+                            ElevatedButton(
+                              child: Text(
+                                'Asset Details',
+                                style: TextStyle(
+                                    fontSize: dSize.height <= 500
+                                        ? dSize.height * 0.027
+                                        : 13.75),
+                              ),
+                              onPressed: () {
+                                if (!_formKey.currentState!.validate()) {
+                                  return;
+                                }
+                                FocusScope.of(context).unfocus();
+                                _formKey.currentState!.save();
+                                MyConfig.SERVER = ipAddressController.text;
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=> LightAssetsDetails()));
+                              },
                               style: ElevatedButton.styleFrom(
                                   primary: const Color(0xFF0F6671),
                                   textStyle: const TextStyle(fontSize: 20),

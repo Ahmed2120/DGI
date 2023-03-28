@@ -15,6 +15,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../Services/ExcelService.dart';
 import 'assets_counter_screen.dart';
+import 'item_capture_newPage.dart';
+import 'item_counter_newPage.dart';
+import 'item_verification_newPage.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -146,7 +149,7 @@ class _HomePageState extends State<HomePage> {
                                       Navigator.of(context).push(
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  const ItemCapture()));
+                                                  const ItemNewCapture()));
                                     } else {
                                       CustomWidgetBuilder.showMessageDialog(
                                           context,
@@ -164,7 +167,7 @@ class _HomePageState extends State<HomePage> {
                                       Navigator.of(context).push(
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  AssetsVerification()));
+                                                  ItemNewVerification()));
                                     } else {
                                       CustomWidgetBuilder.showMessageDialog(
                                           context,
@@ -182,7 +185,7 @@ class _HomePageState extends State<HomePage> {
                                       Navigator.of(context).push(
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  const AssetsCounter()));
+                                                  const ItemNewCounter()));
                                     } else {
                                       CustomWidgetBuilder.showMessageDialog(
                                           context,

@@ -30,6 +30,7 @@ class DatabaseHandler {
         batch.execute("CREATE TABLE asset(Id INTEGER PRIMARY KEY ,ItemId INTEGER,Barcode TEXT,SerialNumber TEXT,AssetImageInBase64 BLOB,AssetLocationId INTEGER ,Description TEXT ,isCounted BOOLEAN DEFAULT false,IsVerified INTEGER DEFAULT 2,Color TEXT,Width INTEGER,Height INTEGER,Length INTEGER,FloorId INTEGER,DepartmentId INTEGER,SectionId INTEGER,BrandId INTEGER,isUploaded BOOLEAN DEFAULT false, itemImage Text, itemName Text)",);
         batch.execute("CREATE TABLE brand(Id INTEGER PRIMARY KEY, Name TEXT)");
         batch.execute("CREATE TABLE color(Id INTEGER PRIMARY KEY, Name TEXT)");
+        batch.execute("CREATE TABLE sectionGroup(Id INTEGER PRIMARY KEY, Name TEXT, FloorName TEXT, BuildingName TEXT)");
         await batch.commit();
       },
       version: 1,
@@ -62,6 +63,7 @@ class DatabaseHandler {
     batch.execute("delete from asset");
     batch.execute("delete from brand");
     batch.execute("delete from color");
+    batch.execute("delete from sectionGroup");
     return await batch.commit();
   }
 
