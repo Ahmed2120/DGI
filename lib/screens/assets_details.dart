@@ -237,7 +237,7 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                                       color: const Color(0xFF00B0BD), width: 2.0),
                                 ),
                                 height: 100,
-                                child: asset == null || asset!.image == null
+                                child: asset == null || imagePath == null
                                     ? Image.asset(
                                         'assets/icons/img.png',
                                         fit: BoxFit.cover,

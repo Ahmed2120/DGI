@@ -9,8 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
+import '../Services/SectionTypeService.dart';
 import '../Utility/CustomWidgetBuilder.dart';
 import '../language.dart';
+import '../model/sectionType.dart';
 import 'home_page.dart';
 
 class AssetsCheck extends StatefulWidget {
@@ -23,10 +25,15 @@ class AssetsCheck extends StatefulWidget {
 class _AssetsCheckState extends State<AssetsCheck> {
   Asset? asset;
   final assetService = AssetService();
+  final sectionTypeService = SectionTypeService();
+
   List<Asset> assets = [];
   List<Asset> allAssets = [];
+  List<SectionType> allSections = [];
   final GlobalKey<FormState> _formKey = GlobalKey();
 
+  String? imagePath;
+  String? _section;
   bool error = false;
 
   final lang = Language();
@@ -154,6 +161,7 @@ class _AssetsCheckState extends State<AssetsCheck> {
                               const Spacer(),
                               InkWell(
                                       onTap: () => scanBarcodeNormal(),
+                                      // onTap: () => getItemData('090203010104735'),
                                       child: Container(
                                         padding: EdgeInsets.all(7),
                                         width: dSize.width * 0.5,
@@ -209,14 +217,14 @@ class _AssetsCheckState extends State<AssetsCheck> {
                                         width: 2.0),
                                   ),
                                   height: 100,
-                                  child: asset == null || asset!.image! == null
+                                  child: asset == null || imagePath == null
                                       ? Image.asset(
                                           'assets/icons/img.png',
                                           fit: BoxFit.cover,
                                           width: dSize.width * 0.577,
                                         )
                                       : Image.memory(
-                                          base64Decode(asset!.image!),
+                                          base64Decode(imagePath!),
                                     width: 300,
                                     height: 100,
                                         )),
@@ -228,14 +236,21 @@ class _AssetsCheckState extends State<AssetsCheck> {
                           CustomWidgetBuilder.buildTextFormField(
                               dSize,
                               lang.getTxt('asset_desc'),
-                              asset?.itemName?? "",true),
+                              asset?.itemName?? "",false),
+                          SizedBox(
+                            height: dSize.height * 0.01,
+                          ),
+                          CustomWidgetBuilder.buildTextFormField(
+                              dSize,
+                              lang.getTxt('section'),
+                              _section?? "",false),
                           SizedBox(
                             height: dSize.height * 0.01,
                           ),
                           Expanded(
                             child: Column(
                               children: [
-                                SizedBox(
+                                Expanded(child: SizedBox(
                                   height: dSize.height * 0.26,
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(12),
@@ -250,7 +265,7 @@ class _AssetsCheckState extends State<AssetsCheck> {
                                       ],
                                     ),
                                   ),
-                                ),
+                                )),
                                 Padding(
                                   padding: EdgeInsets.all(dSize.height * 0.007),
                                   child: Text(
@@ -372,10 +387,17 @@ class _AssetsCheckState extends State<AssetsCheck> {
 
   void getItemData(String barcodeScanRes) async {
     List<Asset> assets = await assetService.select(barcodeScanRes);
+    allSections = await sectionTypeService.retrieve();
     setState(() {
       if (assets.isNotEmpty) {
         error = false;
         asset = assets[0];
+        imagePath = asset?.itemImage ?? asset?.image;
+        if (allAssets[0].sectionId != null) {
+          _section = allSections
+              .firstWhere((element) => element.id == asset?.sectionId)
+              .name;
+        }
       }else {
         error = true;
       }
@@ -438,6 +460,7 @@ class _AssetsCheckState extends State<AssetsCheck> {
       asset!.isCounted=1;
       assetService.update(asset!);
       asset = null;
+      _section = null;
       getItems();
     }
   }
