@@ -8,6 +8,8 @@ class TransactionResponse {
   final User user;
   final int transactionType;
   final String transActionTypeName;
+  final int buildingId;
+  final bool includeChecking;
   // final AssetLocationResponse? assetLocation;
   final List<SectionGroup>? sectionGroups;
 
@@ -16,6 +18,8 @@ class TransactionResponse {
     required this.user,
     required this.transactionType,
     required this.transActionTypeName,
+    required this.buildingId,
+    required this.includeChecking,
     // required this.assetLocation,
     required this.sectionGroups,
   });
@@ -25,6 +29,8 @@ class TransactionResponse {
         user = User.fromMap(res["AppUser"]),
         transactionType = res["TransactionType"],
         transActionTypeName = res["TransActionTypeName"],
+        buildingId = res["BuildingId"],
+        includeChecking = res["IncludeChecking"],
         // assetLocation = AssetLocationResponse.fromMap(res["AssetLocation"]),
         sectionGroups =
             res["sections"]?.map<SectionGroup>((e) => SectionGroup.fromMap(e)).toList();

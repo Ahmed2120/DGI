@@ -23,6 +23,7 @@ import 'package:dgi/model/CaptuerDeatailsList.dart';
 import 'package:dgi/model/CaptureDetails.dart';
 import 'package:dgi/model/CaptureDetailsRequest.dart';
 import 'package:dgi/model/asset.dart';
+import 'package:dgi/model/assetCheck.dart';
 import 'package:dgi/model/assetLocation.dart';
 import 'package:dgi/model/assetVerificationRequest.dart';
 import 'package:dgi/model/category.dart';
@@ -46,11 +47,13 @@ import '../model/assetCounterRequest.dart';
 import '../model/brand.dart';
 import '../model/itemColor.dart';
 import 'AccountGroupService.dart';
+import 'AssetCheckResponse.dart';
 import 'BrandService.dart';
 import 'ColorService.dart';
 import 'DescriptionService.dart';
 import 'LevelService.dart';
 import 'SectionGroup_service.dart';
+import 'assetCheckService.dart';
 
 class ServerService {
   SettingService settingService = SettingService();
@@ -77,7 +80,7 @@ class ServerService {
         .get(Uri.parse('${MyConfig.SERVER}${MyConfig.MAIN_CATEGORY_API}'));
     if (response.statusCode == 200) {
       final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
-      print('------${response.body}');
+
       return parsed
           .map<MainCategory>((json) => MainCategory.fromMap(json))
           .toList();
@@ -383,6 +386,10 @@ class ServerService {
       if (response.transactionType == 2 || response.transactionType == 3) {
         await downloadAssets(response.id, response.transactionType);
       }
+      if (response.includeChecking) {
+
+        await downloadAssetsCheck(response.buildingId, response.includeChecking);
+      }
       return "Success";
     }
   }
@@ -428,6 +435,66 @@ class ServerService {
           throw Exception('This is no asset data assign to transaction');
         }
         return AssetVerificationResponse.fromMap(json.decode(response.body));
+      } else {
+        _handleStatusCode(response.statusCode);
+      }
+    } on SocketException {
+      throw Exception(
+          'Failed to connect to server make sure you connect to the internet');
+    } on FormatException {
+      throw Exception("Bad response");
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  downloadAssetsCheck(int buildingId, bool includeChecking) async {
+    AssetCheckService assetCheckService = AssetCheckService();
+    try {
+
+      AssetCheckResponse? assetCheckResponse =
+          await getAssetsCheck(1, buildingId, includeChecking);
+
+      if (assetCheckResponse == null) {
+        throw Exception("there is no data");
+      } else {
+
+        await assetCheckService.batch(assetCheckResponse.assets);
+
+        for (int i = 2; i <= assetCheckResponse!.totalPages; i++) {
+          assetCheckResponse = await getAssetsCheck(i, buildingId, includeChecking);
+
+          await assetCheckService.batch(assetCheckResponse!.assets);
+        }
+      }
+    } catch (e) {
+      await clearData();
+      rethrow;
+    }
+  }
+
+  getAssetsCheck(int pageNumber, int buildingId, bool includeChecking) async {
+    if (MyConfig.SERVER == '') {
+      await setServerIPAddress();
+    }
+    final queryParameters = {
+      'pageNumber': pageNumber.toString(),
+      'pageSize': '300',
+      'buildingId': buildingId.toString(),
+      'isActive': includeChecking.toString(),
+    };
+    String queryString = Uri(queryParameters: queryParameters).query;
+    final uri =
+        '${MyConfig.SERVER}${MyConfig.ASSET_CHECK}' + '?' + queryString;
+    try {
+      final response = await http.get(Uri.parse(uri));
+
+      if (response.statusCode == 200) {
+        final responseJson = json.decode(response.body);
+        if (responseJson == null) {
+          throw Exception('This is no asset data assign to transaction');
+        }
+        return AssetCheckResponse.fromMap(json.decode(response.body));
       } else {
         _handleStatusCode(response.statusCode);
       }
@@ -509,7 +576,6 @@ class ServerService {
         .toList();
     CaptureDetailsList request =
         CaptureDetailsList(captureDetailsList: captureDetailsList);
-    print('====' + jsonEncode(request));
     final response =
         await http.post(Uri.parse('${MyConfig.SERVER}${MyConfig.UPLOAD_API}'),
             headers: <String, String>{
@@ -553,7 +619,7 @@ class ServerService {
         .toList();
     AssetVerificationRequest request =
         AssetVerificationRequest(id: transactionId, verifications: assetList);
-    print('====' + jsonEncode(request));
+
     final response = await http.post(
         Uri.parse('${MyConfig.SERVER}${MyConfig.ASSET_VERFICATION_UPLOAD}'),
         headers: <String, String>{
@@ -617,7 +683,7 @@ class ServerService {
         .toList();
     AssetCounterRequest request =
         AssetCounterRequest(id: transactionId, inventories: assetList);
-    print('====' + jsonEncode(request.id));
+
     final response = await http.post(
         Uri.parse('${MyConfig.SERVER}${MyConfig.ASSET_INVENTORY_UPLOAD}'),
         headers: <String, String>{
@@ -648,6 +714,28 @@ class ServerService {
       }
       await partialUploadAssetInventory(assets, transactions[0].id);
       await assetService.upload(assets);
+    }
+  }
+
+  uploadAssetCheck() async{
+    final assetCheckService = AssetCheckService();
+    List<AssetCheck> assetsCheck = await assetCheckService.retrieveChecked();
+    if (MyConfig.SERVER == '') {
+      await setServerIPAddress();
+    }
+    final response = await http.post(
+        Uri.parse('${MyConfig.SERVER}${MyConfig.UPDATE_ASSET_SECTION}'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(assetsCheck));
+    final responseJson = jsonDecode(response.body);
+    if (response.statusCode == 200 && responseJson["Succeeded"]) {
+      return true;
+    } else if (responseJson != null && responseJson["Message"] != null) {
+      throw Exception(responseJson["Message"]);
+    } else {
+      _handleStatusCode(response.statusCode);
     }
   }
 

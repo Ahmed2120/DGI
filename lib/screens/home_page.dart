@@ -255,6 +255,7 @@ class _HomePageState extends State<HomePage> {
         await serverService.uploadData();
       }else {
         await serverService.uploadAssetInventory();
+        await serverService.uploadAssetCheck();
       }
       await serverService.clearData();
       List<Setting> settings = await settingService.retrieve();

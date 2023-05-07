@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import '../language.dart';
+import '../model/asset.dart';
+import '../screens/check_item/scan_item.dart';
 import '../screens/home_page.dart';
 
 class CustomWidgetBuilder{
@@ -57,11 +59,42 @@ class CustomWidgetBuilder{
         ));
   }
 
-  static Text buildText(String title, dSize) {
+  static void errorScanDialog(BuildContext context,String message,bool dismissible,
+      String barcode) {
+    final lang = Language();
+    showDialog(
+        context: context,
+        barrierDismissible: dismissible,
+        builder: (ctx) => Directionality(
+          textDirection: Language.isEn ? TextDirection.ltr : TextDirection.rtl,
+          child: AlertDialog(
+            title: Text(lang.getTxt('error_occurred'),),
+            content: Text(message),
+            actions: [
+              TextButton(
+                child: Text(lang.getTxt('ok'),),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                child: Text('update',),
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> ScanItemScreen(barcode)));
+                },
+              )
+            ],
+          ),
+        ));
+  }
+
+  static Text buildText(String title, dSize, {Color? color}) {
     return Text(
       title,
-      style:
-      TextStyle(fontSize: dSize.height <= 500 ? 10 : dSize.height * 0.02, color: const Color(0xFF0F6671), fontWeight: FontWeight.bold),
+      style: TextStyle(
+          fontSize: dSize.width * 0.03,
+          color: color ?? const Color(0xFF0F6671),
+          fontWeight: FontWeight.bold),
     );
   }
 

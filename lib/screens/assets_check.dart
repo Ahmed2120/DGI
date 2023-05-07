@@ -31,6 +31,7 @@ class _AssetsCheckState extends State<AssetsCheck> {
   List<Asset> allAssets = [];
   List<SectionType> allSections = [];
   final GlobalKey<FormState> _formKey = GlobalKey();
+  final _barcodeController = TextEditingController();
 
   String? imagePath;
   String? _section;
@@ -90,7 +91,7 @@ class _AssetsCheckState extends State<AssetsCheck> {
                               padding: EdgeInsets.symmetric(
                                   vertical: dSize.height * 0.004, horizontal: 25),
                               decoration: BoxDecoration(
-                                color: Color(0xFFFFA227),
+                                color: const Color(0xFFFFA227),
                                 borderRadius: Language.isEn ? const BorderRadius.only(
                                     topRight: Radius.circular(12),
                                     bottomRight: Radius.circular(12)) : const BorderRadius.only(
@@ -106,7 +107,7 @@ class _AssetsCheckState extends State<AssetsCheck> {
                                     children: <InlineSpan>[
                                       TextSpan(
                                         text: lang.getTxt('counter_header_title'),
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontWeight: FontWeight.bold),
                                       ),
                                       TextSpan(
@@ -122,20 +123,20 @@ class _AssetsCheckState extends State<AssetsCheck> {
                       Container(
                         padding: EdgeInsets.symmetric(vertical: dSize.height * 0.007),
                         width: double.infinity,
-                        decoration: BoxDecoration(color: Colors.white),
+                        decoration: const BoxDecoration(color: Colors.white),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             Text(
                               '${lang.getTxt('assets_total')} : '+allAssets.length.toString(),
                               style: TextStyle(
-                                  color: Color(0xFF0F6671),
+                                  color: const Color(0xFF0F6671),
                                   fontSize: dSize.width * 0.031),
                             ),
                             Text(
                               '${lang.getTxt('remain')} : '+allAssets.where((element) => element.isCounted==0 || element.isCounted==null).toList().length.toString(),
                               style: TextStyle(
-                                  color: Color(0xFF0F6671),
+                                  color: const Color(0xFF0F6671),
                                   fontSize: dSize.width * 0.037),
                             ),
                           ],
@@ -157,7 +158,16 @@ class _AssetsCheckState extends State<AssetsCheck> {
                         children: [
                           Row(
                             children: [
-                              buildText(lang.getTxt('barcode'), dSize),
+                              InkWell(
+                                // onTap: ()=>getItemData(_barcodeController.text),
+                                  child: Container(
+                                  child: buildText(lang.getTxt('barcode'), dSize, color: Colors.white),
+                                padding: const EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF00B0BD),
+                                  borderRadius: BorderRadius.circular(15)
+                                ),
+                              )),
                               const Spacer(),
                               InkWell(
                                       onTap: () => scanBarcodeNormal(),
@@ -173,6 +183,27 @@ class _AssetsCheckState extends State<AssetsCheck> {
                                         child: Text(lang.getTxt('tab_barcode'), textAlign: TextAlign.center,),
                                       ),
                                     ),
+                              // Container(
+                              //   width: dSize.width * 0.5,
+                              //   child: TextFormField(
+                              //     controller: _barcodeController,
+                              //     style: TextStyle(fontSize: dSize.height <= 500 ? 10 : dSize.height * 0.02),
+                              //     decoration: InputDecoration(
+                              //       enabledBorder: const OutlineInputBorder(
+                              //           borderSide: BorderSide(
+                              //               color: Color(0xFF00B0BD), width: 2)),
+                              //       focusedBorder: const OutlineInputBorder(
+                              //           borderSide: BorderSide(
+                              //               color: Color(0xFF00B0BD), width: 2)),
+                              //       contentPadding: EdgeInsets.all(
+                              //           dSize.height <= 600
+                              //               ? dSize.height * 0.015
+                              //               : 6),
+                              //       isDense: true,
+                              //       border: InputBorder.none,
+                              //     ),
+                              //   ),
+                              // ),
                               SizedBox(
                                 width: dSize.width * 0.03,
                               ),
@@ -271,7 +302,7 @@ class _AssetsCheckState extends State<AssetsCheck> {
                                   child: Text(
                                     'CLICK THE ASSETS FOR MORE DETAILS',
                                     style: TextStyle(
-                                        color: Color(0xFF00B0BD),
+                                        color: const Color(0xFF00B0BD),
                                         fontSize: dSize.width * 0.03),
                                   ),
                                 ),
@@ -309,14 +340,14 @@ class _AssetsCheckState extends State<AssetsCheck> {
                 ),
                 const Spacer(),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 1),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       CustomWidgetBuilder.buildArrow(
                           context,
                           dSize,
-                          Icon(Icons.arrow_back_ios_rounded),
+                          const Icon(Icons.arrow_back_ios_rounded),
                           () => Navigator.of(context).pop()),
                     ],
                   ),
@@ -347,7 +378,7 @@ class _AssetsCheckState extends State<AssetsCheck> {
       padding: EdgeInsets.symmetric(
           vertical: dSize.height * 0.0001, horizontal: dSize.width * 0.009),
       decoration: BoxDecoration(
-          color: isCorrect ? Color(0xFF00B0BD) : Color(0xFFFFA227),
+          color: isCorrect ? const Color(0xFF00B0BD) : const Color(0xFFFFA227),
           borderRadius: BorderRadius.circular(15)),
       child: Icon(
         icon.icon,
@@ -357,12 +388,12 @@ class _AssetsCheckState extends State<AssetsCheck> {
     );
   }
 
-  Text buildText(String title, dSize) {
+  Text buildText(String title, dSize, {Color? color}) {
     return Text(
       title,
       style: TextStyle(
           fontSize: dSize.width * 0.03,
-          color: Color(0xFF0F6671),
+          color: color ?? const Color(0xFF0F6671),
           fontWeight: FontWeight.bold),
     );
   }
@@ -400,25 +431,26 @@ class _AssetsCheckState extends State<AssetsCheck> {
         }
       }else {
         error = true;
+        CustomWidgetBuilder.errorScanDialog(context, 'no item found', false, barcodeScanRes);
       }
     });
   }
 
   TableRow buildRow(List<dynamic> cells, {bool isHeader = false}) => TableRow(
         decoration: BoxDecoration(
-            color: isHeader ? Color(0xFFFFA227) : Colors.grey[200],
+            color: isHeader ? const Color(0xFFFFA227) : Colors.grey[200],
             borderRadius: isHeader
                 ? BorderRadius.circular(10)
                 : BorderRadius.circular(0)),
         children: cells
             .map((cell) => Padding(
-                  padding: EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(8.0),
                   child: cell.runtimeType == String
                       ? Text(
                           cell,
                           style: TextStyle(
                               color:
-                                  isHeader ? Colors.white : Color(0xFF0F6671),
+                                  isHeader ? Colors.white : const Color(0xFF0F6671),
                               fontWeight: isHeader
                                   ? FontWeight.bold
                                   : FontWeight.normal),

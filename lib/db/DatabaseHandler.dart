@@ -31,6 +31,7 @@ class DatabaseHandler {
         batch.execute("CREATE TABLE brand(Id INTEGER PRIMARY KEY, Name TEXT)");
         batch.execute("CREATE TABLE color(Id INTEGER PRIMARY KEY, Name TEXT)");
         batch.execute("CREATE TABLE sectionGroup(Id INTEGER PRIMARY KEY, Name TEXT, FloorName TEXT, BuildingName TEXT)");
+        batch.execute("CREATE TABLE assetCheck(Id INTEGER PRIMARY KEY, Name TEXT, Barcode TEXT, SectionName TEXT, SectionId INTEGER, IsChecked INTEGER DEFAULT 0)");
         await batch.commit();
       },
       version: 1,
@@ -64,6 +65,7 @@ class DatabaseHandler {
     batch.execute("delete from brand");
     batch.execute("delete from color");
     batch.execute("delete from sectionGroup");
+    batch.execute("delete from assetCheck");
     return await batch.commit();
   }
 

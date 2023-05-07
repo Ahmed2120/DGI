@@ -42,6 +42,9 @@ class _AssetsDetailsState extends State<AssetsDetails> {
   final floorService = FloorService();
   final brandService = BrandService();
   final descriptionService = DescriptionService();
+
+  final _barcodeController = TextEditingController();
+
   List<Asset> assets = [];
   List<Asset> allAssets = [];
   List<SectionType> allSections = [];
@@ -190,24 +193,52 @@ class _AssetsDetailsState extends State<AssetsDetails> {
                       children: [
                         Row(
                           children: [
-                            CustomWidgetBuilder.buildText(lang.getTxt('barcode'), dSize),
+                            InkWell(
+                                // onTap: ()=>getItemData(_barcodeController.text),
+                                child: Container(
+                                  child: CustomWidgetBuilder.buildText(lang.getTxt('barcode'), dSize, color: Colors.white),
+                                  padding: const EdgeInsets.all(12),
+                                  decoration: BoxDecoration(
+                                      color: const Color(0xFF00B0BD),
+                                      borderRadius: BorderRadius.circular(15)
+                                  ),
+                                )),
                             const Spacer(),
                             InkWell(
-                              onTap: () => scanBarcodeNormal(),
-                              // onTap: ()=>getItemData('090104010100038'),
-                              child: Container(
-                                padding: EdgeInsets.all(dSize.height * 0.007),
-                                width: dSize.width * 0.5,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: const Color(0xFF00B0BD), width: 2.0),
-                                ),
-                                child: Text(
-                                  lang.getTxt('tab_barcode'),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ),
+                                    onTap: () => scanBarcodeNormal(),
+                                    // onTap: () => getItemData('090203010104735'),
+                                    child: Container(
+                                      padding: EdgeInsets.all(7),
+                                      width: dSize.width * 0.5,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: const Color(0xFF00B0BD),
+                                            width: 2.0),
+                                      ),
+                                      child: Text(lang.getTxt('tab_barcode'), textAlign: TextAlign.center,),
+                                    ),
+                                  ),
+                            // Container(
+                            //   width: dSize.width * 0.5,
+                            //   child: TextFormField(
+                            //     controller: _barcodeController,
+                            //     style: TextStyle(fontSize: dSize.height <= 500 ? 10 : dSize.height * 0.02),
+                            //     decoration: InputDecoration(
+                            //       enabledBorder: const OutlineInputBorder(
+                            //           borderSide: BorderSide(
+                            //               color: Color(0xFF00B0BD), width: 2)),
+                            //       focusedBorder: const OutlineInputBorder(
+                            //           borderSide: BorderSide(
+                            //               color: Color(0xFF00B0BD), width: 2)),
+                            //       contentPadding: EdgeInsets.all(
+                            //           dSize.height <= 600
+                            //               ? dSize.height * 0.015
+                            //               : 6),
+                            //       isDense: true,
+                            //       border: InputBorder.none,
+                            //     ),
+                            //   ),
+                            // ),
                           ],
                         ),
                         if (error)

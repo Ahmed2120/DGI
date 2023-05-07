@@ -30,6 +30,8 @@ class MyConfig {
   static String ASSET_INVENTORY = '/GetAssetsByTransactionId';
   static String ASSET_VERFICATION_UPLOAD = '/Verification/UploadVerification';
   static String ASSET_INVENTORY_UPLOAD = '/UploadCounter';
+  static String UPDATE_ASSET_SECTION = '/Asset/UpdateAssetSection';
+  static String ASSET_CHECK = '/Asset/GetAssets';
   static const String BUILDING = "Building";
   static const String OFFICE = "Office";
   static const String STORE = "Store";

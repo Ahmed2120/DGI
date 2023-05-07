@@ -1,6 +1,7 @@
 import 'package:dgi/Services/SettingService.dart';
 import 'package:dgi/model/settings.dart';
 import 'package:dgi/screens/assets_capture_screen.dart';
+import 'package:dgi/screens/assets_check.dart';
 import 'package:dgi/screens/auth_screen.dart';
 import 'package:dgi/screens/home_page.dart';
 import 'package:dgi/screens/splash_screen.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'model/assetLocation.dart';
+import 'screens/check_item/scan_item.dart';
 import 'screens/item_verification_newPage.dart';
 import 'screens/light_events_screen.dart';
 
@@ -46,6 +48,7 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Montserrat'
       ),
       home: SplashScreen(pdaNo: pdaNo,),
+      // home: ScanItemScreen(),
     );
   }
 }
