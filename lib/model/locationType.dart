@@ -7,10 +7,10 @@ class LocationType{
         required this.name});
 
   LocationType.fromMap(Map<String, dynamic> res)
-      : id = res["id"],
-        name = res["name"];
+      : id = res["Id"],
+        name = res["Name"];
 
   Map<String, Object?> toMap() {
-    return {'id':id,'name': name};
+    return {'Id':id,'Name': name};
   }
 }

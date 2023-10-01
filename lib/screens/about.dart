@@ -2,9 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../Utility/CustomWidgetBuilder.dart';
+import '../language.dart';
 
 class AboutUs extends StatelessWidget {
-  const AboutUs({Key? key}) : super(key: key);
+   AboutUs({Key? key}) : super(key: key);
+
+  final lang = Language();
 
   @override
   Widget build(BuildContext context) {
@@ -33,12 +36,12 @@ class AboutUs extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 5),
                     width: double.infinity,
-                    decoration: BoxDecoration(color: Colors.white),
+                    decoration: const BoxDecoration(color: Colors.white),
                     child: Text(
-                      'ABOUT US',
+                      lang.getTxt('about'),
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          color: Color(0xFF0F6671),
+                          color: const Color(0xFF0F6671),
                           fontSize: dSize.width * 0.039, fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -53,7 +56,7 @@ class AboutUs extends StatelessWidget {
               'SAGECO SYSTEM',
               textAlign: TextAlign.center,
               style: TextStyle(
-                  color: Color(0xFF0F6671), fontSize: dSize.width * 0.039, fontWeight: FontWeight.bold),
+                  color: const Color(0xFF0F6671), fontSize: dSize.width * 0.039, fontWeight: FontWeight.bold),
             ),
             const Spacer(),
             Padding(
@@ -64,7 +67,7 @@ class AboutUs extends StatelessWidget {
                   CustomWidgetBuilder.buildArrow(
                       context,
                       dSize,
-                      Icon(Icons.arrow_back_ios_rounded),
+                      const Icon(Icons.arrow_back_ios_rounded),
                           () => Navigator.of(context).pop()),
                 ],
               ),
@@ -87,7 +90,7 @@ class AboutUs extends StatelessWidget {
                   'SAGECO SYSTEM',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                      color: Color(0xFF0F6671), fontSize: dSize.width * 0.039, fontWeight: FontWeight.bold),
+                      color: const Color(0xFF0F6671), fontSize: dSize.width * 0.039, fontWeight: FontWeight.bold),
                 ))
           ],
         ),

@@ -1,42 +1,76 @@
-class AssetLocation{
+class AssetLocation {
   final int id;
   final int areaId;
-  final String businessUnit;
+  final String? businessUnit;
   final int? departmentId;
-  final String name;
-  final String buildingName;
-  final String buildingAddress;
-  final String buildingNo;
+  final String? name;
+  final String? buildingName;
+  final String? buildingAddress;
+  final String? buildingNo;
   final int? floorId;
   final int? sectionId;
+  final int locationType;
+  final String locationTypeName;
+  final String? compound;
+  final String? city;
+  final String? governorate;
+  final String? country;
 
   AssetLocation(
-      { required this.id,
-        required this.name,
-        required this.buildingAddress,
-        required this.buildingName,
-        required this.buildingNo,
-        required this.businessUnit,
-        required this.areaId,
-        required this.departmentId,
-        required this.floorId,
-        required this.sectionId
+      {required this.id,
+      this.name,
+      this.buildingAddress,
+      this.buildingName,
+      this.buildingNo,
+      this.businessUnit,
+      required this.areaId,
+      this.departmentId,
+      this.floorId,
+      this.sectionId,
+      required this.locationTypeName,
+      required this.locationType,
+      required this.compound,
+      required this.city,
+      required this.governorate,
+      required this.country,
       });
 
   AssetLocation.fromMap(Map<String, dynamic> res)
-      : id = res["id"],
-        name = res["name"],
-        businessUnit = res["businessUnit"],
-        buildingAddress = res["buildingAddress"],
-        buildingName = res["buildingName"],
-        buildingNo = res["buildingNo"],
-        areaId = res["areaId"],
-        departmentId = res["departmentId"],
-        floorId = res["floorId"],
-        sectionId = res["sectionId"];
+      : id = res["Id"],
+        name = res["Name"],
+        businessUnit = res["BusinessUnit"],
+        buildingAddress = res["BuildingAddress"],
+        buildingName = res["BuildingName"],
+        buildingNo = res["BuildingNo"],
+        areaId = res["AreaId"],
+        departmentId = res["DepartmentId"],
+        floorId = res["FloorId"],
+        sectionId = res["SectionId"],
+        locationTypeName = res["LocationTypeName"],
+        compound = res["Compound"],
+        city = res["City"],
+        governorate = res["Governerate"],
+        country = res["Country"],
+        locationType = res["LocationType"];
 
   Map<String, Object?> toMap() {
-    return {'id':id,'name': name,'businessUnit':businessUnit,'buildingAddress':buildingAddress,'buildingName':buildingName,
-    'buildingNo':buildingNo,'areaId':areaId,'departmentId':departmentId,'floorId':floorId,'sectionId':sectionId};
+    return {
+      'Id': id,
+      'Name': name,
+      'BusinessUnit': businessUnit,
+      'BuildingAddress': buildingAddress,
+      'BuildingName': buildingName,
+      'BuildingNo': buildingNo,
+      'AreaId': areaId,
+      'DepartmentId': departmentId,
+      'FloorId': floorId,
+      'SectionId': sectionId,
+      'LocationTypeName': locationTypeName,
+      'LocationType': locationType,
+      'Compound': compound,
+      'City': city,
+      'Governerate': governorate,
+      'Country': country,
+    };
   }
 }

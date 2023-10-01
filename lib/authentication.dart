@@ -6,18 +6,18 @@ import 'package:sqflite/sqflite.dart';
 class Authentication{
   DatabaseHandler databaseHandler = DatabaseHandler();
 
-  static String? username;
+  static String? userName;
 
   Future<String> logIn(String username, String password) async {
     final Database db = await databaseHandler.initializeDB();
-    final List<Map<String, Object?>> queryResult = await db.query(UserRepository.TABLE_NAME, where: 'username = ? and password = ?', whereArgs: [username, password]);
+    final List<Map<String, Object?>> queryResult = await db.query(UserRepository.TABLE_NAME, where: 'UserName = ? and HashedPassword = ?', whereArgs: [username, password]);
     if(queryResult.isEmpty) {
       print('user $queryResult');
       return 'failed';
     }
     else{
-      username = User.fromMap(queryResult[0]).username;
-      print('log in: username ${User.fromMap(queryResult[0]).username}, password: ${User.fromMap(queryResult[0]).password}');
+      userName = User.fromMap(queryResult[0]).username;
+      print('log in: username ${userName}, password: ${User.fromMap(queryResult[0]).password}');
       return 'success';
     }
 

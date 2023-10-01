@@ -1,29 +1,29 @@
 class User {
   final int? id;
-  final String name;
+  final String? name;
   final String username;
   final String password;
-  final String address;
+  final String? address;
   final String? email;
 
 
   User(
       { this.id,
-        required this.name,
+        this.name,
         required this.username,
         required this.password,
-        required this.address,
+        this.address,
         required this.email});
 
   User.fromMap(Map<String, dynamic> res)
-      : id = res["id"],
-        name = res["name"],
-        username = res["username"],
-        password = res["password"],
-        email = res["email"],
-        address = res["address"];
+      : id = res["Id"],
+        name = res["Name"],
+        username = res["UserName"],
+        password = res["HashedPassword"],
+        email = res["Email"],
+        address = res["Address"];
 
   Map<String, Object?> toMap() {
-    return {'id':id,'name': name, 'username': username, 'password': password, 'email': email,'address':address};
+    return {'Id':id,'Name': name, 'UserName': username, 'HashedPassword': password, 'EmailAddress': email,'Address':address};
   }
 }

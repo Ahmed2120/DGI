@@ -1,19 +1,18 @@
 import 'package:dgi/db/ItemRepository.dart';
 import 'package:dgi/model/item.dart';
 
-
 class ItemService{
-  ItemRepository itemRepository = ItemRepository();
+  final _itemRepositoryRepository = ItemRepository();
   Future<int> insert(Item item) async {
-    return itemRepository.insert(item);
+    return _itemRepositoryRepository.insert(item);
   }
   Future<List<Item>> retrieve() async {
-    return itemRepository.retrieve();
+    return _itemRepositoryRepository.retrieve();
   }
   Future<int> batch(List<Item> items) async {
-    return itemRepository.batch(items);
+    return _itemRepositoryRepository.batch(items);
   }
   Future<void> delete(int id) async {
-    return itemRepository.delete(id);
+    return _itemRepositoryRepository.delete(id);
   }
 }

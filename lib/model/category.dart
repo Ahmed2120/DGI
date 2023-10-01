@@ -1,16 +1,19 @@
 class Category{
-  final int? id;
+  final int id;
   final String name;
+  final int? mainCategoryId;
 
   Category(
-      { this.id,
-        required this.name});
+      { required this.id,
+        required this.name,
+        this.mainCategoryId});
 
   Category.fromMap(Map<String, dynamic> res)
-      : id = res["id"],
-        name = res["name"];
+      : id = res["Id"],
+        name = res["Name"],
+        mainCategoryId = res["MainCategoryId"];
 
   Map<String, Object?> toMap() {
-    return {'id':id,'name': name};
+    return {'Id':id,'Name': name,'MainCategoryId':mainCategoryId};
   }
 }

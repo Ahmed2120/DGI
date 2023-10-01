@@ -1,3 +1,4 @@
+import 'package:dgi/Utility/configration.dart';
 import 'package:dgi/db/AssetRepository.dart';
 import 'package:dgi/model/asset.dart';
 
@@ -10,7 +11,7 @@ class AssetService{
   Future<List<Asset>> retrieve() async {
     return assetRepository.retrieve();
   }
-  Future<int> insertCategories(List<Asset> assets) async {
+  Future<int> batch(List<Asset> assets) async {
     return assetRepository.batch(assets);
   }
   Future<void> delete(int id) async {
@@ -27,5 +28,11 @@ class AssetService{
   }
   Future<int> update(Asset asset) async {
     return assetRepository.update(asset);
+  }
+  Future<List<Asset>> retrieveTopElement() async {
+    return assetRepository.retrieveTopElement(MyConfig.PAGE_SIZE);
+  }
+  upload(List<Asset> items)async{
+    return assetRepository.upload(items);
   }
 }
