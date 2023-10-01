@@ -11,6 +11,7 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 import '../Services/SectionTypeService.dart';
 import '../Utility/CustomWidgetBuilder.dart';
+import '../db/cash_helper.dart';
 import '../language.dart';
 import '../model/sectionType.dart';
 import 'home_page.dart';
@@ -431,6 +432,7 @@ class _AssetsCheckState extends State<AssetsCheck> {
         }
       }else {
         error = true;
+        if(CashHelper.getBool('includeChecking')!)
         CustomWidgetBuilder.errorScanDialog(context, 'no item found', false, barcodeScanRes);
       }
     });

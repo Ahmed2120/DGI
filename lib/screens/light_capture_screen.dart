@@ -305,7 +305,7 @@ class _LightCaptureScreenState extends State<LightCaptureScreen> {
                   showSelectedItems: true,
                   showSearchBox: true
               ),
-              items: buildings.map((e) => e.name).toSet().toList(),
+              items: buildings.map((e) => e.name).toList(),
               dropdownDecoratorProps: const DropDownDecoratorProps(
                 dropdownSearchDecoration: InputDecoration(
                     suffixIconColor: Color(0xFF00B0BD)
@@ -331,7 +331,7 @@ class _LightCaptureScreenState extends State<LightCaptureScreen> {
                   showSelectedItems: true,
                   showSearchBox: true
               ),
-              items: floors.map((e) => e.name).toSet().toList(),
+              items: floors.map((e) => e.name).toList(),
               dropdownDecoratorProps: const DropDownDecoratorProps(
                 dropdownSearchDecoration: InputDecoration(
                     suffixIconColor: Color(0xFF00B0BD)
@@ -357,7 +357,8 @@ class _LightCaptureScreenState extends State<LightCaptureScreen> {
                   showSelectedItems: true,
                   showSearchBox: true
               ),
-              items: sectionsPerFloor.map((e) => e.name).toSet().toList(),
+              // items: sectionsPerFloor.map((e) => e.name).toSet().toList(),
+              items: sectionsPerFloor.map((e) => e.name).toList(),
               dropdownDecoratorProps: const DropDownDecoratorProps(
                 dropdownSearchDecoration: InputDecoration(
                     suffixIconColor: Color(0xFF00B0BD)
@@ -383,7 +384,7 @@ class _LightCaptureScreenState extends State<LightCaptureScreen> {
                   showSelectedItems: true,
                   showSearchBox: true
               ),
-              items: items.map((e) => e.name).toSet().toList(),
+              items: items.map((e) => e.name).toList(),
               dropdownDecoratorProps: const DropDownDecoratorProps(
                 dropdownSearchDecoration: InputDecoration(
                     suffixIconColor: Color(0xFF00B0BD)
@@ -409,7 +410,7 @@ class _LightCaptureScreenState extends State<LightCaptureScreen> {
                   showSelectedItems: true,
                   showSearchBox: true
               ),
-              items: descriptions.map((e) => e.description).toSet().toList(),
+              items: descriptions.map((e) => e.description).toList(),
               dropdownDecoratorProps: const DropDownDecoratorProps(
                 dropdownSearchDecoration: InputDecoration(
                     suffixIconColor: Color(0xFF00B0BD)

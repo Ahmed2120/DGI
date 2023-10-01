@@ -8,6 +8,7 @@ import 'package:dgi/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'db/cash_helper.dart';
 import 'model/assetLocation.dart';
 import 'screens/check_item/scan_item.dart';
 import 'screens/item_verification_newPage.dart';
@@ -15,6 +16,7 @@ import 'screens/light_events_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await CashHelper.init();
   final settingService = SettingService();
   List<Setting> settings = await settingService.retrieve();
   String pdaNo="";

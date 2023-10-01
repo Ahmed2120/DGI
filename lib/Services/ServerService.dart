@@ -42,6 +42,7 @@ import 'package:http/http.dart' as http;
 import 'package:dgi/Utility/configration.dart';
 import 'package:dgi/model/country.dart';
 
+import '../db/cash_helper.dart';
 import '../model/accountGroup.dart';
 import '../model/assetCounterRequest.dart';
 import '../model/brand.dart';
@@ -386,9 +387,10 @@ class ServerService {
       if (response.transactionType == 2 || response.transactionType == 3) {
         await downloadAssets(response.id, response.transactionType);
       }
+      CashHelper.setBool('includeChecking', response.includeChecking);
       if (response.includeChecking) {
 
-        await downloadAssetsCheck(response.buildingId, response.includeChecking);
+        await downloadAssetsCheck(response.buildingId!, response.includeChecking);
       }
       return "Success";
     }

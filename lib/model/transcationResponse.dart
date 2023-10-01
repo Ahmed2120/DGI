@@ -8,7 +8,7 @@ class TransactionResponse {
   final User user;
   final int transactionType;
   final String transActionTypeName;
-  final int buildingId;
+  final int? buildingId;
   final bool includeChecking;
   // final AssetLocationResponse? assetLocation;
   final List<SectionGroup>? sectionGroups;
